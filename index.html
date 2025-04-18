@@ -17,7 +17,6 @@
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.15/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1e40af">
@@ -31,38 +30,33 @@
       @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
       .shockwave { animation: shockwave 1s ease-out; }
       @keyframes shockwave { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(3); opacity: 0; } }
-      .logo-glow { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8)); }
+      .logo-glow { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8)); max-width: 72px; width: 100%; height: auto; animation: logo-pulse 3s infinite; }
+      @keyframes logo-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+      .animate-orbit { animation: orbit 20s linear infinite; }
+      @keyframes orbit { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body className="font-inter transition-colors duration-300" id="theme-body">
   <div id="root"></div>
   <audio id="hoverSound" src="https://assets.mixkit.co/active_storage/sfx/1568/1568-preview.mp3"></audio>
   <script type="text/babel">
+    console.log('Starting React render...');
     const Logo = () => (
       <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACgCAYAAABPn3NYAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uWCPjwfO1s3r3BwcABZIBADsAAAD/2wBDAAoHBwkHBgoJCAkLCwoMDxkQDw4NDx4WFxIZJCAmJSMgIyMjJiUjJicoKSo1NCMmKiQqNTMoOSIvNDE3PDwxMzP/2wBDAQsLCw0NDxkQDw4QFBQXFxgYGBgYHCYkIx4lJiMnKSYrKzY1Ky8yNTo3PD0+QUFDQ0VGR0dJSUpNTU5QUFBQUFP/wAARCABgAMgDASIAAhEBAxEB/8QAGwABAQEBAQEBAQAAAAAAAAAAAAECAwQFBgcI/8QAOxAAAQMDAwIEAwUGBAcAAAAAAAECAwQFEQYSITEHEyJRYXGBkaGxwRQjQrHB0fAUQlJygrLxFjNDU2Nzg7LTFBVCU3KCkqLxFidTc4Ojs8PT4yQlNUVldISUpLTF1eX/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECAwQFBgf/xAA1EQACAQMDAgQHBQEAAAAAAAAAAQIRAxIhMUEEEyJRYXGBkaGxwRQjQlJygrLxFjNDU2Nzg7LTFBVCU3KCkqLxFidTc4Ojs8PT4yQlNUVldISUpLTF1eX//aAAwDAQACEQMRAD8A/WijjFHLTKOKOaOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK>](https://www.w3schools.com/tags/tryit.asp?filename=tryit_base64_image) alt="Olaris Consulting Limited Logo" className="h-12 logo-glow" />
+        src="/logo.png"
+        alt="Olaris Consulting Limited Logo"
+        className="logo-glow"
+        onError={() => console.error('Logo failed to load. Please upload logo.png to your GitHub repo root.')}
+      />
     );
 
     const Navbar = () => {
       const toggleTheme = () => {
+        console.log('Toggling theme...');
         const body = document.getElementById('theme-body');
         body.classList.toggle('dark');
         body.classList.toggle('neon-night');
         localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-      };
-
-      const startVoice = () => {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.onresult = (event) => {
-          const command = event.results[0][0].transcript.toLowerCase();
-          if (command.includes('home')) window.location.hash = 'home';
-          else if (command.includes('about')) window.location.hash = 'about';
-          else if (command.includes('services')) window.location.hash = 'services';
-          else if (command.includes('projects')) window.location.hash = 'projects';
-          else if (command.includes('testimonials')) window.location.hash = 'testimonials';
-          else if (command.includes('contact')) window.location.hash = 'contact';
-        };
-        recognition.start();
       };
 
       return (
@@ -78,9 +72,6 @@
               <a href="#projects" className="hover:text-cyan-400">Projects</a>
               <a href="#testimonials" className="hover:text-cyan-400">Testimonials</a>
               <a href="#contact" className="hover:text-cyan-400">Contact</a>
-              <button onClick={startVoice} className="p-2 rounded-full bg-cyan-500 text-black" aria-label="Voice navigation">
-                <svg className="w-5 h-5 pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-              </button>
               <button onClick={toggleTheme} className="p-2 rounded-full bg-gray-700 dark:bg-gray-200 text-white dark:text-gray-900" aria-label="Toggle theme">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
               </button>
@@ -102,7 +93,7 @@
           </a>
         </div>
         <div id="modal" className="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-30" role="dialog" aria-labelledby="modal-title">
-          <div className="bg-white dark:bg-gray-900 p-8 rounded-lg max-w-md text-center transform transition-all duration-500" style={{ transformStyle: 'preserve-3d' }}>
+          <div className="bg-white dark:bg-gray-900 p-8 rounded-lg max-w-md text-center transform transition-all duration-500 scale-0" id="modal-content">
             <h3 id="modal-title" className="text-2xl font-bold mb-4 holographic font-orbitron"></h3>
             <p id="modal-description" className="text-gray-700 dark:text-gray-300 mb-6"></p>
             <button onClick={() => document.getElementById('modal').classList.add('hidden')} className="bg-cyan-700 text-white px-6 py-2 rounded-full hover:bg-cyan-500">Close</button>
@@ -115,21 +106,9 @@
       <section id="about" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black animate-wave">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-extrabold mb-8 holographic font-orbitron">About Alan Carreras</h2>
-          <div className="relative h-[400px] overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="space-y-8 transform transition-all duration-700" style={{ transformStyle: 'preserve-3d' }}>
-                <div className="bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-xl backdrop-blur-sm opacity-0 translate-z-10" data-carousel>
-                  <p className="text-lg text-gray-700 dark:text-gray-300">39 years in the motor industry, specializing in fleet management and tech innovation.</p>
-                </div>
-                <div className="bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-xl backdrop-blur-sm opacity-0 translate-z-10" data-carousel>
-                  <p className="text-lg text-gray-700 dark:text-gray-300">Led Jurni Leasing to Top 10 broker status, managing 30,000+ vehicles.</p>
-                </div>
-                <div className="bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-xl backdrop-blur-sm opacity-0 translate-z-10" data-carousel>
-                  <p className="text-lg text-gray-700 dark:text-gray-300">Pioneered web_salsac_app, a blockchain-based ESG solution for Covase Ltd.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p className="text-lg max-w-2xl mx-auto text-gray-700 dark:text-gray-300">
+            With 39 years in the motor industry, I specialize in fleet management, M&A, and tech innovation. I led Jurni Leasing to Top 10 broker status, managing 30,000+ vehicles, and pioneered web_salsac_app, a blockchain-based ESG solution for Covase Ltd.
+          </p>
         </div>
       </section>
     );
@@ -195,7 +174,7 @@
             </div>
           </div>
           <div className="mt-8">
-            <a href="#ar-vehicle" className="bg-cyan-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-cyan-500">View AR Vehicle Demo</a>
+            <a href="#ar-vehicle" className="bg-cyan-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-cyan-500">View AR Vehicle Demo (Coming Soon)</a>
           </div>
         </div>
       </section>
@@ -276,85 +255,221 @@
       </div>
     );
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-
-    // 3D Carousel Animation for About
-    document.addEventListener('scroll', () => {
-      const elements = document.querySelectorAll('[data-carousel]');
-      elements.forEach((el, i) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.8) {
-          gsap.to(el, {
-            opacity: 1,
-            z: 0,
-            rotateY: i * 15,
-            duration: 1,
-            delay: i * 0.3,
-            ease: 'power3.out'
-          });
-        }
-      });
-    });
-
-    // Apply saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-      document.getElementById('theme-body').classList.add('dark', 'neon-night');
+    try {
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+      console.log('React render successful');
+    } catch (e) {
+      console.error('React render failed:', e);
+      document.body.innerHTML = '<h1>Error loading site. Please contact alan@olaris.co.uk.</h1>';
     }
-
-    // Particle Bursts on Scroll
-    document.addEventListener('scroll', () => {
-      const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.5 && !section.classList.contains('sparked')) {
-          section.classList.add('sparked');
-          const canvas = document.createElement('canvas');
-          canvas.className = 'absolute top-0 left-0 w-full h-full pointer-events-none';
-          section.appendChild(canvas);
-          const ctx = canvas.getContext('2d');
-          canvas.width = section.offsetWidth;
-          canvas.height = section.offsetHeight;
-          let particles = [];
-          for (let i = 0; i < 20; i++) {
-            particles.push({
-              x: Math.random() * canvas.width,
-              y: Math.random() * canvas.height,
-              vx: (Math.random() - 0.5) * 5,
-              vy: (Math.random() - 0.5) * 5,
-              alpha: 1,
-              life: 30
-            });
-          }
-          function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles = particles.filter(p => p.life > 0);
-            particles.forEach(p => {
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
-              ctx.fill();
-              p.x += p.vx;
-              p.y += p.vy;
-              p.alpha -= 0.03;
-              p.life--;
-            });
-            if (particles.length) requestAnimationFrame(drawParticles);
-            else section.removeChild(canvas);
-          }
-          drawParticles();
-        }
-      });
-    });
   </script>
   <script>
-    // PWA Service Worker Registration
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(reg => {
-        console.log('Service Worker registered:', reg);
-      }).catch(err => {
-        console.error('Service Worker registration failed:', err);
+    console.log('Starting constellation effect...');
+    try {
+      const canvas = document.getElementById('webCanvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas context not supported');
+
+      const projects = [
+        { id: 'jurni-expansion', title: 'Jurni Leasing Expansion', desc: 'Scaled Jurni to a Top 10 broker with 30,000+ vehicles.' },
+        { id: 'jurni-ma', title: 'Jurni M&A Leadership', desc: 'Drove M&A deals, boosting market position by 20%.' },
+        { id: 'web-salsac', title: 'web_salsac_app Development', desc: 'Built a blockchain-based app for ESG transparency.' },
+        { id: 'carmmunity', title: 'Carmmunity Portal Development', desc: 'Created a real-time pricing portal, speeding orders by 25%.' }
+      ];
+
+      let dots = [];
+      const numDots = 30;
+      const connectDistance = 120;
+      const dotRadius = 4;
+      let particles = [];
+      let soundEnabled = true;
+      const stars = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = document.getElementById('home').offsetHeight;
+        console.log('Canvas resized:', canvas.width, canvas.height);
+      }
+
+      function createDots() {
+        dots = [];
+        for (let i = 0; i < numDots - projects.length; i++) {
+          dots.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            alpha: 0.7,
+            isProject: false
+          });
+        }
+        projects.forEach((proj, i) => {
+          dots.push({
+            x: (canvas.width / (projects.length + 1)) * (i + 1),
+            y: canvas.height * 0.4,
+            alpha: 1,
+            isProject: true,
+            project: proj
+          });
+        });
+        console.log('Dots created:', dots.length);
+      }
+
+      function createStars() {
+        for (let i = 0; i < 50; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            alpha: 0.5 + Math.random() * 0.5
+          });
+        }
+      }
+
+      function createParticles(x, y) {
+        for (let i = 0; i < 5; i++) {
+          particles.push({
+            x,
+            y,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            alpha: 1,
+            life: 60
+          });
+        }
+      }
+
+      resizeCanvas();
+      createDots();
+      createStars();
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        createDots();
+        createStars();
       });
+
+      let mouseX = -1000;
+      let mouseY = -1000;
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (window.innerWidth > 768) {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.clientX - rect.left;
+          mouseY = e.clientY - rect.top;
+          createParticles(mouseX, mouseY);
+        }
+      });
+
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        dots.forEach(dot => {
+          if (dot.isProject) {
+            const dx = clickX - dot.x;
+            const dy = clickY - dot.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 20) {
+              const modal = document.getElementById('modal');
+              const modalContent = document.getElementById('modal-content');
+              document.getElementById('modal-title').textContent = dot.project.title;
+              document.getElementById('modal-description').textContent = dot.project.desc;
+              modal.classList.remove('hidden');
+              modalContent.classList.remove('scale-0');
+              modalContent.classList.add('scale-100');
+              if (soundEnabled) {
+                const sound = document.getElementById('hoverSound');
+                sound.currentTime = 0;
+                sound.play().catch(() => console.log('Sound blocked'));
+              }
+            }
+          }
+        });
+      });
+
+      function drawNetwork() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.strokeStyle = 'rgba(0, 255, 255, 0.7)';
+        ctx.lineWidth = 2;
+
+        // Draw stars
+        stars.forEach(star => {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, 1, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+          ctx.fill();
+          star.alpha = 0.5 + Math.sin(Date.now() / 1000) * 0.3;
+        });
+
+        // Draw dots
+        dots.forEach(dot => {
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, dot.isProject ? dotRadius * 2 : dotRadius, 0, Math.PI * 2);
+          ctx.fillStyle = dot.isProject ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 255, 255, 0.8)';
+          ctx.fill();
+        });
+
+        // Draw lines
+        dots.forEach((dot, i) => {
+          const dx = dot.x - mouseX;
+          const dy = dot.y - mouseY;
+          const distanceToMouse = Math.sqrt(dx * dx + dy * dy);
+          if (distanceToMouse < connectDistance) {
+            for (let j = i + 1; j < dots.length; j++) {
+              const dx2 = dot.x - dots[j].x;
+              const dy2 = dot.y - dots[j].y;
+              const distance = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+              if (distance < connectDistance) {
+                ctx.beginPath();
+                ctx.moveTo(dot.x, dot.y);
+                ctx.lineTo(dots[j].x, dots[j].y);
+                ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / connectDistance})`;
+                ctx.stroke();
+              }
+            }
+            if (dot.isProject && distanceToMouse < 50) {
+              ctx.beginPath();
+              ctx.arc(dot.x, dot.y, 20, 0, Math.PI * 2);
+              ctx.strokeStyle = 'rgba(255, 0, 255, 0.5)';
+              ctx.stroke();
+              ctx.setLineDash([5, 5]);
+              ctx.stroke();
+              ctx.setLineDash([]);
+            }
+          }
+        });
+
+        // Draw particles
+        particles = particles.filter(p => p.life > 0);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
+          ctx.fill();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.02;
+          p.life--;
+        });
+      }
+
+      function animate() {
+        if (window.innerWidth > 768) {
+          drawNetwork();
+        }
+        requestAnimationFrame(animate);
+      }
+
+      console.log('Starting constellation animation...');
+      animate();
+
+      // Sound Toggle
+      document.addEventListener('click', () => {
+        soundEnabled = true;
+      });
+    } catch (e) {
+      console.error('Constellation effect failed:', e);
+      document.getElementById('webCanvas').style.display = 'none';
+      document.body.insertAdjacentHTML('beforeend', '<p style="color: red; text-align: center;">Interactive effect not supported. Please contact alan@olaris.co.uk.</p>');
     }
   </script>
 </body>
