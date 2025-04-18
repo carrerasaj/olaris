@@ -26,16 +26,16 @@
       .animate-wave { animation: wave 15s infinite linear; }
       @keyframes wave { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
       .project-card { transition: transform 0.7s, box-shadow 0.7s; transform-style: preserve-3d; position: relative; perspective: 1000px; }
-      .project-card:hover { transform: rotateY(1080deg) translateZ(100px); box-shadow: 0 0 40px rgba(0, 255, 255, 1); }
+      .project-card:hover { transform: rotateY(1440deg) translateZ(150px); box-shadow: 0 0 50px rgba(0, 255, 255, 1); }
       .project-card .front, .project-card .back { backface-visibility: hidden; position: absolute; width: 100%; height: 100%; border-radius: 0.5rem; }
       .project-card .back { transform: rotateY(180deg); background: linear-gradient(45deg, #00ffcc, #ff00ff); overflow: hidden; }
       .pulse { animation: pulse 2s infinite; }
       @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
       .shockwave { animation: shockwave 1s ease-out; }
       @keyframes shockwave { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(3); opacity: 0; } }
-      .logo-glow { filter: drop-shadow(0 0 30px rgba(0, 255, 255, 1)); max-width: 160px; width: 100%; height: auto; animation: logo-quasar 6s infinite; }
-      @media (max-width: 768px) { .logo-glow { max-width: 100px; } }
-      @keyframes logo-quasar { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.4) rotate(15deg); } }
+      .logo-glow { filter: drop-shadow(0 0 35px rgba(0, 255, 255, 1)); max-width: 180px; width: 100%; height: auto; animation: logo-supernova 7s infinite; }
+      @media (max-width: 768px) { .logo-glow { max-width: 120px; } }
+      @keyframes logo-supernova { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.5) rotate(20deg); } }
       .disco { animation: disco 0.5s infinite alternate; }
       @keyframes disco { 0% { background: linear-gradient(45deg, #00ffcc, #ff00ff); } 100% { background: linear-gradient(45deg, #ff00ff, #00ffcc); } }
       .starry { position: relative; overflow: hidden; }
@@ -101,9 +101,9 @@
 
     const Hero = () => (
       <section id="home" className="relative bg-gradient-to-b from-blue-900 to-cyan-900 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black text-white py-20 text-center overflow-hidden">
-        <video className="absolute top-0 left-0 w-full h-full hero-video" autoPlay loop muted playsInline>
-          <source src="https://pixabay.com/videos/download/video-10485_small.mp4" type="video/mp4" />
-          <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback cityscape" />
+        <video className="absolute top-0 left-0 w-full h-full hero-video" autoPlay loop muted playsInline onError={() => console.error('Hero video failed to load')}>
+          <source src="https://coverr.co/videos/futuristic-city-neon-45678.mp4" type="video/mp4" />
+          <img src="https://coverr.co/static/fallback-cityscape.jpg" alt="Fallback cityscape" />
         </video>
         <canvas id="webCanvas" className="absolute top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
         <div id="fallback" className="absolute top-0 left-0 w-full h-full hidden" style={{ background: 'url(data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"%3E%3Crect fill="%23000" width="800" height="600"/%3E%3Ccircle cx="100" cy="100" r="5" fill="%2300ffcc"/%3E%3Ccircle cx="300" cy="200" r="5" fill="%2300ffcc"/%3E%3Ccircle cx="500" cy="300" r="5" fill="%2300ffcc"/%3E%3Ccircle cx="700" cy="400" r="5" fill="%2300ffcc"/%3E%3C/svg%3E)' }}></div>
@@ -127,9 +127,9 @@
 
     const About = () => (
       <section id="about" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black animate-wave relative">
-        <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.2" autoPlay loop muted playsInline>
-          <source src="https://pixabay.com/videos/download/video-10774_small.mp4" type="video/mp4" />
-          <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback globe" />
+        <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.2" autoPlay loop muted playsInline onError={() => console.error('About video failed to load')}>
+          <source src="https://coverr.co/videos/globe-tech-98765.mp4" type="video/mp4" />
+          <img src="https://coverr.co/static/fallback-globe.jpg" alt="Fallback globe" />
         </video>
         <div className="container mx-auto text-center relative z-10">
           <img src="/profile.png" alt="Alan Carreras" className="profile-glow w-48 h-48 mx-auto mb-8 object-cover" onError={() => console.error('Profile picture failed to load. Please ensure profile.png is in your GitHub repo root.')} />
@@ -157,7 +157,7 @@
               <p className="text-gray-700 dark:text-gray-300">Scale your business with market analysis, increasing revenue by 15%.</p>
             </div>
             <div className="bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm hover:scale-105 transition-transform duration-300">
-              <svg className="w-10 h-10 mx-auto mb-4 text-cyan-500 pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2m-6 0h2"></path></svg>
+              <svg className="w-10 h-10 mx-auto mb-4 text-cyan-500 pulse" fill="none" stroke="currentColor" viewBox="0 0 24 4" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2m-6 0h2"></path></svg>
               <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">M&A Advisory</h3>
               <p className="text-gray-700 dark:text-gray-300">Navigate acquisitions to maximize value, achieving 20% gains.</p>
             </div>
@@ -182,9 +182,9 @@
                 <p className="text-gray-700 dark:text-gray-300">Scaled Jurni to a Top 10 broker.</p>
               </div>
               <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline>
-                  <source src="https://pixabay.com/videos/download/video-12345_small.mp4" type="video/mp4" />
-                  <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback car" />
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline onError={() => console.error('Jurni Leasing video failed to load')}>
+                  <source src="https://coverr.co/videos/car-highway-12345.mp4" type="video/mp4" />
+                  <img src="https://coverr.co/static/fallback-car.jpg" alt="Fallback car" />
                 </video>
                 <p className="text-white relative z-10 text-lg font-bold holographic">Managed 30,000+ vehicles (2011–2023)</p>
               </div>
@@ -195,9 +195,9 @@
                 <p className="text-gray-700 dark:text-gray-300">Drove M&A deals.</p>
               </div>
               <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline>
-                  <source src="https://pixabay.com/videos/download/video-87654_small.mp4" type="video/mp4" />
-                  <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback charts" />
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline onError={() => console.error('Jurni M&A video failed to load')}>
+                  <source src="https://coverr.co/videos/charts-finance-87654.mp4" type="video/mp4" />
+                  <img src="https://coverr.co/static/fallback-charts.jpg" alt="Fallback charts" />
                 </video>
                 <p className="text-white relative z-10 text-lg font-bold holographic">Boosted market position by 20% (2011–2023)</p>
               </div>
@@ -208,9 +208,9 @@
                 <p className="text-gray-700 dark:text-gray-300">Blockchain-based fleet app.</p>
               </div>
               <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline>
-                  <source src="https://pixabay.com/videos/download/video-98765_small.mp4" type="video/mp4" />
-                  <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback blockchain" />
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline onError={() => console.error('web_salsac_app video failed to load')}>
+                  <source src="https://coverr.co/videos/blockchain-nodes-98765.mp4" type="video/mp4" />
+                  <img src="https://coverr.co/static/fallback-blockchain.jpg" alt="Fallback blockchain" />
                 </video>
                 <p className="text-white relative z-10 text-lg font-bold holographic">Enhanced ESG reporting for Covase Ltd (2024–Present)</p>
               </div>
@@ -221,9 +221,9 @@
                 <p className="text-gray-700 dark:text-gray-300">Real-time pricing portal.</p>
               </div>
               <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline>
-                  <source src="https://pixabay.com/videos/download/video-76543_small.mp4" type="video/mp4" />
-                  <img src="https://pixabay.com/get/gf7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1f7e6a4b6a8b5f7b1.jpg" alt="Fallback dashboard" />
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline onError={() => console.error('Carmmunity video failed to load')}>
+                  <source src="https://coverr.co/videos/dashboard-data-76543.mp4" type="video/mp4" />
+                  <img src="https://coverr.co/static/fallback-dashboard.jpg" alt="Fallback dashboard" />
                 </video>
                 <p className="text-white relative z-10 text-lg font-bold holographic">Sped orders by 25% (2023–Present)</p>
               </div>
@@ -296,6 +296,7 @@
         <div className="container mx-auto">
           <Logo />
           <p className="mt-4">© 2025 Olaris Consulting Limited. All rights reserved.</p>
+          <p className="text-sm">Version: Cosmic-1.0</p>
         </div>
       </footer>
     );
@@ -332,7 +333,7 @@
         konamiPosition++;
         if (konamiPosition === konamiCode.length) {
           document.body.classList.add('disco');
-          document.body.insertAdjacentHTML('beforeend', '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; z-index: 100; text-shadow: 0 0 10px cyan;">Olaris: Rule the Universe!</div>');
+          document.body.insertAdjacentHTML('beforeend', '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; z-index: 100; text-shadow: 0 0 10px cyan;">Olaris: Transcend Reality!</div>');
           if (window.soundEnabled) {
             const sound = document.getElementById('hoverSound');
             sound.currentTime = 0;
@@ -340,7 +341,7 @@
           }
           setTimeout(() => {
             document.body.classList.remove('disco');
-            document.querySelector('div[style*="Rule the Universe"]').remove();
+            document.querySelector('div[style*="Transcend Reality"]').remove();
           }, 5000);
           konamiPosition = 0;
         }
@@ -363,12 +364,12 @@
           canvas.width = section.offsetWidth;
           canvas.height = section.offsetHeight;
           let particles = [];
-          for (let i = 0; i < 150; i++) {
+          for (let i = 0; i < 200; i++) {
             particles.push({
               x: Math.random() * canvas.width,
               y: Math.random() * canvas.height,
-              vx: (Math.random() - 0.5) * 15,
-              vy: (Math.random() - 0.5) * 15,
+              vx: (Math.random() - 0.5) * 20,
+              vy: (Math.random() - 0.5) * 20,
               alpha: 1,
               life: 60,
               color: Math.random() > 0.5 ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 0, 255, 1)'
@@ -413,19 +414,10 @@
       }
       console.log('Canvas context initialized');
 
-      const projects = [
-        { id: 'jurni-expansion', title: 'Jurni Leasing Expansion', desc: 'Scaled Jurni to a Top 10 broker with 30,000+ vehicles.' },
-        { id: 'jurni-ma', title: 'Jurni M&A Leadership', desc: 'Drove M&A deals, boosting market position by 20%.' },
-        { id: 'web-salsac', title: 'web_salsac_app Development', desc: 'Built a blockchain-based app for ESG transparency.' },
-        { id: 'carmmunity', title: 'Carmmunity Portal Development', desc: 'Created a real-time pricing portal, speeding orders by 25%.' }
-      ];
-
-      let dots = [];
-      const numDots = 30;
-      const connectDistance = 120;
+      const dots = [];
+      const numDots = 20;
+      const connectDistance = 100;
       const dotRadius = 4;
-      let particles = [];
-      const stars = [];
 
       function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -434,58 +426,22 @@
       }
 
       function createDots() {
-        dots = [];
-        for (let i = 0; i < numDots - projects.length; i++) {
+        dots.length = 0;
+        for (let i = 0; i < numDots; i++) {
           dots.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            alpha: 0.7,
-            isProject: false
+            alpha: 0.8
           });
         }
-        projects.forEach((proj, i) => {
-          dots.push({
-            x: (canvas.width / (projects.length + 1)) * (i + 1),
-            y: canvas.height * 0.4,
-            alpha: 1,
-            isProject: true,
-            project: proj
-          });
-        });
         console.log('Dots created:', dots.length);
-      }
-
-      function createStars() {
-        for (let i = 0; i < 50; i++) {
-          stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            alpha: 0.5 + Math.random() * 0.5
-          });
-        }
-      }
-
-      function createParticles(x, y) {
-        for (let i = 0; i < 10; i++) {
-          particles.push({
-            x,
-            y,
-            vx: (Math.random() - 0.5) * 5,
-            vy: (Math.random() - 0.5) * 5,
-            alpha: 1,
-            life: 60,
-            color: Math.random() > 0.5 ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 0, 255, 1)'
-          });
-        }
       }
 
       resizeCanvas();
       createDots();
-      createStars();
       window.addEventListener('resize', () => {
         resizeCanvas();
         createDots();
-        createStars();
       });
 
       let mouseX = -1000;
@@ -497,71 +453,20 @@
           const rect = canvas.getBoundingClientRect();
           mouseX = e.clientX - rect.left;
           mouseY = e.clientY - rect.top;
-          createParticles(mouseX, mouseY);
         }
-      });
-
-      canvas.addEventListener('click', (e) => {
-        console.log('Canvas clicked:', e.clientX, e.clientY);
-        const rect = canvas.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const clickY = e.clientY - rect.top;
-        dots.forEach(dot => {
-          if (dot.isProject) {
-            const dx = clickX - dot.x;
-            const dy = clickY - dot.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 20) {
-              const modal = document.getElementById('modal');
-              const modalContent = document.getElementById('modal-content');
-              document.getElementById('modal-title').textContent = dot.project.title;
-              document.getElementById('modal-description').textContent = dot.project.desc;
-              modal.classList.remove('hidden');
-              modalContent.classList.remove('scale-0');
-              modalContent.classList.add('scale-100');
-              if (window.soundEnabled) {
-                const sound = document.getElementById('hoverSound');
-                sound.currentTime = 0;
-                sound.play().catch(() => console.log('Sound blocked'));
-              }
-            }
-          }
-        });
       });
 
       function drawNetwork() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.strokeStyle = 'rgba(0, 255, 255, 0.7)';
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+        ctx.strokeStyle = 'rgba(255, 0, 255, 0.7)';
         ctx.lineWidth = 2;
-
-        // Draw stars
-        stars.forEach(star => {
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, 1, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-          ctx.fill();
-          star.alpha = 0.5 + Math.sin(Date.now() / 1000) * 0.3;
-        });
 
         // Draw dots
         dots.forEach(dot => {
           ctx.beginPath();
-          ctx.arc(dot.x, dot.y, dot.isProject ? dotRadius * 2 : dotRadius, 0, Math.PI * 2);
-          ctx.fillStyle = dot.isProject ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 255, 255, 0.8)';
+          ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
           ctx.fill();
-          if (dot.isProject) {
-            const dx = dot.x - mouseX;
-            const dy = dot.y - mouseY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < 50) {
-              ctx.beginPath();
-              ctx.moveTo(dot.x, dot.y);
-              ctx.lineTo(mouseX, mouseY);
-              ctx.strokeStyle = 'rgba(255, 0, 255, 0.5)';
-              ctx.stroke();
-            }
-          }
         });
 
         // Draw lines
@@ -578,24 +483,10 @@
                 ctx.beginPath();
                 ctx.moveTo(dot.x, dot.y);
                 ctx.lineTo(dots[j].x, dots[j].y);
-                ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / connectDistance})`;
                 ctx.stroke();
               }
             }
           }
-        });
-
-        // Draw particles
-        particles = particles.filter(p => p.life > 0);
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-          ctx.fillStyle = p.color.replace('1)', `${p.alpha})`);
-          ctx.fill();
-          p.x += p.vx;
-          p.y += p.vy;
-          p.alpha -= 0.02;
-          p.life--;
         });
       }
 
@@ -609,53 +500,6 @@
 
       console.log('Starting constellation animation...');
       animate();
-
-      // Particle Bursts on Project Flip
-      document.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          const rect = card.getBoundingClientRect();
-          const canvas = document.createElement('canvas');
-          canvas.className = 'absolute top-0 left-0 w-full h-full pointer-events-none z-10';
-          card.appendChild(canvas);
-          const ctx = canvas.getContext('2d');
-          canvas.width = rect.width;
-          canvas.height = rect.height;
-          let particles = [];
-          for (let i = 0; i < 50; i++) {
-            particles.push({
-              x: Math.random() * canvas.width,
-              y: Math.random() * canvas.height,
-              vx: (Math.random() - 0.5) * 10,
-              vy: (Math.random() - 0.5) * 10,
-              alpha: 1,
-              life: 60,
-              color: Math.random() > 0.5 ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 0, 255, 1)'
-            });
-          }
-          function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles = particles.filter(p => p.life > 0);
-            particles.forEach(p => {
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-              ctx.fillStyle = p.color.replace('1)', `${p.alpha})`);
-              ctx.fill();
-              p.x += p.vx;
-              p.y += p.vy;
-              p.alpha -= 0.02;
-              p.life--;
-            });
-            if (particles.length) requestAnimationFrame(drawParticles);
-            else card.removeChild(canvas);
-          }
-          drawParticles();
-          if (window.soundEnabled) {
-            const sound = document.getElementById('hoverSound');
-            sound.currentTime = 0;
-            sound.play().catch(() => console.log('Sound blocked'));
-          }
-        });
-      });
     } catch (e) {
       console.error('Constellation effect failed:', e);
       document.getElementById('webCanvas').style.display = 'none';
