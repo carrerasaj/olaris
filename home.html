@@ -40,6 +40,7 @@
       @keyframes disco { 0% { background: linear-gradient(45deg, #00ffcc, #ff00ff); } 100% { background: linear-gradient(45deg, #ff00ff, #00ffcc); } }
       .starry { position: relative; overflow: hidden; }
       .starry::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('/starfield.jpg') repeat; opacity: 0.5; z-index: -1; }
+      .hero-video { object-fit: cover; opacity: 0.3; z-index: -2; }
       .debug { position: absolute; top: 10px; left: 10px; color: red; font-size: 12px; }
     </style>
 </head>
@@ -98,8 +99,14 @@
     };
 
     const Hero = () => (
-      <section id="home" className="relative bg-gradient-to-b from-blue-900 to-cyan-900 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black text-white py-20 text-center">
-        <p className="debug">Debug: Cosmic-1.7</p>
+      <section id="home" className="relative bg-gradient-to-b from-blue-900 to-cyan-900 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black text-white py-20 text-center overflow-hidden">
+        <p className="debug">Debug: Cosmic-1.8</p>
+        <video className="absolute top-0 left-0 w-full h-full hero-video" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Hero video failed to load')}>
+          <source src="/videos/cityscape.mp4" type="video/mp4" />
+          <img src="/videos/cityscape-fallback.jpg" alt="Fallback cityscape" />
+        </video>
+        <canvas id="webCanvas" className="absolute top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
+        <div id="fallback" className="absolute top-0 left-0 w-full h-full hidden" style={{ background: 'url(/starfield.jpg)' }}></div>
         <div className="container mx-auto relative z-10 backdrop-blur-sm bg-white/10 p-8 rounded-lg">
           <h2 className="text-6xl font-extrabold mb-4 holographic font-orbitron">Olaris Consulting Limited</h2>
           <p className="text-2xl mb-6 text-cyan-300">Driving strategic growth and fleet management excellence</p>
@@ -119,8 +126,12 @@
     );
 
     const About = () => (
-      <section id="about" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black animate-wave">
-        <div className="container mx-auto text-center">
+      <section id="about" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black animate-wave relative">
+        <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.2" autoPlay loop muted playsInline preload="auto" onError={() => console.error('About video failed to load')}>
+          <source src="/videos/globe.mp4" type="video/mp4" />
+          <img src="/videos/globe-fallback.jpg" alt="Fallback globe" />
+        </video>
+        <div className="container mx-auto text-center relative z-10">
           <h2 className="text-4xl font-extrabold mb-8 holographic font-orbitron">About Alan Carreras</h2>
           <p className="text-lg max-w-2xl mx-auto text-gray-700 dark:text-gray-300">
             With 39 years in the motor industry, I specialize in fleet management, M&A, and tech innovation. I led Jurni Leasing to Top 10 broker status, managing 30,000+ vehicles, and pioneered web_salsac_app, a blockchain-based ESG solution for Covase Ltd.
@@ -169,8 +180,12 @@
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Jurni Leasing Expansion</h3>
                 <p className="text-gray-700 dark:text-gray-300">Scaled Jurni to a Top 10 broker.</p>
               </div>
-              <div className="back p-4 rounded-lg h-full flex flex-col justify-center">
-                <p className="text-white text-lg font-bold holographic">Managed 30,000+ vehicles (2011–2023)</p>
+              <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Jurni Leasing video failed to load')}>
+                  <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
+                  <img src="/videos/jurni-leasing-fallback.jpg" alt="Fallback car" />
+                </video>
+                <p className="text-white relative z-10 text-lg font-bold holographic">Managed 30,000+ vehicles (2011–2023)</p>
               </div>
             </div>
             <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
@@ -178,8 +193,12 @@
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Jurni M&A Leadership</h3>
                 <p className="text-gray-700 dark:text-gray-300">Drove M&A deals.</p>
               </div>
-              <div className="back p-4 rounded-lg h-full flex flex-col justify-center">
-                <p className="text-white text-lg font-bold holographic">Boosted market position by 20% (2011–2023)</p>
+              <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Jurni M&A video failed to load')}>
+                  <source src="/videos/jurni-ma.mp4" type="video/mp4" />
+                  <img src="/videos/jurni-ma-fallback.jpg" alt="Fallback charts" />
+                </video>
+                <p className="text-white relative z-10 text-lg font-bold holographic">Boosted market position by 20% (2011–2023)</p>
               </div>
             </div>
             <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
@@ -187,8 +206,12 @@
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">web_salsac_app Development</h3>
                 <p className="text-gray-700 dark:text-gray-300">Blockchain-based fleet app.</p>
               </div>
-              <div className="back p-4 rounded-lg h-full flex flex-col justify-center">
-                <p className="text-white text-lg font-bold holographic">Enhanced ESG reporting for Covase Ltd (2024–Present)</p>
+              <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('web_salsac_app video failed to load')}>
+                  <source src="/videos/web-salsac.mp4" type="video/mp4" />
+                  <img src="/videos/web-salsac-fallback.jpg" alt="Fallback blockchain" />
+                </video>
+                <p className="text-white relative z-10 text-lg font-bold holographic">Enhanced ESG reporting for Covase Ltd (2024–Present)</p>
               </div>
             </div>
             <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
@@ -196,8 +219,12 @@
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Carmmunity Portal Development</h3>
                 <p className="text-gray-700 dark:text-gray-300">Real-time pricing portal.</p>
               </div>
-              <div className="back p-4 rounded-lg h-full flex flex-col justify-center">
-                <p className="text-white text-lg font-bold holographic">Sped orders by 25% (2023–Present)</p>
+              <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Carmmunity video failed to load')}>
+                  <source src="/videos/carmmunity.mp4" type="video/mp4" />
+                  <img src="/videos/carmmunity-fallback.jpg" alt="Fallback dashboard" />
+                </video>
+                <p className="text-white relative z-10 text-lg font-bold holographic">Sped orders by 25% (2023–Present)</p>
               </div>
             </div>
           </div>
@@ -373,6 +400,145 @@
         console.error('Section particle effect failed:', e);
       }
     });
+  </script>
+  <script>
+    console.log('Starting constellation effect...');
+    try {
+      window.soundEnabled = true;
+      const canvas = document.getElementById('webCanvas');
+      console.log('Canvas element:', canvas);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error('Canvas context not supported');
+        throw new Error('Canvas context not supported');
+      }
+      console.log('Canvas context initialized');
+
+      const dots = [];
+      const numDots = 30;
+      const dotRadius = 2;
+      const maxDistance = 80;
+      const lineOpacity = 0.3;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = document.getElementById('home').offsetHeight || 600;
+        console.log('Canvas resized:', canvas.width, canvas.height);
+      }
+
+      function createDots() {
+        dots.length = 0;
+        for (let i = 0; i < numDots; i++) {
+          dots.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            alpha: 0.5 + Math.random() * 0.5
+          });
+        }
+        console.log('Dots created:', dots.length);
+      }
+
+      resizeCanvas();
+      createDots();
+      window.addEventListener('resize', () => {
+        try {
+          resizeCanvas();
+          createDots();
+        } catch (e) {
+          console.error('Resize failed:', e);
+        }
+      });
+
+      let mouseX = -1000;
+      let mouseY = -1000;
+
+      canvas.addEventListener('mousemove', (e) => {
+        try {
+          console.log('Mouse move detected:', e.clientX, e.clientY);
+          if (window.innerWidth > 768) {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+          }
+        } catch (e) {
+          console.error('Mouse move failed:', e);
+        }
+      });
+
+      function drawNetwork() {
+        try {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'rgba(0, 255, 255, 1)';
+          ctx.strokeStyle = `rgba(0, 255, 255, ${lineOpacity})`;
+
+          // Draw lines between nearby dots
+          for (let i = 0; i < dots.length; i++) {
+            for (let j = i + 1; j < dots.length; j++) {
+              const dx = dots[i].x - dots[j].x;
+              const dy = dots[i].y - dots[j].y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < maxDistance) {
+                ctx.beginPath();
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(dots[j].x, dots[j].y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          // Draw and update dots
+          dots.forEach(dot => {
+            // Move dots
+            dot.x += dot.vx;
+            dot.y += dot.vy;
+
+            // Bounce off edges
+            if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
+            if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
+
+            // Attract to mouse
+            const dx = dot.x - mouseX;
+            const dy = dot.y - mouseY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < maxDistance) {
+              const force = (maxDistance - distance) / maxDistance * 0.05;
+              dot.vx += dx * force / distance;
+              dot.vy += dy * force / distance;
+            }
+
+            // Draw dot
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0, 255, 255, ${dot.alpha})`;
+            ctx.fill();
+          });
+        } catch (e) {
+          console.error('Draw network failed:', e);
+        }
+      }
+
+      function animate() {
+        try {
+          console.log('Animating frame...');
+          if (window.innerWidth > 768) {
+            drawNetwork();
+          }
+          requestAnimationFrame(animate);
+        } catch (e) {
+          console.error('Animation failed:', e);
+        }
+      }
+
+      console.log('Starting constellation animation...');
+      animate();
+    } catch (e) {
+      console.error('Constellation effect failed:', e);
+      document.getElementById('webCanvas').style.display = 'none';
+      document.getElementById('fallback').classList.remove('hidden');
+      document.body.insertAdjacentHTML('beforeend', '<p style="color: red; text-align: center;">Interactive effect not supported. Please contact alan@olaris.co.uk.</p>');
+    }
   </script>
 </body>
 </html>
