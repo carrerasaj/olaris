@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olaris Consulting Limited</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.15/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const Logo = () => (
+      <img
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uWCPjwfO1s3r3BwcABZIBADs=..."
+        alt="Olaris Consulting Limited Logo"
+        className="h-12"
+      />
+    );
+
+    const Navbar = () => (
+      <nav className="bg-blue-900 text-white p-4 sticky top-0 z-10">
+        <div className="container mx-auto flex justify-between items-center">
+          <a href="#home" className="flex items-center">
+            <Logo />
+          </a>
+          <div className="space-x-4">
+            <a href="#home" className="hover:text-gray-300">Home</a>
+            <a href="#about" className="hover:text-gray-300">About</a>
+            <a href="#services" className="hover:text-gray-300">Services</a>
+            <a href="#contact" className="hover:text-gray-300">Contact</a>
+          </div>
+        </div>
+      </nav>
+    );
+
+    const Hero = () => (
+      <section id="home" className="bg-blue-700 text-white py-20 text-center">
+        <div className="container mx-auto">
+          <h2 className="text-4xl font-bold mb-4">Olaris Consulting Limited</h2>
+          <p className="text-lg mb-6">Expert guidance for your business success</p>
+          <a href="#contact" className="bg-white text-blue-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-200">
+            Get in Touch
+          </a>
+        </div>
+      </section>
+    );
+
+    const About = () => (
+      <section id="about" className="py-16 bg-gray-100">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6">About Olaris Consulting</h2>
+          <p className="text-lg max-w-2xl mx-auto">
+            Founded to deliver exceptional value, Olaris Consulting Limited specializes in [your industry/field, e.g., strategic planning, technology integration]. 
+            With [X years] of experience, I help businesses thrive through tailored solutions. 
+            [Replace this with your personal bio, expertise, and what sets Olaris apart.]
+          </p>
+        </div>
+      </section>
+    );
+
+    const Services = () => (
+      <section id="services" className="py-16">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6">Our Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4">Strategic Consulting</h3>
+              <p>[Describe your strategic service, e.g., crafting long-term business plans.]</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4">Process Optimization</h3>
+              <p>[Describe your optimization service, e.g., improving operational workflows.]</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4">Market Insights</h3>
+              <p>[Describe your insights service, e.g., providing competitive analysis.]</p>
+            </div>
+          </div>
+          <p className="mt-6 text-sm text-gray-600">[Replace these with your actual services.]</p>
+        </div>
+      </section>
+    );
+
+    const Contact = () => (
+      <section id="contact" className="py-16 bg-gray-100">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6">Contact Olaris Consulting</h2>
+          <p className="text-lg mb-6">Let’s collaborate to achieve your business goals!</p>
+          <div className="max-w-lg mx-auto">
+            <p className="text-sm text-red-600 mb-4">
+              Note: Form submission requires a backend server. Please contact me directly at [your-email@example.com].
+            </p>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full p-3 rounded-lg border border-gray-300"
+                disabled
+              />
+              <input
+                type="email"
+                placeholder="Your Email"
+                className="w-full p-3 rounded-lg border border-gray-300"
+                disabled
+              />
+              <textarea
+                placeholder="Your Message"
+                className="w-full p-3 rounded-lg border border-gray-300"
+                rows="5"
+                disabled
+              ></textarea>
+              <button
+                className="bg-blue-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-800"
+                disabled
+              >
+                Send Message
+              </button>
+            </div>
+            <p className="mt-6">[Add your contact details, e.g., Email: your-email@example.com | Phone: your-phone-number]</p>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Footer = () => (
+      <footer className="bg-blue-900 text-white py-6 text-center">
+        <div className="container mx-auto">
+          <Logo />
+          <p className="mt-4">© 2025 Olaris Consulting Limited. All rights reserved.</p>
+        </div>
+      </footer>
+    );
+
+    const App = () => (
+      <div>
+        <Navbar />
+        <Hero />
+        <About />
+        <Services />
+        <Contact />
+        <Footer />
+      </div>
+    );
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
