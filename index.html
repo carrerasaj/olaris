@@ -25,15 +25,19 @@
       .holographic { background: linear-gradient(45deg, #1e40af, #00ffcc, #ff00ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
       .animate-wave { animation: wave 15s infinite linear; }
       @keyframes wave { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
-      .project-card:hover { transform: perspective(1000px) rotateY(10deg) rotateX(5deg); }
+      .project-card { transition: transform 0.5s; transform-style: preserve-3d; }
+      .project-card:hover { transform: rotateY(180deg); }
+      .project-card .front, .project-card .back { backface-visibility: hidden; position: absolute; width: 100%; height: 100%; }
+      .project-card .back { transform: rotateY(180deg); }
       .pulse { animation: pulse 2s infinite; }
       @keyframes pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
       .shockwave { animation: shockwave 1s ease-out; }
       @keyframes shockwave { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(3); opacity: 0; } }
-      .logo-glow { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8)); max-width: 72px; width: 100%; height: auto; animation: logo-pulse 3s infinite; }
+      .logo-glow { filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)); max-width: 120px; width: 100%; height: auto; animation: logo-pulse 3s infinite; }
+      @media (max-width: 768px) { .logo-glow { max-width: 64px; } }
       @keyframes logo-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-      .animate-orbit { animation: orbit 20s linear infinite; }
-      @keyframes orbit { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      .disco { animation: disco 0.5s infinite alternate; }
+      @keyframes disco { 0% { background: linear-gradient(45deg, #00ffcc, #ff00ff); } 100% { background: linear-gradient(45deg, #ff00ff, #00ffcc); } }
     </style>
 </head>
 <body className="font-inter transition-colors duration-300" id="theme-body">
@@ -45,7 +49,7 @@
       <img
         src="/logo.png"
         alt="Olaris Consulting Limited Logo"
-        className="logo-glow"
+        className="logo-glow hover:scale-110 transition-transform duration-300"
         onError={() => console.error('Logo failed to load. Please upload logo.png to your GitHub repo root.')}
       />
     );
@@ -57,6 +61,11 @@
         body.classList.toggle('dark');
         body.classList.toggle('neon-night');
         localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+      };
+
+      const toggleSound = () => {
+        window.soundEnabled = !window.soundEnabled;
+        console.log('Sound enabled:', window.soundEnabled);
       };
 
       return (
@@ -72,6 +81,9 @@
               <a href="#projects" className="hover:text-cyan-400">Projects</a>
               <a href="#testimonials" className="hover:text-cyan-400">Testimonials</a>
               <a href="#contact" className="hover:text-cyan-400">Contact</a>
+              <button onClick={toggleSound} className="p-2 rounded-full bg-cyan-500 text-black" aria-label="Toggle sound">
+                <svg className="w-5 h-5 pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707a1 1 0 011.414 0l2.828 2.828a1 1 0 010 1.414L8.414 12l6.121 6.121a1 1 0 010 1.414l-2.828 2.828a1 1 0 01-1.414 0L5.586 15z" /></svg>
+              </button>
               <button onClick={toggleTheme} className="p-2 rounded-full bg-gray-700 dark:bg-gray-200 text-white dark:text-gray-900" aria-label="Toggle theme">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
               </button>
@@ -147,29 +159,41 @@
       <section id="projects" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-gray-800 dark:to-gray-900 neon-night:bg-black animate-wave">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-extrabold mb-8 holographic font-orbitron">Our Projects</h2>
-          <div className="relative h-[400px] overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex space-x-8 animate-orbit" style={{ transformStyle: 'preserve-3d' }}>
-                <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm transition-all duration-500">
-                  <div className="bg-blue-100 h-24 mb-4 flex items-center justify-center text-blue-700 dark:text-blue-400 text-sm">Jurni Leasing Fleet</div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Jurni Leasing Expansion</h3>
-                  <p className="text-gray-700 dark:text-gray-300">Scaled Jurni to a Top 10 broker, managing 30,000+ vehicles (2011–2023).</p>
-                </div>
-                <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm transition-all duration-500">
-                  <div className="bg-blue-100 h-24 mb-4 flex items-center justify-center text-blue-700 dark:text-blue-400 text-sm">M&A Strategy</div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Jurni M&A Leadership</h3>
-                  <p className="text-gray-700 dark:text-gray-300">Drove M&A deals, boosting market position by 20% (2011–2023).</p>
-                </div>
-                <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm transition-all duration-500">
-                  <div className="bg-blue-100 h-24 mb-4 flex items-center justify-center text-blue-700 dark:text-blue-400 text-sm">Web App Innovation</div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">web_salsac_app Development</h3>
-                  <p className="text-gray-700 dark:text-gray-300">Led a blockchain-based fleet app with ESG reporting for Covase Ltd (2024–Present).</p>
-                </div>
-                <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm transition-all duration-500">
-                  <div className="bg-blue-100 h-24 mb-4 flex items-center justify-center text-blue-700 dark:text-blue-400 text-sm">Carmmunity Portal</div>
-                  <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Carmmunity Portal Development</h3>
-                  <p className="text-gray-700 dark:text-gray-300">Built a pricing portal, speeding orders by 25% (2023–Present).</p>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
+              <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Jurni Leasing Expansion</h3>
+                <p className="text-gray-700 dark:text-gray-300">Scaled Jurni to a Top 10 broker.</p>
+              </div>
+              <div className="back bg-cyan-900/90 p-4 rounded-lg h-full flex flex-col justify-center">
+                <p className="text-white">Managed 30,000+ vehicles with a £multi-million turnover (2011–2023).</p>
+              </div>
+            </div>
+            <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
+              <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Jurni M&A Leadership</h3>
+                <p className="text-gray-700 dark:text-gray-300">Drove M&A deals.</p>
+              </div>
+              <div className="back bg-cyan-900/90 p-4 rounded-lg h-full flex flex-col justify-center">
+                <p className="text-white">Boosted market position by 20% (2011–2023).</p>
+              </div>
+            </div>
+            <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
+              <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">web_salsac_app Development</h3>
+                <p className="text-gray-700 dark:text-gray-300">Blockchain-based fleet app.</p>
+              </div>
+              <div className="back bg-cyan-900/90 p-4 rounded-lg h-full flex flex-col justify-center">
+                <p className="text-white">Enhanced ESG reporting for Covase Ltd (2024–Present).</p>
+              </div>
+            </div>
+            <div className="project-card bg-white/90 dark:bg-gray-900/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
+              <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Carmmunity Portal Development</h3>
+                <p className="text-gray-700 dark:text-gray-300">Real-time pricing portal.</p>
+              </div>
+              <div className="back bg-cyan-900/90 p-4 rounded-lg h-full flex flex-col justify-center">
+                <p className="text-white">Sped orders by 25% (2023–Present).</p>
               </div>
             </div>
           </div>
@@ -263,10 +287,31 @@
       console.error('React render failed:', e);
       document.body.innerHTML = '<h1>Error loading site. Please contact alan@olaris.co.uk.</h1>';
     }
+
+    // Konami Code Easter Egg
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiPosition = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.key === konamiCode[konamiPosition]) {
+        konamiPosition++;
+        if (konamiPosition === konamiCode.length) {
+          document.body.classList.add('disco');
+          document.body.insertAdjacentHTML('beforeend', '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; z-index: 100; text-shadow: 0 0 10px cyan;">You found the future!</div>');
+          setTimeout(() => {
+            document.body.classList.remove('disco');
+            document.querySelector('div[style*="You found the future"]').remove();
+          }, 5000);
+          konamiPosition = 0;
+        }
+      } else {
+        konamiPosition = 0;
+      }
+    });
   </script>
   <script>
     console.log('Starting constellation effect...');
     try {
+      window.soundEnabled = true;
       const canvas = document.getElementById('webCanvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas context not supported');
@@ -283,12 +328,11 @@
       const connectDistance = 120;
       const dotRadius = 4;
       let particles = [];
-      let soundEnabled = true;
       const stars = [];
 
       function resizeCanvas() {
         canvas.width = window.innerWidth;
-        canvas.height = document.getElementById('home').offsetHeight;
+        canvas.height = document.getElementById('home').offsetHeight || 600;
         console.log('Canvas resized:', canvas.width, canvas.height);
       }
 
@@ -350,6 +394,7 @@
       let mouseY = -1000;
 
       canvas.addEventListener('mousemove', (e) => {
+        console.log('Mouse move detected');
         if (window.innerWidth > 768) {
           const rect = canvas.getBoundingClientRect();
           mouseX = e.clientX - rect.left;
@@ -359,6 +404,7 @@
       });
 
       canvas.addEventListener('click', (e) => {
+        console.log('Canvas clicked');
         const rect = canvas.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const clickY = e.clientY - rect.top;
@@ -375,7 +421,7 @@
               modal.classList.remove('hidden');
               modalContent.classList.remove('scale-0');
               modalContent.classList.add('scale-100');
-              if (soundEnabled) {
+              if (window.soundEnabled) {
                 const sound = document.getElementById('hoverSound');
                 sound.currentTime = 0;
                 sound.play().catch(() => console.log('Sound blocked'));
@@ -462,9 +508,45 @@
       console.log('Starting constellation animation...');
       animate();
 
-      // Sound Toggle
-      document.addEventListener('click', () => {
-        soundEnabled = true;
+      // Particle Bursts on Project Flip
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          const rect = card.getBoundingClientRect();
+          const canvas = document.createElement('canvas');
+          canvas.className = 'absolute top-0 left-0 w-full h-full pointer-events-none';
+          card.appendChild(canvas);
+          const ctx = canvas.getContext('2d');
+          canvas.width = rect.width;
+          canvas.height = rect.height;
+          let particles = [];
+          for (let i = 0; i < 20; i++) {
+            particles.push({
+              x: Math.random() * canvas.width,
+              y: Math.random() * canvas.height,
+              vx: (Math.random() - 0.5) * 5,
+              vy: (Math.random() - 0.5) * 5,
+              alpha: 1,
+              life: 30
+            });
+          }
+          function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
+              ctx.fill();
+              p.x += p.vx;
+              p.y += p.vy;
+              p.alpha -= 0.03;
+              p.life--;
+            });
+            if (particles.length) requestAnimationFrame(drawParticles);
+            else card.removeChild(canvas);
+          }
+          drawParticles();
+        });
       });
     } catch (e) {
       console.error('Constellation effect failed:', e);
