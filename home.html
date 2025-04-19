@@ -403,142 +403,152 @@
   </script>
   <script>
     console.log('Starting constellation effect...');
-    try {
-      window.soundEnabled = true;
-      const canvas = document.getElementById('webCanvas');
-      console.log('Canvas element:', canvas);
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        console.error('Canvas context not supported');
-        throw new Error('Canvas context not supported');
-      }
-      console.log('Canvas context initialized');
-
-      const dots = [];
-      const numDots = 30;
-      const dotRadius = 2;
-      const maxDistance = 80;
-      const lineOpacity = 0.3;
-
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = document.getElementById('home').offsetHeight || 600;
-        console.log('Canvas resized:', canvas.width, canvas.height);
-      }
-
-      function createDots() {
-        dots.length = 0;
-        for (let i = 0; i < numDots; i++) {
-          dots.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.3,
-            vy: (Math.random() - 0.5) * 0.3,
-            alpha: 0.5 + Math.random() * 0.5
-          });
-        }
-        console.log('Dots created:', dots.length);
-      }
-
-      resizeCanvas();
-      createDots();
-      window.addEventListener('resize', () => {
+    window.onload = function() {
+      setTimeout(() => {
         try {
+          window.soundEnabled = true;
+          const canvas = document.getElementById('webCanvas');
+          console.log('Canvas element:', canvas);
+          if (!canvas) {
+            console.error('Canvas element not found');
+            return;
+          }
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            console.error('Canvas context not supported');
+            throw new Error('Canvas context not supported');
+          }
+          console.log('Canvas context initialized');
+
+          const dots = [];
+          const numDots = 30;
+          const dotRadius = 2;
+          const maxDistance = 80;
+          const lineOpacity = 0.3;
+
+          function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = document.getElementById('home').offsetHeight || 600;
+            console.log('Canvas resized:', canvas.width, canvas.height);
+          }
+
+          function createDots() {
+            dots.length = 0;
+            for (let i = 0; i < numDots; i++) {
+              dots.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                alpha: 0.5 + Math.random() * 0.5
+              });
+            }
+            console.log('Dots created:', dots.length);
+          }
+
           resizeCanvas();
           createDots();
-        } catch (e) {
-          console.error('Resize failed:', e);
-        }
-      });
-
-      let mouseX = -1000;
-      let mouseY = -1000;
-
-      canvas.addEventListener('mousemove', (e) => {
-        try {
-          console.log('Mouse move detected:', e.clientX, e.clientY);
-          if (window.innerWidth > 768) {
-            const rect = canvas.getBoundingClientRect();
-            mouseX = e.clientX - rect.left;
-            mouseY = e.clientY - rect.top;
-          }
-        } catch (e) {
-          console.error('Mouse move failed:', e);
-        }
-      });
-
-      function drawNetwork() {
-        try {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = 'rgba(0, 255, 255, 1)';
-          ctx.strokeStyle = `rgba(0, 255, 255, ${lineOpacity})`;
-
-          // Draw lines between nearby dots
-          for (let i = 0; i < dots.length; i++) {
-            for (let j = i + 1; j < dots.length; j++) {
-              const dx = dots[i].x - dots[j].x;
-              const dy = dots[i].y - dots[j].y;
-              const distance = Math.sqrt(dx * dx + dy * dy);
-              if (distance < maxDistance) {
-                ctx.beginPath();
-                ctx.moveTo(dots[i].x, dots[i].y);
-                ctx.lineTo(dots[j].x, dots[j].y);
-                ctx.stroke();
-              }
+          window.addEventListener('resize', () => {
+            try {
+              resizeCanvas();
+              createDots();
+            } catch (e) {
+              console.error('Resize failed:', e);
             }
-          }
-
-          // Draw and update dots
-          dots.forEach(dot => {
-            // Move dots
-            dot.x += dot.vx;
-            dot.y += dot.vy;
-
-            // Bounce off edges
-            if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
-            if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
-
-            // Attract to mouse
-            const dx = dot.x - mouseX;
-            const dy = dot.y - mouseY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < maxDistance) {
-              const force = (maxDistance - distance) / maxDistance * 0.05;
-              dot.vx += dx * force / distance;
-              dot.vy += dy * force / distance;
-            }
-
-            // Draw dot
-            ctx.beginPath();
-            ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(0, 255, 255, ${dot.alpha})`;
-            ctx.fill();
           });
-        } catch (e) {
-          console.error('Draw network failed:', e);
-        }
-      }
 
-      function animate() {
-        try {
-          console.log('Animating frame...');
-          if (window.innerWidth > 768) {
-            drawNetwork();
+          let mouseX = -1000;
+          let mouseY = -1000;
+
+          canvas.addEventListener('mousemove', (e) => {
+            try {
+              console.log('Mouse move detected:', e.clientX, e.clientY);
+              if (window.innerWidth > 768) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+              }
+            } catch (e) {
+              console.error('Mouse move failed:', e);
+            }
+          });
+
+          function drawNetwork() {
+            try {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ctx.fillStyle = 'rgba(0, 255, 255, 1)';
+              ctx.strokeStyle = `rgba(0, 255, 255, ${lineOpacity})`;
+
+              // Draw lines between nearby dots
+              for (let i = 0; i < dots.length; i++) {
+                for (let j = i + 1; j < dots.length; j++) {
+                  const dx = dots[i].x - dots[j].x;
+                  const dy = dots[i].y - dots[j].y;
+                  const distance = Math.sqrt(dx * dx + dy * dy);
+                  if (distance < maxDistance) {
+                    ctx.beginPath();
+                    ctx.moveTo(dots[i].x, dots[i].y);
+                    ctx.lineTo(dots[j].x, dots[j].y);
+                    ctx.stroke();
+                  }
+                }
+              }
+
+              // Draw and update dots
+              dots.forEach(dot => {
+                // Move dots
+                dot.x += dot.vx;
+                dot.y += dot.vy;
+
+                // Bounce off edges
+                if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
+                if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
+
+                // Attract to mouse
+                const dx = dot.x - mouseX;
+                const dy = dot.y - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < maxDistance) {
+                  const force = (maxDistance - distance) / maxDistance * 0.05;
+                  dot.vx += dx * force / distance;
+                  dot.vy += dy * force / distance;
+                }
+
+                // Draw dot
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 255, ${dot.alpha})`;
+                ctx.fill();
+              });
+            } catch (e) {
+              console.error('Draw network failed:', e);
+            }
           }
-          requestAnimationFrame(animate);
-        } catch (e) {
-          console.error('Animation failed:', e);
-        }
-      }
 
-      console.log('Starting constellation animation...');
-      animate();
-    } catch (e) {
-      console.error('Constellation effect failed:', e);
-      document.getElementById('webCanvas').style.display = 'none';
-      document.getElementById('fallback').classList.remove('hidden');
-      document.body.insertAdjacentHTML('beforeend', '<p style="color: red; text-align: center;">Interactive effect not supported. Please contact alan@olaris.co.uk.</p>');
-    }
+          function animate() {
+            try {
+              console.log('Animating frame...');
+              if (window.innerWidth > 768) {
+                drawNetwork();
+              }
+              requestAnimationFrame(animate);
+            } catch (e) {
+              console.error('Animation failed:', e);
+            }
+          }
+
+          console.log('Starting constellation animation...');
+          animate();
+        } catch (e) {
+          console.error('Constellation effect failed:', e);
+          const canvas = document.getElementById('webCanvas');
+          if (canvas) canvas.style.display = 'none';
+          const fallback = document.getElementById('fallback');
+          if (fallback) fallback.classList.remove('hidden');
+          document.body.insertAdjacentHTML('beforeend', '<p style="color: red; text-align: center;">Interactive effect not supported. Please contact alan@olaris.co.uk.</p>');
+        }
+      }, 1000); // Delay to ensure DOM is loaded
+    };
   </script>
 </body>
 </html>

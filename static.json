@@ -1,0 +1,1 @@
+{"root": ".", "headers": {"/videos/*.mp4": {"Content-Type": "video/mp4"}, "/videos/*.jpg": {"Content-Type": "image/jpeg"}}}
