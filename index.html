@@ -139,6 +139,12 @@
             padding: 20px 0;
             text-align: center;
         }
+        .media-error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -148,12 +154,18 @@
     <script type="text/babel">
         console.log('Starting React render...');
         const Logo = () => (
-            <img
-                src="/logo.png"
-                alt="Olaris Consulting Limited Logo"
-                className="logo-glow hover:scale-110 transition-transform duration-300"
-                onError={() => console.error('Logo failed to load. Please upload logo.png to your GitHub repo root.')}
-            />
+            <div>
+                <img
+                    src="/logo.png"
+                    alt="Olaris Consulting Limited Logo"
+                    className="logo-glow hover:scale-110 transition-transform duration-300"
+                    onError={(e) => {
+                        console.error('Logo failed to load at /logo.png');
+                        e.target.style.display = 'none';
+                        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Logo failed to load. Check if /logo.png exists.</p>');
+                    }}
+                />
+            </div>
         );
 
         const Navbar = () => (
@@ -177,9 +189,17 @@
         const Hero = () => (
             <section id="home" className="relative bg-gradient-to-b from-blue-900 to-cyan-900 text-white py-20 text-center overflow-hidden section">
                 <p className="debug">Debug: Cosmic-1.9</p>
-                <video className="absolute top-0 left-0 w-full h-full hero-video" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Hero video failed to load')}>
+                <video className="absolute top-0 left-0 w-full h-full hero-video" autoPlay loop muted playsInline preload="auto" onError={(e) => {
+                    console.error('Hero video failed to load at /videos/cityscape.mp4');
+                    e.target.style.display = 'none';
+                    e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Hero video failed to load. Check if /videos/cityscape.mp4 exists.</p>');
+                }}>
                     <source src="/videos/cityscape.mp4" type="video/mp4" />
-                    <img src="/videos/cityscape-fallback.jpg" alt="Fallback cityscape" />
+                    <img src="/videos/cityscape-fallback.jpg" alt="Fallback cityscape" onError={(e) => {
+                        console.error('Hero fallback image failed to load at /videos/cityscape-fallback.jpg');
+                        e.target.style.display = 'none';
+                        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Hero fallback image failed to load. Check if /videos/cityscape-fallback.jpg exists.</p>');
+                    }} />
                 </video>
                 <canvas id="webCanvas" className="absolute top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
                 <div id="fallback" className="absolute top-0 left-0 w-full h-full hidden" style={{ background: 'url(/starfield.jpg)' }}></div>
@@ -196,9 +216,17 @@
 
         const About = () => (
             <section id="about" className="py-20 bg-gradient-to-r from-blue-100 to-cyan-100 animate-wave relative section">
-                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.2" autoPlay loop muted playsInline preload="auto" onError={() => console.error('About video failed to load')}>
+                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.2" autoPlay loop muted playsInline preload="auto" onError={(e) => {
+                    console.error('About video failed to load at /videos/globe.mp4');
+                    e.target.style.display = 'none';
+                    e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">About video failed to load. Check if /videos/globe.mp4 exists.</p>');
+                }}>
                     <source src="/videos/globe.mp4" type="video/mp4" />
-                    <img src="/videos/globe-fallback.jpg" alt="Fallback globe" />
+                    <img src="/videos/globe-fallback.jpg" alt="Fallback globe" onError={(e) => {
+                        console.error('About fallback image failed to load at /videos/globe-fallback.jpg');
+                        e.target.style.display = 'none';
+                        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">About fallback image failed to load. Check if /videos/globe-fallback.jpg exists.</p>');
+                    }} />
                 </video>
                 <div className="container mx-auto text-center relative z-10">
                     <h2 className="text-4xl font-extrabold mb-8 holographic">About Alan Carreras</h2>
@@ -250,9 +278,17 @@
                                 <p className="text-gray-700">Scaled Jurni to a Top 10 broker.</p>
                             </div>
                             <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Jurni Leasing video failed to load')}>
+                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={(e) => {
+                                    console.error('Jurni Leasing video failed to load at /videos/jurni-leasing.mp4');
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Jurni Leasing video failed to load. Check if /videos/jurni-leasing.mp4 exists.</p>');
+                                }}>
                                     <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-                                    <img src="/videos/jurni-leasing-fallback.jpg" alt="Fallback car" />
+                                    <img src="/videos/jurni-leasing-fallback.jpg" alt="Fallback car" onError={(e) => {
+                                        console.error('Jurni Leasing fallback image failed to load at /videos/jurni-leasing-fallback.jpg');
+                                        e.target.style.display = 'none';
+                                        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Jurni Leasing fallback image failed to load. Check if /videos/jurni-leasing-fallback.jpg exists.</p>');
+                                    }} />
                                 </video>
                                 <p className="text-white relative z-10 text-lg font-bold holographic">Managed 30,000+ vehicles (2011–2023)</p>
                             </div>
@@ -263,355 +299,186 @@
                                 <p className="text-gray-700">Drove M&A deals.</p>
                             </div>
                             <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Jurni M&A video failed to load')}>
+                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={(e) => {
+                                    console.error('Jurni M&A video failed to load at /videos/jurni-ma.mp4');
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Jurni M&A video failed to load. Check if /videos/jurni-ma.mp4 exists.</p>');
+                                }}>
                                     <source src="/videos/jurni-ma.mp4" type="video/mp4" />
-                                    <img src="/videos/jurni-ma-fallback.jpg" alt="Fallback charts" />
+                                    <img src="/videos/jurni-ma-fallback.jpg" alt="Fallback charts" onError={(e) => {
+                                        console.error('Jurni M&A fallback image failed to load at /videos/jurni-ma-fallback.jpg');
+                                        e.target.style.display = 'none';
+                                        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="media-error">Jurni M&A fallback image failed to load. Check if /videos/jurni-ma-fallback.jpg exists.</p>');
+                                    }} />
                                 </video>
                                 <p className="text-white relative z-10 text-lg font-bold holographic">Boosted market position by 20% (2011–2023)</p>
                             </div>
                         </div>
-                        <div className="project-card bg-white/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
-                            <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
-                                <h3 className="text-xl font-semibold mb-2 text-gray-900">web_salsac_app Development</h3>
-                                <p className="text-gray-700">Blockchain-based fleet app.</p>
-                            </div>
-                            <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('web_salsac_app video failed to load')}>
-                                    <source src="/videos/web-salsac.mp4" type="video/mp4" />
-                                    <img src="/videos/web-salsac-fallback.jpg" alt="Fallback blockchain" />
-                                </video>
-                                <p className="text-white relative z-10 text-lg font-bold holographic">Enhanced ESG reporting for Covase Ltd (2024–Present)</p>
-                            </div>
-                        </div>
-                        <div className="project-card bg-white/90 p-6 rounded-lg shadow-md backdrop-blur-sm relative h-64">
-                            <div className="front bg-blue-100 p-4 rounded-lg h-full flex flex-col justify-center">
-                                <h3 className="text-xl font-semibold mb-2 text-gray-900">Carmmunity Portal Development</h3>
-                                <p className="text-gray-700">Real-time pricing portal.</p>
-                            </div>
-                            <div className="back p-4 rounded-lg h-full flex flex-col justify-center relative">
-                                <video className="absolute top-0 left-0 w-full h-full object-cover opacity-0.8" autoPlay loop muted playsInline preload="auto" onError={() => console.error('Carmmunity video failed to load')}>
-                                    <source src="/videos/carmmunity.mp4" type="video/mp4" />
-                                    <img src="/videos/carmmunity-fallback.jpg" alt="Fallback dashboard" />
-                                </video>
-                                <p className="text-white relative z-10 text-lg font-bold holographic">Sped orders by 25% (2023–Present)</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-8">
-                        <a href="#ar-vehicle" className="bg-cyan-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-cyan-500">View AR Vehicle Demo (Coming Soon)</a>
-                    </div>
-                </div>
-            </section>
-        );
+                        <div classNamestore.min.js?ver=5.9.10' id='wp-emoji-release-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/revslider/public/assets/js/rbtools.min.js?ver=6.5.18' async id='tp-tools-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/revslider/public/assets/js/rs6.min.js?ver=6.5.23' async id='revmin-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/js/admin/tp-advanced-shadow-layout.js?ver=5.0.9' id='tp-advanced-shadows-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/imagesloaded.min.js?ver=4.1.4' id='imagesloaded-js'></script>
+<script id='oceanwp-main-js-extra'>
+var oceanwpLocalize = {"nonce":"bcbe1fbf56","isRTL":"","menuSearchStyle":"disabled","mobileMenuSearchStyle":"disabled","sidrSource":null,"sidrDisplace":"1","sidrSide":"left","sidrDropdownTarget":"link","verticalHeaderTarget":"icon","customSelects":".woocommerce-ordering .orderby, #dropdown_product_cat, .widget_categories select, .widget_archive select, .single-product .variations_form .variations select","ajax_url":"https:\/\/digitalinnk.com\/wp-admin\/admin-ajax.php","stickyChoose":"auto","stickyStyle":"shrink","shrinkLogoHeight":"50","stickyEffect":"none","hasStickyTopBar":"","hasStickyMobile":"1"};
+</script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/theme.min.js?ver=3.3.0' id='oceanwp-main-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/full-screen-mobile-menu.min.js?ver=3.3.0' id='oceanwp-full-screen-mobile-menu-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/vendors/magnific-popup.min.js?ver=3.3.0' id='ow-magnific-popup-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/ow-lightbox.min.js?ver=3.3.0' id='oceanwp-lightbox-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/vendors/flickity.pkgd.min.js?ver=3.3.0' id='ow-flickity-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/ow-slider.min.js?ver=3.3.0' id='oceanwp-slider-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/scroll-effect.min.js?ver=3.3.0' id='oceanwp-scroll-effect-js'></script>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/select.min.js?ver=3.3.0' id='oceanwp-select-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/page-links-to/dist/new-tab.js?ver=3.3.6' id='page-links-to-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/ocean-sticky-header/assets/js/sticky-header.min.js' id='osh-js-scripts-js'></script>
+<!--[if lt IE 9]>
+<script src='https://digitalinnk.com/wp-content/themes/oceanwp/assets/js/third/html5.min.js?ver=3.3.0' id='html5shiv-js'></script>
+<![endif]-->
+<script src='https://digitalinnk.com/wp-content/plugins/revslider-particles-addon/public/assets/js/revolution.addon.particles.min.js?ver=3.3.0' async id='rs-particles-front-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/revslider-transitionpack-addon/public/assets/js/revolution.addon.transitionpack.min.js?ver=1.0.3' async id='rs-transitionpack-js-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/revslider/public/assets/js/libs/three.min.js?ver=6.5.23' async id='revbuilder-threejs-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/make-column-clickable-elementor/assets/js/make-column-clickable.js?ver=1.4.0' id='make-column-clickable-elementor-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min.js?ver=3.7.1' id='elementor-pro-webpack-runtime-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.6.5' id='elementor-webpack-runtime-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.6.5' id='elementor-frontend-modules-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/dist/vendor/regenerator-runtime.min.js?ver=0.13.9' id='regenerator-runtime-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0' id='wp-polyfill-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/dist/hooks.min.js?ver=1e58c8c5a32b2e97491080c5b10dc71c' id='wp-hooks-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/dist/i18n.min.js?ver=30fcecb428a0e8383d3776bcdd3a7834' id='wp-i18n-js'></script>
+<script id='wp-i18n-js-after'>
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+</script>
+<script id='elementor-pro-frontend-js-translations'>
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "elementor-pro", { "locale_data": { "messages": { "": {} } } } );
+</script>
+<script id='elementor-pro-frontend-js-before'>
+var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/digitalinnk.com\/wp-admin\/admin-ajax.php","nonce":"66b5dc5c83","urls":{"assets":"https:\/\/digitalinnk.com\/wp-content\/plugins\/elementor-pro\/assets\/","rest":"https:\/\/digitalinnk.com\/wp-json\/"},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"}},
+"facebook_sdk":{"lang":"en_US","app_id":""},"lottie":{"defaultAnimationUrl":"https:\/\/digitalinnk.com\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}};
+</script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor-pro/assets/js/frontend.min.js?ver=3.7.1' id='elementor-pro-frontend-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/lib/waypoints/waypoints.min.js?ver=4.0.2' id='elementor-waypoints-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/jquery/ui/core.min.js?ver=1.13.1' id='jquery-ui-core-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/lib/swiper/swiper.min.js?ver=5.3.6' id='swiper-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/lib/share-link/share-link.min.js?ver=3.6.5' id='share-link-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/lib/dialog/dialog.min.js?ver=4.9.0' id='elementor-dialog-js'></script>
+<script id='elementor-frontend-js-before'>
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Share on Facebook","shareOnTwitter":"Share on Twitter","pinIt":"Pin it","download":"Download","downloadImage":"Download image","fullscreen":"Fullscreen","zoom":"Zoom","share":"Share","playVideo":"Play Video","previous":"Previous","next":"Next","close":"Close"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Mobile","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Mobile Extra","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet Extra","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Laptop","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Widescreen","value":2400,"default_value":2400,"direction":"min","is_enabled":false}}},
+"version":"3.6.5","is_static":false,"experimentalFeatures":{"e_import_export":true,"e_hidden_wordpress_widgets":true,"theme_builder_v2":true,"landing-pages":true,"elements-color-picker":true,"favorite-widgets":true,"admin-top-bar":true,"page-transitions":true,"notes":true,"form-submissions":true,"e_scroll_snap":true},"urls":{"assets":"https:\/\/digitalinnk.com\/wp-content\/plugins\/elementor\/assets\/"},"settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description"},"post":{"id":2988,"title":"Product%20-%20Digital%20Innk","excerpt":"","featuredImage":"https:\/\/digitalinnk.com\/wp-content\/uploads\/2022\/05\/thumb3-1024x576.jpg"}};
+</script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.6.5' id='elementor-frontend-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor-pro/assets/js/preloaded-elements-handlers.min.js?ver=3.7.1' id='pro-preloaded-elements-handlers-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor/assets/js/preloaded-modules.min.js?ver=3.6.5' id='preloaded-modules-js'></script>
+<script src='https://digitalinnk.com/wp-content/plugins/elementor-pro/assets/lib/sticky/jquery.sticky.min.js?ver=3.7.1' id='e-sticky-js'></script>
+<script src='https://digitalinnk.com/wp-includes/js/underscore.min.js?ver=1.13.1' id='underscore-js'></script>
+<script id='wp-util-js-extra'>
+var _wpUtilSettings = {"ajax":{"url":"\/wp-admin\/admin-ajax.php"}};
+</script>
+<script src='https://digitalinnk.com/wp-includes/js/wp-util.min.js?ver=5.9.10' id='wp-util-js'></script>
+<script id='wpforms-elementor-js-extra'>
+var wpformsElementorVars = {"captcha_provider":"recaptcha","recaptcha_type":"v2"};
+</script>
+<script src='https://digitalinnk.com/wp-content/plugins/wpforms-lite/assets/js/integrations/elementor/frontend.min.js?ver=1.7.4.2' id='wpforms-elementor-js'></script>
+<script id="rs-initialisation-scripts">
+		var	tpj = jQuery;
 
-        const Testimonials = () => (
-            <section id="testimonials" className="py-20 bg-white section">
-                <div className="container mx-auto text-center">
-                    <h2 className="text-4xl font-extrabold mb-8 holographic">What Clients Say</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="bg-white/90 p-6 rounded-lg shadow-md backdrop-blur-sm">
-                            <p className="italic mb-4 text-gray-700">“Alan is an accomplished motor trade professional… I would recommend him without hesitation.”</p>
-                            <p className="font-semibold text-gray-900">James Newell, Clear Sales Message™</p>
-                        </div>
-                        <div className="bg-white/90 p-6 rounded-lg shadow-md backdrop-blur-sm">
-                            <p className="italic mb-4 text-gray-700">“Alan is a fabulous ambassador for the industry… Highly recommended.”</p>
-                            <p className="font-semibold text-gray-900">Trevor Spencer, ABASS</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
+		var	revapi94,revapi25;
 
-        const WorkWithUs = () => (
-            <section id="work-with-us" className="py-20 bg-gradient-to-r from-blue-700 to-cyan-700 text-white text-center section">
-                <div className="container mx-auto">
-                    <h2 className="text-4xl font-extrabold mb-8 holographic">Consulting for Your Sector</h2>
-                    <p className="text-xl mb-6 text-cyan-300">Ready to transform your business? From Jurni Leasing’s Top 10 success to blockchain-powered web_salsac_app, I deliver innovation.</p>
-                    <a href="#contact" className="bg-white text-blue-700 px-10 py-4 rounded-full font-semibold hover:bg-cyan-400 hover:text-black transform hover:scale-110 transition duration-300 relative overflow-hidden group">
-                        <span className="absolute inset-0 bg-cyan-700 opacity-0 group-hover:opacity-30 transition-opacity"></span>
-                        Start Your Transformation
-                    </a>
-                </div>
-            </section>
-        );
+		if(window.RS_MODULES === undefined) window.RS_MODULES = {};
+		if(RS_MODULES.modules === undefined) RS_MODULES.modules = {};
+		RS_MODULES.modules["revslider941"] = {once: RS_MODULES.modules["revslider941"]!==undefined ? RS_MODULES.modules["revslider941"].once : undefined, init:function() {
+			window.revapi94 = window.revapi94===undefined || window.revapi94===null || window.revapi94.length===0  ? document.getElementById("rev_slider_94_1") : window.revapi94;
+			if(window.revapi94 === null || window.revapi94 === undefined || window.revapi94.length==0) { window.revapi94initTry = window.revapi94initTry ===undefined ? 0 : window.revapi94initTry+1; if (window.revapi94initTry<20) requestAnimationFrame(function() {RS_MODULES.modules["revslider941"].init()}); return;}
+			window.revapi94 = jQuery(window.revapi94);
+			if(window.revapi94.revolution==undefined){ revslider_showDoubleJqueryError("rev_slider_94_1"); return;}
+			revapi94.revolutionInit({
+					revapi:"revapi94",
+					sliderType:"hero",
+					DPR:"dpr",
+					sliderLayout:"fullwidth",
+					duration:"6000ms",
+					visibilityLevels:"1240,1024,778,480",
+					gridwidth:"1240,1024,778,480",
+					gridheight:"500,500,500,500",
+					autoHeight:true,
+					lazyType:"smart",
+					perspective:600,
+					perspectiveType:"global",
+					editorheight:"500,400,400,500",
+					responsiveLevels:"1240,1024,778,480",
+					ajaxUrl:"https://digitalinnk.com/wp-admin/admin-ajax.php",
+					progressBar:{disableProgressBar:true},
+					navigation: {
+						onHoverStop:false
+					},
+					parallax: {
+						levels:[2,4,6,8,10,-2,-4,-6,-8,-10,47,48,49,50,51,30],
+						type:"mousescroll",
+						origo:"slidercenter",
+						speed:0
+					},
+					viewPort: {
+						global:true,
+						globalDist:"-200px",
+						enable:true
+					},
+					fallbacks: {
+						allowHTML5AutoPlayOnAndroid:true
+					},
+			});
+			
+                		if(typeof RsParticlesAddOn !== "undefined") RsParticlesAddOn(revapi94);
 
-        const Contact = () => (
-            <section id="contact" className="py-20 bg-white section">
-                <div className="container mx-auto text-center">
-                    <h2 className="text-4xl font-extrabold mb-8 holographic">Contact Olaris Consulting</h2>
-                    <p className="text-xl mb-6 text-gray-700">Let’s collaborate to achieve your business goals!</p>
-                    <div className="max-w-lg mx-auto">
-                        <p className="text-sm text-red-600 mb-4">Contact form awaits Formspree setup. Reach me directly below.</p>
-                        <form action="https://formspree.io/f/[REPLACE_WITH_YOUR_FORMSPREE_ID]" method="POST" className="space-y-4">
-                            <input type="text" name="name" placeholder="Your Name" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500" required />
-                            <input type="email" name="email" placeholder="Your Email" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500" required />
-                            <textarea name="message" placeholder="Your Message" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500" rows="5" required></textarea>
-                            <button type="submit" className="bg-cyan-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-cyan-500 transform hover:scale-105 transition duration-300 disabled:opacity-50" disabled>
-                                Send Message
-                            </button>
-                        </form>
-                        <p className="mt-6 text-gray-700">Email: alan@olaris.co.uk | Phone: +44 7919 354068</p>
-                    </div>
-                </div>
-            </section>
-        );
+						if (revapi94 !== undefined) jQuery.fn.revolution.transitionpackInit(revapi94[0].id, {url:"https://digitalinnk.com/wp-content/plugins/revslider-transitionpack-addon/"});
+						 window.TP_SHDRS = window.TP_SHDRS || {};
+						 window.TP_SHDRS.water =    window.TP_SHDRS.water || `uniform float intensity;uniform float progress;uniform sampler2D src1;uniform sampler2D src2;uniform vec4 resolution;varying vec2 vUv;vec3 mod289(vec3 x) {return x - floor(x * (1.0 / 289.0)) * 289.0;}vec4 mod289(vec4 x) {return x - floor(x * (1.0 / 289.0)) * 289.0;}vec4 permute(vec4 x) {return mod289(((x*34.0)+1.0)*x);}vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}float snoise(vec3 v) {const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);vec3 i  = floor(v + dot(v, C.yyy) );vec3 x0 =   v - i + dot(i, C.xxx) ;vec3 g = step(x0.yzx, x0.xyz);vec3 l = 1.0 - g;vec3 i1 = min( g.xyz, l.zxy );vec3 i2 = max( g.xyz, l.zxy );vec3 x1 = x0 - i1 + C.xxx;vec3 x2 = x0 - i2 + C.yyy; vec3 x3 = x0 - D.yyy;i = mod289(i);vec4 p = permute( permute( permute(i.z + vec4(0.0, i1.z, i2.z, 1.0 ))+ i.y + vec4(0.0, i1.y, i2.y, 1.0 ))+ i.x + vec4(0.0, i1.x, i2.x, 1.0 ));float n_ = 0.142857142857;vec3  ns = n_ * D.wyz - D.xzx;vec4 j = p - 49.0 * floor(p * ns.z * ns.z);vec4 x_ = floor(j * ns.z);vec4 y_ = floor(j - 7.0 * x_ );    vec4 x = x_ *ns.x + ns.yyyy;vec4 y = y_ *ns.x + ns.yyyy;vec4 h = 1.0 - abs(x) - abs(y);vec4 b0 = vec4( x.xy, y.xy );vec4 b1 = vec4( x.zw, y.zw );vec4 s0 = floor(b0)*2.0 + 1.0;vec4 s1 = floor(b1)*2.0 + 1.0;vec4 sh = -step(h, vec4(0.0));vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;vec3 p0 = vec3(a0.xy,h.x);vec3 p1 = vec3(a0.zw,h.y);vec3 p2 = vec3(a1.xy,h.z);vec3 p3 = vec3(a1.zw,h.w);vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));p0 *= norm.x;p1 *= norm.y;p2 *= norm.z;p3 *= norm.w;  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);m = m * m;return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );}vec3 curlNoise( vec3 p ){const float e = 0.1;float  n1 = snoise(vec3(p.x, p.y + e, p.z));float  n2 = snoise(vec3(p.x, p.y - e, p.z));float  n3 = snoise(vec3(p.x, p.y, p.z + e));float  n4 = snoise(vec3(p.x, p.y, p.z - e));float  n5 = snoise(vec3(p.x + e, p.y, p.z));float  n6 = snoise(vec3(p.x - e, p.y, p.z));float x = n2 - n1 - n4 + n3;float y = n4 - n3 - n6 + n5;float z = n6 - n5 - n2 + n1;const float divisor = 1.0 / ( 2.0 * e );return normalize( vec3( x , y , z ) * divisor );}void main(){vec2 nUV = (vUv - vec2(0.5))*resolution.zw + vec2(0.5);float f = progress;vec3 curl = curlNoise(vec3(nUV,1.) *intensity + progress*.5) / 1.;vec4 t0 = TEXTURE2D(src1, vec2(nUV.x,nUV.y + f * (curl.x) ) );vec4 t1 = TEXTURE2D(src2, vec2(nUV.x,nUV.y + (1.-f) * (curl.x) ));nUV.x += curl.x;gl_FragColor = mix(t0,t1,f);}`;
 
-        const Footer = () => (
-            <footer className="footer">
-                <div className="container mx-auto">
-                    <Logo />
-                    <p className="mt-4">© 2025 Olaris Consulting Limited. All rights reserved.</p>
-                    <p className="text-sm">Version: Cosmic-1.0</p>
-                </div>
-            </footer>
-        );
+		}} // End of RevInitScript
 
-        const App = () => (
-            <div>
-                <Navbar />
-                <Hero />
-                <About />
-                <Services />
-                <Projects />
-                <Testimonials />
-                <WorkWithUs />
-                <Contact />
-                <Footer />
-            </div>
-        );
+		if(window.RS_MODULES === undefined) window.RS_MODULES = {};
+		if(RS_MODULES.modules === undefined) RS_MODULES.modules = {};
+		RS_MODULES.modules["revslider252"] = {once: RS_MODULES.modules["revslider252"]!==undefined ? RS_MODULES.modules["revslider252"].once : undefined, init:function() {
+			window.revapi25 = window.revapi25===undefined || window.revapi25===null || window.revapi25.length===0  ? document.getElementById("rev_slider_25_2") : window.revapi25;
+			if(window.revapi25 === null || window.revapi25 === undefined || window.revapi25.length==0) { window.revapi25initTry = window.revapi25initTry ===undefined ? 0 : window.revapi25initTry+1; if (window.revapi25initTry<20) requestAnimationFrame(function() {RS_MODULES.modules["revslider252"].init()}); return;}
+			window.revapi25 = jQuery(window.revapi25);
+			if(window.revapi25.revolution==undefined){ revslider_showDoubleJqueryError("rev_slider_25_2"); return;}
+			revapi25.revolutionInit({
+					revapi:"revapi25",
+					sliderType:"hero",
+					DPR:"dpr",
+					sliderLayout:"fullwidth",
+					visibilityLevels:"1240,1024,778,480",
+					gridwidth:"1240,1024,778,480",
+					gridheight:"400,400,500,500",
+					lazyType:"smart",
+					perspective:600,
+					perspectiveType:"local",
+					editorheight:"822,719,940,835",
+					responsiveLevels:"1240,1024,778,480",
+					progressBar:{disableProgressBar:true},
+					navigation: {
+						onHoverStop:false
+					},
+					viewPort: {
+						global:true,
+						globalDist:"-200px",
+						enable:true,
+						visible_area:"20%",
+						presize:true
+					},
+					fallbacks: {
+						allowHTML5AutoPlayOnAndroid:true
+					},
+			});
+			
+		}} // End of RevInitScript
 
-        try {
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-            console.log('React render successful');
-        } catch (e) {
-            console.error('React render failed:', e);
-            document.body.innerHTML = '<h1>Error loading site. Please contact alan@olaris.co.uk.</h1>';
-        }
-
-        // Konami Code Easter Egg
-        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        let konamiPosition = 0;
-        document.addEventListener('keydown', (e) => {
-            console.log('Key pressed:', e.key);
-            if (e.key === konamiCode[konamiPosition]) {
-                konamiPosition++;
-                if (konamiPosition === konamiCode.length) {
-                    document.body.classList.add('disco');
-                    document.body.insertAdjacentHTML('beforeend', '<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; z-index: 100; text-shadow: 0 0 10px cyan;">Olaris: Transcend Reality!</div>');
-                    if (window.soundEnabled) {
-                        const sound = document.getElementById('hoverSound');
-                        sound.currentTime = 0;
-                        sound.play().catch(() => console.log('Sound blocked'));
-                    }
-                    setTimeout(() => {
-                        document.body.classList.remove('disco');
-                        document.querySelector('div[style*="Transcend Reality"]').remove();
-                    }, 5000);
-                    konamiPosition = 0;
-                }
-            } else {
-                konamiPosition = 0;
-            }
-        });
-
-        // Section Particle Bursts
-        document.addEventListener('scroll', () => {
-            try {
-                const sections = document.querySelectorAll('section');
-                sections.forEach(section => {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top < window.innerHeight * 0.5 && !section.classList.contains('sparked')) {
-                        section.classList.add('sparked');
-                        const canvas = document.createElement('canvas');
-                        canvas.className = 'absolute top-0 left-0 w-full h-full pointer-events-none z-10';
-                        section.appendChild(canvas);
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = section.offsetWidth;
-                        canvas.height = section.offsetHeight;
-                        let particles = [];
-                        for (let i = 0; i < 200; i++) {
-                            particles.push({
-                                x: Math.random() * canvas.width,
-                                y: Math.random() * canvas.height,
-                                vx: (Math.random() - 0.5) * 20,
-                                vy: (Math.random() - 0.5) * 20,
-                                alpha: 1,
-                                life: 60,
-                                color: Math.random() > 0.5 ? 'rgba(0, 255, 255, 1)' : 'rgba(255, 0, 255, 1)'
-                            });
-                        }
-                        function drawParticles() {
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            particles = particles.filter(p => p.life > 0);
-                            particles.forEach(p => {
-                                ctx.beginPath();
-                                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-                                ctx.fillStyle = p.color.replace('1)', `${p.alpha})`);
-                                ctx.fill();
-                                p.x += p.vx;
-                                p.y += p.vy;
-                                p.alpha -= 0.02;
-                                p.life--;
-                            });
-                            if (particles.length) requestAnimationFrame(drawParticles);
-                            else section.removeChild(canvas);
-                        }
-                        drawParticles();
-                        if (window.soundEnabled) {
-                            const sound = document.getElementById('sectionSound');
-                            sound.currentTime = 0;
-                            sound.play().catch(() => console.log('Sound blocked'));
-                        }
-                    }
-                });
-            } catch (e) {
-                console.error('Section particle effect failed:', e);
-            }
-        });
-    </script>
-    <script>
-        console.log('Starting constellation effect...');
-        window.onload = function() {
-            setTimeout(() => {
-                try {
-                    window.soundEnabled = true;
-                    const canvas = document.getElementById('webCanvas');
-                    console.log('Canvas element:', canvas);
-                    if (!canvas) {
-                        console.error('Canvas element not found');
-                        return;
-                    }
-                    const ctx = canvas.getContext('2d');
-                    if (!ctx) {
-                        console.error('Canvas context not supported');
-                        throw new Error('Canvas context not supported');
-                    }
-                    console.log('Canvas context initialized');
-
-                    const dots = [];
-                    const numDots = 30;
-                    const dotRadius = 2;
-                    const maxDistance = 80;
-                    const lineOpacity = 0.3;
-
-                    function resizeCanvas() {
-                        canvas.width = window.innerWidth;
-                        canvas.height = document.getElementById('home').offsetHeight || 600;
-                        console.log('Canvas resized:', canvas.width, canvas.height);
-                    }
-
-                    function createDots() {
-                        dots.length = 0;
-                        for (let i = 0; i < numDots; i++) {
-                            dots.push({
-                                x: Math.random() * canvas.width,
-                                y: Math.random() * canvas.height,
-                                vx: (Math.random() - 0.5) * 0.3,
-                                vy: (Math.random() - 0.5) * 0.3,
-                                alpha: 0.5 + Math.random() * 0.5
-                            });
-                        }
-                        console.log('Dots created:', dots.length);
-                    }
-
-                    resizeCanvas();
-                    createDots();
-                    window.addEventListener('resize', () => {
-                        try {
-                            resizeCanvas();
-                            createDots();
-                        } catch (e) {
-                            console.error('Resize failed:', e);
-                        }
-                    });
-
-                    let mouseX = -1000;
-                    let mouseY = -1000;
-
-                    canvas.addEventListener('mousemove', (e) => {
-                        try {
-                            console.log('Mouse move detected:', e.clientX, e.clientY);
-                            if (window.innerWidth > 768) {
-                                const rect = canvas.getBoundingClientRect();
-                                mouseX = e.clientX - rect.left;
-                                mouseY = e.clientY - rect.top;
-                            }
-                        } catch (e) {
-                            console.error('Mouse move failed:', e);
-                        }
-                    });
-
-                    function drawNetwork() {
-                        try {
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            ctx.fillStyle = 'rgba(0, 255, 255, 1)';
-                            ctx.strokeStyle = `rgba(0, 255, 255, ${lineOpacity})`;
-
-                            for (let i = 0; i < dots.length; i++) {
-                                for (let j = i + 1; j < dots.length; j++) {
-                                    const dx = dots[i].x - dots[j].x;
-                                    const dy = dots[i].y - dots[j].y;
-                                    const distance = Math.sqrt(dx * dx + dy * dy);
-                                    if (distance < maxDistance) {
-                                        ctx.beginPath();
-                                        ctx.moveTo(dots[i].x, dots[i].y);
-                                        ctx.lineTo(dots[j].x, dots[j].y);
-                                        ctx.stroke();
-                                    }
-                                }
-                            }
-
-                            dots.forEach(dot => {
-                                dot.x += dot.vx;
-                                dot.y += dot.vy;
-
-                                if (dot.x < 0 || dot.x > canvas.width) dot.vx *= -1;
-                                if (dot.y < 0 || dot.y > canvas.height) dot.vy *= -1;
-
-                                const dx = dot.x - mouseX;
-                                const dy = dot.y - mouseY;
-                                const distance = Math.sqrt(dx * dx + dy * dy);
-                                if (distance < maxDistance) {
-                                    const force = (maxDistance - distance) / maxDistance * 0.05;
-                                    dot.vx += dx * force / distance;
-                                    dot.vy += dy * force / distance;
-                                }
-
-                                ctx.beginPath();
-                                ctx.arc(dot.x, dot.y, dotRadius, 0, Math.PI * 2);
-                                ctx.fillStyle = `rgba(0, 255, 255, ${dot.alpha})`;
-                                ctx.fill();
-                            });
-                        } catch (e) {
-                            console.error('Draw network failed:', e);
-                        }
-                    }
-
-                    function animate() {
-                        try {
-                            console.log('Animating frame...');
-                            if (window.innerWidth > 768) {
-                                drawNetwork();
-                            }
-                            requestAnimationFrame(animate);
-                        } catch (e) {
-                            console.error('Animation failed:', e);
-                        }
-                    }
-
-                    console.log('Starting constellation animation...');
-                    animate();
-                } catch (e) {
-                    console.error('Constellation effect failed:', e);
-                    const canvas = document.getElementById('webCanvas');
-                    if (canvas) canvas.style.display = 'none';
-                    const fallback = document.getElementById('fallback');
-                    if (fallback) fallback.classList.remove('hidden');
-                    document.body.insertAdjacentHTML('beforeend', '<p style="color: red; text-align: center;">Interactive effect not supported. Please contact alan@olaris.co.uk.</p>');
-                }
-            }, 1000);
-        };
-    </script>
-</body>
+		if (window.RS_MODULES.checkMinimal!==undefined) { window.RS_MODULES.checkMinimal();};
+	</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'932a31847d28bfbd',t:'MTc0NTA0MjU1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+</DOCUMENT>
