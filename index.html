@@ -9,8 +9,11 @@
   <meta property="og:description" content="Leading Fleet Management, Automotive M&A Advisory, and Technology Integration services." />
   <meta property="og:image" content="/images/logo.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://your-deployed-site-url.com/" />
+  <meta property="og:url" content="https://www.olaris.co.uk/" />
   <link rel="icon" href="/images/logo.png" />
+
+  <!-- Preload Hero poster -->
+  <link rel="preload" as="image" href="/videos/cityscape-fallback.jpg" type="image/jpeg">
 
   <!-- Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,16 +40,16 @@
     /* Preloader styles */
     #preloader {
       position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:1000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
     #preloader img {
-      width: 100px;
+      width: 80px;
       animation: pulse 1.5s infinite;
     }
     @keyframes pulse {
@@ -58,22 +61,16 @@
 </head>
 
 <body class="bg-white text-gray-800">
-
   <!-- Preloader -->
   <div id="preloader">
-    <img src="/images/logo.png" alt="Loading..." />
+    <img src="/images/logo.png" alt="Loading Olaris Logo" />
   </div>
 
   <div id="root"></div>
 
   <script type="text/babel">
 
-    // Hide Preloader when fully loaded
-    window.addEventListener('load', () => {
-      document.getElementById('preloader').style.display = 'none';
-    });
-
-    // Smooth scroll
+    // Smooth Scroll
     window.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -83,7 +80,7 @@
       });
     });
 
-    // Fade-in scroll effect
+    // Fade-In Animation
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.fade-in').forEach(el => {
         const rect = el.getBoundingClientRect();
@@ -93,14 +90,19 @@
       });
     });
 
+    // Preloader
+    window.addEventListener('load', () => {
+      document.getElementById('preloader').style.display = 'none';
+    });
+
     const Navbar = () => (
       <nav className="fixed w-full bg-white shadow z-50">
         <div className="container mx-auto flex justify-between items-center p-4">
           <div className="flex items-center space-x-4">
-            <img src="/images/logo.png" alt="Olaris Logo" className="w-12 h-12" />
+            <img src="/images/logo.png" alt="Olaris Logo" className="h-10 w-auto" loading="lazy" />
             <div className="text-xl font-bold text-blue-900">Olaris Consulting</div>
           </div>
-          <div className="space-x-6">
+          <div className="space-x-6 hidden md:flex">
             <a href="#home" className="hover:text-blue-600">Home</a>
             <a href="#about" className="hover:text-blue-600">About</a>
             <a href="#services" className="hover:text-blue-600">Services</a>
@@ -113,7 +115,7 @@
 
     const Hero = () => (
       <section id="home" className="relative min-h-screen flex items-center justify-center text-center text-white overflow-hidden section">
-        <video autoPlay muted loop playsInline poster="/videos/cityscape-fallback.jpg" className="absolute w-full h-full object-cover z-0">
+        <video autoPlay muted loop playsInline preload="auto" poster="/videos/cityscape-fallback.jpg" className="absolute w-full h-full object-cover z-0">
           <source src="/videos/cityscape.mp4" type="video/mp4" />
         </video>
         <div className="relative z-10 px-6 fade-in">
@@ -165,7 +167,7 @@
           <h2 className="text-4xl font-bold mb-12 text-blue-800">Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <video autoPlay muted loop playsInline poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover">
+              <video muted preload="metadata" poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy">
                 <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
               </video>
               <div className="p-6">
@@ -174,7 +176,7 @@
               </div>
             </div>
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <video autoPlay muted loop playsInline poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover">
+              <video muted preload="metadata" poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy">
                 <source src="/videos/web-salsac.mp4" type="video/mp4" />
               </video>
               <div className="p-6">
@@ -191,7 +193,7 @@
       <section id="contact" className="section bg-gradient-to-br from-blue-900 to-blue-700 text-white fade-in">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="flex justify-center">
-            <img src="/images/profile.png" alt="Profile" className="rounded-lg shadow-lg w-80 h-auto object-cover" />
+            <img src="/images/profile.png" alt="Profile Picture" className="rounded-lg shadow-lg max-w-[250px] h-auto object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="text-4xl font-bold mb-6 text-center md:text-left">Let's Connect</h2>
@@ -228,6 +230,5 @@
     );
 
   </script>
-
 </body>
 </html>
