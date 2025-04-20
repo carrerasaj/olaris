@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ once: true });
+    });
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited</title>
@@ -20,7 +28,8 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #fff;
+      background: #f9fafb;
+      scroll-behavior: smooth;
     }
     #preloader {
       position: fixed;
@@ -29,13 +38,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 50;
     }
     .fade-in-hero {
       opacity: 0;
       transform: translateY(20px);
       animation: fadeInHero 1s forwards;
-      animation-delay: 0.3s;
+      animation-delay: 0.4s;
     }
     @keyframes fadeInHero {
       to {
@@ -43,37 +52,23 @@
         transform: translateY(0);
       }
     }
-    .animate-fadeInUp {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-    .animate-fadeInUp.delay-100 { animation-delay: 0.4s; }
-    .animate-fadeInUp.delay-200 { animation-delay: 0.6s; }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes gradient-xy {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .animate-gradient-xy {
+    .animate-gradient {
       background-size: 400% 400%;
-      animation: gradient-xy 15s ease infinite;
+      animation: gradientMove 15s ease infinite;
+    }
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
   </style>
 </head>
 
-<body>
+<body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
     <img src="/images/logo.png" alt="Loading..." width="80" height="80" />
   </div>
 
-  <div id="root" class="snap-y snap-mandatory overflow-y-scroll h-screen"></div>
+  <div id="root"></div>
 
   <script type="text/babel">
     const Navbar = () => (
@@ -92,23 +87,23 @@
     );
 
     const Hero = () => (
-      <section id="home" className="relative h-screen text-white flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient-xy overflow-hidden snap-start">
-        <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover" poster="/videos/cityscape-fallback.jpg">
+      <section id="home" className="relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start">
+        <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover opacity-40">
           <source src="/videos/cityscape.webm" type="video/webm" />
           <source src="/videos/cityscape.mp4" type="video/mp4" />
         </video>
-        <div className="relative z-10 text-center px-6 fade-in-hero transform translate-y-6 hover:translate-y-0 transition duration-1000">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
-          <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
-          <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">Get In Touch</a>
+        <div className="relative z-10 text-center px-6 fade-in-hero">
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">Olaris Consulting Limited</h1>
+          <p className="text-xl md:text-2xl mb-8" data-aos="fade-up" data-aos-delay="100">Driving strategic growth and fleet management excellence.</p>
+          <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition" data-aos="fade-up" data-aos-delay="200">Get In Touch</a>
         </div>
       </section>
     );
 
     const About = () => (
-      <section id="about" className="relative h-screen flex items-center justify-center bg-gray-50 text-center snap-start">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-6 text-blue-800">About Us</h2>
+      <section id="about" className="section py-24 bg-gray-100 snap-start">
+        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold mb-6 text-blue-800">About Us</h2>
           <p className="max-w-3xl mx-auto text-gray-700 leading-relaxed">
             Olaris Consulting Limited is committed to delivering strategic growth initiatives and operational excellence across the fleet management and mobility sectors.
           </p>
@@ -117,76 +112,70 @@
     );
 
     const Services = () => (
-      <section id="services" className="relative h-screen flex items-center justify-center bg-gray-50 text-center snap-start">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 text-blue-800">Services</h2>
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-blue-600">Fleet Management</h3>
-              <p className="text-gray-600">Optimize leasing and operations, reducing costs by up to 10%.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-blue-600">Expansion Strategy</h3>
-              <p className="text-gray-600">Scale your business with market intelligence and expansion tactics.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-blue-600">M&A Advisory</h3>
-              <p className="text-gray-600">Navigate mergers and acquisitions with experienced leadership.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-3 text-blue-600">Digital Integration</h3>
-              <p className="text-gray-600">Implement blockchain, Azure, ESG tracking, and digital transformation.</p>
-            </div>
+      <section id="services" className="section py-24 bg-white snap-start">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-extrabold mb-12 text-blue-800" data-aos="fade-up">Services</h2>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up" data-aos-delay="100">
+            {[
+              { title: "Fleet Management", desc: "Optimize leasing and operations, reducing costs by up to 10%." },
+              { title: "Expansion Strategy", desc: "Scale your business with market intelligence and expansion tactics." },
+              { title: "M&A Advisory", desc: "Navigate mergers and acquisitions with experienced leadership." },
+              { title: "Digital Integration", desc: "Implement blockchain, Azure, ESG tracking, and digital transformation." },
+            ].map((service, idx) => (
+              <div key={idx} className="p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition bg-gray-50">
+                <h3 className="text-xl font-semibold text-blue-700 mb-3">{service.title}</h3>
+                <p className="text-gray-600">{service.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
     );
 
     const Projects = () => (
-      <section id="projects" className="relative h-screen flex flex-col items-center justify-center bg-gray-50 text-center snap-start">
-        <h2 className="text-4xl font-extrabold text-blue-800 mb-8">Projects</h2>
+      <section id="projects" className="section py-24 bg-gray-100 snap-start">
+        <div className="text-center mb-12" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold text-blue-800">Projects</h2>
+        </div>
         <div className="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
-            <video poster="/videos/jurni-leasing-fallback.jpeg" autoPlay muted loop playsInline className="w-full h-64 object-cover">
-              <source src="/videos/jurni-leasing.webm" type="video/webm" />
-              <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-            </video>
-            <div className="p-6"><h3 className="text-2xl font-bold text-blue-800 mb-2">Jurni Leasing Expansion</h3><p className="text-gray-700">Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p></div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
-            <video poster="/videos/web-salsac-fallback.jpeg" autoPlay muted loop playsInline className="w-full h-64 object-cover">
-              <source src="/videos/web-salsac.webm" type="video/webm" />
-              <source src="/videos/web-salsac.mp4" type="video/mp4" />
-            </video>
-            <div className="p-6"><h3 className="text-2xl font-bold text-blue-800 mb-2">Blockchain ESG Platform</h3><p className="text-gray-700">Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p></div>
-          </div>
+          {[
+            { title: "Jurni Leasing Expansion", video: "jurni-leasing", desc: "Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles." },
+            { title: "Blockchain ESG Platform", video: "web-salsac", desc: "Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance." },
+          ].map((proj, idx) => (
+            <div key={idx} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105" data-aos="fade-up" data-aos-delay={idx * 100}>
+              <video autoPlay muted loop playsInline className="w-full h-64 object-cover">
+                <source src={`/videos/${proj.video}.webm`} type="video/webm" />
+                <img src={`/videos/${proj.video}-fallback.jpeg`} alt={proj.title} className="w-full h-64 object-cover" />
+              </video>
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-blue-800 mb-2">{proj.title}</h3>
+                <p className="text-gray-700">{proj.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     );
 
     const Contact = () => (
-      <section id="contact" className="relative h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-blue-700 text-white snap-start">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <img src="/images/profile.png" alt="Profile Picture" className="rounded-xl shadow-xl max-w-[280px] h-auto object-cover" loading="lazy" />
-            <p className="text-lg font-light leading-relaxed max-w-xs">👋 Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
+      <section id="contact" className="section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6" data-aos="fade-up">
+          <div className="flex flex-col items-center text-center">
+            <img src="/images/profile.png" alt="Profile" className="rounded-lg shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy" />
+            <p className="text-lg leading-relaxed">👋 Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
           </div>
-          <div>
-            <h2 className="text-4xl font-extrabold mb-6 text-center md:text-left">Let's Connect</h2>
-            <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800">
-              <input type="text" placeholder="Name" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
-              <input type="email" placeholder="Email" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
-              <textarea placeholder="Message" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" rows="4" required></textarea>
-              <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 duration-300">Send Message</button>
-            </form>
-          </div>
+          <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800">
+            <input type="text" placeholder="Name" className="w-full p-3 rounded border-gray-300" required />
+            <input type="email" placeholder="Email" className="w-full p-3 rounded border-gray-300" required />
+            <textarea placeholder="Message" className="w-full p-3 rounded border-gray-300" rows="4" required></textarea>
+            <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition">Send Message</button>
+          </form>
         </div>
       </section>
     );
 
     const Footer = () => (
-      <footer className="text-center py-6 bg-white text-gray-600 text-sm">
+      <footer className="text-center py-6 text-gray-500 text-sm bg-white">
         © 2025 Olaris Consulting Limited. All rights reserved.
       </footer>
     );
@@ -217,11 +206,11 @@
       const name = event.target[0].value.trim();
       const email = event.target[1].value.trim();
       const message = event.target[2].value.trim();
-
       if (!name || !email.includes("@") || !message) {
         alert('Please complete all fields correctly.');
         event.preventDefault();
-        return false;
+      } else {
+        alert('✅ Thank you! Your message has been sent.');
       }
     }
   </script>
