@@ -67,9 +67,7 @@
 }
   </style>
 </head>
-
-<body>
-  <body class="snap-y snap-mandatory overflow-y-scroll h-screen">
+<body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
     <img src="/images/logo.png" alt="Loading..." width="80" height="80" />
   </div>
@@ -93,18 +91,18 @@
     );
 
     const Hero = () => (
-      <section id="home" className="relative h-screen text-white flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient-xy overflow-hidden snap-start">
-        <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover">
-          <source src="/videos/cityscape.webm" type="video/webm" />
-          <source src="/videos/cityscape.mp4" type="video/mp4" />
-        </video>
-        <div className="relative z-10 text-center px-6 fade-in-hero transform translate-y-6 hover:translate-y-0 transition duration-1000">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
-          <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
-          <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">Get In Touch</a>
-        </div>
-      </section>
-    );
+  <section id="home" className="relative h-screen text-white flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient-xy overflow-hidden snap-start">
+    <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover">
+      <source src="/videos/cityscape.webm" type="video/webm" />
+      <source src="/videos/cityscape.mp4" type="video/mp4" />
+    </video>
+    <div className="relative z-10 text-center px-6 fade-in-hero transform translate-y-6 hover:translate-y-0 transition duration-1000">
+      <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
+      <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
+      <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">Get In Touch</a>
+    </div>
+  </section>
+);
 
     const About = () => (
       <section id="about" className="relative h-screen text-white flex items-center justify-center snap-start">
