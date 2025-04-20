@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta property="og:title" content="Olaris Consulting Limited" />
+  <meta property="og:description" content="Fleet Management | Growth Strategy | Digital Integration." />
+  <meta property="og:image" content="/images/logo.png" />
+  <meta property="og:url" content="https://yourwebsite.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited</title>
@@ -51,10 +56,20 @@
         transform: translateY(0);
       }
     }
+    @keyframes gradient-xy {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-xy {
+  background-size: 400% 400%;
+  animation: gradient-xy 15s ease infinite;
+}
   </style>
 </head>
 
 <body>
+  <body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
     <img src="/images/logo.png" alt="Loading..." width="80" height="80" />
   </div>
@@ -78,12 +93,12 @@
     );
 
     const Hero = () => (
-      <section className="relative h-screen bg-black text-white flex items-center justify-center overflow-hidden">
+      <section id="home" className="relative h-screen text-white flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient-xy overflow-hidden snap-start">
         <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover">
           <source src="/videos/cityscape.webm" type="video/webm" />
           <source src="/videos/cityscape.mp4" type="video/mp4" />
         </video>
-        <div className="relative z-10 text-center px-6 fade-in-hero">
+        <div className="relative z-10 text-center px-6 fade-in-hero transform translate-y-6 hover:translate-y-0 transition duration-1000">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
           <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
           <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">Get In Touch</a>
@@ -170,7 +185,7 @@
           </div>
           <div>
             <h2 className="text-4xl font-extrabold mb-6 text-center md:text-left">Let's Connect</h2>
-            <form id="contactForm" className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800">
+            <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800">
               <input type="text" placeholder="Name" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
               <input type="email" placeholder="Email" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
               <textarea placeholder="Message" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" rows="4" required></textarea>
@@ -208,6 +223,17 @@
         preloader.style.display = "none";
       }, 500);
     };
+    function validateForm(event) {
+  const name = event.target[0].value.trim();
+  const email = event.target[1].value.trim();
+  const message = event.target[2].value.trim();
+
+  if (!name || !email.includes("@") || !message) {
+    alert('Please complete all fields correctly.');
+    event.preventDefault();
+    return false;
+  }
+}
   </script>
 </body>
 </html>
