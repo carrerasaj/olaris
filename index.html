@@ -6,19 +6,55 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
+      // Preloader logic
+      const preloader = document.getElementById("preloader");
+      setTimeout(() => {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+        }, 500);
+      }, 3000);
     });
   </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited</title>
-  <meta name="description" content="Driving strategic growth and fleet management excellence.">
+  <meta name="description" content="Olaris Consulting Limited specialises in fleet management, strategic growth, and digital integration with blockchain and ESG solutions.">
   <meta property="og:title" content="Olaris Consulting Limited" />
   <meta property="og:description" content="Fleet Management | Growth Strategy | Digital Integration." />
-  <meta property="og:image" content="/images/logo.png" />
-  <meta property="og:url" content="https://your-real-domain.com/" />
+  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
+  <meta property="og:url" content="https://olaris.co.uk/" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
+  <link rel="canonical" href="https://olaris.co.uk/" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Olaris Consulting Limited",
+      "url": "https://olaris.co.uk",
+      "logo": "https://olaris.co.uk/images/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+44-7919 35 40 68",
+        "contactType": "customer service",
+        "areaServed": "GB",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://linkedin.com/company/olaris-consulting-limited",
+        "https://twitter.com/olarisconsult"
+      ]
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -176,7 +212,12 @@
 
     const Footer = () => (
       <footer className="text-center py-6 text-gray-500 text-sm bg-white">
-        © 2025 Olaris Consulting Limited. All rights reserved.
+        <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
+        <p>Olaris Consulting Limited, [1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919 35 40 68 | Email: info@olaris.co.uk</p>
+        <div>
+          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 hover:text-blue-700 mx-2">LinkedIn</a> |
+          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a>
+        </div>
       </footer>
     );
 
@@ -214,5 +255,6 @@
       }
     }
   </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9333fdf32f6a6788',t:'MTc0NTE0NTI5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
