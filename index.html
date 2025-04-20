@@ -231,33 +231,37 @@
   </div>
 </section>
     );
+    const Contact = () => (
+  <section id="contact" className="section bg-gradient-to-br from-blue-900 to-blue-700 text-white fade-in py-16">
+    <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      
+      {/* Profile image with intro */}
+      <div className="flex flex-col items-center text-center space-y-4">
+        <img src="/images/profile.png" alt="Profile Picture" className="rounded-xl shadow-xl max-w-[280px] h-auto object-cover" loading="lazy" />
+        <p className="text-lg font-light leading-relaxed max-w-xs">👋 Hi, I'm Alan Carreras. Let's discuss how we can drive your strategic growth and fleet management excellence together.</p>
+      </div>
+      
+      {/* Contact Form */}
+      <div>
+        <h2 className="text-4xl font-extrabold mb-6 text-center md:text-left">Let's Connect</h2>
+        <form id="contactForm" className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800" onSubmit="handleSubmit(event)">
+          <input type="text" id="name" placeholder="Name" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" required />
+          <input type="email" id="email" placeholder="Email" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" required />
+          <textarea id="message" placeholder="Message" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" rows="5" required></textarea>
+          <button id="submitButton" type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 duration-300">
+            Send Message
+          </button>
+        </form>
 
-    <section id="contact" className="section bg-gradient-to-br from-blue-900 to-blue-700 text-white fade-in py-16">
-  <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-    
-    <!-- Profile image with intro -->
-    <div className="flex flex-col items-center text-center space-y-4">
-      <img src="/images/profile.png" alt="Profile Picture" className="rounded-xl shadow-xl max-w-[280px] h-auto object-cover" loading="lazy" />
-      <p className="text-lg font-light leading-relaxed max-w-xs">👋 Hi, I'm Alan Carreras. Let's discuss how we can drive your strategic growth and fleet management excellence together.</p>
-    </div>
-    
-    <!-- Contact Form -->
-    <div>
-      <h2 className="text-4xl font-extrabold mb-6 text-center md:text-left">Let's Connect</h2>
-      <form id="contactForm" className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800" onSubmit="handleSubmit(event)">
-  <input type="text" id="name" placeholder="Name" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" required />
-  <input type="email" id="email" placeholder="Email" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" required />
-  <textarea id="message" placeholder="Message" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:ring-4 focus:ring-blue-400 focus:border-blue-400 outline-none transition" rows="5" required></textarea>
-  <button id="submitButton" type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 duration-300">
-    Send Message
-  </button>
-</form>
+        {/* Hidden Thank You Message */}
+        <div id="thankYouMessage" className="hidden mt-6 text-green-400 text-center text-2xl font-bold">
+          🎉 Thank you! We’ll be in touch soon.
+        </div>
+      </div>
 
-<!-- Hidden Thank You Message -->
-<div id="thankYouMessage" className="hidden mt-6 text-green-400 text-center text-2xl font-bold">
-  🎉 Thank you! We’ll be in touch soon.
-</div>
     </div>
+  </section>
+);
 
   </div>
 </section>
