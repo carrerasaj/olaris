@@ -4,47 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited</title>
-  <meta name="description" content="Driving strategic growth and fleet management excellence." />
+  <meta name="description" content="Driving strategic growth and fleet management excellence.">
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
-      .fade-in-hero {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInHero 1s forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes fadeInHero {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fadeInUp {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 1s forwards;
-}
-
-.animate-fadeInUp.delay-100 {
-  animation-delay: 0.4s;
-}
-
-.animate-fadeInUp.delay-200 {
-  animation-delay: 0.6s;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -59,8 +26,30 @@
       justify-content: center;
       z-index: 9999;
     }
-    #mainContent {
-      display: none;
+    .fade-in-hero {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInHero 1s forwards;
+      animation-delay: 0.3s;
+    }
+    @keyframes fadeInHero {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeInUp {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+    }
+    .animate-fadeInUp.delay-100 { animation-delay: 0.4s; }
+    .animate-fadeInUp.delay-200 { animation-delay: 0.6s; }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -73,13 +62,6 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    window.onload = () => {
-      const preloader = document.getElementById("preloader");
-      preloader.style.opacity = "0";
-      setTimeout(() => {
-        preloader.style.display = "none";
-      }, 500);
-    };
     const Navbar = () => (
       <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
         <div className="flex items-center space-x-4">
@@ -96,20 +78,18 @@
     );
 
     const Hero = () => (
-  <section className="relative h-screen bg-black text-white flex items-center justify-center overflow-hidden">
-    <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover">
-      <source src="/videos/cityscape.webm" type="video/webm" />
-      <source src="/videos/cityscape.mp4" type="video/mp4" />
-    </video>
-    <div className="relative z-10 text-center px-6 fade-in-hero">
-      <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
-      <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
-      <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">
-        Get In Touch
-      </a>
-    </div>
-  </section>
-);
+      <section className="relative h-screen bg-black text-white flex items-center justify-center overflow-hidden">
+        <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover">
+          <source src="/videos/cityscape.webm" type="video/webm" />
+          <source src="/videos/cityscape.mp4" type="video/mp4" />
+        </video>
+        <div className="relative z-10 text-center px-6 fade-in-hero">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fadeInUp">Olaris Consulting Limited</h1>
+          <p className="text-xl md:text-2xl mb-8 animate-fadeInUp delay-100">Driving strategic growth and fleet management excellence.</p>
+          <a href="#contact" className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 px-8 rounded-full text-lg font-semibold animate-fadeInUp delay-200">Get In Touch</a>
+        </div>
+      </section>
+    );
 
     const About = () => (
       <section id="about" className="section py-16 bg-gray-50 text-center">
@@ -149,33 +129,34 @@
     );
 
     const Projects = () => (
-      <section id="projects" className="section bg-gray-50 text-center py-16">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-blue-800">Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Project 1 */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-              <video muted preload="metadata" poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-                <source src="/videos/jurni-leasing.webm" type="video/webm" />
-                <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-              </video>
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-blue-800">Jurni Leasing Expansion</h3>
-                <p>Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
-              </div>
-            </div>
-            {/* Project 2 */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-              <video muted preload="metadata" poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-                <source src="/videos/web-salsac.webm" type="video/webm" />
-                <source src="/videos/web-salsac.mp4" type="video/mp4" />
-              </video>
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-blue-800">Blockchain ESG Platform</h3>
-                <p>Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
-              </div>
+      <section id="projects" className="py-20 bg-gray-50">
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-extrabold text-blue-800">Projects</h2>
+        </div>
+        <div className="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0">
+
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+            <video autoPlay muted loop playsInline className="w-full h-64 object-cover">
+              <source src="/videos/jurni-leasing.webm" type="video/webm" />
+              <img src="/videos/jurni-leasing-fallback.jpeg" alt="Jurni Leasing Expansion" className="w-full h-64 object-cover" />
+            </video>
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-blue-800 mb-2">Jurni Leasing Expansion</h3>
+              <p className="text-gray-700">Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
             </div>
           </div>
+
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+            <video autoPlay muted loop playsInline className="w-full h-64 object-cover">
+              <source src="/videos/web-salsac.webm" type="video/webm" />
+              <img src="/videos/web-salsac-fallback.jpeg" alt="Blockchain ESG Platform" className="w-full h-64 object-cover" />
+            </video>
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-blue-800 mb-2">Blockchain ESG Platform</h3>
+              <p className="text-gray-700">Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
+            </div>
+          </div>
+
         </div>
       </section>
     );
@@ -183,24 +164,19 @@
     const Contact = () => (
       <section id="contact" className="section bg-gradient-to-br from-blue-900 to-blue-700 text-white py-16">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          
-          {/* Profile image with intro */}
           <div className="flex flex-col items-center text-center space-y-4">
             <img src="/images/profile.png" alt="Profile Picture" className="rounded-xl shadow-xl max-w-[280px] h-auto object-cover" loading="lazy" />
-            <p className="text-lg font-light leading-relaxed max-w-xs">👋 Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
+            <p className="text-lg font-light leading-relaxed max-w-xs">Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
           </div>
-          
-          {/* Contact Form */}
           <div>
             <h2 className="text-4xl font-extrabold mb-6 text-center md:text-left">Let's Connect</h2>
-            <form id="contactForm" onSubmit="handleSubmit(event)" className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800">
+            <form id="contactForm" className="bg-white rounded-lg p-6 shadow-lg space-y-4 text-gray-800">
               <input type="text" placeholder="Name" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
               <input type="email" placeholder="Email" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" required />
               <textarea placeholder="Message" className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none" rows="4" required></textarea>
               <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 duration-300">Send Message</button>
             </form>
           </div>
-
         </div>
       </section>
     );
@@ -225,26 +201,13 @@
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 
-    function handleSubmit(event) {
-      event.preventDefault();
-
-      const form = document.getElementById('contactForm');
-      const button = form.querySelector('button');
-
-      button.disabled = true;
-      button.innerText = "Sending...";
-
-  setTimeout(() => {
-    form.innerHTML = '<div class="text-green-500 text-center text-2xl font-bold">🎉 Thank you! We’ll be in touch soon!</div>';
-  }, 1500);
-}
-
-    // Hide Preloader After Load
     window.onload = () => {
-      document.getElementById("preloader").style.display = "none";
-      document.getElementById("mainContent").style.display = "block";
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
     };
-
   </script>
 </body>
 </html>
