@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ once: true });
+    });
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited</title>
@@ -11,18 +19,10 @@
   <meta property="og:url" content="https://your-real-domain.com/" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
-  
-  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- React & Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- AOS (Animate on Scroll) -->
-  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
   <style>
     body {
@@ -60,58 +60,17 @@
       0%, 100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
     }
-    #scrollToTopBtn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      display: none;
-      background: linear-gradient(to right, #3b82f6, #1e40af);
-      color: white;
-      border: none;
-      border-radius: 9999px;
-      padding: 12px 18px;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      z-index: 9999;
-      transition: all 0.3s ease;
-    }
-    #scrollToTopBtn:hover {
-      transform: scale(1.1);
-    }
   </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      AOS.init({ once: true });
-    });
-
-    window.addEventListener('scroll', function() {
-      const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-      if (window.scrollY > 300) {
-        scrollToTopBtn.style.display = 'block';
-      } else {
-        scrollToTopBtn.style.display = 'none';
-      }
-    });
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
-
 </head>
 
-<body class="snap-y snap-mandatory overflow-y-scroll h-screen bg-gray-50">
+<body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
     <img src="/images/logo.png" alt="Loading..." width="80" height="80" />
   </div>
 
-  <button id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
-
   <div id="root"></div>
-  <script type="text/babel">
 
+  <script type="text/babel">
     const Navbar = () => (
       <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
         <div className="flex items-center space-x-4">
@@ -126,21 +85,21 @@
         </div>
       </nav>
     );
-    
+
     const Hero = () => (
       <section id="home" className="relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start">
         <video autoPlay muted loop playsInline className="absolute w-full h-full object-cover opacity-40">
           <source src="/videos/cityscape.webm" type="video/webm" />
           <source src="/videos/cityscape.mp4" type="video/mp4" />
         </video>
-        <div className="relative z-10 text-center px-6 fade-in-hero" data-aos="fade-up">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4">Olaris Consulting Limited</h1>
-          <p className="text-xl md:text-2xl mb-8">Driving strategic growth and fleet management excellence.</p>
-          <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition">Get In Touch</a>
+        <div className="relative z-10 text-center px-6 fade-in-hero">
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">Olaris Consulting Limited</h1>
+          <p className="text-xl md:text-2xl mb-8" data-aos="fade-up" data-aos-delay="100">Driving strategic growth and fleet management excellence.</p>
+          <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition" data-aos="fade-up" data-aos-delay="200">Get In Touch</a>
         </div>
       </section>
     );
-    
+
     const About = () => (
       <section id="about" className="section py-24 bg-gray-100 snap-start">
         <div className="container mx-auto px-6 text-center" data-aos="fade-up">
@@ -151,7 +110,7 @@
         </div>
       </section>
     );
-    
+
     const Services = () => (
       <section id="services" className="section py-24 bg-white snap-start">
         <div className="container mx-auto px-6 text-center">
@@ -172,7 +131,7 @@
         </div>
       </section>
     );
-    
+
     const Projects = () => (
       <section id="projects" className="section py-24 bg-gray-100 snap-start">
         <div className="text-center mb-12" data-aos="fade-up">
@@ -197,7 +156,7 @@
         </div>
       </section>
     );
-    
+
     const Contact = () => (
       <section id="contact" className="section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6" data-aos="fade-up">
@@ -214,13 +173,13 @@
         </div>
       </section>
     );
-    
+
     const Footer = () => (
       <footer className="text-center py-6 text-gray-500 text-sm bg-white">
         © 2025 Olaris Consulting Limited. All rights reserved.
       </footer>
     );
-    
+
     const App = () => (
       <>
         <Navbar />
@@ -232,30 +191,28 @@
         <Footer />
       </>
     );
-    
+
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    <script type="text/babel">
-  window.onload = () => {
-    const preloader = document.getElementById("preloader");
-    preloader.style.opacity = "0";
-    setTimeout(() => {
-      preloader.style.display = "none";
-    }, 500);
-  };
 
-  function validateForm(event) {
-    const name = event.target[0].value.trim();
-    const email = event.target[1].value.trim();
-    const message = event.target[2].value.trim();
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
+    };
 
-    if (!name || !email.includes("@") || !message) {
-      alert('⚠️ Please complete all fields correctly.');
-      event.preventDefault();
-    } else {
-      alert('✅ Thank you! Your message has been sent successfully.');
+    function validateForm(event) {
+      const name = event.target[0].value.trim();
+      const email = event.target[1].value.trim();
+      const message = event.target[2].value.trim();
+      if (!name || !email.includes("@") || !message) {
+        alert('Please complete all fields correctly.');
+        event.preventDefault();
+      } else {
+        alert('✅ Thank you! Your message has been sent.');
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
