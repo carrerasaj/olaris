@@ -148,37 +148,40 @@
       </section>
     );
 
-    const Projects = () => (
-      <section id="projects" className="section bg-gray-50 text-center py-16">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-blue-800">Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Project 1 */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-              <video muted preload="metadata" poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-                <source src="/videos/jurni-leasing.webm" type="video/webm" />
-                <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-              </video>
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-blue-800">Jurni Leasing Expansion</h3>
-                <p>Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
-              </div>
-            </div>
-            {/* Project 2 */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-              <video muted preload="metadata" poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-                <source src="/videos/web-salsac.webm" type="video/webm" />
-                <source src="/videos/web-salsac.mp4" type="video/mp4" />
-              </video>
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-blue-800">Blockchain ESG Platform</h3>
-                <p>Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    <!-- Projects Section -->
+<section id="projects" class="py-20 bg-gray-50">
+  <div class="text-center mb-10">
+    <h2 class="text-4xl font-extrabold text-blue-800">Projects</h2>
+  </div>
+
+  <div class="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0">
+
+    {/* Project 1 */}
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+      <video autoplay muted loop playsinline class="w-full h-64 object-cover">
+        <source src="/videos/jurni-leasing.webm" type="video/webm" />
+        <img src="/videos/jurni-leasing-fallback.jpeg" alt="Jurni Leasing Expansion" class="w-full h-64 object-cover" />
+      </video>
+      <div class="p-6">
+        <h3 class="text-2xl font-bold text-blue-800 mb-2">Jurni Leasing Expansion</h3>
+        <p class="text-gray-700">Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
+      </div>
+    </div>
+
+    {/* Project 2 */}
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300">
+      <video autoplay muted loop playsinline class="w-full h-64 object-cover">
+        <source src="/videos/web-salsac.webm" type="video/webm" />
+        <img src="/videos/web-salsac-fallback.jpeg" alt="Blockchain ESG Platform" class="w-full h-64 object-cover" />
+      </video>
+      <div class="p-6">
+        <h3 class="text-2xl font-bold text-blue-800 mb-2">Blockchain ESG Platform</h3>
+        <p class="text-gray-700">Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
 
     const Contact = () => (
       <section id="contact" className="section bg-gradient-to-br from-blue-900 to-blue-700 text-white py-16">
@@ -187,7 +190,7 @@
           {/* Profile image with intro */}
           <div className="flex flex-col items-center text-center space-y-4">
             <img src="/images/profile.png" alt="Profile Picture" className="rounded-xl shadow-xl max-w-[280px] h-auto object-cover" loading="lazy" />
-            <p className="text-lg font-light leading-relaxed max-w-xs">👋 Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
+            <p className="text-lg font-light leading-relaxed max-w-xs">Hi, I'm Alan Carreras. Let's discuss your goals together!</p>
           </div>
           
           {/* Contact Form */}
