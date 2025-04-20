@@ -198,34 +198,39 @@
     );
 
     const Projects = () => (
-      <section id="projects" className="section bg-gray-50 text-center fade-in">
-  <div className="container mx-auto">
-    <h2 className="text-4xl font-bold mb-12 text-blue-800">Projects</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      
-      <!-- Project 1 -->
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-        <video muted preload="metadata" poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-          <source src="/videos/jurni-leasing.webm" type="video/webm" />
-          <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-        </video>
-        <div className="p-6">
-          <h3 className="text-2xl font-semibold mb-4 text-blue-800">Jurni Leasing Expansion</h3>
-          <p>Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
+  <section id="projects" className="section bg-gray-50 text-center fade-in">
+    <div className="container mx-auto">
+      <h2 className="text-4xl font-bold mb-12 text-blue-800">Projects</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        {/* Project 1 */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
+          <video muted preload="metadata" poster="/videos/jurni-leasing-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
+            <source src="/videos/jurni-leasing.webm" type="video/webm" />
+            <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
+          </video>
+          <div className="p-6">
+            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Jurni Leasing Expansion</h3>
+            <p>Scaled Jurni Leasing to Top 10 broker, managing over 30,000 vehicles.</p>
+          </div>
         </div>
-      </div>
-      
-      <!-- Project 2 -->
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-        <video muted preload="metadata" poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
-          <source src="/videos/web-salsac.webm" type="video/webm" />
-          <source src="/videos/web-salsac.mp4" type="video/mp4" />
-        </video>
-        <div className="p-6">
-          <h3 className="text-2xl font-semibold mb-4 text-blue-800">Blockchain ESG Platform</h3>
-          <p>Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
+
+        {/* Project 2 */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
+          <video muted preload="metadata" poster="/videos/web-salsac-fallback.jpeg" className="w-full h-64 object-cover" loading="lazy" playsInline>
+            <source src="/videos/web-salsac.webm" type="video/webm" />
+            <source src="/videos/web-salsac.mp4" type="video/mp4" />
+          </video>
+          <div className="p-6">
+            <h3 className="text-2xl font-semibold mb-4 text-blue-800">Blockchain ESG Platform</h3>
+            <p>Developed web_salsac_app, a blockchain-based ESG solution for fleet compliance.</p>
+          </div>
         </div>
+
       </div>
+    </div>
+  </section>
+);
 
     </div>
   </div>
