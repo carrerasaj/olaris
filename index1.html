@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="/css/aos.css" rel="stylesheet" />
-  <script defer src="/js/aos.js"></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
@@ -13,29 +13,26 @@
           preloader.style.display = "none";
         }, 500);
       }, 3000);
-      // Hamburger menu toggle with error handling
+      // Hamburger menu toggle
       const menuToggle = document.getElementById('menuToggle');
       const navMenu = document.getElementById('navMenu');
-      if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
-          navMenu.classList.toggle('hidden');
-        });
-      }
+      menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('hidden');
+      });
     });
   </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited | UK Fleet Management & Growth Experts</title>
   <meta name="description" content="Olaris Consulting Limited, based in Charlbury, UK, delivers fleet management, strategic growth, and blockchain ESG solutions for businesses." />
-  <meta property="og:title" content="Olaris Consulting Limited | UK Consulting Experts" />
-  <meta property="og:description" content="Specializing in fleet management, growth strategy, and digital integration with blockchain and ESG solutions." />
-  <meta property="og:image" content="https://olaris.co.uk/images/logo.webp" />
+  <meta property="og:title" content="Olaris Consulting Limited" />
+  <meta property="og:description" content="Fleet Management | Growth Strategy | Digital Integration." />
+  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
   <meta property="og:url" content="https://olaris.co.uk/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/images/logo.webp" type="image/webp" />
+  <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/" />
-  <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -48,10 +45,10 @@
       "@type": "Organization",
       "name": "Olaris Consulting Limited",
       "url": "https://olaris.co.uk",
-      "logo": "https://olaris.co.uk/images/logo.webp",
+      "logo": "https://olaris.co.uk/images/logo.png",
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+44-7919-35-40-68",
+        "telephone": "+44-7919 35 40 68",
         "contactType": "customer service",
         "areaServed": "GB",
         "availableLanguage": "English"
@@ -62,10 +59,10 @@
       ]
     }
   </script>
-  <script src="/js/tailwindcss.min.js"></script>
-  <script src="/js/react.min.js"></script>
-  <script src="/js/react-dom.min.js"></script>
-  <script src="/js/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     body {
@@ -101,74 +98,25 @@
       50% { background-position: 100% 50%; }
     }
     .error-message { color: red; font-size: 0.875rem; margin-top: 0.25rem; }
-    #navMenu {
-      background: white;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    #stickyCTA {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(to right, #3b82f6, #1e40af);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 9999px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 999;
-      transition: transform 0.3s ease;
-      display: none;
-    }
-    #stickyCTA:hover {
-      transform: scale(1.1);
-    }
-    #exitPopup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    #exitPopupContent {
-      background: white;
-      padding: 24px;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 400px;
-    }
   </style>
 </head>
 
 <body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
-    <img src="/images/logo.webp" alt="Olaris Consulting Logo" width="80" height="80" />
-  </div>
-
-  <a href="#contact" id="stickyCTA">Contact Us</a>
-  <div id="exitPopup">
-    <div id="exitPopupContent">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Don’t Leave Yet!</h2>
-      <p className="text-gray-700 mb-6">Get 10% off your first consultation with Olaris Consulting.</p>
-      <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-      <button id="closePopup" className="mt-4 text-gray-600 underline">No Thanks</button>
-    </div>
+    <img src="/images/logo.png" alt="Loading..." width="80" height="80" />
   </div>
 
   <div id="root"></div>
 
-  <script type="text/babel">
+    <script type="text/babel">
     const Navbar = () => (
       <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
         <div className="flex items-center space-x-4">
-          <img src="/images/logo.webp" alt="Olaris Consulting Logo" className="h-10 w-10" />
+          <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
           <span className="font-bold text-xl text-blue-800">Olaris Consulting</span>
         </div>
         <div className="md:hidden">
-          <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 focus:outline-none">
+          <button id="menuToggle" className="text-gray-600 focus:outline-none">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -233,7 +181,7 @@
             ))}
           </div>
           <div className="mt-12">
-            <img src="/images/client-logos.webp" alt="Trusted by leading UK businesses" className="mx-auto h-12 opacity-70" />
+            <img src="/images/client-logos.png" alt="Trusted by leading UK businesses" className="mx-auto h-12 opacity-70" />
           </div>
         </div>
       </section>
@@ -262,18 +210,6 @@
               </div>
             </div>
           ))}
-        </div>
-      </section>
-    );
-
-    const FeaturedIn = () => (
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800">Featured In</h2>
-          <div className="flex justify-center space-x-8">
-            <img src="/images/forbes-logo.webp" alt="Forbes" className="h-10 opacity-70" />
-            <img src="/images/techcrunch-logo.webp" alt="TechCrunch" className="h-10 opacity-70" />
-          </div>
         </div>
       </section>
     );
@@ -323,20 +259,20 @@
         <section id="contact" className="section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6" data-aos="fade-up">
             <div className="flex flex-col items-center text-center">
-              <img src="/images/profile.webp" alt="Alan Carreras, Consultant" className="rounded-lg shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy" />
+              <img src="/images/profile.png" alt="Alan Carreras, Consultant" className="rounded-lg shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy" />
               <p className="text-lg leading-relaxed">👋 Hi, I'm Alan Carreras, Charlbury-based consultant. Let's discuss your business goals!</p>
             </div>
             <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800">
               <div>
-                <input type="text" placeholder="Name" aria-label="Name" className="w-full p-3 rounded border-gray-300" required />
+                <input type="text" placeholder="Name" className="w-full p-3 rounded border-gray-300" required />
                 {errors.name && <p className="error-message">{errors.name}</p>}
               </div>
               <div>
-                <input type="email" placeholder="Email" aria-label="Email" className="w-full p-3 rounded border-gray-300" required />
+                <input type="email" placeholder="Email" className="w-full p-3 rounded border-gray-300" required />
                 {errors.email && <p className="error-message">{errors.email}</p>}
               </div>
               <div>
-                <textarea placeholder="Message" aria-label="Message" className="w-full p-3 rounded border-gray-300" rows="4" required></textarea>
+                <textarea placeholder="Message" className="w-full p-3 rounded border-gray-300" rows="4" required></textarea>
                 {errors.message && <p className="error-message">{errors.message}</p>}
               </div>
               <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition">Send Message</button>
@@ -349,22 +285,10 @@
     const Footer = () => (
       <footer className="text-center py-6 text-gray-500 text-sm bg-white">
         <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-        <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
-        <div className="mt-2">
+        <p>Olaris Consulting Limited, [1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919 35 40 68 | Email: info@olaris.co.uk</p>
+        <div>
           <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 hover:text-blue-700 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 hover:text-blue-700 mx-2">Share on Facebook</a>
-        </div>
-        <div className="mt-4">
-          <h3 className="text-gray-700 font-semibold">Subscribe to Our Newsletter</h3>
-          <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center">
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
-          </form>
-          <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
-        </div>
-        <div className="mt-4">
-          <a href="/privacy-policy" className="text-gray-600 hover:underline">Privacy Policy</a>
+          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a>
         </div>
       </footer>
     );
@@ -376,8 +300,6 @@
         <About />
         <Services />
         <Projects />
-        <FeaturedIn />
-        <Testimonials />
         <Contact />
         <Footer />
       </>
@@ -385,29 +307,26 @@
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 
-    // Sticky CTA visibility
-    window.addEventListener('scroll', () => {
-      const stickyCTA = document.getElementById('stickyCTA');
-      if (window.scrollY > 300) {
-        stickyCTA.style.display = 'block';
-      } else {
-        stickyCTA.style.display = 'none';
-      }
-    });
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
+    };
 
-    // Exit-intent popup
-    let isLeaving = false;
-    document.addEventListener('mouseout', (e) => {
-      if (e.clientY <= 0 && !isLeaving) {
-        isLeaving = true;
-        const exitPopup = document.getElementById('exitPopup');
-        exitPopup.style.display = 'flex';
+    function validateForm(event) {
+      const name = event.target[0].value.trim();
+      const email = event.target[1].value.trim();
+      const message = event.target[2].value.trim();
+      if (!name || !email.includes("@") || !message) {
+        alert('Please complete all fields correctly.');
+        event.preventDefault();
+      } else {
+        alert('✅ Thank you! Your message has been sent.');
       }
-    });
-    document.getElementById('closePopup').addEventListener('click', () => {
-      document.getElementById('exitPopup').style.display = 'none';
-    });
+    }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9333fdf32f6a6788',t:'MTc0NTE0NTI5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
