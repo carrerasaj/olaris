@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="/css/aos.css" rel="stylesheet" />
-  <script defer src="/js/aos.js"></script>
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script defer src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
       const preloader = document.getElementById("preloader");
-      setTimeout(() => {
+      const preloaderImg = document.getElementById("preloaderImg");
+      // Hide preloader after 2 seconds or on error
+      const hidePreloader = () => {
         preloader.style.opacity = "0";
         setTimeout(() => {
           preloader.style.display = "none";
         }, 500);
-      }, 3000);
+      };
+      setTimeout(hidePreloader, 2000);
+      preloaderImg.onerror = hidePreloader; // Hide preloader if image fails to load
       // Hamburger menu toggle with error handling
       const menuToggle = document.getElementById('menuToggle');
       const navMenu = document.getElementById('navMenu');
@@ -30,10 +34,10 @@
   <meta name="description" content="Olaris Consulting Limited, based in Charlbury, UK, delivers fleet management, strategic growth, and blockchain ESG solutions for businesses." />
   <meta property="og:title" content="Olaris Consulting Limited | UK Consulting Experts" />
   <meta property="og:description" content="Specializing in fleet management, growth strategy, and digital integration with blockchain and ESG solutions." />
-  <meta property="og:image" content="https://olaris.co.uk/images/logo.webp" />
+  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
   <meta property="og:url" content="https://olaris.co.uk/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/images/logo.webp" type="image/webp" />
+  <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/" />
   <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
   <script>
@@ -48,7 +52,7 @@
       "@type": "Organization",
       "name": "Olaris Consulting Limited",
       "url": "https://olaris.co.uk",
-      "logo": "https://olaris.co.uk/images/logo.webp",
+      "logo": "https://olaris.co.uk/images/logo.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+44-7919-35-40-68",
@@ -62,10 +66,10 @@
       ]
     }
   </script>
-  <script src="/js/tailwindcss.min.js"></script>
-  <script src="/js/react.min.js"></script>
-  <script src="/js/react-dom.min.js"></script>
-  <script src="/js/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     body {
@@ -145,7 +149,7 @@
 
 <body class="snap-y snap-mandatory overflow-y-scroll h-screen">
   <div id="preloader">
-    <img src="/images/logo.webp" alt="Olaris Consulting Logo" width="80" height="80" />
+    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
   </div>
 
   <a href="#contact" id="stickyCTA">Contact Us</a>
@@ -164,7 +168,7 @@
     const Navbar = () => (
       <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
         <div className="flex items-center space-x-4">
-          <img src="/images/logo.webp" alt="Olaris Consulting Logo" className="h-10 w-10" />
+          <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
           <span className="font-bold text-xl text-blue-800">Olaris Consulting</span>
         </div>
         <div className="md:hidden">
@@ -188,7 +192,7 @@
         <video autoPlay muted loop playsInline loading="lazy" className="absolute w-full h-full object-cover opacity-40">
           <source src="/videos/cityscape.webm" type="video/webm" />
           <source src="/videos/cityscape.mp4" type="video/mp4" />
-          <img src="/videos/cityscape-fallback.jpeg" alt="Cityscape Background" className="w-full h-full object-cover" />
+          <img src="/videos/cityscape-fallback.jpg" alt="Cityscape Background" className="w-full h-full object-cover" />
         </video>
         <div className="relative z-10 text-center px-6 fade-in-hero">
           <h1 className="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">Olaris Consulting Limited</h1>
@@ -232,9 +236,6 @@
               </div>
             ))}
           </div>
-          <div className="mt-12">
-            <img src="/images/client-logos.webp" alt="Trusted by leading UK businesses" className="mx-auto h-12 opacity-70" />
-          </div>
         </div>
       </section>
     );
@@ -262,18 +263,6 @@
               </div>
             </div>
           ))}
-        </div>
-      </section>
-    );
-
-    const FeaturedIn = () => (
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800">Featured In</h2>
-          <div className="flex justify-center space-x-8">
-            <img src="/images/forbes-logo.webp" alt="Forbes" className="h-10 opacity-70" />
-            <img src="/images/techcrunch-logo.webp" alt="TechCrunch" className="h-10 opacity-70" />
-          </div>
         </div>
       </section>
     );
@@ -323,7 +312,7 @@
         <section id="contact" className="section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6" data-aos="fade-up">
             <div className="flex flex-col items-center text-center">
-              <img src="/images/profile.webp" alt="Alan Carreras, Consultant" className="rounded-lg shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy" />
+              <img src="/images/profile.png" alt="Alan Carreras, Consultant" className="rounded-lg shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy" />
               <p className="text-lg leading-relaxed">👋 Hi, I'm Alan Carreras, Charlbury-based consultant. Let's discuss your business goals!</p>
             </div>
             <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800">
@@ -376,7 +365,6 @@
         <About />
         <Services />
         <Projects />
-        <FeaturedIn />
         <Testimonials />
         <Contact />
         <Footer />
