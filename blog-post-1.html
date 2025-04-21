@@ -30,12 +30,12 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/blog-post-1.html" />
-  <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
+    gtag('config', 'G-BFJ8CC0RNJ');
   </script>
   <script type="application/ld+json">
     {
@@ -65,6 +65,16 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+    .nav-button {
+  border: 1px solid #d1d5db; /* Gray border */
+  border-radius: 9999px; /* Fully rounded */
+  transition: all 0.3s ease;
+}
+.nav-button:hover {
+  background-color: #1e40af; /* Blue background on hover */
+  color: white;
+  border-color: #1e40af;
+}
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -215,9 +225,11 @@ const BlogPost = () => (
         <p>Real-time data from IoT devices is helping fleet managers make informed decisions on the go.</p>
         <p>Ready to implement these trends in your fleet? <a href="index.html#contact" className="text-blue-600 hover:underline">Contact us</a> for a consultation.</p>
       </div>
+      <SocialShare />
     </div>
   </section>
 );
+
 const SocialShare = () => (
   <div className="mt-8 flex justify-center space-x-4">
     <a href={`https://www.linkedin.com/sharing/share-offsite/?url=https://olaris.co.uk/blog-post-1.html`} target="_blank" className="text-gray-600 hover:text-blue-700">

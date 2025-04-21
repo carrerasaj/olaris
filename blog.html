@@ -16,6 +16,16 @@
       };
       setTimeout(hidePreloader, 2000);
       preloaderImg.onerror = hidePreloader;
+
+      // Dark mode toggle
+      const toggleDarkMode = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      };
+      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
     });
   </script>
 
@@ -30,12 +40,12 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/blog.html" />
-  <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
+    gtag('config', 'G-BFJ8CC0RNJ');
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -48,6 +58,11 @@
       font-family: 'Inter', sans-serif;
       background: #f9fafb;
       scroll-behavior: smooth;
+      transition: background-color 0.3s ease;
+    }
+    .dark body {
+      background: #1a202c;
+      color: #e2e8f0;
     }
     #preloader {
       position: fixed;
@@ -61,6 +76,23 @@
     #navMenu {
       background: white;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .nav-button {
+      border: 1px solid #d1d5db;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #1e40af;
+      color: white;
+      border-color: #1e40af;
+    }
+    .dark .nav-button {
+      border-color: #4a5568;
+    }
+    .dark .nav-button:hover {
+      background-color: #4299e1;
+      border-color: #4299e1;
     }
     #stickyCTA {
       position: fixed;
@@ -97,6 +129,37 @@
       text-align: center;
       max-width: 400px;
     }
+    .dark #exitPopupContent {
+      background: #2d3748;
+      color: #e2e8f0;
+    }
+    .blog-hero {
+      background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .dark .blog-hero {
+      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
+    .blog-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      transform: rotate(45deg);
+      animation: rotateGlow 20s linear infinite;
+    }
+    @keyframes rotateGlow {
+      0% { transform: rotate(45deg); }
+      100% { transform: rotate(405deg); }
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+      transition: transform 0.3s ease;
+    }
   </style>
 </head>
 
@@ -108,10 +171,10 @@
   <a href="index.html#contact" id="stickyCTA">Contact Us</a>
   <div id="exitPopup">
     <div id="exitPopupContent">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Don’t Leave Yet!</h2>
-      <p className="text-gray-700 mb-6">Get 10% off your first consultation with Olaris Consulting.</p>
+      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
+      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
       <a href="index.html#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-      <button id="closePopup" className="mt-4 text-gray-600 underline">No Thanks</button>
+      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
     </div>
   </div>
 
@@ -123,47 +186,79 @@
       const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
       return (
-        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
+        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
           <div className="flex items-center space-x-4">
             <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
-            <span className="font-bold text-xl text-blue-800">Olaris Consulting</span>
+            <span className="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
           </div>
-          <div className="md:hidden">
-            <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 focus:outline-none" onClick={toggleMenu}>
-              {isMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-              )}
+          <div className="flex items-center space-x-4">
+            <button id="darkModeToggle" aria-label="Toggle dark mode" className="text-gray-600 dark:text-gray-300 focus:outline-none">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
             </button>
+            <div className="md:hidden">
+              <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 dark:text-gray-300 focus:outline-none" onClick={toggleMenu}>
+                {isMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
-          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-8 text-gray-600 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white md:bg-transparent p-4 md:p-0`}>
-            <a href="index.html#about" className="hover:text-blue-700 py-2 md:py-0">About</a>
-            <a href="index.html#services" className="hover:text-blue-700 py-2 md:py-0">Services</a>
-            <a href="index.html#projects" className="hover:text-blue-700 py-2 md:py-0">Projects</a>
-            <a href="index.html#contact" className="hover:text-blue-700 py-2 md:py-0">Contact</a>
-            <a href="blog.html" className="hover:text-blue-700 py-2 md:py-0">Blog</a>
+          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
+            <a href="index.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
+            <a href="index.html#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
+            <a href="index.html#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
+            <a href="index.html#projects" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Projects</a>
+            <a href="index.html#contact" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Contact</a>
+            <a href="blog.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Blog</a>
           </div>
         </nav>
       );
     };
 
-    const BlogList = () => (
-      <section className="py-16 bg-gray-100">
+    const BlogHero = () => (
+      <section className="blog-hero py-24 text-center text-white relative">
+        <div className="container mx-auto px-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-blue-800 dark:text-blue-300" data-aos="fade-up">Olaris Consulting Blog</h1>
+          <p className="text-xl md:text-2xl mb-8 text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">Insights on fleet management, strategic growth, and ESG solutions.</p>
+        </div>
+      </section>
+    );
+
+    const FeaturedPost = () => (
+      <section className="py-16 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
         <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-          <h1 className="text-4xl font-extrabold mb-8 text-blue-800">Olaris Consulting Blog</h1>
-          <p className="text-gray-700 mb-12">Insights on fleet management, strategic growth, and ESG solutions.</p>
+          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Featured Post</h2>
+          <div className="max-w-3xl mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card">
+            <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-64 object-cover rounded-t-lg" />
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
+              <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    const RecentPosts = () => (
+      <section className="py-16 bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
+        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
+          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Recent Posts</h2>
           <div className="max-w-5xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="100">
-              <img src="/images/logo.png" alt="Fleet Management Trends Placeholder" className="w-full h-48 object-cover rounded-t-lg" />
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="100">
+              <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-48 object-cover rounded-t-lg" />
               <div className="p-6">
-                <h2 className="text-xl font-semibold text-blue-700 mb-2">Top 5 Fleet Management Trends for 2025</h2>
-                <p className="text-gray-600 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
-                <a href="blog-post-1.html" className="text-blue-600 hover:underline">Read More</a>
+                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
+                <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
               </div>
             </div>
           </div>
@@ -172,24 +267,24 @@
     );
 
     const Footer = () => (
-      <footer className="text-center py-6 text-gray-500 text-sm bg-white">
+      <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
         <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
         <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
         <div className="mt-2">
-          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 hover:text-blue-700 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 hover:text-blue-700 mx-2">Share on Facebook</a>
+          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
+          <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a>
         </div>
         <div className="mt-4">
-          <h3 className="text-gray-700 font-semibold">Subscribe to Our Newsletter</h3>
+          <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
           <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300" required />
+            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" required />
             <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
           </form>
           <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
         </div>
         <div className="mt-4">
-          <a href="/privacy-policy" className="text-gray-600 hover:underline">Privacy Policy</a>
+          <a href="privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
         </div>
       </footer>
     );
@@ -197,7 +292,9 @@
     const App = () => (
       <>
         <Navbar />
-        <BlogList />
+        <BlogHero />
+        <FeaturedPost />
+        <RecentPosts />
         <Footer />
       </>
     );
@@ -225,6 +322,4 @@
       document.getElementById('exitPopup').style.display = 'none';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-</body>
-</html>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height
