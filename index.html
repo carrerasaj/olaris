@@ -16,8 +16,8 @@
       };
       setTimeout(hidePreloader, 2000);
       preloaderImg.onerror = hidePreloader;
+      preloaderImg.onload = hidePreloader;
 
-      // Dark mode toggle
       const toggleDarkMode = () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -26,7 +26,18 @@
       if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark');
       }
+
+      console.log("DOMContentLoaded fired, attempting to render React app...");
     });
+
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
+      console.log("Window loaded, ensuring preloader is hidden.");
+    };
   </script>
 
   <meta charset="UTF-8" />
@@ -67,7 +78,7 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-  <script src="/js/tailwindcss.min.js"></script>
+  <link href="/css/tailwindcss.min.css" rel="stylesheet" />
   <script src="/js/react.min.js"></script>
   <script src="/js/react-dom.min.js"></script>
   <script src="/js/babel.min.js"></script>

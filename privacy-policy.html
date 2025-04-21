@@ -16,6 +16,8 @@
       };
       setTimeout(hidePreloader, 2000);
       preloaderImg.onerror = hidePreloader;
+      preloaderImg.onload = hidePreloader;
+
       const toggleDarkMode = () => {
         document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -24,7 +26,18 @@
       if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark');
       }
+
+      console.log("DOMContentLoaded fired, attempting to render React app...");
     });
+
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
+      console.log("Window loaded, ensuring preloader is hidden.");
+    };
   </script>
 
   <meta charset="UTF-8" />
@@ -48,7 +61,7 @@
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-  <script src="/js/tailwindcss.min.js"></script>
+  <link href="/css/tailwindcss.min.css" rel="stylesheet" />
   <script src="/js/react.min.js"></script>
   <script src="/js/react-dom.min.js"></script>
   <script src="/js/babel.min.js"></script>
@@ -80,6 +93,7 @@
       align-items: center;
       justify-content: center;
       z-index: 50;
+      transition: opacity 0.5s ease;
     }
     #navMenu {
       background: white;
@@ -348,15 +362,37 @@
       </footer>
     );
 
-    const App = () => (
-      <>
-        <Navbar />
-        <PrivacyPolicy />
-        <Footer />
-      </>
-    );
+    const App = () => {
+      React.useEffect(() => {
+        console.log("React App component mounted successfully.");
+      }, []);
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+      return (
+        <>
+          <Navbar />
+          <PrivacyPolicy />
+          <Footer />
+        </>
+      );
+    };
+
+    try {
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+      console.log("React app rendered successfully.");
+    } catch (error) {
+      console.error("Error rendering React app:", error);
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+        document.getElementById('root').innerHTML = `
+          <div style="text-align: center; padding: 20px; background: #f9fafb;">
+            <h1>Olaris Consulting Limited</h1>
+            <p>There was an error loading the page. Please try refreshing, or contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a>.</p>
+          </div>
+        `;
+      }, 500);
+    }
 
     window.addEventListener('scroll', () => {
       const stickyCTA = document.getElementById('stickyCTA');
