@@ -1,45 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="/css/aos.css" rel="stylesheet" />
-  <script defer src="/js/aos.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      AOS.init({ once: true });
-      const preloader = document.getElementById("preloader");
-      const preloaderImg = document.getElementById("preloaderImg");
-      const hidePreloader = () => {
-        preloader.style.opacity = "0";
-        setTimeout(() => {
-          preloader.style.display = "none";
-        }, 500);
-      };
-      setTimeout(hidePreloader, 2000);
-      preloaderImg.onerror = hidePreloader;
-      preloaderImg.onload = hidePreloader;
-
-      const toggleDarkMode = () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      };
-      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
-      if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
-
-      console.log("DOMContentLoaded fired, attempting to render React app...");
-    });
-
-    window.onload = () => {
-      const preloader = document.getElementById("preloader");
-      preloader.style.opacity = "0";
-      setTimeout(() => {
-        preloader.style.display = "none";
-      }, 500);
-      console.log("Window loaded, ensuring preloader is hidden.");
-    };
-  </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited | UK Fleet Management & Growth Experts</title>
@@ -49,10 +10,15 @@
   <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
   <meta property="og:url" content="https://olaris.co.uk/" />
   <meta name="twitter:card" content="summary_large_image" />
+  
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/" />
   <link rel="preload" href="/images/logo.png" as="image" />
   <link rel="preload" href="/js/react.min.js" as="script" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <link href="/css/tailwindcss.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -60,25 +26,22 @@
     gtag('js', new Date());
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Olaris Consulting Limited",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "1 Graces Court, The Slade",
-        "addressLocality": "Charlbury",
-        "postalCode": "OX7 3EG",
-        "addressCountry": "UK"
-      },
-      "telephone": "+44-7919-35-40-68",
-      "url": "https://olaris.co.uk",
-      "description": "Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions."
+
+  <script defer src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" onload="initAOSWithRetry()"></script>
+  <script>
+    function initAOSWithRetry(attempts = 3, delay = 1000) {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({ once: true });
+        console.log("AOS initialized successfully.");
+      } else if (attempts > 0) {
+        console.warn(`AOS not loaded yet, retrying (${attempts} attempts left)...`);
+        setTimeout(() => initAOSWithRetry(attempts - 1, delay), delay);
+      } else {
+        console.error("AOS failed to load after retries.");
+      }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-  <link href="/css/tailwindcss.min.css" rel="stylesheet" />
+
   <script src="/js/react.min.js"></script>
   <script src="/js/react-dom.min.js"></script>
   <script src="/js/babel.min.js"></script>
@@ -227,23 +190,69 @@
       <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
     </div>
   </noscript>
-
+  
   <div id="preloader">
-    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
+    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
   </div>
-
+  
   <a href="#contact" id="stickyCTA">Contact Us</a>
   <a onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn">↑</a>
+  
   <div id="exitPopup">
     <div id="exitPopupContent">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
-      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
-      <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
+      <h2 class="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
+      <p class="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
+      <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
+      <button id="closePopup" class="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
     </div>
   </div>
-
+  
   <div id="root"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const preloader = document.getElementById("preloader");
+      const preloaderImg = document.getElementById("preloaderImg");
+      const hidePreloader = () => {
+        if (preloader) {
+          preloader.style.opacity = "0";
+          setTimeout(() => {
+            preloader.style.display = "none";
+          }, 500);
+        }
+      };
+      setTimeout(hidePreloader, 2000);
+      if (preloaderImg) {
+        preloaderImg.onerror = hidePreloader;
+        preloaderImg.onload = hidePreloader;
+      }
+
+      const toggleDarkMode = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      };
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+      }
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+
+      console.log("DOMContentLoaded fired, attempting to render React app...");
+    });
+
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+        }, 500);
+      }
+      console.log("Window loaded, ensuring preloader is hidden.");
+    };
+  </script>
 
   <script type="text/babel">
     const Navbar = () => {
@@ -276,7 +285,7 @@
               </button>
             </div>
           </div>
-          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
+          <div id="navMenu" className={${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0}>
             <a href="#" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
             <a href="#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
             <a href="#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
@@ -292,20 +301,19 @@
       const [variant, setVariant] = React.useState('A');
 
       React.useEffect(() => {
-        // Simple A/B testing logic: 50% chance for each variant
         const random = Math.random();
         const selectedVariant = random > 0.5 ? 'A' : 'B';
         setVariant(selectedVariant);
         gtag('event', 'ab_test_view', {
           'event_category': 'A/B Test',
-          'event_label': `Hero CTA Variant ${selectedVariant}`
+          'event_label': Hero CTA Variant ${selectedVariant}
         });
       }, []);
 
       const handleCTAClick = () => {
         gtag('event', 'ab_test_click', {
           'event_category': 'A/B Test',
-          'event_label': `Hero CTA Variant ${variant}`
+          'event_label': Hero CTA Variant ${variant}
         });
       };
 
@@ -392,9 +400,9 @@
           ].map((proj, idx) => (
             <div key={idx} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105" data-aos="fade-up" data-aos-delay={idx * 100}>
               <video autoPlay muted loop playsInline loading="lazy" className="w-full h-64 object-cover">
-                <source src={`/videos/${proj.video}.webm`} type="video/webm" />
-                <source src={`/videos/${proj.video}.mp4`} type="video/mp4" />
-                <img src={`/videos/${proj.video}-fallback.jpeg`} alt={proj.title} className="w-full h-64 object-cover" />
+                <source src={/videos/${proj.video}.webm} type="video/webm" />
+                <source src={/videos/${proj.video}.mp4} type="video/mp4" />
+                <img src={/videos/${proj.video}-fallback.jpeg} alt={proj.title} className="w-full h-64 object-cover" />
               </video>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2">{proj.title}</h3>
@@ -513,29 +521,42 @@
       );
     };
 
-    const Footer = () => (
-      <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
-        <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-        <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
-        <div className="mt-2">
-          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a> |
-          <a href="blog.html" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Blog</a>
-        </div>
-        <div className="mt-4">
-          <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
-          <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
-          </form>
-          <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
-        </div>
-        <div className="mt-4">
-          <a href="privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
-        </div>
-      </footer>
-    );
+    const Footer = () => {
+      const emailRef = React.useRef(null);
+
+      React.useEffect(() => {
+        if (emailRef.current) {
+          emailRef.current.href = "mailto:info@olaris.co.uk";
+          emailRef.current.textContent = "info@olaris.co.uk";
+        }
+      }, []);
+
+      return (
+        <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
+          <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
+          <p>
+            Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: <a ref={emailRef} className="text-gray-600 dark:text-gray-300 hover:underline"></a>
+          </p>
+          <div className="mt-2">
+            <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
+            <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a> |
+            <a href="blog.html" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Blog</a>
+          </div>
+          <div className="mt-4">
+            <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
+            <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center">
+              <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
+              <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
+            </form>
+            <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
+          </div>
+          <div className="mt-4">
+            <a href="privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
+          </div>
+        </footer>
+      );
+    };
 
     const App = () => (
       <>
@@ -551,17 +572,53 @@
       </>
     );
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    try {
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        ReactDOM.createRoot(rootElement).render(<App />);
+        console.log("React app rendered successfully.");
+      } else {
+        throw new Error("Root element not found in DOM.");
+      }
+    } catch (error) {
+      console.error("Error rendering React app:", error);
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+          const root = document.getElementById('root');
+          if (root) {
+            root.innerHTML = 
+              <div style="text-align: center; padding: 20px; background: #f9fafb;">
+                <h1>Olaris Consulting Limited</h1>
+                <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
+              </div>
+            ;
+          } else {
+            console.error("Root element not found in DOM during error handling.");
+            document.body.innerHTML = 
+              <div style="text-align: center; padding: 20px; background: #f9fafb;">
+                <h1>Olaris Consulting Limited</h1>
+                <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
+              </div>
+            ;
+          }
+        }, 500);
+      }
+    }
 
     window.addEventListener('scroll', () => {
       const stickyCTA = document.getElementById('stickyCTA');
       const backToTopBtn = document.getElementById('backToTopBtn');
-      if (window.scrollY > 300) {
-        stickyCTA.style.display = 'block';
-        backToTopBtn.style.display = 'block';
-      } else {
-        stickyCTA.style.display = 'none';
-        backToTopBtn.style.display = 'none';
+      if (stickyCTA && backToTopBtn) {
+        if (window.scrollY > 300) {
+          stickyCTA.style.display = 'block';
+          backToTopBtn.style.display = 'block';
+        } else {
+          stickyCTA.style.display = 'none';
+          backToTopBtn.style.display = 'none';
+        }
       }
     });
 
@@ -570,29 +627,21 @@
       if (e.clientY <= 0 && !isLeaving) {
         isLeaving = true;
         const exitPopup = document.getElementById('exitPopup');
-        exitPopup.style.display = 'flex';
+        if (exitPopup) {
+          exitPopup.style.display = 'flex';
+        }
       }
     });
-    document.getElementById('closePopup').addEventListener('click', () => {
-      document.getElementById('exitPopup').style.display = 'none';
-    });
-  </script>
-  <script>
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
-    Tawk_API.onLoad = function(){
-      Tawk_API.setAttributes({
-        'widgetColor': '#1e40af',
-        'welcomeMessage': 'Hello! How can we assist you with fleet management or ESG solutions today?'
+
+    const closePopup = document.getElementById('closePopup');
+    if (closePopup) {
+      closePopup.addEventListener('click', () => {
+        const exitPopup = document.getElementById('exitPopup');
+        if (exitPopup) {
+          exitPopup.style.display = 'none';
+        }
       });
-    };
+    }
   </script>
 </body>
 </html>
