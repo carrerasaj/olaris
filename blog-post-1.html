@@ -65,6 +65,18 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+
+    body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+  scroll-behavior: smooth;
+}
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  color: #1e3a8a; /* Darker blue for better contrast */
+}
     .nav-button {
   border: 1px solid #d1d5db; /* Gray border */
   border-radius: 9999px; /* Fully rounded */
@@ -144,7 +156,13 @@
     }
   </style>
 </head>
-
+<noscript>
+  <div style="text-align: center; padding: 20px; background: #f9fafb;">
+    <h1>Olaris Consulting Limited</h1>
+    <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
+    <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
+  </div>
+</noscript>
 <body>
   <div id="preloader">
     <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
@@ -210,7 +228,7 @@ const BlogPost = () => (
     <div className="container mx-auto px-6">
       <h1 className="text-4xl font-extrabold mb-6 text-blue-800" data-aos="fade-up">Top 5 Fleet Management Trends for 2025</h1>
       <p className="text-gray-600 mb-4" data-aos="fade-up" data-aos-delay="100">Published on April 20, 2025</p>
-      <img src="/images/logo.png" alt="Fleet Management Trends Placeholder" className="w-full max-w-2xl mx-auto h-64 object-cover mb-6 rounded-lg" data-aos="fade-up" data-aos-delay="200" />
+      <img src="/images/blog-post-1.jpeg" alt="Top 5 Fleet Management Trends for 2025" className="w-full max-w-2xl mx-auto h-64 object-cover mb-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200" />
       <div className="prose max-w-2xl mx-auto text-gray-700" data-aos="fade-up" data-aos-delay="300">
         <p>Fleet management is evolving rapidly, and 2025 promises to bring transformative changes. Here are the top 5 trends to watch:</p>
         <h2>1. Electrification of Fleets</h2>
@@ -267,6 +285,18 @@ const SocialShare = () => (
         </div>
       </footer>
     );
+
+        <script>
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
 
     const App = () => (
       <>
