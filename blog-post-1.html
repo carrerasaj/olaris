@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
-  <script defer src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <link href="/css/aos.css" rel="stylesheet" />
+  <script defer src="/js/aos.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
@@ -16,6 +16,14 @@
       };
       setTimeout(hidePreloader, 2000);
       preloaderImg.onerror = hidePreloader;
+      const toggleDarkMode = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      };
+      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
     });
   </script>
 
@@ -25,11 +33,13 @@
   <meta name="description" content="Discover the top 5 fleet management trends for 2025, including electrification, AI-driven analytics, and more, from Olaris Consulting." />
   <meta property="og:title" content="Top 5 Fleet Management Trends for 2025" />
   <meta property="og:description" content="Learn about the latest fleet management trends for 2025 from Olaris Consulting." />
-  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
+  <meta property="og:image" content="https://olaris.co.uk/images/blog-post-1.jpeg" />
   <meta property="og:url" content="https://olaris.co.uk/blog-post-1.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/blog-post-1.html" />
+  <link rel="preload" href="/images/logo.png" as="image" />
+  <link rel="preload" href="/js/react.min.js" as="script" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -56,42 +66,33 @@
         }
       },
       "datePublished": "2025-04-20",
-      "image": "https://olaris.co.uk/images/logo.png"
+      "image": "https://olaris.co.uk/images/blog-post-1.jpeg"
     }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <script src="/js/tailwindcss.min.js"></script>
+  <script src="/js/react.min.js"></script>
+  <script src="/js/react-dom.min.js"></script>
+  <script src="/js/babel.min.js"></script>
 
   <style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-
-    body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-  scroll-behavior: smooth;
-}
-h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
-  color: #1e3a8a; /* Darker blue for better contrast */
-}
-    .nav-button {
-  border: 1px solid #d1d5db; /* Gray border */
-  border-radius: 9999px; /* Fully rounded */
-  transition: all 0.3s ease;
-}
-.nav-button:hover {
-  background-color: #1e40af; /* Blue background on hover */
-  color: white;
-  border-color: #1e40af;
-}
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #f9fafb;
+      background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
       scroll-behavior: smooth;
+      transition: background-color 0.3s ease;
+    }
+    .dark body {
+      background: #1a202c;
+      color: #e2e8f0;
+    }
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1e3a8a;
+    }
+    .dark h1, .dark h2, .dark h3 {
+      color: #93c5fd;
     }
     #preloader {
       position: fixed;
@@ -105,6 +106,9 @@ h1, h2, h3 {
     #navMenu {
       background: white;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dark #navMenu {
+      background: #2d3748;
     }
     #stickyCTA {
       position: fixed;
@@ -141,6 +145,10 @@ h1, h2, h3 {
       text-align: center;
       max-width: 400px;
     }
+    .dark #exitPopupContent {
+      background: #2d3748;
+      color: #e2e8f0;
+    }
     .prose {
       max-width: 65ch;
       margin: 0 auto;
@@ -150,20 +158,72 @@ h1, h2, h3 {
       margin-bottom: 1rem;
       color: #1e40af;
     }
+    .dark .prose h2 {
+      color: #93c5fd;
+    }
     .prose p {
       margin-bottom: 1rem;
       line-height: 1.6;
     }
+    .prose a {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .prose a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #1e40af;
+      transition: width 0.3s ease;
+    }
+    .prose a:hover::after {
+      width: 100%;
+    }
+    .dark .prose a::after {
+      background-color: #93c5fd;
+    }
+    .nav-button {
+      border: 1px solid #d1d5db;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #1e40af;
+      color: white;
+      border-color: #1e40af;
+    }
+    .dark .nav-button {
+      border-color: #4a5568;
+    }
+    .dark .nav-button:hover {
+      background-color: #4299e1;
+      border-color: #4299e1;
+    }
+    .infographic-placeholder {
+      background: #f1f5f9;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .dark .infographic-placeholder {
+      background: #2d3748;
+    }
   </style>
 </head>
-<noscript>
-  <div style="text-align: center; padding: 20px; background: #f9fafb;">
-    <h1>Olaris Consulting Limited</h1>
-    <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
-    <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
-  </div>
-</noscript>
+
 <body>
+  <noscript>
+    <div style="text-align: center; padding: 20px; background: #f9fafb;">
+      <h1>Olaris Consulting Limited</h1>
+      <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
+      <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
+    </div>
+  </noscript>
+
   <div id="preloader">
     <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
   </div>
@@ -171,10 +231,10 @@ h1, h2, h3 {
   <a href="index.html#contact" id="stickyCTA">Contact Us</a>
   <div id="exitPopup">
     <div id="exitPopupContent">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Don’t Leave Yet!</h2>
-      <p className="text-gray-700 mb-6">Get 10% off your first consultation with Olaris Consulting.</p>
+      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
+      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
       <a href="index.html#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-      <button id="closePopup" className="mt-4 text-gray-600 underline">No Thanks</button>
+      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
     </div>
   </div>
 
@@ -186,117 +246,145 @@ h1, h2, h3 {
       const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
       return (
-        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
+        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
           <div className="flex items-center space-x-4">
             <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
-            <span className="font-bold text-xl text-blue-800">Olaris Consulting</span>
+            <span className="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
           </div>
-          <div className="md:hidden">
-            <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 focus:outline-none" onClick={toggleMenu}>
-              {isMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-              )}
+          <div className="flex items-center space-x-4">
+            <button id="darkModeToggle" aria-label="Toggle dark mode" className="text-gray-600 dark:text-gray-300 focus:outline-none">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
             </button>
+            <div className="md:hidden">
+              <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 dark:text-gray-300 focus:outline-none" onClick={toggleMenu}>
+                {isMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
-          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-8 text-gray-600 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white md:bg-transparent p-4 md:p-0`}>
-            <a href="index.html#about" className="hover:text-blue-700 py-2 md:py-0">About</a>
-            <a href="index.html#services" className="hover:text-blue-700 py-2 md:py-0">Services</a>
-            <a href="index.html#projects" className="hover:text-blue-700 py-2 md:py-0">Projects</a>
-            <a href="index.html#contact" className="hover:text-blue-700 py-2 md:py-0">Contact</a>
-            <a href="blog.html" className="hover:text-blue-700 py-2 md:py-0">Blog</a>
+          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
+            <a href="index.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
+            <a href="index.html#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
+            <a href="index.html#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
+            <a href="index.html#projects" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Projects</a>
+            <a href="index.html#contact" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Contact</a>
+            <a href="blog.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Blog</a>
           </div>
         </nav>
       );
     };
+
     const Breadcrumbs = () => (
-  <nav className="container mx-auto px-6 py-4 text-gray-600 text-sm" aria-label="Breadcrumb">
-    <a href="index.html" className="hover:text-blue-700">Home</a> &gt;
-    <a href="blog.html" className="hover:text-blue-700">Blog</a> &gt;
-    <span>Top 5 Fleet Management Trends for 2025</span>
-  </nav>
-);
+      <nav className="container mx-auto px-6 py-4 text-gray-600 dark:text-gray-300 text-sm" aria-label="Breadcrumb">
+        <a href="index.html" className="hover:text-blue-700 dark:hover:text-blue-500">Home</a> &gt;
+        <a href="blog.html" className="hover:text-blue-700 dark:hover:text-blue-500">Blog</a> &gt;
+        <span>Top 5 Fleet Management Trends for 2025</span>
+      </nav>
+    );
 
-const BlogPost = () => (
-  <section className="py-16 bg-gray-100">
-    <Breadcrumbs />
-    <div className="container mx-auto px-6">
-      <h1 className="text-4xl font-extrabold mb-6 text-blue-800" data-aos="fade-up">Top 5 Fleet Management Trends for 2025</h1>
-      <p className="text-gray-600 mb-4" data-aos="fade-up" data-aos-delay="100">Published on April 20, 2025</p>
-      <img src="/images/blog-post-1.jpeg" alt="Top 5 Fleet Management Trends for 2025" className="w-full max-w-2xl mx-auto h-64 object-cover mb-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200" />
-      <div className="prose max-w-2xl mx-auto text-gray-700" data-aos="fade-up" data-aos-delay="300">
-        <p>Fleet management is evolving rapidly, and 2025 promises to bring transformative changes. Here are the top 5 trends to watch:</p>
-        <h2>1. Electrification of Fleets</h2>
-        <p>With the push for sustainability, more UK businesses are transitioning to electric vehicles (EVs) to reduce emissions and comply with regulations.</p>
-        <h2>2. AI-Driven Analytics</h2>
-        <p>Artificial intelligence is revolutionizing fleet management by predicting maintenance needs and optimizing routes.</p>
-        <h2>3. Blockchain for Transparency</h2>
-        <p>Blockchain technology is being adopted to ensure transparent tracking of fleet operations and ESG compliance.</p>
-        <h2>4. Autonomous Vehicles</h2>
-        <p>Self-driving technology is slowly being integrated into fleets, improving safety and efficiency.</p>
-        <h2>5. Telematics and IoT Integration</h2>
-        <p>Real-time data from IoT devices is helping fleet managers make informed decisions on the go.</p>
-        <p>Ready to implement these trends in your fleet? <a href="index.html#contact" className="text-blue-600 hover:underline">Contact us</a> for a consultation.</p>
+    const SocialShare = () => (
+      <div className="mt-8 flex justify-center space-x-4">
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=https://olaris.co.uk/blog-post-1.html`} target="_blank" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500">
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.477-2.25-1.672-2.25-1.195 0-1.908.804-2.222 1.578v6.276h-3v-11h3v1.547c.42-.664 1.17-1.547 2.842-1.547 2.086 0 3.65 1.363 3.65 4.297v6.703z"/>
+          </svg>
+        </a>
+        <a href={`https://twitter.com/intent/tweet?url=https://olaris.co.uk/blog-post-1.html&text=Top 5 Fleet Management Trends for 2025`} target="_blank" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500">
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124-4.09-.205-7.719-2.165-10.148-5.144-.424.729-.666 1.582-.666 2.487 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.316 0-.626-.03-.928-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.397 0-.788-.023-1.177-.068 2.179 1.397 4.768 2.212 7.548 2.212 9.054 0 14.002-7.496 14.002-13.986 0-.213-.005-.426-.014-.637.961-.695 1.797-1.562 2.457-2.549z"/>
+          </svg>
+        </a>
       </div>
-      <SocialShare />
-    </div>
-  </section>
-);
+    );
 
-const SocialShare = () => (
-  <div className="mt-8 flex justify-center space-x-4">
-    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=https://olaris.co.uk/blog-post-1.html`} target="_blank" className="text-gray-600 hover:text-blue-700">
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.477-2.25-1.672-2.25-1.195 0-1.908.804-2.222 1.578v6.276h-3v-11h3v1.547c.42-.664 1.17-1.547 2.842-1.547 2.086 0 3.65 1.363 3.65 4.297v6.703z"/>
-      </svg>
-    </a>
-    <a href={`https://twitter.com/intent/tweet?url=https://olaris.co.uk/blog-post-1.html&text=Top 5 Fleet Management Trends for 2025`} target="_blank" className="text-gray-600 hover:text-blue-700">
-      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124-4.09-.205-7.719-2.165-10.148-5.144-.424.729-.666 1.582-.666 2.487 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.316 0-.626-.03-.928-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.397 0-.788-.023-1.177-.068 2.179 1.397 4.768 2.212 7.548 2.212 9.054 0 14.002-7.496 14.002-13.986 0-.213-.005-.426-.014-.637.961-.695 1.797-1.562 2.457-2.549z"/>
-      </svg>
-    </a>
-  </div>
-);
+    const BlogPost = () => (
+      <section className="py-16 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
+        <Breadcrumbs />
+        <div className="container mx-auto px-6">
+          <h1 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300" data-aos="fade-up">Top 5 Fleet Management Trends for 2025</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-4" data-aos="fade-up" data-aos-delay="100">Published on April 20, 2025</p>
+          <img src="/images/blog-post-1.jpeg" alt="Top 5 Fleet Management Trends for 2025" className="w-full max-w-2xl mx-auto h-64 object-cover mb-6 rounded-lg shadow-md" data-aos="fade-up" data-aos-delay="200" />
+          <div className="prose max-w-2xl mx-auto text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="300">
+            <p>Fleet management is evolving rapidly, and 2025 promises to bring transformative changes. According to a recent study by the UK Fleet Management Association, 68% of fleet operators plan to adopt new technologies within the next two years to stay competitive. Here are the top 5 trends to watch:</p>
+            
+            <h2>1. Electrification of Fleets</h2>
+            <p>With the push for sustainability, more UK businesses are transitioning to electric vehicles (EVs) to reduce emissions and comply with regulations. The UK government aims for all new vehicles to be zero-emission by 2035, driving a 45% increase in EV adoption among fleets in 2024 alone. To prepare, fleet managers should:</p>
+            <ul className="list-disc pl-6">
+              <li>Assess charging infrastructure needs for their operational areas.</li>
+              <li>Explore government incentives, such as the EV grant scheme, to offset costs.</li>
+              <li>Train drivers on EV maintenance to maximize vehicle lifespan.</li>
+            </ul>
+
+            <h2>2. AI-Driven Analytics</h2>
+            <p>Artificial intelligence is revolutionizing fleet management by predicting maintenance needs and optimizing routes. AI tools can reduce fuel costs by up to 15% through real-time route adjustments, according to a 2024 report by Fleet News. Fleet managers can leverage AI by:</p>
+            <ul className="list-disc pl-6">
+              <li>Integrating AI platforms like Olaris’s FleetOptix to predict vehicle downtime.</li>
+              <li>Using AI to analyze driver behavior and improve safety protocols.</li>
+            </ul>
+
+            <h2>3. Blockchain for Transparency</h2>
+            <p>Blockchain technology is being adopted to ensure transparent tracking of fleet operations and ESG compliance. For example, Olaris’s web_salsac_app uses blockchain to provide immutable records of carbon emissions, helping fleets meet regulatory requirements. Benefits include:</p>
+            <ul className="list-disc pl-6">
+              <li>Enhanced trust with stakeholders through verifiable data.</li>
+              <li>Reduced administrative overhead by automating compliance reporting.</li>
+            </ul>
+            <div className="infographic-placeholder">
+              <p><em>[Infographic Placeholder: Benefits of Blockchain in Fleet Management]</em></p>
+            </div>
+
+            <h2>4. Autonomous Vehicles</h2>
+            <p>Self-driving technology is slowly being integrated into fleets, improving safety and efficiency. A 2024 trial by the UK Department for Transport found that autonomous delivery vans reduced accident rates by 20%. To adopt autonomous vehicles, consider:</p>
+            <ul className="list-disc pl-6">
+              <li>Starting with semi-autonomous features like adaptive cruise control.</li>
+              <li>Partnering with technology providers to pilot fully autonomous vehicles.</li>
+            </ul>
+
+            <h2>5. Telematics and IoT Integration</h2>
+            <p>Real-time data from IoT devices is helping fleet managers make informed decisions on the go. Telematics systems can reduce idle times by 25%, according to a 2024 study by the UK Telematics Association. Key steps to implement IoT include:</p>
+            <ul className="list-disc pl-6">
+              <li>Installing IoT sensors to monitor vehicle health and driver performance.</li>
+              <li>Using telematics dashboards to track fuel efficiency in real-time.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>Adopting these trends can position your fleet for success in 2025 and beyond. Whether you’re looking to reduce costs, improve sustainability, or enhance transparency, Olaris Consulting can help. Ready to implement these trends in your fleet? <a href="index.html#contact" className="text-blue-600 dark:text-blue-300 hover:underline">Contact us</a> for a consultation, or download our <a href="/fleet-management-checklist.pdf" download className="text-blue-600 dark:text-blue-300 hover:underline" onClick={() => gtag('event', 'download_guide', { 'event_category': 'Lead', 'event_label': 'Fleet Management Checklist Blog' })}>Fleet Management Checklist</a> to get started today.</p>
+          </div>
+          <SocialShare />
+        </div>
+      </section>
+    );
 
     const Footer = () => (
-      <footer className="text-center py-6 text-gray-500 text-sm bg-white">
+      <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
         <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
         <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
         <div className="mt-2">
-          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 hover:text-blue-700 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 hover:text-blue-700 mx-2">Share on Facebook</a>
+          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
+          <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a>
         </div>
         <div className="mt-4">
-          <h3 className="text-gray-700 font-semibold">Subscribe to Our Newsletter</h3>
+          <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
           <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
+            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
+            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
           </form>
           <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
         </div>
         <div className="mt-4">
-          <a href="/privacy-policy" className="text-gray-600 hover:underline">Privacy Policy</a>
+          <a href="/privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
         </div>
       </footer>
     );
-
-        <script>
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-  })();
-</script>
 
     const App = () => (
       <>
@@ -329,6 +417,22 @@ const SocialShare = () => (
       document.getElementById('exitPopup').style.display = 'none';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  <script>
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+    Tawk_API.onLoad = function(){
+      Tawk_API.setAttributes({
+        'widgetColor': '#1e40af',
+        'welcomeMessage': 'Hello! How can we assist you with fleet management or ESG solutions today?'
+      });
+    };
+  </script>
 </body>
 </html>

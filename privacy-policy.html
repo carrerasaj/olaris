@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="/css/aos.css" rel="stylesheet" />
+  <script defer src="/js/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ once: true });
+      const preloader = document.getElementById("preloader");
+      const preloaderImg = document.getElementById("preloaderImg");
+      const hidePreloader = () => {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+        }, 500);
+      };
+      setTimeout(hidePreloader, 2000);
+      preloaderImg.onerror = hidePreloader;
+      const toggleDarkMode = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      };
+      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    });
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy | Olaris Consulting Limited</title>
@@ -12,6 +38,8 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/privacy-policy.html" />
+  <link rel="preload" href="/images/logo.png" as="image" />
+  <link rel="preload" href="/js/react.min.js" as="script" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -19,43 +47,85 @@
     gtag('js', new Date());
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <script src="/js/tailwindcss.min.js"></script>
+  <script src="/js/react.min.js"></script>
+  <script src="/js/react-dom.min.js"></script>
+  <script src="/js/babel.min.js"></script>
 
-  
   <style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-    body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-  scroll-behavior: smooth;
-}
-h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
-  color: #1e3a8a; /* Darker blue for better contrast */
-}
-    .nav-button {
-  border: 1px solid #d1d5db; /* Gray border */
-  border-radius: 9999px; /* Fully rounded */
-  transition: all 0.3s ease;
-}
-.nav-button:hover {
-  background-color: #1e40af; /* Blue background on hover */
-  color: white;
-  border-color: #1e40af;
-}
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #f9fafb;
+      background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
       scroll-behavior: smooth;
+      transition: background-color 0.3s ease;
+    }
+    .dark body {
+      background: #1a202c;
+      color: #e2e8f0;
+    }
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1e3a8a;
+    }
+    .dark h1, .dark h2, .dark h3 {
+      color: #93c5fd;
+    }
+    #preloader {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
     }
     #navMenu {
       background: white;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dark #navMenu {
+      background: #2d3748;
+    }
+    #stickyCTA {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(to right, #3b82f6, #1e40af);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: transform 0.3s ease;
+      display: none;
+    }
+    #stickyCTA:hover {
+      transform: scale(1.1);
+    }
+    #exitPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    #exitPopupContent {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 400px;
+    }
+    .dark #exitPopupContent {
+      background: #2d3748;
+      color: #e2e8f0;
     }
     .prose {
       max-width: 65ch;
@@ -66,20 +136,82 @@ h1, h2, h3 {
       margin-bottom: 1rem;
       color: #1e40af;
     }
+    .dark .prose h2 {
+      color: #93c5fd;
+    }
     .prose p {
       margin-bottom: 1rem;
       line-height: 1.6;
     }
+    .prose a {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .prose a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #1e40af;
+      transition: width 0.3s ease;
+    }
+    .prose a:hover::after {
+      width: 100%;
+    }
+    .dark .prose a::after {
+      background-color: #93c5fd;
+    }
+    .nav-button {
+      border: 1px solid #d1d5db;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #1e40af;
+      color: white;
+      border-color: #1e40af;
+    }
+    .dark .nav-button {
+      border-color: #4a5568;
+    }
+    .dark .nav-button:hover {
+      background-color: #4299e1;
+      border-color: #4299e1;
+    }
+    .gradient-section {
+      background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
+    }
+    .dark .gradient-section {
+      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
   </style>
 </head>
-<noscript>
+
+<body>
+  <noscript>
     <div style="text-align: center; padding: 20px; background: #f9fafb;">
       <h1>Olaris Consulting Limited</h1>
       <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
       <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
     </div>
   </noscript>
-<body>
+
+  <div id="preloader">
+    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
+  </div>
+
+  <a href="index.html#contact" id="stickyCTA">Contact Us</a>
+  <div id="exitPopup">
+    <div id="exitPopupContent">
+      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
+      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
+      <a href="index.html#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
+      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
+    </div>
+  </div>
+
   <div id="root"></div>
 
   <script type="text/babel">
@@ -88,42 +220,50 @@ h1, h2, h3 {
       const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
       return (
-        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white sticky top-0 z-50">
+        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
           <div className="flex items-center space-x-4">
             <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
-            <span className="font-bold text-xl text-blue-800">Olaris Consulting</span>
+            <span className="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
           </div>
-          <div className="md:hidden">
-            <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 focus:outline-none" onClick={toggleMenu}>
-              {isMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-              )}
+          <div className="flex items-center space-x-4">
+            <button id="darkModeToggle" aria-label="Toggle dark mode" className="text-gray-600 dark:text-gray-300 focus:outline-none">
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
             </button>
+            <div className="md:hidden">
+              <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 dark:text-gray-300 focus:outline-none" onClick={toggleMenu}>
+                {isMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
-          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-8 text-gray-600 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white md:bg-transparent p-4 md:p-0`}>
-            <a href="index.html#about" className="hover:text-blue-700 py-2 md:py-0">About</a>
-            <a href="index.html#services" className="hover:text-blue-700 py-2 md:py-0">Services</a>
-            <a href="index.html#projects" className="hover:text-blue-700 py-2 md:py-0">Projects</a>
-            <a href="index.html#contact" className="hover:text-blue-700 py-2 md:py-0">Contact</a>
-            <a href="blog.html" className="hover:text-blue-700 py-2 md:py-0">Blog</a>
+          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
+            <a href="index.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
+            <a href="index.html#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
+            <a href="index.html#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
+            <a href="index.html#projects" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Projects</a>
+            <a href="index.html#contact" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Contact</a>
+            <a href="blog.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Blog</a>
           </div>
         </nav>
       );
     };
 
     const PrivacyPolicy = () => (
-      <section className="py-16 bg-gray-100">
+      <section className="py-16 gradient-section dark:text-gray-300">
         <div className="container mx-auto px-6">
-          <h1 className="text-4xl font-extrabold mb-6 text-blue-800">Privacy Policy</h1>
-          <div className="prose max-w-2xl mx-auto text-gray-700">
+          <h1 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300" data-aos="fade-up">Privacy Policy</h1>
+          <div className="prose max-w-2xl mx-auto text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">
             <p><strong>Last Updated: April 20, 2025</strong></p>
-            <p>Olaris Consulting Limited ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website <a href="https://olaris.co.uk" className="text-blue-600 hover:underline">https://olaris.co.uk</a> (the "Site"). Please read this policy carefully.</p>
+            <p>Olaris Consulting Limited ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website <a href="https://olaris.co.uk" className="text-blue-600 dark:text-blue-300 hover:underline">https://olaris.co.uk</a> (the "Site"). Please read this policy carefully.</p>
 
             <h2>1. Information We Collect</h2>
             <p>We may collect the following types of information:</p>
@@ -164,7 +304,7 @@ h1, h2, h3 {
               <li><strong>Deletion:</strong> Request deletion of your data (subject to legal obligations).</li>
               <li><strong>Opt-Out:</strong> Unsubscribe from marketing emails at any time using the unsubscribe link.</li>
             </ul>
-            <p>To exercise these rights, please contact us at <a href="mailto:info@olaris.co.uk" className="text-blue-600 hover:underline">info@olaris.co.uk</a>.</p>
+            <p>To exercise these rights, please contact us at <a href="mailto:info@olaris.co.uk" className="text-blue-600 dark:text-blue-300 hover:underline">info@olaris.co.uk</a>.</p>
 
             <h2>6. Data Security</h2>
             <p>We implement reasonable security measures to protect your data, including encryption and secure hosting. However, no method of transmission over the internet is 100% secure.</p>
@@ -177,7 +317,7 @@ h1, h2, h3 {
 
             <h2>9. Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us:</p>
-            <p>Email: <a href="mailto:info@olaris.co.uk" className="text-blue-600 hover:underline">info@olaris.co.uk</a></p>
+            <p>Email: <a href="mailto:info@olaris.co.uk" className="text-blue-600 dark:text-blue-300 hover:underline">info@olaris.co.uk</a></p>
             <p>Address: Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK</p>
             <p>Phone: +44-7919-35-40-68</p>
           </div>
@@ -185,37 +325,25 @@ h1, h2, h3 {
       </section>
     );
 
-<script>
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-  })();
-</script>
-
     const Footer = () => (
-      <footer className="text-center py-6 text-gray-500 text-sm bg-white">
+      <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
         <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-        <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
+        <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: <a href="mailto:info@olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:underline">info@olaris.co.uk</a></p>
         <div className="mt-2">
-          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 hover:text-blue-700 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 hover:text-blue-700 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 hover:text-blue-700 mx-2">Share on Facebook</a>
+          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
+          <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a>
         </div>
         <div className="mt-4">
-          <h3 className="text-gray-700 font-semibold">Subscribe to Our Newsletter</h3>
+          <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
           <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
+            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
+            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
           </form>
           <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
         </div>
         <div className="mt-4">
-          <a href="/privacy-policy.html" className="text-gray-600 hover:underline">Privacy Policy</a>
+          <a href="/privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
         </div>
       </footer>
     );
@@ -229,6 +357,44 @@ h1, h2, h3 {
     );
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+    window.addEventListener('scroll', () => {
+      const stickyCTA = document.getElementById('stickyCTA');
+      if (window.scrollY > 300) {
+        stickyCTA.style.display = 'block';
+      } else {
+        stickyCTA.style.display = 'none';
+      }
+    });
+
+    let isLeaving = false;
+    document.addEventListener('mouseout', (e) => {
+      if (e.clientY <= 0 && !isLeaving) {
+        isLeaving = true;
+        const exitPopup = document.getElementById('exitPopup');
+        exitPopup.style.display = 'flex';
+      }
+    });
+    document.getElementById('closePopup').addEventListener('click', () => {
+      document.getElementById('exitPopup').style.display = 'none';
+    });
+  </script>
+  <script>
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+    Tawk_API.onLoad = function(){
+      Tawk_API.setAttributes({
+        'widgetColor': '#1e40af',
+        'welcomeMessage': 'Hello! How can we assist you with fleet management or ESG solutions today?'
+      });
+    };
   </script>
 </body>
 </html>

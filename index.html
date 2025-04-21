@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
-  <script defer src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <link href="/css/aos.css" rel="stylesheet" />
+  <script defer src="/js/aos.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
@@ -40,6 +40,8 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/" />
+  <link rel="preload" href="/images/logo.png" as="image" />
+  <link rel="preload" href="/js/react.min.js" as="script" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -47,50 +49,47 @@
     gtag('js', new Date());
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Olaris Consulting Limited",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "1 Graces Court, The Slade",
-      "addressLocality": "Charlbury",
-      "postalCode": "OX7 3EG",
-      "addressCountry": "UK"
-    },
-    "telephone": "+44-7919-35-40-68",
-    "url": "https://olaris.co.uk",
-    "description": "Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions."
-  }
-</script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Olaris Consulting Limited",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1 Graces Court, The Slade",
+        "addressLocality": "Charlbury",
+        "postalCode": "OX7 3EG",
+        "addressCountry": "UK"
+      },
+      "telephone": "+44-7919-35-40-68",
+      "url": "https://olaris.co.uk",
+      "description": "Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions."
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <script src="/js/tailwindcss.min.js"></script>
+  <script src="/js/react.min.js"></script>
+  <script src="/js/react-dom.min.js"></script>
+  <script src="/js/babel.min.js"></script>
 
   <style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-    body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-  scroll-behavior: smooth;
-}
-h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
-  color: #1e3a8a; /* Darker blue for better contrast */
-}
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #f9fafb;
+      background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
       scroll-behavior: smooth;
       transition: background-color 0.3s ease;
     }
     .dark body {
       background: #1a202c;
       color: #e2e8f0;
+    }
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1e3a8a;
+    }
+    .dark h1, .dark h2, .dark h3 {
+      color: #93c5fd;
     }
     #preloader {
       position: fixed;
@@ -122,6 +121,9 @@ h1, h2, h3 {
     #navMenu {
       background: white;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dark #navMenu {
+      background: #2d3748;
     }
     .nav-button {
       border: 1px solid #d1d5db;
@@ -190,16 +192,31 @@ h1, h2, h3 {
     .dark .gradient-section {
       background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
     }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1e40af;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
-<noscript>
-  <div style="text-align: center; padding: 20px; background: #f9fafb;">
-    <h1>Olaris Consulting Limited</h1>
-    <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
-    <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
-  </div>
-</noscript>
+
 <body>
+  <noscript>
+    <div style="text-align: center; padding: 20px; background: #f9fafb;">
+      <h1>Olaris Consulting Limited</h1>
+      <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
+      <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
+    </div>
+  </noscript>
+
   <div id="preloader">
     <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
   </div>
@@ -260,73 +277,97 @@ h1, h2, h3 {
       );
     };
 
-    const Hero = () => (
-  <section id="home" className="relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start">
-    <video autoPlay muted loop playsInline loading="lazy" className="absolute w-full h-full object-cover opacity-40">
-      <source src="/videos/fleet-management.webm" type="video/webm" />
-      <source src="/videos/fleet-management.mp4" type="video/mp4" />
-      <img src="/images/fleet-management-fallback.jpg" alt="Fleet Management Background" className="w-full h-full object-cover" />
-    </video>
-    <div className="relative z-10 text-center px-6 fade-in-hero">
-      <h1 className="text-5xl md:text-7xl font-extrabold mb-2" data-aos="fade-up">Olaris Consulting Limited</h1>
-      <p className="text-lg md:text-xl mb-4" data-aos="fade-up" data-aos-delay="50">Driving Sustainable Growth with Blockchain Innovation</p>
-      <p className="text-xl md:text-2xl mb-8" data-aos="fade-up" data-aos-delay="100">Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions.</p>
-      <div className="space-x-4">
-        <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition" data-aos="fade-up" data-aos-delay="200">Request a Free Consultation</a>
-        <a href="#services" className="border-2 border-white py-3 px-8 rounded-full text-lg font-bold hover:bg-white hover:text-blue-800 transition" data-aos="fade-up" data-aos-delay="300">Explore Services</a>
-        <a href="/fleet-management-checklist.pdf" download className="border-2 border-white py-3 px-8 rounded-full text-lg font-bold hover:bg-white hover:text-blue-800 transition" data-aos="fade-up" data-aos-delay="400" onClick={() => gtag('event', 'download_guide', { 'event_category': 'Lead', 'event_label': 'Fleet Management Checklist' })}>Download Checklist</a>
-      </div>
-      <div className="mt-12">
-        <a href="#about" className="text-white animate-bounce">
-          <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </a>
-      </div>
-    </div>
-  </section>
-);
+    const Hero = () => {
+      const [variant, setVariant] = React.useState('A');
 
-const About = () => (
-  <section id="about" className="section py-24 gradient-section dark:text-gray-300 snap-start">
-    <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-      <h2 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300">About Us</h2>
-      <p className="max-w-3xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-        Olaris Consulting Limited, based in Charlbury, UK, delivers strategic growth initiatives and operational excellence in fleet management, mobility, and digital transformation. Our expertise in blockchain and ESG solutions empowers businesses to thrive in a competitive landscape.
-      </p>
-      <div className="mt-6">
-        <video autoPlay muted loop playsInline loading="lazy" className="w-full max-w-md mx-auto rounded-lg shadow-md">
-          <source src="/videos/alan-carreras-message.webm" type="video/webm" />
-          <source src="/videos/alan-carreras-message.mp4" type="video/mp4" />
-          <img src="/images/profile.png" alt="Alan Carreras Message" className="w-full max-w-md mx-auto rounded-lg" />
-        </video>
-        <p className="mt-4 text-gray-700 dark:text-gray-300 italic">"At Olaris, we’re passionate about driving sustainable growth through innovation." - Alan Carreras, Founder</p>
-      </div>
-    </div>
-  </section>
-);
+      React.useEffect(() => {
+        // Simple A/B testing logic: 50% chance for each variant
+        const random = Math.random();
+        const selectedVariant = random > 0.5 ? 'A' : 'B';
+        setVariant(selectedVariant);
+        gtag('event', 'ab_test_view', {
+          'event_category': 'A/B Test',
+          'event_label': `Hero CTA Variant ${selectedVariant}`
+        });
+      }, []);
+
+      const handleCTAClick = () => {
+        gtag('event', 'ab_test_click', {
+          'event_category': 'A/B Test',
+          'event_label': `Hero CTA Variant ${variant}`
+        });
+      };
+
+      return (
+        <section id="home" className="relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start">
+          <video autoPlay muted loop playsInline loading="lazy" className="absolute w-full h-full object-cover opacity-40">
+            <source src="/videos/fleet-management.webm" type="video/webm" />
+            <source src="/videos/fleet-management.mp4" type="video/mp4" />
+            <img src="/images/fleet-management-fallback.jpg" alt="Fleet Management Background" className="w-full h-full object-cover" />
+          </video>
+          <div className="relative z-10 text-center px-6 fade-in-hero">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-2" data-aos="fade-up">Olaris Consulting Limited</h1>
+            <p className="text-lg md:text-xl mb-4" data-aos="fade-up" data-aos-delay="50">Driving Sustainable Growth with Blockchain Innovation</p>
+            <p className="text-xl md:text-2xl mb-8" data-aos="fade-up" data-aos-delay="100">Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions.</p>
+            <div className="space-x-4">
+              <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition" data-aos="fade-up" data-aos-delay="200" onClick={handleCTAClick}>
+                {variant === 'A' ? 'Request a Free Consultation' : 'Get a Free Quote'}
+              </a>
+              <a href="#services" className="border-2 border-white py-3 px-8 rounded-full text-lg font-bold hover:bg-white hover:text-blue-800 transition" data-aos="fade-up" data-aos-delay="300">Explore Services</a>
+              <a href="/fleet-management-checklist.pdf" download className="border-2 border-white py-3 px-8 rounded-full text-lg font-bold hover:bg-white hover:text-blue-800 transition" data-aos="fade-up" data-aos-delay="400" onClick={() => gtag('event', 'download_guide', { 'event_category': 'Lead', 'event_label': 'Fleet Management Checklist' })}>Download Checklist</a>
+            </div>
+            <div className="mt-12">
+              <a href="#about" className="text-white animate-bounce">
+                <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    const About = () => (
+      <section id="about" className="section py-24 gradient-section dark:text-gray-300 snap-start">
+        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300">About Us</h2>
+          <p className="max-w-3xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+            Olaris Consulting Limited, based in Charlbury, UK, delivers strategic growth initiatives and operational excellence in fleet management, mobility, and digital transformation. Our expertise in blockchain and ESG solutions empowers businesses to thrive in a competitive landscape.
+          </p>
+          <div className="mt-6">
+            <video autoPlay muted loop playsInline loading="lazy" className="w-full max-w-md mx-auto rounded-lg shadow-md">
+              <source src="/videos/alan-carreras-message.webm" type="video/webm" />
+              <source src="/videos/alan-carreras-message.mp4" type="video/mp4" />
+              <img src="/images/profile.png" alt="Alan Carreras Message" className="w-full max-w-md mx-auto rounded-lg" />
+            </video>
+            <p className="mt-4 text-gray-700 dark:text-gray-300 italic">"At Olaris, we’re passionate about driving sustainable growth through innovation." - Alan Carreras, Founder</p>
+          </div>
+        </div>
+      </section>
+    );
 
     const Services = () => (
-  <section id="services" className="section py-24">
-    <div className="container mx-auto px-6 text-center">
-      <h2 className="text-4xl font-extrabold mb-12 text-blue-800" data-aos="fade-up">Our Services</h2>
-      <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up" data-aos-delay="100">
-        {[
-          { title: "Fleet Management", desc: "Reduce costs by up to 10% with optimized leasing, vehicle tracking, and operational efficiency tailored to your fleet.", icon: "🚛" },
-          { title: "Expansion Strategy", desc: "Grow your business with data-driven market intelligence and strategic planning for sustainable expansion.", icon: "📈" },
-          { title: "M&A Advisory", desc: "Navigate complex mergers and acquisitions with expert guidance to maximize value and minimize risk.", icon: "🤝" },
-          { title: "Digital Integration", desc: "Transform your operations with blockchain, Azure, and ESG tracking for compliance and innovation.", icon: "🔗" },
-        ].map((service, idx) => (
-          <div key={idx} className="p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition bg-white">
-            <div className="text-4xl mb-3">{service.icon}</div>
-            <h3 className="text-xl font-semibold text-blue-700 mb-3">{service.title}</h3>
-            <p className="text-gray-600">{service.desc}</p>
+      <section id="services" className="section py-24">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-extrabold mb-12 text-blue-800 dark:text-blue-300" data-aos="fade-up">Our Services</h2>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4" data-aos="fade-up" data-aos-delay="100">
+            {[
+              { title: "Fleet Management", desc: "Reduce costs by up to 10% with optimized leasing, vehicle tracking, and operational efficiency tailored to your fleet.", icon: "🚛" },
+              { title: "Expansion Strategy", desc: "Grow your business with data-driven market intelligence and strategic planning for sustainable expansion.", icon: "📈" },
+              { title: "M&A Advisory", desc: "Navigate complex mergers and acquisitions with expert guidance to maximize value and minimize risk.", icon: "🤝" },
+              { title: "Digital Integration", desc: "Transform your operations with blockchain, Azure, and ESG tracking for compliance and innovation.", icon: "🔗" },
+            ].map((service, idx) => (
+              <div key={idx} className="p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition bg-white dark:bg-gray-700">
+                <div className="text-4xl mb-3">{service.icon}</div>
+                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3">{service.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{service.desc}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+        </div>
+      </section>
+    );
 
     const Projects = () => (
       <section id="projects" className="section py-24 gradient-section dark:text-gray-300 snap-start">
@@ -368,6 +409,14 @@ const About = () => (
                 <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
               </div>
             </div>
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="200">
+              <img src="/images/fleet-management-charlbury.jpg" alt="Fleet Management in Charlbury" className="w-full h-48 object-cover rounded-t-lg" />
+              <div className="p-6">
+                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Fleet Management Solutions in Charlbury</h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">Learn why Olaris Consulting is the top choice for fleet management in Charlbury, UK.</p>
+                <a href="blog-post-2.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -397,23 +446,30 @@ const About = () => (
 
     const Contact = () => {
       const [errors, setErrors] = React.useState({});
-      
+      const [isSubmitting, setIsSubmitting] = React.useState(false);
+
       const validateForm = (event) => {
         event.preventDefault();
+        setIsSubmitting(true);
         const name = event.target[0].value.trim();
         const email = event.target[1].value.trim();
         const message = event.target[2].value.trim();
         const newErrors = {};
-        
+
         if (!name) newErrors.name = "Name is required";
         if (!email.includes("@")) newErrors.email = "Valid email is required";
         if (!message) newErrors.message = "Message is required";
-        
+
         setErrors(newErrors);
         if (Object.keys(newErrors).length === 0) {
-          gtag('event', 'form_submission', { 'event_category': 'Contact', 'event_label': 'Consultation Request' });
-          alert('✅ Thank you! Your message has been sent successfully.');
-          event.target.reset();
+          setTimeout(() => {
+            gtag('event', 'form_submission', { 'event_category': 'Contact', 'event_label': 'Consultation Request' });
+            alert('✅ Thank you! Your message has been sent successfully.');
+            event.target.reset();
+            setIsSubmitting(false);
+          }, 1000);
+        } else {
+          setIsSubmitting(false);
         }
       };
 
@@ -426,18 +482,20 @@ const About = () => (
             </div>
             <form id="contactForm" onSubmit={validateForm} className="bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800">
               <div>
-                <input type="text" placeholder="Name" aria-label="Name" className="w-full p-3 rounded border-gray-300" required />
+                <input type="text" placeholder="Name" aria-label="Name" className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500" required />
                 {errors.name && <p className="error-message">{errors.name}</p>}
               </div>
               <div>
-                <input type="email" placeholder="Email" aria-label="Email" className="w-full p-3 rounded border-gray-300" required />
+                <input type="email" placeholder="Email" aria-label="Email" className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500" required />
                 {errors.email && <p className="error-message">{errors.email}</p>}
               </div>
               <div>
-                <textarea placeholder="Message" aria-label="Message" className="w-full p-3 rounded border-gray-300" rows="4" required></textarea>
+                <textarea placeholder="Message" aria-label="Message" className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500" rows="4" required></textarea>
                 {errors.message && <p className="error-message">{errors.message}</p>}
               </div>
-              <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition">Send Message</button>
+              <button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition flex items-center justify-center" disabled={isSubmitting}>
+                {isSubmitting ? <div className="loading-spinner"></div> : 'Send Message'}
+              </button>
             </form>
           </div>
         </section>
@@ -457,8 +515,8 @@ const About = () => (
         <div className="mt-4">
           <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
           <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
+            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
+            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
           </form>
           <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
         </div>
@@ -467,18 +525,6 @@ const About = () => (
         </div>
       </footer>
     );
-
-<script>
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-  })();
-</script>
 
     const App = () => (
       <>
@@ -520,6 +566,22 @@ const About = () => (
       document.getElementById('exitPopup').style.display = 'none';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  <script>
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+    Tawk_API.onLoad = function(){
+      Tawk_API.setAttributes({
+        'widgetColor': '#1e40af',
+        'welcomeMessage': 'Hello! How can we assist you with fleet management or ESG solutions today?'
+      });
+    };
+  </script>
 </body>
 </html>
