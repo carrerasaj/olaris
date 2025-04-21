@@ -16,8 +16,11 @@
     "url": "https://github.com/carrerasaj/olaris/issues"
   },
   "homepage": "https://github.com/carrerasaj/olaris#readme",
-  "description": "",
   "devDependencies": {
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-react": "^7.26.3",
     "tailwindcss": "^4.1.4"
-  }
+  },
+  "description": ""
 }
