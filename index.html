@@ -1,359 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Olaris Consulting Limited | Fleet & Growth Experts</title>
-  <meta name="description" content="Olaris Consulting helps UK businesses grow with fleet, blockchain, and ESG solutions." />
-  <meta property="og:title" content="Olaris Consulting Limited" />
-  <meta property="og:description" content="Fleet management, strategy, and innovation." />
-  <meta property="og:image" content="/images/logo.png" />
-  <meta property="og:url" content="https://olaris.co.uk/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="canonical" href="https://olaris.co.uk/" />
+  <title>Olaris Consulting Limited | UK Fleet Management & Growth Experts</title>
+  <meta name="description" content="Olaris Consulting helps businesses grow sustainably through fleet management, strategy, and blockchain ESG solutions." />
   <link rel="icon" href="/images/logo.png" type="image/png" />
-
-  <!-- Tailwind CSS -->
-  <link href="/css/tailwindcss.min.css" rel="stylesheet" />
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-  <!-- AOS Animation -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link href="/css/tailwind.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" defer onload="AOS.init({ once: true });"></script>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-BFJ8CC0RNJ');
-  </script>
-
-<style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    color: #1f2937;
-    background: #f9fafb;
-  }
-  header {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    z-index: 999;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  header nav a {
-    margin-left: 1.5rem;
-    text-decoration: none;
-    color: #1f2937;
-    font-weight: bold;
-    transition: color 0.3s ease;
-  }
-  header nav a:hover {
-    color: #3b82f6;
-  }
-
-  .hero {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .hero video,
-  .hero img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    color: white;
-    padding: 2rem;
-    max-width: 800px;
-    animation: fadeIn 2s ease forwards;
-  }
-  .hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  .hero-content p {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-  }
-  .cta-buttons a {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    margin: 0 0.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 9999px;
-    transition: all 0.3s ease;
-  }
-  .cta-buttons .primary {
-    background: #3b82f6;
-    color: white;
-  }
-  .cta-buttons .primary:hover {
-    background: #2563eb;
-  }
-  .cta-buttons .secondary {
-    background: transparent;
-    color: white;
-    border: 2px solid white;
-  }
-  .cta-buttons .secondary:hover {
-    background: white;
-    color: #1f2937;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Responsive */
-    @media (max-width: 768px) {
-    .hero {
-    height: 70vh;
-      font-size: 2rem;
+  <script defer src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" onload="AOS.init({ once: true });"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+      margin: 0;
     }
-    .hero-content p {
-      font-size: 1rem;
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: transform 0.2s ease-in-out, background 0.3s ease;
     }
-  }
-  nav {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.85);
-  transition: box-shadow 0.3s ease-in-out;
-  }
-
-  nav.scrolled {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-</style>
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .primary {
+      background: linear-gradient(to right, #2563eb, #1e40af);
+      color: white;
+    }
+    .secondary {
+      border: 2px solid #2563eb;
+      color: #2563eb;
+    }
+    #toast {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #10b981;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      z-index: 1000;
+    }
+  </style>
 </head>
-
 <body>
-  <div id="preloader">
-    <div class="loading-spinner"></div>
-  </div>
 
-  <header>
-    <div class="logo">
-      <img src="/images/logo.png" alt="Olaris Logo" height="40"/>
+<!-- Toast for confirmation -->
+<div id="toast">✅ Message Sent!</div>
+
+<!-- Header -->
+<header class="fixed top-0 left-0 w-full bg-white shadow z-50">
+  <nav class="container mx-auto flex justify-between items-center p-4">
+    <div class="flex items-center space-x-2">
+      <img src="/images/logo.png" alt="Olaris Logo" class="w-10 h-10">
+      <span class="text-xl font-bold text-blue-800">Olaris Consulting</span>
     </div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-  <section id="home" class="relative h-screen flex items-center justify-center text-white overflow-hidden">
-    <!-- Background Video -->
-    <video class="absolute w-full h-full object-cover" autoplay muted loop playsinline>
-      <source src="/videos/fleet-management.webm" type="video/webm" />
-      <source src="/videos/fleet-management.mp4" type="video/mp4" />
-      <img src="/images/fleet-management-fallback.jpg" alt="Fleet Management Background" class="w-full h-full object-cover" />
-    </video>
-  
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-  
-    <!-- Hero Content -->
-    <div class="relative z-10 text-center px-6 max-w-3xl mx-auto animate__animated animate__fadeIn">
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight">
-        Fleet & Growth Consulting
-      </h1>
-      <p class="text-lg sm:text-xl md:text-2xl mb-6 leading-relaxed">
-        Empowering UK businesses with expert strategy, operational efficiency, and blockchain ESG solutions.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105">
-          Book Free Consultation
-        </a>
-        <a href="#services" class="border-2 border-white text-white py-3 px-6 rounded-full font-bold hover:bg-white hover:text-blue-800 transition">
-          Explore Services
-        </a>
-      </div>
-      <!-- Scroll Cue -->
-      <div class="mt-12 animate-bounce">
-        <a href="#about" aria-label="Scroll to About">
-          <svg class="w-6 h-6 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </a>
+    <div class="space-x-6 hidden md:flex">
+      <a href="#home" class="text-gray-700 hover:text-blue-600">Home</a>
+      <a href="#services" class="text-gray-700 hover:text-blue-600">Services</a>
+      <a href="#about" class="text-gray-700 hover:text-blue-600">About</a>
+      <a href="#contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section id="home" class="pt-24 relative h-screen bg-black text-white flex items-center justify-center overflow-hidden">
+  <video autoplay muted loop playsinline class="absolute w-full h-full object-cover opacity-50">
+    <source src="/videos/fleet-management.mp4" type="video/mp4" />
+    <source src="/videos/fleet-management.webm" type="video/webm" />
+    <img src="/images/fleet-management-fallback.jpg" alt="Fleet background" class="w-full h-full object-cover" />
+  </video>
+  <div class="relative z-10 text-center px-6">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-4" data-aos="fade-up">Olaris Consulting Limited</h1>
+    <p class="text-lg md:text-xl mb-6" data-aos="fade-up" data-aos-delay="100">Strategic growth & fleet innovation with blockchain ESG.</p>
+    <div class="space-x-4" data-aos="fade-up" data-aos-delay="200">
+      <a href="#contact" class="btn primary">Free Consultation</a>
+      <a href="#services" class="btn secondary">Explore Services</a>
+    </div>
+  </div>
+</section>
+<!-- Services -->
+<section id="services" class="py-20 bg-white text-gray-800">
+    <div class="container mx-auto text-center px-6">
+      <h2 class="text-3xl font-bold mb-10" data-aos="fade-up">Our Services</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" data-aos="fade-up" data-aos-delay="100">
+        <div class="p-6 rounded shadow hover:shadow-lg transition">
+          <div class="text-4xl mb-4">🚛</div>
+          <h3 class="font-semibold text-lg mb-2">Fleet Management</h3>
+          <p>Reduce costs and increase uptime with smart fleet solutions.</p>
+        </div>
+        <div class="p-6 rounded shadow hover:shadow-lg transition">
+          <div class="text-4xl mb-4">📈</div>
+          <h3 class="font-semibold text-lg mb-2">Growth Strategy</h3>
+          <p>We help businesses grow through data, M&A, and expert advice.</p>
+        </div>
+        <div class="p-6 rounded shadow hover:shadow-lg transition">
+          <div class="text-4xl mb-4">🔗</div>
+          <h3 class="font-semibold text-lg mb-2">Blockchain ESG</h3>
+          <p>Track ESG metrics transparently using blockchain technology.</p>
+        </div>
+        <div class="p-6 rounded shadow hover:shadow-lg transition">
+          <div class="text-4xl mb-4">💻</div>
+          <h3 class="font-semibold text-lg mb-2">Digital Advisory</h3>
+          <p>Modernize and scale with cloud, automation, and insights.</p>
+        </div>
       </div>
     </div>
   </section>
-      <section id="services" class="py-24 bg-white">
-        <div class="container mx-auto px-6 max-w-6xl text-center">
-          <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-12">Our Services</h2>
-          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <!-- Service 1 -->
-            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
-              <div class="text-4xl mb-3">🚛</div>
-              <h3 class="text-xl font-semibold text-blue-700 mb-2">Fleet Management</h3>
-              <p class="text-gray-600 text-sm">Optimize vehicle tracking, leasing, and costs — reduce operational spend by up to 10%.</p>
-            </div>
-            <!-- Service 2 -->
-            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
-              <div class="text-4xl mb-3">📈</div>
-              <h3 class="text-xl font-semibold text-blue-700 mb-2">Expansion Strategy</h3>
-              <p class="text-gray-600 text-sm">Accelerate business growth with data-led market research and strategic planning.</p>
-            </div>
-            <!-- Service 3 -->
-            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
-              <div class="text-4xl mb-3">🤝</div>
-              <h3 class="text-xl font-semibold text-blue-700 mb-2">M&A Advisory</h3>
-              <p class="text-gray-600 text-sm">Navigate mergers and acquisitions with insight and risk mitigation from seasoned advisors.</p>
-            </div>
-            <!-- Service 4 -->
-            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
-              <div class="text-4xl mb-3">🔗</div>
-              <h3 class="text-xl font-semibold text-blue-700 mb-2">Digital Integration</h3>
-              <p class="text-gray-600 text-sm">Leverage blockchain, Azure, and ESG data integrations to future-proof your business.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="projects" class="py-24 bg-gradient-to-b from-gray-100 to-white">
-        <div class="container mx-auto px-6 max-w-6xl text-center">
-          <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-12">Client Success Stories</h2>
-      
-          <div class="grid gap-10 md:grid-cols-2">
-            <!-- Project 1 -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl overflow-hidden transition transform hover:-translate-y-1">
-              <video autoplay muted loop playsinline class="w-full h-64 object-cover">
-                <source src="/videos/jurni-leasing.webm" type="video/webm" />
-                <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-                <img src="/videos/jurni-leasing-fallback.jpeg" alt="Jurni Leasing" class="w-full h-64 object-cover" />
-              </video>
-              <div class="p-6 text-left">
-                <h3 class="text-xl font-semibold text-blue-700 mb-2">Jurni Leasing Expansion</h3>
-                <p class="text-gray-600 mb-4 text-sm leading-relaxed">
-                  Scaled Jurni to a Top 10 UK leasing broker. Improved ops, reduced fleet costs, and managed 30K+ vehicles.
-                </p>
-                <a href="#contact" class="text-blue-600 font-medium hover:underline">Learn how we did it →</a>
-              </div>
-            </div>
-      
-            <!-- Project 2 -->
-            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl overflow-hidden transition transform hover:-translate-y-1">
-              <video autoplay muted loop playsinline class="w-full h-64 object-cover">
-                <source src="/videos/web-salsac.webm" type="video/webm" />
-                <source src="/videos/web-salsac.mp4" type="video/mp4" />
-                <img src="/videos/web-salsac-fallback.jpeg" alt="Blockchain ESG Platform" class="w-full h-64 object-cover" />
-              </video>
-              <div class="p-6 text-left">
-                <h3 class="text-xl font-semibold text-blue-700 mb-2">Blockchain ESG Platform</h3>
-                <p class="text-gray-600 mb-4 text-sm leading-relaxed">
-                  Built a blockchain ESG compliance tool (web_salsac_app) for streamlined, auditable fleet sustainability tracking.
-                </p>
-                <a href="#contact" class="text-blue-600 font-medium hover:underline">Explore the solution →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-<section id="contact" style="padding: 100px 20px; background: #1e3a8a; color: white;">
-  <div style="max-width: 800px; margin: auto;">
-
-    <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 30px;">Let's Talk</h2>
-
-    <form id="contactForm" style="display: flex; flex-direction: column; gap: 20px;">
-      <input type="text" id="name" placeholder="Your Name" required style="padding: 12px; border-radius: 6px; border: none; font-size: 1rem;" />
-      <input type="email" id="email" placeholder="Your Email" required style="padding: 12px; border-radius: 6px; border: none; font-size: 1rem;" />
-      <textarea id="message" placeholder="Your Message" rows="5" required style="padding: 12px; border-radius: 6px; border: none; font-size: 1rem;"></textarea>
-
-      <button type="submit" style="background-color: #3b82f6; padding: 12px 24px; font-weight: bold; border-radius: 6px; border: none; color: white; cursor: pointer;">
-        Send Message
-      </button>
-
-      <!-- Hidden Success Message -->
-      <p id="successMsg" style="display: none; color: #c3fccc; font-weight: bold;">✅ Thanks! We'll be in touch shortly.</p>
-    </form>
-  </div>
-</section>
-
-<section style="padding: 100px 20px; background: #f3f4f6;">
-  <div style="max-width: 900px; margin: auto; text-align: center;">
-    <h2 style="font-size: 2.5rem; color: #1e3a8a;">What Our Clients Say</h2>
-    <div style="margin-top: 2rem; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-      <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-        <p style="color: #374151;">"Olaris helped us streamline our fleet and saved us 10% annually. Game changer!"</p>
-        <p style="margin-top: 1rem; font-weight: bold; color: #1e3a8a;">— John D., Logistics Manager</p>
-      </div>
-      <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-        <p style="color: #374151;">"Their blockchain ESG system made our compliance workflow seamless."</p>
-        <p style="margin-top: 1rem; font-weight: bold; color: #1e3a8a;">— Sarah T., COO</p>
+  
+  <!-- Contact -->
+  <section id="contact" class="py-20 bg-blue-50">
+    <div class="container mx-auto max-w-3xl text-center px-6">
+      <h2 class="text-3xl font-bold mb-6" data-aos="fade-up">Let’s Talk</h2>
+      <p class="mb-10 text-gray-600" data-aos="fade-up" data-aos-delay="100">We’d love to hear about your business goals.</p>
+      <form id="contactForm" class="space-y-6" data-aos="fade-up" data-aos-delay="200">
+        <input type="text" name="name" placeholder="Name" required class="w-full p-3 border rounded">
+        <input type="email" name="email" placeholder="Email" required class="w-full p-3 border rounded">
+        <textarea name="message" placeholder="Your Message" rows="5" required class="w-full p-3 border rounded"></textarea>
+        <button type="submit" class="btn primary w-full">Send Message</button>
+      </form>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-10">
+    <div class="container mx-auto text-center px-4">
+      <p class="mb-2">© 2025 Olaris Consulting Limited. All rights reserved.</p>
+      <p>Charlbury, Oxfordshire | <a href="mailto:info@olaris.co.uk" class="underline">info@olaris.co.uk</a></p>
+      <div class="mt-4 space-x-4">
+        <a href="https://linkedin.com/company/olaris-consulting-limited" class="hover:text-white">LinkedIn</a>
+        <a href="https://twitter.com/olarisconsult" class="hover:text-white">Twitter</a>
+        <a href="privacy-policy.html" class="hover:underline">Privacy Policy</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer style="padding: 40px 20px; text-align: center; font-size: 0.9rem; color: #6b7280;">
-  <p>© 2025 Olaris Consulting Limited</p>
-  <p>Charlbury, UK | info@olaris.co.uk | +44-7919-35-40-68</p>
-  <p><a href="privacy-policy.html" style="color: #3b82f6;">Privacy Policy</a></p>
-</footer>
-    <!-- Scripts -->
-    <script>
-      window.addEventListener('load', () => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-          preloader.classList.add('fade-out');
-          setTimeout(() => preloader.remove(), 600);
-        }
-      });
+  </footer>
   
-      function validateForm(e) {
-        e.preventDefault();
-        alert("✅ Thank you! Your message has been sent.");
-        e.target.reset();
-        return false;
-      }
-    </script>
-    <script>
-    const contactForm = document.getElementById("contactForm");
-    const successMsg = document.getElementById("successMsg");
-  
-    contactForm.addEventListener("submit", function (e) {
+  <!-- Toast Script -->
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      const toast = document.getElementById('toast');
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+      e.target.reset();
+    });
+  </script>
   
-      // Simulated submission success
-      setTimeout(() => {
-        successMsg.style.display = "block";
-        contactForm.reset();
-      }, 500);
-    });
-    window.addEventListener('scroll', () => {
-      const nav = document.querySelector('nav');
-      nav.classList.toggle('scrolled', window.scrollY > 50);
-    });
-    </script>
   </body>
   </html>
