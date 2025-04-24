@@ -14,8 +14,6 @@
   <link rel="icon" href="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" type="image/png" />
   <link rel="canonical" href="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
   <link rel="preload" href="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" as="image" />
-  <link rel="preload" href="https://unpkg.com/react@18.2.0/umd/react.production.min.js" as="script" />
-  <link rel="preload" href="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" as="script" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
@@ -28,16 +26,6 @@
     gtag('js', new Date());
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
-
-  <!-- REACT + REACTDOM -->
-  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
-
-  <!-- BABEL (for JSX) -->
-  <script src="https://unpkg.com/@babel/standalone@7.20.15/babel.min.js"></script>
-
-  <!-- AOS Animation -->
-  <script defer src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" onload="AOS.init({ once: true });"></script>
 
   <style>
     body {
@@ -180,7 +168,7 @@
 
 <!-- Preloader -->
 <div id="preloader">
-  <img id="preloaderImg" src="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
+  <img id="preloaderImg" src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
 </div>
 
 <!-- Sticky CTA & Back to Top -->
@@ -200,80 +188,153 @@
 <!-- React App -->
 <div id="root"></div>
 
+<!-- Scripts -->
+<script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
+<script>
+  if (typeof React === 'undefined') {
+    console.error('React failed to load from CDN');
+    document.getElementById('root').innerHTML = `
+      <div style="text-align: center; padding: 20px; background: #f9fafb;">
+        <h1>Olaris Consulting Limited</h1>
+        <p>Error loading dependencies. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+      </div>
+    `;
+  }
+</script>
+
+<script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+<script>
+  if (typeof ReactDOM === 'undefined') {
+    console.error('ReactDOM failed to load from CDN');
+    document.getElementById('root').innerHTML = `
+      <div style="text-align: center; padding: 20px; background: #f9fafb;">
+        <h1>Olaris Consulting Limited</h1>
+        <p>Error loading dependencies. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+      </div>
+    `;
+  }
+</script>
+
+<script src="https://unpkg.com/@babel/standalone@7.20.15/babel.min.js"></script>
+<script>
+  if (typeof Babel === 'undefined') {
+    console.error('Babel failed to load from CDN');
+    document.getElementById('root').innerHTML = `
+      <div style="text-align: center; padding: 20px; background: #f9fafb;">
+        <h1>Olaris Consulting Limited</h1>
+        <p>Error loading dependencies. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+      </div>
+    `;
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" onload="AOS.init({ once: true });"></script>
+<script>
+  if (typeof AOS === 'undefined') {
+    console.error('AOS failed to load from CDN');
+  }
+</script>
+
 <!-- Main JavaScript Logic -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const preloader = document.getElementById("preloader");
-    const preloaderImg = document.getElementById("preloaderImg");
+    try {
+      const preloader = document.getElementById("preloader");
+      const preloaderImg = document.getElementById("preloaderImg");
 
-    const hidePreloader = () => {
-      if (preloader) {
-        preloader.style.opacity = "0";
-        setTimeout(() => { preloader.style.display = "none"; }, 500);
+      const hidePreloader = () => {
+        if (preloader) {
+          preloader.style.opacity = "0";
+          setTimeout(() => { preloader.style.display = "none"; }, 500);
+        }
+      };
+
+      setTimeout(hidePreloader, 2000);
+      if (preloaderImg) {
+        preloaderImg.onerror = hidePreloader;
+        preloaderImg.onload = hidePreloader;
       }
-    };
 
-    setTimeout(hidePreloader, 2000);
-    if (preloaderImg) {
-      preloaderImg.onerror = hidePreloader;
-      preloaderImg.onload = hidePreloader;
-    }
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
 
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    if (darkModeToggle) {
-      darkModeToggle.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      });
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
+          document.documentElement.classList.toggle('dark');
+          localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+      }
+    } catch (error) {
+      console.error('Error in DOMContentLoaded handler:', error);
+      document.getElementById('root').innerHTML = `
+        <div style="text-align: center; padding: 20px; background: #f9fafb;">
+          <h1>Olaris Consulting Limited</h1>
+          <p>Error initializing the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+        </div>
+      `;
     }
   });
 
   window.onload = () => {
-    const preloader = document.getElementById("preloader");
-    if (preloader) {
-      preloader.style.opacity = "0";
-      setTimeout(() => { preloader.style.display = "none"; }, 500);
+    try {
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        setTimeout(() => { preloader.style.display = "none"; }, 500);
+      }
+    } catch (error) {
+      console.error('Error in window.onload handler:', error);
     }
   };
 
   window.addEventListener('scroll', () => {
-    const stickyCTA = document.getElementById('stickyCTA');
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    if (stickyCTA && backToTopBtn) {
-      if (window.scrollY > 300) {
-        stickyCTA.style.display = 'block';
-        backToTopBtn.style.display = 'block';
-      } else {
-        stickyCTA.style.display = 'none';
-        backToTopBtn.style.display = 'none';
+    try {
+      const stickyCTA = document.getElementById('stickyCTA');
+      const backToTopBtn = document.getElementById('backToTopBtn');
+      if (stickyCTA && backToTopBtn) {
+        if (window.scrollY > 300) {
+          stickyCTA.style.display = 'block';
+          backToTopBtn.style.display = 'block';
+        } else {
+          stickyCTA.style.display = 'none';
+          backToTopBtn.style.display = 'none';
+        }
       }
+    } catch (error) {
+      console.error('Error in scroll handler:', error);
     }
   });
 
   let isLeaving = false;
   document.addEventListener('mouseout', (e) => {
-    if (e.clientY <= 0 && !isLeaving) {
-      isLeaving = true;
-      const exitPopup = document.getElementById('exitPopup');
-      if (exitPopup) {
-        exitPopup.style.display = 'flex';
+    try {
+      if (e.clientY <= 0 && !isLeaving) {
+        isLeaving = true;
+        const exitPopup = document.getElementById('exitPopup');
+        if (exitPopup) {
+          exitPopup.style.display = 'flex';
+        }
       }
+    } catch (error) {
+      console.error('Error in mouseout handler:', error);
     }
   });
 
   const closePopup = document.getElementById('closePopup');
   if (closePopup) {
     closePopup.addEventListener('click', () => {
-      const exitPopup = document.getElementById('exitPopup');
-      if (exitPopup) {
-        exitPopup.style.display = 'none';
+      try {
+        const exitPopup = document.getElementById('exitPopup');
+        if (exitPopup) {
+          exitPopup.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error in closePopup handler:', error);
       }
     });
-  };
+  }
 </script>
 
 <!-- React App (JSX) -->
@@ -595,13 +656,16 @@ const App = () => (
 );
 
 try {
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    ReactDOM.createRoot(rootElement).render(<App />);
-    console.log("React app rendered successfully.");
-  } else {
-    throw new Error("Root element not found in DOM.");
-  }
+  // Delay rendering to ensure Cloudflare challenge completes
+  setTimeout(() => {
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      ReactDOM.createRoot(rootElement).render(<App />);
+      console.log("React app rendered successfully.");
+    } else {
+      throw new Error("Root element not found in DOM.");
+    }
+  }, 1000);
 } catch (error) {
   console.error("Error rendering React app:", error);
   const preloader = document.getElementById("preloader");
@@ -624,5 +688,6 @@ try {
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'935815a1bf02070f',t:'MTc0NTUyMzc1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'935824977e1e32f3',t:'MTc0NTUyNDM2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93586c3b1d7bb07f',t:'MTc0NTUyNzMwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
