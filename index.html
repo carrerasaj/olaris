@@ -30,51 +30,112 @@
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      scroll-behavior: smooth;
-      background: #f9fafb;
-      transition: background-color 0.3s ease;
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #1f2937;
+    background: #f9fafb;
+  }
+  header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    z-index: 999;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header nav a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  header nav a:hover {
+    color: #3b82f6;
+  }
+
+  .hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .hero video,
+  .hero img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    padding: 2rem;
+    max-width: 800px;
+    animation: fadeIn 2s ease forwards;
+  }
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .cta-buttons a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+  }
+  .cta-buttons .primary {
+    background: #3b82f6;
+    color: white;
+  }
+  .cta-buttons .primary:hover {
+    background: #2563eb;
+  }
+  .cta-buttons .secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+  .cta-buttons .secondary:hover {
+    background: white;
+    color: #1f2937;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .hero-content h1 {
+      font-size: 2rem;
     }
-    .dark body {
-      background: #1a202c;
-      color: #e2e8f0;
+    .hero-content p {
+      font-size: 1rem;
     }
-    h1, h2, h3 {
-      font-family: 'Poppins', sans-serif;
-      color: #1e3a8a;
-    }
-    .dark h1, .dark h2, .dark h3 {
-      color: #93c5fd;
-    }
-    #preloader {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      transition: opacity 0.5s ease;
-    }
-    .fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .loading-spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #1e40af;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
@@ -82,20 +143,32 @@
     <div class="loading-spinner"></div>
   </div>
 
-  <header class="bg-white dark:bg-gray-900 sticky top-0 z-50 shadow">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <img src="/images/logo.png" alt="Olaris Logo" class="h-10 w-10" />
-        <h1 class="text-xl font-bold text-blue-800 dark:text-blue-300">Olaris Consulting</h1>
-      </div>
-      <nav class="hidden md:flex space-x-6 text-gray-600 dark:text-gray-300">
-        <a href="#about" class="hover:text-blue-700">About</a>
-        <a href="#services" class="hover:text-blue-700">Services</a>
-        <a href="#projects" class="hover:text-blue-700">Projects</a>
-        <a href="#contact" class="hover:text-blue-700">Contact</a>
-      </nav>
+  <header>
+    <div class="logo">
+      <img src="/images/logo.png" alt="Olaris Logo" height="40"/>
     </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
+  <section class="hero" id="home">
+    <video autoplay muted loop playsinline>
+      <source src="/videos/fleet-management.webm" type="video/webm" />
+      <source src="/videos/fleet-management.mp4" type="video/mp4" />
+      <img src="/images/fleet-management-fallback.jpg" alt="Fleet Background" />
+    </video>
+    <div class="hero-content">
+      <h1>Olaris Consulting Limited</h1>
+      <p>Strategic growth and fleet innovation with blockchain ESG for UK businesses.</p>
+      <div class="cta-buttons">
+        <a href="#contact" class="primary">Free Consultation</a>
+        <a href="#services" class="secondary">Explore Services</a>
+      </div>
+    </div>
+  </section>
 
   <main>
     <!-- Hero Section -->
@@ -106,61 +179,77 @@
       </section>
   
       <!-- About Section -->
-      <section id="about" class="py-20 bg-gray-100 dark:bg-gray-800 text-center">
-        <div class="container mx-auto px-6">
-          <h2 class="text-4xl font-bold mb-4 text-blue-800 dark:text-blue-300" data-aos="fade-up">About Us</h2>
-          <p class="max-w-3xl mx-auto text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">
-            Olaris Consulting delivers expert guidance in fleet optimization, strategic growth planning, and ESG integration through blockchain. Based in Charlbury, we serve forward-thinking UK businesses.
-          </p>
-        </div>
-      </section>
-  
-      <!-- Services -->
-      <section id="services" class="py-20 text-center bg-white dark:bg-gray-900">
-        <div class="container mx-auto px-6">
-          <h2 class="text-4xl font-bold mb-12 text-blue-800 dark:text-blue-300" data-aos="fade-up">Our Services</h2>
-          <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-            <div class="p-6 rounded-lg shadow-md bg-gray-100 dark:bg-gray-700" data-aos="fade-up">
-              <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Fleet Management</h3>
-              <p class="text-gray-600 dark:text-gray-200">Optimize leasing, tracking, and operations to save costs.</p>
-            </div>
-            <div class="p-6 rounded-lg shadow-md bg-gray-100 dark:bg-gray-700" data-aos="fade-up" data-aos-delay="100">
-              <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Growth Strategy</h3>
-              <p class="text-gray-600 dark:text-gray-200">Data-led planning to expand sustainably and smartly.</p>
-            </div>
-            <div class="p-6 rounded-lg shadow-md bg-gray-100 dark:bg-gray-700" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">M&A Advisory</h3>
-              <p class="text-gray-600 dark:text-gray-200">Support for successful mergers and acquisitions.</p>
-            </div>
-            <div class="p-6 rounded-lg shadow-md bg-gray-100 dark:bg-gray-700" data-aos="fade-up" data-aos-delay="300">
-              <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Blockchain ESG</h3>
-              <p class="text-gray-600 dark:text-gray-200">Ensure ESG compliance with modern tech and tools.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-  
-      <!-- Contact Section -->
-      <section id="contact" class="py-20 bg-blue-800 text-white">
-        <div class="container mx-auto px-6">
-          <h2 class="text-4xl font-bold text-center mb-8">Contact Us</h2>
-          <form class="max-w-2xl mx-auto space-y-4" onsubmit="return validateForm(event)">
-            <input type="text" placeholder="Name" class="w-full p-3 rounded text-black" required />
-            <input type="email" placeholder="Email" class="w-full p-3 rounded text-black" required />
-            <textarea placeholder="Message" rows="5" class="w-full p-3 rounded text-black" required></textarea>
-            <button type="submit" class="bg-white text-blue-800 font-bold py-3 px-6 rounded-full hover:scale-105 transition">Send Message</button>
-          </form>
-        </div>
-      </section>
-    </main>
-  
-    <!-- Footer -->
-    <footer class="py-8 text-center text-sm bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-      <p>&copy; 2025 Olaris Consulting Limited</p>
-      <p>Charlbury, UK | info@olaris.co.uk | +44-7919-35-40-68</p>
-      <p><a href="privacy-policy.html" class="hover:underline">Privacy Policy</a></p>
-    </footer>
-  
+<!-- About Section -->
+<section id="about" style="padding: 80px 20px; max-width: 900px; margin: auto; text-align: center;">
+  <h2 style="font-size: 2.25rem; color: #1e3a8a;">About Us</h2>
+  <p style="font-size: 1.1rem; color: #374151; max-width: 700px; margin: 1rem auto;">
+    Olaris Consulting delivers expert guidance in fleet optimization, strategic growth planning, and ESG integration through blockchain. Based in Charlbury, we serve forward-thinking UK businesses.
+  </p>
+</section>
+
+<!-- Services Section -->
+<section id="services" style="padding: 80px 20px; background: #f3f4f6;">
+  <h2 style="text-align: center; font-size: 2.25rem; color: #1e3a8a;">Our Services</h2>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 2rem;">
+    <div style="flex: 1 1 240px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color: #2563eb;">Fleet Management</h3>
+      <p>Optimize leasing, tracking, and operations to save costs.</p>
+    </div>
+    <div style="flex: 1 1 240px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color: #2563eb;">Growth Strategy</h3>
+      <p>Data-led planning to expand sustainably and smartly.</p>
+    </div>
+    <div style="flex: 1 1 240px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color: #2563eb;">M&A Advisory</h3>
+      <p>Support for successful mergers and acquisitions.</p>
+    </div>
+    <div style="flex: 1 1 240px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <h3 style="color: #2563eb;">Blockchain ESG</h3>
+      <p>Ensure ESG compliance with modern tech and tools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" style="padding: 80px 20px; max-width: 1000px; margin: auto;">
+  <h2 style="text-align: center; font-size: 2.25rem; color: #1e3a8a;">Featured Projects</h2>
+  <div style="display: flex; flex-direction: column; gap: 40px; margin-top: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <video autoplay muted loop playsinline style="max-width: 100%; border-radius: 8px;">
+        <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
+      </video>
+      <h3 style="color: #111827;">Jurni Leasing Expansion</h3>
+      <p>Scaled Jurni to Top 10 UK broker, managing 30,000+ vehicles with operational efficiency.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <video autoplay muted loop playsinline style="max-width: 100%; border-radius: 8px;">
+        <source src="/videos/web-salsac.mp4" type="video/mp4" />
+      </video>
+      <h3 style="color: #111827;">Blockchain ESG Platform</h3>
+      <p>Developed a blockchain-based compliance platform for ESG tracking and validation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" style="padding: 80px 20px; background: #f3f4f6;">
+  <h2 style="text-align: center; font-size: 2.25rem; color: #1e3a8a;">Get in Touch</h2>
+  <form style="max-width: 600px; margin: auto; margin-top: 2rem; display: flex; flex-direction: column; gap: 20px;">
+    <input type="text" placeholder="Name" style="padding: 12px; font-size: 1rem; border: 1px solid #d1d5db; border-radius: 6px;" required>
+    <input type="email" placeholder="Email" style="padding: 12px; font-size: 1rem; border: 1px solid #d1d5db; border-radius: 6px;" required>
+    <textarea placeholder="Message" rows="4" style="padding: 12px; font-size: 1rem; border: 1px solid #d1d5db; border-radius: 6px;" required></textarea>
+    <button type="submit" style="padding: 12px; background: #3b82f6; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">
+      Send Message
+    </button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer style="padding: 40px 20px; text-align: center; font-size: 0.9rem; color: #6b7280;">
+  <p>© 2025 Olaris Consulting Limited</p>
+  <p>Charlbury, UK | info@olaris.co.uk | +44-7919-35-40-68</p>
+  <p><a href="privacy-policy.html" style="color: #3b82f6;">Privacy Policy</a></p>
+</footer>
     <!-- Scripts -->
     <script>
       window.addEventListener('load', () => {
