@@ -339,6 +339,33 @@
 
 <!-- React App (JSX) -->
 <script type="text/babel">
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught in ErrorBoundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ textAlign: 'center', padding: '20px', background: '#f9fafb' }}>
+          <h1>Olaris Consulting Limited</h1>
+          <p>Something went wrong while rendering the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -477,14 +504,26 @@ const Projects = () => (
     </div>
     <div className={"max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0"}>
       {[
-        { title: "Jurni Leasing Expansion", video: "jurni-leasing", desc: "Scaled Jurni Leasing to a Top 10 UK broker, managing over 30,000 vehicles with streamlined operations." },
-        { title: "Blockchain ESG Platform", video: "web-salsac", desc: "Developed web_salsac_app, a blockchain-based ESG solution ensuring compliance for fleet operators." },
+        { 
+          title: "Jurni Leasing Expansion", 
+          videoWebm: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745525980/jurni-leasing_qwd7my.webm", 
+          videoMp4: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745526040/jurni-leasing_em8trv.mp4", 
+          fallback: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg", 
+          desc: "Scaled Jurni Leasing to a Top 10 UK broker, managing over 30,000 vehicles with streamlined operations." 
+        },
+        { 
+          title: "Blockchain ESG Platform", 
+          videoWebm: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg", // Placeholder until actual video is uploaded
+          videoMp4: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg",  // Placeholder until actual video is uploaded
+          fallback: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg", 
+          desc: "Developed web_salsac_app, a blockchain-based ESG solution ensuring compliance for fleet operators." 
+        },
       ].map((proj, idx) => (
         <div key={idx} className={"bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105"} data-aos="fade-up" data-aos-delay={idx * 100}>
           <video autoPlay muted loop playsInline loading="lazy" className={"w-full h-64 object-cover"}>
-            <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525980/jurni-leasing_qwd7my.webm" type="video/webm" />
-            <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526040/jurni-leasing_em8trv.mp4" type="video/mp4" />
-            <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" alt={proj.title} className={"w-full h-64 object-cover"} />
+            <source src={proj.videoWebm} type="video/webm" />
+            <source src={proj.videoMp4} type="video/mp4" />
+            <img src={proj.fallback} alt={proj.title} className={"w-full h-64 object-cover"} />
           </video>
           <div className={"p-6"}>
             <h3 className={"text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2"}>{proj.title}</h3>
@@ -605,20 +644,11 @@ const Contact = () => {
 };
 
 const Footer = () => {
-  const emailRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (emailRef.current) {
-      emailRef.current.href = "mailto:alan@olaris.co.uk";
-      emailRef.current.textContent = "alan@olaris.co.uk";
-    }
-  }, []);
-
   return (
     <footer className={"text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800"}>
       <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
       <p>
-        Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: <a ref={emailRef} className={"text-gray-600 dark:text-gray-300 hover:underline"}></a>
+        Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: <a href="mailto:alan@olaris.co.uk" className={"text-gray-600 dark:text-gray-300 hover:underline"}>alan@olaris.co.uk</a>
       </p>
       <div className={"mt-2"}>
         <a href="https://linkedin.com/company/olaris-consulting-limited" className={"text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2"}>LinkedIn</a> |
@@ -634,7 +664,7 @@ const Footer = () => {
         </form>
         <p className={"mt-2 text-xs"}>Get a Free Fleet Management Guide upon signup!</p>
       </div>
-      <div className={"mt-4"}}>
+      <div className={"mt-4"}>
         <a href="privacy-policy.html" className={"text-gray-600 dark:text-gray-300 hover:underline"}>Privacy Policy</a>
       </div>
     </footer>
