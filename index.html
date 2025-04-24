@@ -585,12 +585,10 @@ const Hero = () => {
 
     try {
       const rootElement = document.getElementById('root');
-      if (rootElement) {
-        ReactDOM.createRoot(rootElement).render(<App />);
-        console.log("React app rendered successfully.");
-      } else {
-        throw new Error("Root element not found in DOM.");
-      }
+      if (!rootElement) throw new Error("Root element not found in DOM.");
+      // ⚡️ Use v17 render API
+      ReactDOM.render(<App />, rootElement);
+      console.log("React app rendered successfully.");
     } catch (error) {
       console.error("Error rendering React app:", error);
       const preloader = document.getElementById("preloader");
@@ -598,27 +596,24 @@ const Hero = () => {
         preloader.style.opacity = "0";
         setTimeout(() => {
           preloader.style.display = "none";
+
+          // ⚡️ Fallback: assign a real HTML string
+          const fallbackHtml = `
+            <div style="text-align: center; padding: 20px; background: #f9fafb;">
+              <h1>Olaris Consulting Limited</h1>
+              <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
+            </div>
+          `;
           const root = document.getElementById('root');
           if (root) {
-            root.innerHTML = 
-              <div style="text-align: center; padding: 20px; background: #f9fafb;">
-                <h1>Olaris Consulting Limited</h1>
-                <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
-              </div>
-            ;
+            root.innerHTML = fallbackHtml;
           } else {
-            console.error("Root element not found in DOM during error handling.");
-            document.body.innerHTML = 
-              <div style="text-align: center; padding: 20px; background: #f9fafb;">
-                <h1>Olaris Consulting Limited</h1>
-                <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
-              </div>
-            ;
+            document.body.innerHTML = fallbackHtml;
           }
         }, 500);
       }
     }
-</script>
+  </script>
 
 </body>
 </html>
