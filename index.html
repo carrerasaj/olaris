@@ -28,7 +28,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
@@ -89,7 +89,7 @@
     /* Form errors */
     .error-message { color:red; font-size:.875rem; margin-top:.25rem; }
 
-    /* Nav menu */
+    /* Nav menu & buttons */
     #navMenu { background:white; box-shadow:0 4px 6px rgba(0,0,0,.1); }
     .dark #navMenu { background:#2d3748; }
     .nav-button {
@@ -163,381 +163,387 @@
 </head>
 
 <body>
-<!-- Preloader -->
-<div id="preloader">
-  <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
-</div>
-
-<!-- Sticky CTA & Back to Top -->
-<a href="#contact" id="stickyCTA">Contact Us</a>
-<a onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn">↑</a>
-
-<!-- Exit Popup -->
-<div id="exitPopup">
-  <div id="exitPopupContent">
-    <h2 class="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
-    <p class="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
-    <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-    <button id="closePopup" class="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
-  </div>
-</div>
-
-<!-- React App -->
-<div id="root"></div>
-
-<!-- Your main JavaScript logic -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const preloader = document.getElementById("preloader");
-    const preloaderImg = document.getElementById("preloaderImg");
-
-    const hidePreloader = () => {
-      if (preloader) {
-        preloader.style.opacity = "0";
-        setTimeout(() => { preloader.style.display = "none"; }, 500);
-      }
-    };
-
-    setTimeout(hidePreloader, 2000);
-    if (preloaderImg) {
-      preloaderImg.onerror = hidePreloader;
-      preloaderImg.onload = hidePreloader;
-    }
-
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-  });
-
-  window.onload = () => {
-    const preloader = document.getElementById("preloader");
-    if (preloader) {
-      preloader.style.opacity = "0";
-      setTimeout(() => { preloader.style.display = "none"; }, 500);
-    }
-  };
-
-  window.addEventListener('scroll', () => {
-    const stickyCTA = document.getElementById('stickyCTA');
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    if (stickyCTA && backToTopBtn) {
-      if (window.scrollY > 300) {
-        stickyCTA.style.display = 'block';
-        backToTopBtn.style.display = 'block';
-      } else {
-        stickyCTA.style.display = 'none';
-        backToTopBtn.style.display = 'none';
-      }
-    }
-  });
-
-  let isLeaving = false;
-  document.addEventListener('mouseout', (e) => {
-    if (e.clientY <= 0 && !isLeaving) {
-      isLeaving = true;
-      const exitPopup = document.getElementById('exitPopup');
-      if (exitPopup) {
-        exitPopup.style.display = 'flex';
-      }
-    }
-  });
-
-  const closePopup = document.getElementById('closePopup');
-  if (closePopup) {
-    closePopup.addEventListener('click', () => {
-      const exitPopup = document.getElementById('exitPopup');
-      if (exitPopup) {
-        exitPopup.style.display = 'none';
-      }
-    });
-  };
-</script>
-
-<noscript>
-  <div class="text-center p-5 bg-gray-100">
-    <h1>Olaris Consulting Limited</h1>
-    <p>JavaScript is disabled. Please enable it for full functionality.</p>
-    <p>Contact us: <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a></p>
-  </div>
-</noscript>
-
-<!-- Preloader -->
-<div id="preloader">
-  <img src="/images/logo.png" alt="Logo" width="80" height="80" loading="eager" />
-</div>
-
-<!-- Nav -->
-<nav class="sticky top-0 bg-white shadow z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-    <div class="flex items-center space-x-4">
-      <img src="/images/logo.png" alt="Logo" class="h-10 w-10" />
-      <span class="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
-    </div>
-    <div class="flex items-center space-x-4">
-      <button id="darkModeToggle" aria-label="Toggle dark mode" class="text-gray-600 dark:text-gray-300 focus:outline-none">
-        <!-- icon here -->
-      </button>
-      <button id="menuToggle" class="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none">
-        <!-- menu icon -->
-      </button>
-    </div>
-  </div>
-  <!-- mobile menu -->
-  <div id="navMenu" class="hidden md:flex md:space-x-6 text-gray-600 dark:text-gray-300 text-lg bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0">
-    <a href="#" class="nav-button py-2 px-4">Home</a>
-    <a href="#about" class="nav-button py-2 px-4">About</a>
-    <a href="#services" class="nav-button py-2 px-4">Services</a>
-    <a href="#projects" class="nav-button py-2 px-4">Projects</a>
-    <a href="#contact" class="nav-button py-2 px-4">Contact</a>
-    <a href="blog.html" class="nav-button py-2 px-4">Blog</a>
-  </div>
-</nav>
-
-<!-- Hero -->
-<section id="home" class="relative flex items-center justify-center min-h-screen text-white overflow-hidden animate-gradient">
-  <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-40">
-    <source src="/videos/fleet-management.webm" type="video/webm" />
-    <source src="/videos/fleet-management.mp4" type="video/mp4" />
-  </video>
-  <div class="relative z-10 text-center px-4 fade-in-hero max-w-3xl">
-    <h1 class="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">Olaris Consulting Limited</h1>
-    <p class="text-lg md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">Driving Sustainable Growth with Blockchain Innovation</p>
-    <div class="space-x-4" data-aos="fade-up" data-aos-delay="200">
-      <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full font-bold">Free Consultation</a>
-      <a href="#services" class="border-2 border-white py-3 px-8 rounded-full font-bold">Explore Services</a>
-    </div>
-  </div>
-</section>
-
-<!-- About -->
-<section id="about" class="py-24 gradient-section dark:text-gray-300">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-    <h2 class="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300">About Us</h2>
-    <p class="text-gray-700 leading-relaxed">
-      Olaris Consulting Limited… (your copy here)
-    </p>
-  </div>
-</section>
-
-<!-- Services -->
-<section id="services" class="py-24">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-    <h2 class="text-4xl font-extrabold mb-12 text-blue-800 dark:text-blue-300">Our Services</h2>
-    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-      <!-- service cards… -->
-    </div>
-  </div>
-</section>
-
-<!-- Projects -->
-<section id="projects" class="py-24 gradient-section dark:text-gray-300">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-    <h2 class="text-4xl font-extrabold text-center mb-8 text-blue-800 dark:text-blue-300">Our Projects</h2>
-    <div class="grid gap-8 md:grid-cols-2">
-      <!-- project cards… -->
-    </div>
-  </div>
-</section>
-);
-  <!-- Testimonials -->
-  <section id="testimonials" class="py-16 gradient-section dark:text-gray-300">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-      <h2 class="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">
-        What Our Clients Say
-      </h2>
-      <div class="grid gap-8 md:grid-cols-2">
-        <blockquote class="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
-          <p class="italic text-gray-600 dark:text-gray-300">
-            "Olaris transformed our fleet operations, saving us 8% annually."
-          </p>
-          <footer class="mt-4 font-semibold text-blue-700 dark:text-blue-300">
-            John Doe, Fleet Manager
-          </footer>
-        </blockquote>
-        <blockquote class="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
-          <p class="italic text-gray-600 dark:text-gray-300">
-            "Their blockchain ESG platform is a game-changer for compliance."
-          </p>
-          <footer class="mt-4 font-semibold text-blue-700 dark:text-blue-300">
-            Jane Smith, CEO
-          </footer>
-        </blockquote>
-      </div>
-      <div class="mt-8" data-aos="fade-up" data-aos-delay="200">
-        <a
-          href="#contact"
-          class="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-8 rounded-full transition hover:scale-105"
-        >
-          See How We Can Help You
-        </a>
-      </div>
-    </div>
-  </section>
-    <!-- Contact -->
-    <section id="contact" class="py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        <div class="text-center" data-aos="fade-up">
-          <img
-            src="/images/profile.png"
-            alt="Alan Carreras"
-            class="mx-auto rounded-full shadow-2xl w-60 h-60 object-cover mb-6"
-            loading="lazy"
-          />
-          <p class="text-lg">
-            👋 Hi, I'm Alan Carreras, Charlbury-based consultant. Let's discuss your
-            business goals!
-          </p>
-        </div>
-        <form
-          id="contactForm"
-          onSubmit="validateForm(event)"
-          class="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-2xl space-y-4 text-gray-800"
-          data-aos="fade-up"
-        >
-          <div>
-            <input
-              type="text"
-              placeholder="Name"
-              aria-label="Name"
-              class="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <p class="error-message" id="error-name"></p>
-          </div>
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              aria-label="Email"
-              class="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <p class="error-message" id="error-email"></p>
-          </div>
-          <div>
-            <textarea
-              placeholder="Message"
-              aria-label="Message"
-              class="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-              rows="4"
-              required
-            ></textarea>
-            <p class="error-message" id="error-message"></p>
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition flex items-center justify-center"
-          >
-            Send Message
-          </button>
-        </form>
-      </div>
-    </section>
-      <!-- Footer -->
-  <footer class="bg-white dark:bg-gray-800 py-12">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-300 text-sm space-y-4">
-      <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-      <p>
-        1 Graces Court, The Slade, Charlbury OX7 3EG, UK<br/>
-        Phone: +44-7919-35-40-68<br/>
-        Email: <a href="mailto:info@olaris.co.uk" class="hover:underline">info@olaris.co.uk</a>
-      </p>
-      <div class="space-x-4">
-        <a href="https://linkedin.com/company/olaris-consulting-limited">LinkedIn</a>
-        <a href="https://twitter.com/olarisconsult">Twitter</a>
-        <a href="https://facebook.com/sharer/sharer.php?u=https://olaris.co.uk">Facebook</a>
-        <a href="blog.html">Blog</a>
-      </div>
-      <div>
-        <h3 class="font-semibold">Subscribe to Our Newsletter</h3>
-        <form
-          action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&amp;id=XXXX"
-          method="post"
-          class="mt-2 flex justify-center space-x-2"
-        >
-          <input
-            type="email"
-            placeholder="Your email"
-            class="p-2 rounded-l border-gray-300 focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <button
-            type="submit"
-            class="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition"
-          >
-            Subscribe
-          </button>
-        </form>
-        <p class="text-xs mt-2">Get a Free Fleet Management Guide upon signup!</p>
-      </div>
-      <div>
-        <a href="privacy-policy.html" class="hover:underline">Privacy Policy</a>
-      </div>
-    </div>
-  </footer>
-
-    <!-- Sticky CTA & Back to Top -->
-    <a
-    href="#contact"
-    id="stickyCTA"
-    class="fixed right-6 bottom-6 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-6 rounded-full shadow-lg scale-0 transition-transform"
-  >
-    Contact Us
-  </a>
-  <button
-    id="backToTopBtn"
-    class="fixed right-6 bottom-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-full shadow-lg hidden"
-  >
-    ↑
-  </button>
-
-  <!-- Exit Popup -->
-  <div
-    id="exitPopup"
-    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden"
-  >
-    <div
-      id="exitPopupContent"
-      class="bg-white dark:bg-gray-700 p-8 rounded-lg text-center max-w-xs"
-    >
-      <h2 class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4">
-        Don’t Leave Yet!
-      </h2>
-      <p class="mb-6 dark:text-gray-300">
-        Get 10% off your first consultation with Olaris Consulting.
-      </p>
-      <a
-        href="#contact"
-        class="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transition"
-      >
-        Claim Offer
-      </a>
-      <button
-        id="closePopup"
-        class="mt-4 text-gray-600 underline dark:text-gray-300"
-      >
-        No Thanks
-      </button>
-    </div>
-  </div>
-  <!-- Sticky CTA & Back to Top -->
-  <a href="#contact" id="stickyCTA">Contact Us</a>
-  <button id="backToTopBtn" class="p-3 rounded-full">↑</button>
-
-  <!-- Exit Popup -->
-  <div id="exitPopup">
-    <div id="exitPopupContent">
-      <h2>Don’t Leave Yet!</h2>
-      <p>Get 10% off your first consultation.</p>
-      <a href="#contact" class="btn">Claim Offer</a>
-      <button id="closePopup">No Thanks</button>
-    </div>
+  <!-- Preloader -->
+  <div id="preloader">
+    <img id="preloaderImg"
+         src="/images/logo.png"
+         alt="Olaris Consulting Logo"
+         width="80" height="80"
+         loading="eager" />
   </div>
 
+  <!-- React will render EVERYTHING here -->
   <div id="root"></div>
 
+  <!-- global JS: preloader / theme / scroll / exit-popup -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pre = document.getElementById('preloader');
+      setTimeout(() => {
+        pre.style.opacity = 0;
+        setTimeout(() => pre.style.display = 'none', 500);
+      }, 2000);
+      if (localStorage.getItem('theme') === 'dark')
+        document.documentElement.classList.add('dark');
+    });
+
+    window.addEventListener('scroll', () => {
+      const cta = document.getElementById('stickyCTA');
+      const top = document.getElementById('backToTopBtn');
+      if (window.scrollY > 300) {
+        cta && (cta.style.display = 'block');
+        top && (top.style.display = 'block');
+      } else {
+        cta && (cta.style.display = 'none');
+        top && (top.style.display = 'none');
+      }
+    });
+
+    document.addEventListener('mouseout', e => {
+      if (e.clientY <= 0) {
+        const popup = document.getElementById('exitPopup');
+        popup && (popup.style.display = 'flex');
+      }
+    });
+    document.addEventListener('click', e => {
+      if (e.target.id === 'closePopup') {
+        document.getElementById('exitPopup').style.display = 'none';
+      }
+    });
+  </script>
+
+  <!-- React: your entire app -->
   <script type="text/babel">
-   ReactDOM.render(<App />, document.getElementById('root'));
+    const Navbar = () => {
+      const [open, setOpen] = React.useState(false);
+      return (
+        <nav className="sticky top-0 bg-white dark:bg-gray-800 shadow z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img src="/images/logo.png" alt="Logo" className="h-10 w-10" />
+              <span className="font-bold text-xl text-blue-800 dark:text-blue-300">
+                Olaris Consulting
+              </span>
+            </div>
+            <div className="hidden md:flex space-x-6">
+              {['Home','About','Services','Projects','Contact','Blog'].map((label, i) =>
+                <a key={i}
+                   href={label!=='Home' ? `#${label.toLowerCase()}` : '#'}
+                   className="nav-button py-2 px-4">
+                  {label}
+                </a>
+              )}
+            </div>
+            <button onClick={()=>setOpen(!open)}
+                    className="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none">
+              ☰
+            </button>
+          </div>
+          {open && (
+            <div id="navMenu" className="md:hidden flex flex-col space-y-2 px-4 py-2">
+              {['Home','About','Services','Projects','Contact','Blog'].map((label,i)=>
+                <a key={i} href={label!=='Home'?`#${label.toLowerCase()}`:'#'}
+                   className="nav-button py-2 px-4">
+                  {label}
+                </a>
+              )}
+            </div>
+          )}
+        </nav>
+      );
+    };
+
+    const Hero = () => (
+      <section id="home"
+               className="relative flex items-center justify-center min-h-screen text-white overflow-hidden animate-gradient">
+        <video autoPlay muted loop playsInline
+               className="absolute inset-0 w-full h-full object-cover opacity-40">
+          <source src="/videos/fleet-management.webm" type="video/webm" />
+          <source src="/videos/fleet-management.mp4" type="video/mp4" />
+        </video>
+        <div className="relative z-10 text-center px-4 fade-in-hero max-w-3xl">
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">
+            Olaris Consulting Limited
+          </h1>
+          <p className="text-lg md:text-xl mb-2"
+             data-aos="fade-up" data-aos-delay="100">
+            Driving Sustainable Growth with Blockchain Innovation
+          </p>
+          <div className="space-x-4" data-aos="fade-up" data-aos-delay="200">
+            <a href="#contact"
+               className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full font-bold">
+              Free Consultation
+            </a>
+            <a href="#services"
+               className="border-2 border-white py-3 px-8 rounded-full font-bold">
+              Explore Services
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+
+    const About = () => (
+      <section id="about" className="py-24 gradient-section dark:text-gray-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300">
+            About Us
+          </h2>
+          <p className="text-gray-700 leading-relaxed">
+            Olaris Consulting Limited, based in Charlbury, UK, delivers strategic growth initiatives
+            and operational excellence in fleet management, mobility, and digital transformation.
+            Our expertise in blockchain and ESG solutions empowers businesses to thrive.
+          </p>
+        </div>
+      </section>
+    );
+
+    const Services = () => (
+      <section id="services" className="py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold mb-12 text-blue-800 dark:text-blue-300">
+            Our Services
+          </h2>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Fleet Management","Reduce costs by up to 10% with optimized leasing, vehicle tracking and operational efficiency.","🚛"],
+              ["Expansion Strategy","Grow your business with data-driven market intelligence and strategic planning.","📈"],
+              ["M&A Advisory","Navigate complex mergers & acquisitions with expert guidance.","🤝"],
+              ["Digital Integration","Transform your operations with blockchain, Azure & ESG tracking.","🔗"]
+            ].map(([title,desc,icon],i)=>(
+              <div key={i}
+                   className="p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition bg-white dark:bg-gray-700">
+                <div className="text-4xl mb-3">{icon}</div>
+                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3">
+                  {title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Projects = () => (
+      <section id="projects" className="py-24 gradient-section dark:text-gray-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-800 dark:text-blue-300">
+            Our Projects
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            {[
+              ["Jurni Leasing Expansion","Scaled Jurni Leasing to a Top 10 UK broker, managing 30,000 vehicles.","jurni-leasing"],
+              ["Blockchain ESG Platform","Developed web_salsac_app, a blockchain-based ESG solution.","web-salsac"]
+            ].map(([title,desc,video],i)=>(
+              <div key={i}
+                   className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105"
+                   data-aos="fade-up" data-aos-delay={i*100}>
+                <video autoPlay muted loop playsInline className="w-full h-64 object-cover">
+                  <source src={`/videos/${video}.webm`} type="video/webm"/>
+                  <source src={`/videos/${video}.mp4`} type="video/mp4"/>
+                </video>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2">
+                    {title}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">{desc}</p>
+                  <a href="#contact" className="text-blue-600 dark:text-blue-300 hover:underline">
+                    Learn More
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const FeaturedBlogPosts = () => (
+      <section className="py-16 gradient-section dark:text-gray-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+          <h2 className="text-4xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">
+            Featured Blog Posts
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              ["Top 5 Fleet Management Trends for 2025","Discover the latest trends shaping the future of fleet management.","/images/blog-post-1.jpeg","blog-post-1.html"],
+              ["Fleet Management Solutions in Charlbury","Learn why Olaris is the top choice locally.","/images/fleet-management-charlbury.jpg","blog-post-2.html"]
+            ].map(([title,desc,img,href],i)=>(
+              <div key={i}
+                   className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"
+                   data-aos="fade-up" data-aos-delay={100*(i+1)}>
+                <img src={img} alt={title} className="w-full h-48 object-cover rounded-t-lg"/>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                    {title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">{desc}</p>
+                  <a href={href} className="text-blue-600 dark:text-blue-300 hover:underline">
+                    Read More
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Testimonials = () => (
+      <section className="py-16 gradient-section dark:text-gray-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">
+            What Our Clients Say
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            {[
+              ["Olaris transformed our fleet operations, saving us 8% annually.","John Doe, Fleet Manager"],
+              ["Their blockchain ESG platform is a game-changer for compliance.","Jane Smith, CEO"]
+            ].map(([quote,author],i)=>
+              <blockquote key={i} className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
+                <p className="italic text-gray-600 dark:text-gray-300">"{quote}"</p>
+                <footer className="mt-4 font-semibold text-blue-700 dark:text-blue-300">{author}</footer>
+              </blockquote>
+            )}
+          </div>
+          <div className="mt-8" data-aos="fade-up" data-aos-delay="200">
+            <a href="#contact"
+               className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-8 rounded-full transition hover:scale-105">
+              See How We Can Help You
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Contact = () => {
+      const [errors, setErrors] = React.useState({});
+      const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+      const validateForm = e => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        const name    = e.target.name.value.trim();
+        const email   = e.target.email.value.trim();
+        const message = e.target.message.value.trim();
+        const errs = {};
+        if (!name)    errs.name    = "Name is required";
+        if (!email.includes("@")) errs.email = "Valid email is required";
+        if (!message) errs.message = "Message is required";
+        setErrors(errs);
+
+        if (Object.keys(errs).length === 0) {
+          setTimeout(() => {
+            gtag('event','form_submission',{event_category:'Contact',event_label:'Consultation'});
+            alert("✅ Thank you! Your message has been sent.");
+            e.target.reset();
+            setIsSubmitting(false);
+          },1000);
+        } else {
+          setIsSubmitting(false);
+        }
+      };
+
+      return (
+        <section id="contact" className="py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
+            <div className="text-center" data-aos="fade-up">
+              <img src="/images/profile.png" alt="Alan Carreras"
+                   className="mx-auto rounded-full shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy"/>
+              <p className="text-lg">👋 Hi, I’m Alan Carreras, Charlbury-based consultant. Let’s talk!</p>
+            </div>
+            <form name="contactForm" onSubmit={validateForm}
+                  className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-2xl space-y-4 text-gray-800"
+                  data-aos="fade-up">
+              <div>
+                <input name="name" type="text" placeholder="Name" required
+                       className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
+                {errors.name && <p className="error-message">{errors.name}</p>}
+              </div>
+              <div>
+                <input name="email" type="email" placeholder="Email" required
+                       className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
+                {errors.email && <p className="error-message">{errors.email}</p>}
+              </div>
+              <div>
+                <textarea name="message" placeholder="Message" rows="4" required
+                          className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
+                {errors.message && <p className="error-message">{errors.message}</p>}
+              </div>
+              <button type="submit"
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition">
+                {isSubmitting
+                  ? <span className="loading-spinner" />
+                  : "Send Message"
+                }
+              </button>
+            </form>
+          </div>
+        </section>
+      );
+    };
+
+    const Footer = () => (
+      <footer className="bg-white dark:bg-gray-800 py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-300 text-sm space-y-4">
+          <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
+          <p>1 Graces Court, The Slade, Charlbury OX7 3EG, UK<br/>
+             Phone: +44-7919-35-40-68<br/>
+             Email: <a href="mailto:info@olaris.co.uk" className="hover:underline">info@olaris.co.uk</a>
+          </p>
+          <div className="space-x-4">
+            <a href="https://linkedin.com/company/olaris-consulting-limited">LinkedIn</a>
+            <a href="https://twitter.com/olarisconsult">Twitter</a>
+            <a href="https://facebook.com/sharer/sharer.php?u=https://olaris.co.uk">Facebook</a>
+            <a href="blog.html">Blog</a>
+          </div>
+          <div>
+            <h3 className="font-semibold">Subscribe to Our Newsletter</h3>
+            <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&amp;id=XXXX"
+                  method="post" className="mt-2 flex justify-center space-x-2">
+              <input type="email" placeholder="Your email" required
+                     className="p-2 rounded-l border-gray-300 focus:ring-2 focus:ring-blue-500"/>
+              <button type="submit"
+                      className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">
+                Subscribe
+              </button>
+            </form>
+            <p className="text-xs mt-2">Get a Free Fleet Management Guide upon signup!</p>
+          </div>
+          <div><a href="privacy-policy.html" className="hover:underline">Privacy Policy</a></div>
+        </div>
+      </footer>
+    );
+
+    const App = () => (
+      <>
+        <Navbar />
+        <Hero />
+        <About />
+        <Services />
+        <Projects />
+        <FeaturedBlogPosts />
+        <Testimonials />
+        <Contact />
+        <Footer />
+        {/* stickyCTA/backToTop and exit-popup elements */}
+        <a href="#contact" id="stickyCTA" className="fixed right-6 bottom-6 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-6 rounded-full shadow-lg scale-0 transition-transform">
+          Contact Us
+        </a>
+        <button id="backToTopBtn" className="fixed right-6 bottom-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-full shadow-lg hidden">↑</button>
+        <div id="exitPopup" className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+          <div id="exitPopupContent" className="bg-white dark:bg-gray-700 p-8 rounded-lg text-center max-w-xs">
+            <h2 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4">Don’t Leave Yet!</h2>
+            <p className="mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
+            <a href="#contact" className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transition">Claim Offer</a>
+            <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
+          </div>
+        </div>
+      </>
+    );
+
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
