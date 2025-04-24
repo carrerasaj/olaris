@@ -7,13 +7,13 @@
   <meta name="description" content="Olaris Consulting Limited, based in Charlbury, UK, delivers fleet management, strategic growth, and blockchain ESG solutions for businesses." />
   <meta property="og:title" content="Olaris Consulting Limited | UK Consulting Experts" />
   <meta property="og:description" content="Specializing in fleet management, growth strategy, and digital integration with blockchain ESG solutions." />
-  <meta property="og:image" content="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" />
+  <meta property="og:image" content="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/logo.png" />
   <meta property="og:url" content="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="icon" href="/logo.png" type="image/png" />
+  <link rel="icon" href="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
-  <link rel="preload" href="/logo.png" as="image" />
+  <link rel="preload" href="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/logo.png" as="image" />
   <link rel="preload" href="https://unpkg.com/react@18.2.0/umd/react.production.min.js" as="script" />
   <link rel="preload" href="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" as="script" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -180,7 +180,7 @@
 
 <!-- Preloader -->
 <div id="preloader">
-  <img id="preloaderImg" src="/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
+  <img id="preloaderImg" src="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
 </div>
 
 <!-- Sticky CTA & Back to Top -->
@@ -285,11 +285,7 @@ const Navbar = () => {
   return (
     <nav className={"flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50"}>
       <div className={"flex items-center space-x-4"}>
-        <img src="/logo.png" alt="Olaris Consulting Logo" className={"h-10 w-10"} onError={(e) => {
-          console.error('Logo failed to load at /logo.png');
-          e.target.style.display = 'none';
-          e.target.parentElement.insertAdjacentHTML('afterbegin', '<p class="text-red-500 text-sm">Logo failed to load</p>');
-        }} />
+        <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" alt="Olaris Consulting Logo" className={"h-10 w-10"} />
         <span className={"font-bold text-xl text-blue-800 dark:text-blue-300"}>Olaris Consulting</span>
       </div>
       <div className={"flex items-center space-x-4"}>
@@ -350,18 +346,10 @@ const Hero = () => {
 
   return (
     <section id="home" className={"relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start"}>
-      <video autoPlay muted loop playsInline loading="lazy" className={"absolute w-full h-full object-cover opacity-40"} onError={(e) => {
-        console.error('Hero video failed to load at /videos/cityscape.mp4');
-        e.target.style.display = 'none';
-        e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm absolute top-0 left-0">Hero video failed to load</p>');
-      }}>
-        <source src="/videos/cityscape.webm" type="video/webm" />
-        <source src="/videos/cityscape.mp4" type="video/mp4" />
-        <img src="/videos/cityscape-fallback.jpg" alt="Fleet Management Background" className={"w-full h-full object-cover"} onError={(e) => {
-          console.error('Hero fallback image failed to load at /videos/cityscape-fallback.jpg');
-          e.target.style.display = 'none';
-          e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm absolute top-0 left-0">Hero fallback image failed to load</p>');
-        }} />
+      <video autoPlay muted loop playsInline loading="lazy" className={"absolute w-full h-full object-cover opacity-40"}>
+        <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525999/cityscape1a_rntv5f.webm" type="video/webm" />
+        <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526129/cityscape1_gjmidm.mp4" type="video/mp4" />
+        <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745525981/cityscape-fallback_b3drkf.jpg" alt="Fleet Management Background" className={"w-full h-full object-cover"} />
       </video>
       <div className={"relative z-10 text-center px-6 fade-in-hero"}>
         <h1 className={"text-5xl md:text-7xl font-extrabold mb-2"} data-aos="fade-up">Olaris Consulting Limited</h1>
@@ -388,18 +376,10 @@ const About = () => (
         Olaris Consulting Limited, based in Charlbury, UK, delivers strategic growth initiatives and operational excellence in fleet management, mobility, and digital transformation. Our expertise in blockchain and ESG solutions empowers businesses to thrive in a competitive landscape.
       </p>
       <div className={"mt-6"}>
-        <video autoPlay muted loop playsInline loading="lazy" className={"w-full max-w-md mx-auto rounded-lg shadow-md"} onError={(e) => {
-          console.error('About video failed to load at /videos/globe.mp4');
-          e.target.style.display = 'none';
-          e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">About video failed to load</p>');
-        }}>
-          <source src="/videos/globe.webm" type="video/webm" />
-          <source src="/videos/globe.mp4" type="video/mp4" />
-          <img src="/videos/globe-fallback.jpg" alt="Alan Carreras Message" className={"w-full max-w-md mx-auto rounded-lg"} onError={(e) => {
-            console.error('About fallback image failed to load at /videos/globe-fallback.jpg');
-            e.target.style.display = 'none';
-            e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">About fallback image failed to load</p>');
-          }} />
+        <video autoPlay muted loop playsInline loading="lazy" className={"w-full max-w-md mx-auto rounded-lg shadow-md"}>
+          <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525997/globe_uuq61l.webm" type="video/webm" />
+          <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526034/globe_vvqqkg.mp4" type="video/mp4" />
+          <img src="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/globe-fallback.jpg" alt="Alan Carreras Message" className={"w-full max-w-md mx-auto rounded-lg"} />
         </video>
         <p className={"mt-4 text-gray-700 dark:text-gray-300 italic"}>"At Olaris, we’re passionate about driving sustainable growth through innovation." - Alan Carreras, Founder</p>
       </div>
@@ -440,18 +420,10 @@ const Projects = () => (
         { title: "Blockchain ESG Platform", video: "web-salsac", desc: "Developed web_salsac_app, a blockchain-based ESG solution ensuring compliance for fleet operators." },
       ].map((proj, idx) => (
         <div key={idx} className={"bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105"} data-aos="fade-up" data-aos-delay={idx * 100}>
-          <video autoPlay muted loop playsInline loading="lazy" className={"w-full h-64 object-cover"} onError={(e) => {
-            console.error(`Project video (${proj.title}) failed to load at /videos/${proj.video}.mp4`);
-            e.target.style.display = 'none';
-            e.target.parentElement.insertAdjacentHTML('beforeend', `<p class="text-red-500 text-sm">Project video (${proj.title}) failed to load</p>`);
-          }}>
-            <source src={`/videos/${proj.video}.webm`} type="video/webm" />
-            <source src={`/videos/${proj.video}.mp4`} type="video/mp4" />
-            <img src={`/videos/${proj.video}-fallback.jpg`} alt={proj.title} className={"w-full h-64 object-cover"} onError={(e) => {
-              console.error(`Project fallback image (${proj.title}) failed to load at /videos/${proj.video}-fallback.jpg`);
-              e.target.style.display = 'none';
-              e.target.parentElement.insertAdjacentHTML('beforeend', `<p class="text-red-500 text-sm">Project fallback image (${proj.title}) failed to load</p>`);
-            }} />
+          <video autoPlay muted loop playsInline loading="lazy" className={"w-full h-64 object-cover"}>
+            <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525980/jurni-leasing_qwd7my.webm" type="video/webm" />
+            <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526040/jurni-leasing_em8trv.mp4" type="video/mp4" />
+            <img src={`https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/${proj.video}-fallback.jpg`} alt={proj.title} className={"w-full h-64 object-cover"} />
           </video>
           <div className={"p-6"}>
             <h3 className={"text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2"}>{proj.title}</h3>
@@ -470,11 +442,7 @@ const FeaturedBlogPosts = () => (
       <h2 className={"text-4xl font-extrabold mb-8 text-blue-800 dark:text-blue-300"}>Featured Blog Posts</h2>
       <div className={"max-w-5xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3"}>
         <div className={"bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"} data-aos="fade-up" data-aos-delay="100">
-          <img src="/videos/cityscape-fallback.jpg" alt="Fleet Management Trends" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
-            console.error('Blog post image failed to load at /videos/cityscape-fallback.jpg');
-            e.target.style.display = 'none';
-            e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Blog post image failed to load</p>');
-          }} />
+          <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745525981/cityscape-fallback_b3drkf.jpg" alt="Fleet Management Trends" className={"w-full h-48 object-cover rounded-t-lg"} />
           <div className={"p-6"}>
             <h2 className={"text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2"}>Top 5 Fleet Management Trends for 2025</h2>
             <p className={"text-gray-600 dark:text-gray-300 mb-4"}>Discover the latest trends shaping the future of fleet management in the UK.</p>
@@ -482,11 +450,7 @@ const FeaturedBlogPosts = () => (
           </div>
         </div>
         <div className={"bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"} data-aos="fade-up" data-aos-delay="200">
-          <img src="/videos/globe-fallback.jpg" alt="Fleet Management in Charlbury" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
-            console.error('Blog post image failed to load at /videos/globe-fallback.jpg');
-            e.target.style.display = 'none';
-            e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Blog post image failed to load</p>');
-          }} />
+          <img src="https://res.cloudinary.com/dummy-cdn/image/upload/v1698771234/globe-fallback.jpg" alt="Fleet Management in Charlbury" className={"w-full h-48 object-cover rounded-t-lg"} />
           <div className={"p-6"}>
             <h2 className={"text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2"}>Fleet Management Solutions in Charlbury</h2>
             <p className={"text-gray-600 dark:text-gray-300 mb-4"}>Learn why Olaris Consulting is the top choice for fleet management in Charlbury, UK.</p>
@@ -553,11 +517,7 @@ const Contact = () => {
     <section id="contact" className={"section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start"}>
       <div className={"container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6"} data-aos="fade-up">
         <div className={"flex flex-col items-center text-center"}>
-          <img src="/logo.png" alt="Alan Carreras, Consultant" className={"rounded-lg shadow-2xl w-60 h-60 object-cover mb-6"} loading="lazy" onError={(e) => {
-            console.error('Profile image failed to load at /logo.png');
-            e.target.style.display = 'none';
-            e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Profile image failed to load</p>');
-          }} />
+          <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526187/profile_ixlfbz.png" alt="Alan Carreras, Consultant" className={"rounded-lg shadow-2xl w-60 h-60 object-cover mb-6"} loading="lazy" />
           <p className={"text-lg leading-relaxed"}>👋 Hi, I'm Alan Carreras, Charlbury-based consultant. Let's discuss your business goals!</p>
         </div>
         <form id="contactForm" onSubmit={validateForm} className={"bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800"}>
@@ -613,7 +573,7 @@ const Footer = () => {
         </form>
         <p className={"mt-2 text-xs"}>Get a Free Fleet Management Guide upon signup!</p>
       </div>
-      <div className={"mt-4"}>
+      <div className={"mt-4"}}>
         <a href="privacy-policy.html" className={"text-gray-600 dark:text-gray-300 hover:underline"}>Privacy Policy</a>
       </div>
     </footer>
