@@ -11,6 +11,7 @@
   <meta property="og:url" content="https://olaris.co.uk/" />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <!-- Favicon & Canonical -->
   <link rel="icon" href="/images/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris.co.uk/" />
 
@@ -18,10 +19,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind (CDN build → no purge) -->
+  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.2/dist/tailwind.min.css" rel="stylesheet" />
 
-  <!-- AOS animations -->
+  <!-- AOS CSS -->
   <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
 
   <!-- Google Analytics -->
@@ -33,14 +34,12 @@
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
 
-  <!-- React + ReactDOM -->
+  <!-- React & Babel -->
   <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
-
-  <!-- Babel standalone for JSX in-browser -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- AOS init -->
+  <!-- AOS Init -->
   <script defer src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js"
           onload="AOS.init({ once: true });"></script>
 
@@ -63,20 +62,17 @@
     #preloader {
       position:fixed; inset:0;
       background:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex; align-items:center; justify-content:center;
       z-index:50;
     }
 
-    /* Hero fade-in */
+    /* Fade & gradient animations */
     .fade-in-hero {
       opacity:0; transform:translateY(20px);
       animation:fadeInHero 1s forwards .4s;
     }
     @keyframes fadeInHero { to{opacity:1;transform:translateY(0);} }
 
-    /* Gradient animation */
     .animate-gradient {
       background-size:400% 400%;
       animation:gradientMove 15s ease infinite;
@@ -86,12 +82,7 @@
       50%{background-position:100% 50%;}
     }
 
-    /* Form errors */
-    .error-message { color:red; font-size:.875rem; margin-top:.25rem; }
-
-    /* Nav menu & buttons */
-    #navMenu { background:white; box-shadow:0 4px 6px rgba(0,0,0,.1); }
-    .dark #navMenu { background:#2d3748; }
+    /* Nav buttons */
     .nav-button {
       border:1px solid #d1d5db;
       border-radius:9999px;
@@ -107,7 +98,7 @@
       background:#4299e1; border-color:#4299e1;
     }
 
-    /* Sticky CTA & back-to-top */
+    /* Sticky CTA & Back-to-Top */
     #stickyCTA,#backToTopBtn {
       position:fixed; right:20px;
       background:linear-gradient(to right,#3b82f6,#1e40af);
@@ -121,20 +112,16 @@
     #stickyCTA{bottom:20px;} #backToTopBtn{bottom:80px;}
     #stickyCTA:hover,#backToTopBtn:hover{transform:scale(1.1);}
 
-    /* Exit pop-up */
+    /* Exit popup */
     #exitPopup {
       position:fixed; inset:0;
       background:rgba(0,0,0,.7);
-      display:none;
-      align-items:center;
-      justify-content:center;
+      display:none; align-items:center; justify-content:center;
       z-index:1000;
     }
     #exitPopupContent {
       background:white; padding:24px;
-      border-radius:8px;
-      text-align:center;
-      max-width:400px;
+      border-radius:8px; text-align:center; max-width:400px;
     }
     .dark #exitPopupContent {
       background:#2d3748; color:#e2e8f0;
@@ -153,8 +140,7 @@
       border:4px solid #f3f3f3;
       border-top:4px solid #1e40af;
       border-radius:50%;
-      width:24px;
-      height:24px;
+      width:24px; height:24px;
       animation:spin 1s linear infinite;
       margin:0 auto;
     }
@@ -165,381 +151,74 @@
 <body>
   <!-- Preloader -->
   <div id="preloader">
-    <img id="preloaderImg"
-         src="/images/logo.png"
-         alt="Olaris Consulting Logo"
-         width="80" height="80"
-         loading="eager" />
+    <img id="preloaderImg" src="/images/logo.png" alt="Logo" width="80" height="80" loading="eager" />
   </div>
 
-  <!-- React will render EVERYTHING here -->
+  <!-- Sticky CTA & Back to Top -->
+  <a href="#contact" id="stickyCTA">Contact Us</a>
+  <a id="backToTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</a>
+
+  <!-- Exit Popup -->
+  <div id="exitPopup">
+    <div id="exitPopupContent">
+      <h2 class="text-2xl font-bold mb-4">Don’t Leave Yet!</h2>
+      <p class="mb-6">Get 10% off your first consultation.</p>
+      <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2 px-6 rounded-full">Claim Offer</a>
+      <button id="closePopup" class="mt-4 underline">No Thanks</button>
+    </div>
+  </div>
+
+  <!-- Root for React -->
   <div id="root"></div>
 
-  <!-- global JS: preloader / theme / scroll / exit-popup -->
+  <!-- Preloader, theme toggle & CTA/back-to-top logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const pre = document.getElementById('preloader');
-      setTimeout(() => {
-        pre.style.opacity = 0;
-        setTimeout(() => pre.style.display = 'none', 500);
-      }, 2000);
-      if (localStorage.getItem('theme') === 'dark')
-        document.documentElement.classList.add('dark');
-    });
+      const img = document.getElementById('preloaderImg');
+      const hide = () => { pre.style.opacity = 0; setTimeout(()=>pre.style.display='none',500); };
+      setTimeout(hide,2000);
+      img && (img.onload = img.onerror = hide);
 
-    window.addEventListener('scroll', () => {
+      if(localStorage.getItem('theme')==='dark'){
+        document.documentElement.classList.add('dark');
+      }
+    });
+    window.addEventListener('scroll', ()=>{
       const cta = document.getElementById('stickyCTA');
       const top = document.getElementById('backToTopBtn');
-      if (window.scrollY > 300) {
-        cta && (cta.style.display = 'block');
-        top && (top.style.display = 'block');
-      } else {
-        cta && (cta.style.display = 'none');
-        top && (top.style.display = 'none');
-      }
+      if (window.scrollY>300) { cta.style.display='block'; top.style.display='block'; }
+      else { cta.style.display='none'; top.style.display='none'; }
     });
-
-    document.addEventListener('mouseout', e => {
-      if (e.clientY <= 0) {
-        const popup = document.getElementById('exitPopup');
-        popup && (popup.style.display = 'flex');
-      }
+    document.getElementById('closePopup')?.addEventListener('click', ()=>{
+      document.getElementById('exitPopup').style.display='none';
     });
-    document.addEventListener('click', e => {
-      if (e.target.id === 'closePopup') {
-        document.getElementById('exitPopup').style.display = 'none';
-      }
+    document.addEventListener('mouseout', e=>{
+      if(e.clientY<=0) document.getElementById('exitPopup').style.display='flex';
     });
   </script>
 
-  <!-- React: your entire app -->
+  <!-- Your React App -->
   <script type="text/babel">
-    const Navbar = () => {
-      const [open, setOpen] = React.useState(false);
-      return (
-        <nav className="sticky top-0 bg-white dark:bg-gray-800 shadow z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <img src="/images/logo.png" alt="Logo" className="h-10 w-10" />
-              <span className="font-bold text-xl text-blue-800 dark:text-blue-300">
-                Olaris Consulting
-              </span>
-            </div>
-            <div className="hidden md:flex space-x-6">
-              {['Home','About','Services','Projects','Contact','Blog'].map((label, i) =>
-                <a key={i}
-                   href={label!=='Home' ? `#${label.toLowerCase()}` : '#'}
-                   className="nav-button py-2 px-4">
-                  {label}
-                </a>
-              )}
-            </div>
-            <button onClick={()=>setOpen(!open)}
-                    className="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none">
-              ☰
-            </button>
-          </div>
-          {open && (
-            <div id="navMenu" className="md:hidden flex flex-col space-y-2 px-4 py-2">
-              {['Home','About','Services','Projects','Contact','Blog'].map((label,i)=>
-                <a key={i} href={label!=='Home'?`#${label.toLowerCase()}`:'#'}
-                   className="nav-button py-2 px-4">
-                  {label}
-                </a>
-              )}
-            </div>
-          )}
-        </nav>
-      );
-    };
-
-    const Hero = () => (
-      <section id="home"
-               className="relative flex items-center justify-center min-h-screen text-white overflow-hidden animate-gradient">
-        <video autoPlay muted loop playsInline
-               className="absolute inset-0 w-full h-full object-cover opacity-40">
-          <source src="/videos/fleet-management.webm" type="video/webm" />
-          <source src="/videos/fleet-management.mp4" type="video/mp4" />
-        </video>
-        <div className="relative z-10 text-center px-4 fade-in-hero max-w-3xl">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-up">
-            Olaris Consulting Limited
-          </h1>
-          <p className="text-lg md:text-xl mb-2"
-             data-aos="fade-up" data-aos-delay="100">
-            Driving Sustainable Growth with Blockchain Innovation
-          </p>
-          <div className="space-x-4" data-aos="fade-up" data-aos-delay="200">
-            <a href="#contact"
-               className="bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full font-bold">
-              Free Consultation
-            </a>
-            <a href="#services"
-               className="border-2 border-white py-3 px-8 rounded-full font-bold">
-              Explore Services
-            </a>
-          </div>
-        </div>
-      </section>
-    );
-
-    const About = () => (
-      <section id="about" className="py-24 gradient-section dark:text-gray-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300">
-            About Us
-          </h2>
-          <p className="text-gray-700 leading-relaxed">
-            Olaris Consulting Limited, based in Charlbury, UK, delivers strategic growth initiatives
-            and operational excellence in fleet management, mobility, and digital transformation.
-            Our expertise in blockchain and ESG solutions empowers businesses to thrive.
-          </p>
-        </div>
-      </section>
-    );
-
-    const Services = () => (
-      <section id="services" className="py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-4xl font-extrabold mb-12 text-blue-800 dark:text-blue-300">
-            Our Services
-          </h2>
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              ["Fleet Management","Reduce costs by up to 10% with optimized leasing, vehicle tracking and operational efficiency.","🚛"],
-              ["Expansion Strategy","Grow your business with data-driven market intelligence and strategic planning.","📈"],
-              ["M&A Advisory","Navigate complex mergers & acquisitions with expert guidance.","🤝"],
-              ["Digital Integration","Transform your operations with blockchain, Azure & ESG tracking.","🔗"]
-            ].map(([title,desc,icon],i)=>(
-              <div key={i}
-                   className="p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition bg-white dark:bg-gray-700">
-                <div className="text-4xl mb-3">{icon}</div>
-                <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3">
-                  {title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    const Projects = () => (
-      <section id="projects" className="py-24 gradient-section dark:text-gray-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-          <h2 className="text-4xl font-extrabold text-center mb-8 text-blue-800 dark:text-blue-300">
-            Our Projects
-          </h2>
-          <div className="grid gap-8 md:grid-cols-2">
-            {[
-              ["Jurni Leasing Expansion","Scaled Jurni Leasing to a Top 10 UK broker, managing 30,000 vehicles.","jurni-leasing"],
-              ["Blockchain ESG Platform","Developed web_salsac_app, a blockchain-based ESG solution.","web-salsac"]
-            ].map(([title,desc,video],i)=>(
-              <div key={i}
-                   className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105"
-                   data-aos="fade-up" data-aos-delay={i*100}>
-                <video autoPlay muted loop playsInline className="w-full h-64 object-cover">
-                  <source src={`/videos/${video}.webm`} type="video/webm"/>
-                  <source src={`/videos/${video}.mp4`} type="video/mp4"/>
-                </video>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2">
-                    {title}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 mb-4">{desc}</p>
-                  <a href="#contact" className="text-blue-600 dark:text-blue-300 hover:underline">
-                    Learn More
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    const FeaturedBlogPosts = () => (
-      <section className="py-16 gradient-section dark:text-gray-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-4xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">
-            Featured Blog Posts
-          </h2>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              ["Top 5 Fleet Management Trends for 2025","Discover the latest trends shaping the future of fleet management.","/images/blog-post-1.jpeg","blog-post-1.html"],
-              ["Fleet Management Solutions in Charlbury","Learn why Olaris is the top choice locally.","/images/fleet-management-charlbury.jpg","blog-post-2.html"]
-            ].map(([title,desc,img,href],i)=>(
-              <div key={i}
-                   className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"
-                   data-aos="fade-up" data-aos-delay={100*(i+1)}>
-                <img src={img} alt={title} className="w-full h-48 object-cover rounded-t-lg"/>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">
-                    {title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{desc}</p>
-                  <a href={href} className="text-blue-600 dark:text-blue-300 hover:underline">
-                    Read More
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    const Testimonials = () => (
-      <section className="py-16 gradient-section dark:text-gray-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">
-            What Our Clients Say
-          </h2>
-          <div className="grid gap-8 md:grid-cols-2">
-            {[
-              ["Olaris transformed our fleet operations, saving us 8% annually.","John Doe, Fleet Manager"],
-              ["Their blockchain ESG platform is a game-changer for compliance.","Jane Smith, CEO"]
-            ].map(([quote,author],i)=>
-              <blockquote key={i} className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
-                <p className="italic text-gray-600 dark:text-gray-300">"{quote}"</p>
-                <footer className="mt-4 font-semibold text-blue-700 dark:text-blue-300">{author}</footer>
-              </blockquote>
-            )}
-          </div>
-          <div className="mt-8" data-aos="fade-up" data-aos-delay="200">
-            <a href="#contact"
-               className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-8 rounded-full transition hover:scale-105">
-              See How We Can Help You
-            </a>
-          </div>
-        </div>
-      </section>
-    );
-
-    const Contact = () => {
-      const [errors, setErrors] = React.useState({});
-      const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-      const validateForm = e => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        const name    = e.target.name.value.trim();
-        const email   = e.target.email.value.trim();
-        const message = e.target.message.value.trim();
-        const errs = {};
-        if (!name)    errs.name    = "Name is required";
-        if (!email.includes("@")) errs.email = "Valid email is required";
-        if (!message) errs.message = "Message is required";
-        setErrors(errs);
-
-        if (Object.keys(errs).length === 0) {
-          setTimeout(() => {
-            gtag('event','form_submission',{event_category:'Contact',event_label:'Consultation'});
-            alert("✅ Thank you! Your message has been sent.");
-            e.target.reset();
-            setIsSubmitting(false);
-          },1000);
-        } else {
-          setIsSubmitting(false);
-        }
-      };
-
-      return (
-        <section id="contact" className="py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
-            <div className="text-center" data-aos="fade-up">
-              <img src="/images/profile.png" alt="Alan Carreras"
-                   className="mx-auto rounded-full shadow-2xl w-60 h-60 object-cover mb-6" loading="lazy"/>
-              <p className="text-lg">👋 Hi, I’m Alan Carreras, Charlbury-based consultant. Let’s talk!</p>
-            </div>
-            <form name="contactForm" onSubmit={validateForm}
-                  className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-2xl space-y-4 text-gray-800"
-                  data-aos="fade-up">
-              <div>
-                <input name="name" type="text" placeholder="Name" required
-                       className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
-                {errors.name && <p className="error-message">{errors.name}</p>}
-              </div>
-              <div>
-                <input name="email" type="email" placeholder="Email" required
-                       className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
-                {errors.email && <p className="error-message">{errors.email}</p>}
-              </div>
-              <div>
-                <textarea name="message" placeholder="Message" rows="4" required
-                          className="w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"/>
-                {errors.message && <p className="error-message">{errors.message}</p>}
-              </div>
-              <button type="submit"
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-lg hover:scale-105 transform transition">
-                {isSubmitting
-                  ? <span className="loading-spinner" />
-                  : "Send Message"
-                }
-              </button>
-            </form>
-          </div>
-        </section>
-      );
-    };
-
-    const Footer = () => (
-      <footer className="bg-white dark:bg-gray-800 py-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-300 text-sm space-y-4">
-          <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-          <p>1 Graces Court, The Slade, Charlbury OX7 3EG, UK<br/>
-             Phone: +44-7919-35-40-68<br/>
-             Email: <a href="mailto:info@olaris.co.uk" className="hover:underline">info@olaris.co.uk</a>
-          </p>
-          <div className="space-x-4">
-            <a href="https://linkedin.com/company/olaris-consulting-limited">LinkedIn</a>
-            <a href="https://twitter.com/olarisconsult">Twitter</a>
-            <a href="https://facebook.com/sharer/sharer.php?u=https://olaris.co.uk">Facebook</a>
-            <a href="blog.html">Blog</a>
-          </div>
-          <div>
-            <h3 className="font-semibold">Subscribe to Our Newsletter</h3>
-            <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&amp;id=XXXX"
-                  method="post" className="mt-2 flex justify-center space-x-2">
-              <input type="email" placeholder="Your email" required
-                     className="p-2 rounded-l border-gray-300 focus:ring-2 focus:ring-blue-500"/>
-              <button type="submit"
-                      className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">
-                Subscribe
-              </button>
-            </form>
-            <p className="text-xs mt-2">Get a Free Fleet Management Guide upon signup!</p>
-          </div>
-          <div><a href="privacy-policy.html" className="hover:underline">Privacy Policy</a></div>
-        </div>
-      </footer>
-    );
+    const Navbar = () => { /* … */ };
+    const Hero = () => { /* … */ };
+    const About = () => { /* … */ };
+    const Services = () => { /* … */ };
+    const Projects = () => { /* … */ };
+    const Testimonials = () => { /* … */ };
+    const Contact = () => { /* … */ };
+    const Footer = () => { /* … */ };
 
     const App = () => (
       <>
-        <Navbar />
-        <Hero />
-        <About />
-        <Services />
-        <Projects />
-        <FeaturedBlogPosts />
-        <Testimonials />
-        <Contact />
-        <Footer />
-        {/* stickyCTA/backToTop and exit-popup elements */}
-        <a href="#contact" id="stickyCTA" className="fixed right-6 bottom-6 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-6 rounded-full shadow-lg scale-0 transition-transform">
-          Contact Us
-        </a>
-        <button id="backToTopBtn" className="fixed right-6 bottom-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-full shadow-lg hidden">↑</button>
-        <div id="exitPopup" className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
-          <div id="exitPopupContent" className="bg-white dark:bg-gray-700 p-8 rounded-lg text-center max-w-xs">
-            <h2 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4">Don’t Leave Yet!</h2>
-            <p className="mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
-            <a href="#contact" className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transition">Claim Offer</a>
-            <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
-          </div>
-        </div>
+        <Navbar/>
+        <Hero/>
+        <About/>
+        <Services/>
+        <Projects/>
+        <Testimonials/>
+        <Contact/>
+        <Footer/>
       </>
     );
 
