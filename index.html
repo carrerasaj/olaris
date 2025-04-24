@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olaris Consulting Limited | Fleet & Growth Experts</title>
@@ -168,18 +169,28 @@
       <a href="#contact">Contact</a>
     </nav>
   </header>
-  <section class="hero" id="home">
-    <video autoplay muted loop playsinline>
+  <section id="home" class="relative h-screen overflow-hidden flex items-center justify-center text-white">
+    <!-- Background Video -->
+    <video class="absolute w-full h-full object-cover" autoplay muted loop playsinline>
       <source src="/videos/fleet-management.webm" type="video/webm" />
       <source src="/videos/fleet-management.mp4" type="video/mp4" />
-      <img src="/images/fleet-management-fallback.jpg" alt="Fleet Background" />
+      <img src="/images/fleet-management-fallback.jpg" alt="Fleet Management Background" class="w-full h-full object-cover" />
     </video>
-    <div class="hero-content">
-      <h1>Olaris Consulting Limited</h1>
-      <p>Strategic growth and fleet innovation with blockchain ESG for UK businesses.</p>
-      <div class="cta-buttons">
-        <a href="#contact" class="primary">Free Consultation</a>
-        <a href="#services" class="secondary">Explore Services</a>
+  
+    <!-- Dark overlay for text readability -->
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+  
+    <!-- Hero content -->
+    <div class="relative z-10 text-center px-6 max-w-4xl animate__animated animate__fadeInUp">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 text-white drop-shadow-lg">Olaris Consulting Limited</h1>
+      <p class="text-lg md:text-xl mb-6 text-gray-200 max-w-2xl mx-auto">Strategic growth and fleet innovation with blockchain ESG solutions for UK businesses.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transform transition shadow-lg">
+          Free Consultation
+        </a>
+        <a href="#services" class="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-800 transition shadow-md">
+          Explore Services
+        </a>
       </div>
     </div>
   </section>
@@ -292,6 +303,22 @@
   </div>
 </section>
 
+<section style="padding: 100px 20px; background: #f3f4f6;">
+  <div style="max-width: 900px; margin: auto; text-align: center;">
+    <h2 style="font-size: 2.5rem; color: #1e3a8a;">What Our Clients Say</h2>
+    <div style="margin-top: 2rem; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+      <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+        <p style="color: #374151;">"Olaris helped us streamline our fleet and saved us 10% annually. Game changer!"</p>
+        <p style="margin-top: 1rem; font-weight: bold; color: #1e3a8a;">— John D., Logistics Manager</p>
+      </div>
+      <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+        <p style="color: #374151;">"Their blockchain ESG system made our compliance workflow seamless."</p>
+        <p style="margin-top: 1rem; font-weight: bold; color: #1e3a8a;">— Sarah T., COO</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Footer -->
 <footer style="padding: 40px 20px; text-align: center; font-size: 0.9rem; color: #6b7280;">
   <p>© 2025 Olaris Consulting Limited</p>
@@ -315,7 +342,7 @@
         return false;
       }
     </script>
-  <script>
+    <script>
     const contactForm = document.getElementById("contactForm");
     const successMsg = document.getElementById("successMsg");
   
