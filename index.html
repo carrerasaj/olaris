@@ -11,11 +11,11 @@
   <meta property="og:url" content="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="icon" href="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" type="image/png" />
+  <link rel="icon" href="/logo.png" type="image/png" />
   <link rel="canonical" href="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
-  <link rel="preload" href="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" as="image" />
-  <link rel="preload" href="https://unpkg.com/react@17/umd/react.production.min.js" as="script" />
-  <link rel="preload" href="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" as="script" />
+  <link rel="preload" href="/logo.png" as="image" />
+  <link rel="preload" href="https://unpkg.com/react@18.2.0/umd/react.production.min.js" as="script" />
+  <link rel="preload" href="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" as="script" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
@@ -30,8 +30,8 @@
   </script>
 
   <!-- REACT + REACTDOM -->
-  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
 
   <!-- BABEL (for JSX) -->
   <script src="https://unpkg.com/@babel/standalone@7.20.15/babel.min.js"></script>
@@ -165,13 +165,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .disco {
-      animation: disco 0.5s infinite alternate;
-    }
-    @keyframes disco {
-      0% { background: linear-gradient(45deg, #00ffcc, #ff00ff); }
-      100% { background: linear-gradient(45deg, #ff00ff, #00ffcc); }
-    }
   </style>
 </head>
 
@@ -187,7 +180,7 @@
 
 <!-- Preloader -->
 <div id="preloader">
-  <img id="preloaderImg" src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
+  <img id="preloaderImg" src="/logo.png" alt="Olaris Consulting Logo" width="80" height="80" loading="eager" />
 </div>
 
 <!-- Sticky CTA & Back to Top -->
@@ -292,8 +285,8 @@ const Navbar = () => {
   return (
     <nav className={"flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50"}>
       <div className={"flex items-center space-x-4"}>
-        <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" alt="Olaris Consulting Logo" className={"h-10 w-10"} onError={(e) => {
-          console.error('Logo failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png');
+        <img src="/logo.png" alt="Olaris Consulting Logo" className={"h-10 w-10"} onError={(e) => {
+          console.error('Logo failed to load at /logo.png');
           e.target.style.display = 'none';
           e.target.parentElement.insertAdjacentHTML('afterbegin', '<p class="text-red-500 text-sm">Logo failed to load</p>');
         }} />
@@ -358,20 +351,18 @@ const Hero = () => {
   return (
     <section id="home" className={"relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start"}>
       <video autoPlay muted loop playsInline loading="lazy" className={"absolute w-full h-full object-cover opacity-40"} onError={(e) => {
-        console.error('Hero video failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape.mp4');
+        console.error('Hero video failed to load at /videos/cityscape.mp4');
         e.target.style.display = 'none';
         e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm absolute top-0 left-0">Hero video failed to load</p>');
       }}>
-        <source src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape.webm" type="video/webm" />
-        <source src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape.mp4" type="video/mp4" />
-        <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape-fallback.jpg" alt="Fleet Management Background" className={"w-full h-full object-cover"} onError={(e) => {
-          console.error('Hero fallback image failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape-fallback.jpg');
+        <source src="/videos/cityscape.webm" type="video/webm" />
+        <source src="/videos/cityscape.mp4" type="video/mp4" />
+        <img src="/videos/cityscape-fallback.jpg" alt="Fleet Management Background" className={"w-full h-full object-cover"} onError={(e) => {
+          console.error('Hero fallback image failed to load at /videos/cityscape-fallback.jpg');
           e.target.style.display = 'none';
           e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm absolute top-0 left-0">Hero fallback image failed to load</p>');
         }} />
       </video>
-      <canvas id="webCanvas" className="absolute top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
-      <div id="fallback" className="absolute top-0 left-0 w-full h-full hidden" style={{ background: 'url(https://olaris-bry03f24s-alancarreras-projects.vercel.app/starfield.jpg)' }}></div>
       <div className={"relative z-10 text-center px-6 fade-in-hero"}>
         <h1 className={"text-5xl md:text-7xl font-extrabold mb-2"} data-aos="fade-up">Olaris Consulting Limited</h1>
         <p className={"text-lg md:text-xl mb-4"} data-aos="fade-up" data-aos-delay="50">Driving Sustainable Growth with Blockchain Innovation</p>
@@ -398,14 +389,14 @@ const About = () => (
       </p>
       <div className={"mt-6"}>
         <video autoPlay muted loop playsInline loading="lazy" className={"w-full max-w-md mx-auto rounded-lg shadow-md"} onError={(e) => {
-          console.error('About video failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe.mp4');
+          console.error('About video failed to load at /videos/globe.mp4');
           e.target.style.display = 'none';
           e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">About video failed to load</p>');
         }}>
-          <source src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe.webm" type="video/webm" />
-          <source src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe.mp4" type="video/mp4" />
-          <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe-fallback.jpg" alt="Alan Carreras Message" className={"w-full max-w-md mx-auto rounded-lg"} onError={(e) => {
-            console.error('About fallback image failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe-fallback.jpg');
+          <source src="/videos/globe.webm" type="video/webm" />
+          <source src="/videos/globe.mp4" type="video/mp4" />
+          <img src="/videos/globe-fallback.jpg" alt="Alan Carreras Message" className={"w-full max-w-md mx-auto rounded-lg"} onError={(e) => {
+            console.error('About fallback image failed to load at /videos/globe-fallback.jpg');
             e.target.style.display = 'none';
             e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">About fallback image failed to load</p>');
           }} />
@@ -450,14 +441,14 @@ const Projects = () => (
       ].map((proj, idx) => (
         <div key={idx} className={"bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:scale-105"} data-aos="fade-up" data-aos-delay={idx * 100}>
           <video autoPlay muted loop playsInline loading="lazy" className={"w-full h-64 object-cover"} onError={(e) => {
-            console.error(`Project video (${proj.title}) failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/${proj.video}.mp4`);
+            console.error(`Project video (${proj.title}) failed to load at /videos/${proj.video}.mp4`);
             e.target.style.display = 'none';
             e.target.parentElement.insertAdjacentHTML('beforeend', `<p class="text-red-500 text-sm">Project video (${proj.title}) failed to load</p>`);
           }}>
-            <source src={`https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/${proj.video}.webm`} type="video/webm" />
-            <source src={`https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/${proj.video}.mp4`} type="video/mp4" />
-            <img src={`https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/${proj.video}-fallback.jpg`} alt={proj.title} className={"w-full h-64 object-cover"} onError={(e) => {
-              console.error(`Project fallback image (${proj.title}) failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/${proj.video}-fallback.jpg`);
+            <source src={`/videos/${proj.video}.webm`} type="video/webm" />
+            <source src={`/videos/${proj.video}.mp4`} type="video/mp4" />
+            <img src={`/videos/${proj.video}-fallback.jpg`} alt={proj.title} className={"w-full h-64 object-cover"} onError={(e) => {
+              console.error(`Project fallback image (${proj.title}) failed to load at /videos/${proj.video}-fallback.jpg`);
               e.target.style.display = 'none';
               e.target.parentElement.insertAdjacentHTML('beforeend', `<p class="text-red-500 text-sm">Project fallback image (${proj.title}) failed to load</p>`);
             }} />
@@ -479,8 +470,8 @@ const FeaturedBlogPosts = () => (
       <h2 className={"text-4xl font-extrabold mb-8 text-blue-800 dark:text-blue-300"}>Featured Blog Posts</h2>
       <div className={"max-w-5xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3"}>
         <div className={"bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"} data-aos="fade-up" data-aos-delay="100">
-          <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape-fallback.jpg" alt="Fleet Management Trends" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
-            console.error('Blog post image failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/cityscape-fallback.jpg');
+          <img src="/videos/cityscape-fallback.jpg" alt="Fleet Management Trends" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
+            console.error('Blog post image failed to load at /videos/cityscape-fallback.jpg');
             e.target.style.display = 'none';
             e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Blog post image failed to load</p>');
           }} />
@@ -491,8 +482,8 @@ const FeaturedBlogPosts = () => (
           </div>
         </div>
         <div className={"bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition"} data-aos="fade-up" data-aos-delay="200">
-          <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe-fallback.jpg" alt="Fleet Management in Charlbury" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
-            console.error('Blog post image failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/videos/globe-fallback.jpg');
+          <img src="/videos/globe-fallback.jpg" alt="Fleet Management in Charlbury" className={"w-full h-48 object-cover rounded-t-lg"} onError={(e) => {
+            console.error('Blog post image failed to load at /videos/globe-fallback.jpg');
             e.target.style.display = 'none';
             e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Blog post image failed to load</p>');
           }} />
@@ -562,8 +553,8 @@ const Contact = () => {
     <section id="contact" className={"section py-24 bg-gradient-to-br from-blue-800 via-blue-600 to-blue-800 text-white snap-start"}>
       <div className={"container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6"} data-aos="fade-up">
         <div className={"flex flex-col items-center text-center"}>
-          <img src="https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png" alt="Alan Carreras, Consultant" className={"rounded-lg shadow-2xl w-60 h-60 object-cover mb-6"} loading="lazy" onError={(e) => {
-            console.error('Profile image failed to load at https://olaris-bry03f24s-alancarreras-projects.vercel.app/logo.png');
+          <img src="/logo.png" alt="Alan Carreras, Consultant" className={"rounded-lg shadow-2xl w-60 h-60 object-cover mb-6"} loading="lazy" onError={(e) => {
+            console.error('Profile image failed to load at /logo.png');
             e.target.style.display = 'none';
             e.target.parentElement.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm">Profile image failed to load</p>');
           }} />
@@ -666,19 +657,12 @@ try {
             <p>There was an error loading the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
           </div>
         `;
-      } else {
-        console.error("Root element not found in DOM during error handling.");
-        document.body.innerHTML = `
-          <div style="text-align: center; padding: 20px; background: #f9fafb;">
-            <h1>Olaris Consulting Limited</h1>
-            <p>There was an error loading the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
-          </div>
-        `;
       }
     }, 500);
   }
 }
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'935815a1bf02070f',t:'MTc0NTUyMzc1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'935824977e1e32f3',t:'MTc0NTUyNDM2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
