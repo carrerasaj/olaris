@@ -169,119 +169,116 @@
       <a href="#contact">Contact</a>
     </nav>
   </header>
-  <section id="home" class="relative h-screen overflow-hidden flex items-center justify-center text-white">
-    <!-- Background Video -->
-    <video class="absolute w-full h-full object-cover" autoplay muted loop playsinline>
+  <section class="hero" id="home">
+    <video autoplay muted loop playsinline>
       <source src="/videos/fleet-management.webm" type="video/webm" />
       <source src="/videos/fleet-management.mp4" type="video/mp4" />
       <img src="/images/fleet-management-fallback.jpg" alt="Fleet Management Background" class="w-full h-full object-cover" />
     </video>
-  
-    <!-- Dark overlay for text readability -->
-    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-  
-    <!-- Hero content -->
-    <div class="relative z-10 text-center px-6 max-w-4xl animate__animated animate__fadeInUp">
-      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 text-white drop-shadow-lg">Olaris Consulting Limited</h1>
-      <p class="text-lg md:text-xl mb-6 text-gray-200 max-w-2xl mx-auto">Strategic growth and fleet innovation with blockchain ESG solutions for UK businesses.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#contact" class="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-full font-semibold hover:scale-105 transform transition shadow-lg">
-          Free Consultation
-        </a>
-        <a href="#services" class="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-800 transition shadow-md">
-          Explore Services
-        </a>
+    <div class="hero-content">
+      <h1>Olaris Consulting Limited</h1>
+      <p>Strategic growth and fleet innovation with blockchain ESG for UK businesses.</p>
+      <div class="cta-buttons">
+        <a href="#contact" class="primary">Free Consultation</a>
+        <a href="#services" class="secondary">Explore Services</a>
       </div>
     </div>
-  </section>
-  </header>
-  <main>
-    <!-- Hero Section -->
-    <section class="h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 text-white flex flex-col justify-center items-center text-center px-6">
-        <h2 class="text-5xl font-extrabold mb-4" data-aos="fade-up">Fleet & Growth Consulting</h2>
-        <p class="text-lg max-w-2xl mb-6" data-aos="fade-up" data-aos-delay="100">Charlbury-based experts helping UK businesses thrive with strategic fleet management and blockchain ESG solutions.</p>
-        <a href="#contact" class="bg-white text-blue-800 font-bold py-3 px-6 rounded-full shadow-lg hover:scale-105 transition" data-aos="fade-up" data-aos-delay="200">Get in Touch</a>
-      </section>
-  
-      <!-- About Section -->
-      <section id="about" style="padding: 100px 20px; background-color: #ffffff;">
-        <div style="max-width: 800px; margin: auto; text-align: center;">
-          <h2 style="font-size: 2.5rem; color: #1e3a8a; margin-bottom: 20px;">About Us</h2>
-          <p style="font-size: 1.125rem; line-height: 1.75rem; color: #374151;">
-            Olaris Consulting Limited is a Charlbury-based consultancy delivering sustainable growth and operational transformation for UK fleets and emerging businesses.
-            <br /><br />
-            Our work spans fleet optimization, blockchain ESG compliance, and expansion strategies — underpinned by deep industry expertise and a client-first approach.
+    <section id="about" class="bg-gradient-to-b from-white to-gray-100 py-20">
+      <div class="container mx-auto px-6 md:flex items-center gap-10 max-w-6xl">
+        <!-- Text Content -->
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-6">About Olaris</h2>
+          <p class="text-gray-700 leading-relaxed mb-4">
+            Based in Charlbury, UK, Olaris Consulting helps businesses scale, streamline operations, and embrace innovation.
+            We specialize in fleet management, expansion strategies, and blockchain ESG platforms.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Our founder, <strong>Alan Carreras</strong>, brings deep sector experience and a passion for sustainable, technology-driven growth.
           </p>
         </div>
+    
+        <!-- Video/Image -->
+        <div class="md:w-1/2 flex justify-center">
+          <video autoplay muted loop playsinline class="rounded-lg shadow-lg w-full max-w-md">
+            <source src="/videos/jurni-leasing.webm" type="video/webm" />
+            <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
+            <img src="/images/profile.png" alt="Alan Carreras Message" class="w-full max-w-md rounded-lg" />
+          </video>
+        </div>
+      </div>
+    </section>
+
+      <section id="services" class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-6xl text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-12">Our Services</h2>
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <!-- Service 1 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
+              <div class="text-4xl mb-3">🚛</div>
+              <h3 class="text-xl font-semibold text-blue-700 mb-2">Fleet Management</h3>
+              <p class="text-gray-600 text-sm">Optimize vehicle tracking, leasing, and costs — reduce operational spend by up to 10%.</p>
+            </div>
+            <!-- Service 2 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
+              <div class="text-4xl mb-3">📈</div>
+              <h3 class="text-xl font-semibold text-blue-700 mb-2">Expansion Strategy</h3>
+              <p class="text-gray-600 text-sm">Accelerate business growth with data-led market research and strategic planning.</p>
+            </div>
+            <!-- Service 3 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
+              <div class="text-4xl mb-3">🤝</div>
+              <h3 class="text-xl font-semibold text-blue-700 mb-2">M&A Advisory</h3>
+              <p class="text-gray-600 text-sm">Navigate mergers and acquisitions with insight and risk mitigation from seasoned advisors.</p>
+            </div>
+            <!-- Service 4 -->
+            <div class="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition transform hover:-translate-y-1">
+              <div class="text-4xl mb-3">🔗</div>
+              <h3 class="text-xl font-semibold text-blue-700 mb-2">Digital Integration</h3>
+              <p class="text-gray-600 text-sm">Leverage blockchain, Azure, and ESG data integrations to future-proof your business.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-<!-- Services Section -->
-<section id="services" style="padding: 100px 20px; background: #f9fafb;">
-  <div style="max-width: 1100px; margin: auto; text-align: center;">
-    <h2 style="font-size: 2.5rem; color: #1e3a8a; margin-bottom: 2rem;">Our Services</h2>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+      <section id="projects" class="py-24 bg-gradient-to-b from-gray-100 to-white">
+        <div class="container mx-auto px-6 max-w-6xl text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-12">Client Success Stories</h2>
       
-      <div style="flex: 1 1 240px; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.06)'">
-        <div style="font-size: 2rem;">🚛</div>
-        <h3 style="margin-top: 10px; color: #2563eb;">Fleet Management</h3>
-        <p>Cut costs with optimized leasing, tracking, and fleet insights.</p>
-      </div>
-
-      <div style="flex: 1 1 240px; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.06)'">
-        <div style="font-size: 2rem;">📈</div>
-        <h3 style="margin-top: 10px; color: #2563eb;">Growth Strategy</h3>
-        <p>Strategic expansion planning for sustainable UK business growth.</p>
-      </div>
-
-      <div style="flex: 1 1 240px; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.06)'">
-        <div style="font-size: 2rem;">🤝</div>
-        <h3 style="margin-top: 10px; color: #2563eb;">M&A Advisory</h3>
-        <p>Expert support for mergers and acquisitions with minimal risk.</p>
-      </div>
-
-      <div style="flex: 1 1 240px; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.06)'">
-        <div style="font-size: 2rem;">🔗</div>
-        <h3 style="margin-top: 10px; color: #2563eb;">Blockchain ESG</h3>
-        <p>Ensure ESG compliance with secure blockchain integration.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="projects" style="padding: 100px 20px; background: #ffffff;">
-  <div style="max-width: 1100px; margin: auto;">
-    <h2 style="text-align: center; font-size: 2.5rem; color: #1e3a8a;">Our Projects</h2>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 3rem;">
-
-      <!-- Project 1 -->
-      <div style="background: #f9fafb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='none'">
-        <video autoplay muted loop playsinline style="width: 100%; display: block;">
-          <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
-          <img src="/videos/jurni-leasing-fallback.jpeg" alt="Jurni Leasing Preview" />
-        </video>
-        <div style="padding: 20px;">
-          <h3 style="font-size: 1.25rem; font-weight: bold; color: #2563eb;">Jurni Leasing Expansion</h3>
-          <p style="color: #374151; margin-top: 10px;">Scaled Jurni to a top-10 UK broker, managing 30k+ vehicles with streamlined operations.</p>
+          <div class="grid gap-10 md:grid-cols-2">
+            <!-- Project 1 -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl overflow-hidden transition transform hover:-translate-y-1">
+              <video autoplay muted loop playsinline class="w-full h-64 object-cover">
+                <source src="/videos/jurni-leasing.webm" type="video/webm" />
+                <source src="/videos/jurni-leasing.mp4" type="video/mp4" />
+                <img src="/videos/jurni-leasing-fallback.jpeg" alt="Jurni Leasing" class="w-full h-64 object-cover" />
+              </video>
+              <div class="p-6 text-left">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Jurni Leasing Expansion</h3>
+                <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                  Scaled Jurni to a Top 10 UK leasing broker. Improved ops, reduced fleet costs, and managed 30K+ vehicles.
+                </p>
+                <a href="#contact" class="text-blue-600 font-medium hover:underline">Learn how we did it →</a>
+              </div>
+            </div>
+      
+            <!-- Project 2 -->
+            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl overflow-hidden transition transform hover:-translate-y-1">
+              <video autoplay muted loop playsinline class="w-full h-64 object-cover">
+                <source src="/videos/web-salsac.webm" type="video/webm" />
+                <source src="/videos/web-salsac.mp4" type="video/mp4" />
+                <img src="/videos/web-salsac-fallback.jpeg" alt="Blockchain ESG Platform" class="w-full h-64 object-cover" />
+              </video>
+              <div class="p-6 text-left">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Blockchain ESG Platform</h3>
+                <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                  Built a blockchain ESG compliance tool (web_salsac_app) for streamlined, auditable fleet sustainability tracking.
+                </p>
+                <a href="#contact" class="text-blue-600 font-medium hover:underline">Explore the solution →</a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div style="background: #f9fafb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='none'">
-        <video autoplay muted loop playsinline style="width: 100%; display: block;">
-          <source src="/videos/web-salsac.mp4" type="video/mp4" />
-          <img src="/videos/web-salsac-fallback.jpeg" alt="WebSalsac ESG Platform Preview" />
-        </video>
-        <div style="padding: 20px;">
-          <h3 style="font-size: 1.25rem; font-weight: bold; color: #2563eb;">Blockchain ESG Platform</h3>
-          <p style="color: #374151; margin-top: 10px;">Created a blockchain-based ESG solution for fleet compliance and sustainability reporting.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+      </section>
 
 <section id="contact" style="padding: 100px 20px; background: #1e3a8a; color: white;">
   <div style="max-width: 800px; margin: auto;">
