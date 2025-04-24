@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olaris Consulting Limited | UK Fleet Management & Growth Experts</title>
+  <meta name="description" content="Olaris Consulting Limited, based in Charlbury, UK, delivers fleet management, strategic growth, and blockchain ESG solutions for businesses." />
+  <meta property="og:title" content="Olaris Consulting Limited | UK Consulting Experts" />
+  <meta property="og:description" content="Specializing in fleet management, growth strategy, and digital integration with blockchain and ESG solutions." />
+  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
+  <meta property="og:url" content="https://olaris.co.uk/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/images/logo.png" type="image/png" />
+  <link rel="canonical" href="https://olaris.co.uk/" />
+  <link rel="preload" href="/images/logo.png" as="image" />
+  <link rel="preload" href="https://unpkg.com/react@17/umd/react.production.min.js" as="script" crossorigin="anonymous" />
+  <link rel="preload" href="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" as="script" crossorigin="anonymous" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BFJ8CC0RNJ', { 'cookie_domain': 'auto' });
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Olaris Consulting Limited",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1 Graces Court, The Slade",
+        "addressLocality": "Charlbury",
+        "postalCode": "OX7 3EG",
+        "addressCountry": "UK"
+      },
+      "telephone": "+44-7919-35-40-68",
+      "url": "https://olaris.co.uk",
+      "description": "Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions."
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.js" onload="initAOSWithRetry()"></script>
+  <script>
+    function initAOSWithRetry(attempts = 3, delay = 1000) {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({ once: true });
+        console.log("AOS initialized successfully.");
+      } else if (attempts > 0) {
+        console.warn(`AOS not loaded yet, retrying (${attempts} attempts left)...`);
+        setTimeout(() => initAOSWithRetry(attempts - 1, delay), delay);
+      } else {
+        console.error("AOS failed to load after retries.");
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+      scroll-behavior: smooth;
+      transition: background-color 0.3s ease;
+    }
+    .dark body {
+      background: #1a202c;
+      color: #e2e8f0;
+    }
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      color: #1e3a8a;
+    }
+    .dark h1, .dark h2, .dark h3 {
+      color: #93c5fd;
+    }
+    #preloader {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .fade-in-hero {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInHero 1s forwards;
+      animation-delay: 0.4s;
+    }
+    @keyframes fadeInHero {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-gradient {
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .error-message { color: red; font-size: 0.875rem; margin-top: 0.25rem; }
+    #navMenu {
+      background: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dark #navMenu {
+      background: #2d3748;
+    }
+    .nav-button {
+      border: 1px solid #d1d5db;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #1e40af;
+      color: white;
+      border-color: #1e40af;
+    }
+    .dark .nav-button {
+      border-color: #4a5568;
+    }
+    .dark .nav-button:hover {
+      background-color: #4299e1;
+      border-color: #4299e1;
+    }
+    #stickyCTA, #backToTopBtn {
+      position: fixed;
+      right: 20px;
+      background: linear-gradient(to right, #3b82f6, #1e40af);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: transform 0.3s ease;
+      display: none;
+    }
+    #stickyCTA {
+      bottom: 20px;
+    }
+    #backToTopBtn {
+      bottom: 80px;
+    }
+    #stickyCTA:hover, #backToTopBtn:hover {
+      transform: scale(1.1);
+    }
+    #exitPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    #exitPopupContent {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 400px;
+    }
+    .dark #exitPopupContent {
+      background: #2d3748;
+      color: #e2e8f0;
+    }
+    .gradient-section {
+      background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
+    }
+    .dark .gradient-section {
+      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1e40af;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="noscript-content" style="display: none; text-align: center; padding: 20px; background: #f9fafb;">
+    <h1>Olaris Consulting Limited</h1>
+    <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
+    <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
+  </div>
+
+  <script>
+    if (typeof window === 'undefined' || !window.React) {
+      const noscriptContent = document.getElementById('noscript-content');
+      if (noscriptContent) {
+        noscriptContent.style.display = 'block';
+      }
+    }
+  </script>
+
+  <div id="preloader">
+    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
+  </div>
+
+  <a href="#contact" id="stickyCTA">Contact Us</a>
+  <a onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTopBtn">↑</a>
+  <div id="exitPopup">
+    <div id="exitPopupContent">
+      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
+      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
+      <a href="#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
+      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
+    </div>
+  </div>
+
+  <div id="root"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const preloader = document.getElementById("preloader");
+      const preloaderImg = document.getElementById("preloaderImg");
+      const hidePreloader = () => {
+        if (preloader) {
+          preloader.style.opacity = "0";
+          setTimeout(() => {
+            preloader.style.display = "none";
+          }, 500);
+        }
+      };
+      setTimeout(hidePreloader, 2000);
+      if (preloaderImg) {
+        preloaderImg.onerror = hidePreloader;
+        preloaderImg.onload = hidePreloader;
+      }
+
+      const toggleDarkMode = () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      };
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+      }
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+
+      console.log("DOMContentLoaded fired, attempting to render React app...");
+    });
+
+    window.onload = () => {
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+        }, 500);
+      }
+      console.log("Window loaded, ensuring preloader is hidden.");
+    };
+  </script>
+
+  <script type="text/javascript">
+    // Define error message HTML in a JavaScript block
+    window.errorMessageHTML = `
+      <div style="text-align: center; padding: 20px; background: #f9fafb;">
+        <h1>Olaris Consulting Limited</h1>
+        <p>There was an error loading the page. Please try refreshing, or contact us at info@olaris.co.uk.</p>
+      </div>
+    `;
+  </script>
+
+  <script src="/js/app.js"></script>
+
+  <script type="text/javascript">
+    try {
+      console.log("Attempting to render React app...");
+      console.log("window.App:", window.App);
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Root element not found in DOM.");
+      }
+      if (!window.App) {
+        throw new Error("window.App is undefined - app.js may not have loaded correctly.");
+      }
+      ReactDOM.createRoot(rootElement).render(React.createElement(window.App));
+      console.log("React app rendered successfully.");
+    } catch (error) {
+      console.error("Error rendering React app:", error);
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        setTimeout(() => {
+          preloader.style.display = "none";
+          const root = document.getElementById('root');
+          if (root) {
+            root.innerHTML = window.errorMessageHTML;
+          } else {
+            console.error("Root element not found in DOM during error handling.");
+            document.body.innerHTML = window.errorMessageHTML;
+          }
+        }, 500);
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      const stickyCTA = document.getElementById('stickyCTA');
+      const backToTopBtn = document.getElementById('backToTopBtn');
+      if (stickyCTA && backToTopBtn) {
+        if (window.scrollY > 300) {
+          stickyCTA.style.display = 'block';
+          backToTopBtn.style.display = 'block';
+        } else {
+          stickyCTA.style.display = 'none';
+          backToTopBtn.style.display = 'none';
+        }
+      }
+    });
+
+    let isLeaving = false;
+    document.addEventListener('mouseout', (e) => {
+      if (e.clientY <= 0 && !isLeaving) {
+        isLeaving = true;
+        const exitPopup = document.getElementById('exitPopup');
+        if (exitPopup) {
+          exitPopup.style.display = 'flex';
+        }
+      }
+    });
+
+    const closePopup = document.getElementById('closePopup');
+    if (closePopup) {
+      closePopup.addEventListener('click', () => {
+        const exitPopup = document.getElementById('exitPopup');
+        if (exitPopup) {
+          exitPopup.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+  <script>
+    window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": { "background": "#1e40af" },
+          "button": { "background": "#3b82f6" }
+        },
+        "position": "bottom-right",
+        "content": {
+          "message": "This website uses cookies to ensure you get the best experience on our website.",
+          "dismiss": "Got it!",
+          "link": "Learn more",
+          "href": "https://olaris.co.uk/privacy-policy.html"
+        }
+      });
+    });
+  </script>
+</body>
+</html>
