@@ -127,14 +127,28 @@
   }
 
   /* Responsive */
-  @media (max-width: 640px) {
-    .hero-content h1 {
+    @media (max-width: 768px) {
+    .hero {
+    height: 70vh;
       font-size: 2rem;
     }
     .hero-content p {
       font-size: 1rem;
     }
   }
+  nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.85);
+  transition: box-shadow 0.3s ease-in-out;
+  }
+
+  nav.scrolled {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
 </style>
 </head>
 
@@ -314,6 +328,10 @@
         contactForm.reset();
       }, 500);
     });
-  </script>
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+    </script>
   </body>
   </html>
