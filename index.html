@@ -7,7 +7,7 @@
   <meta name="description" content="Olaris Consulting Limited, based in Charlbury, UK, delivers fleet management, strategic growth, blockchain ESG solutions, and digital transformation services." />
   <meta name="keywords" content="fleet management, strategic growth, blockchain ESG, digital transformation, Charlbury consulting, Olaris Consulting" />
   <meta property="og:title" content="Olaris Consulting Limited | UK Consulting Experts" />
-  <meta property="og:description" content="Specializing in fleet management, growth strategy, and digital integration with blockchain ESG solutions." />
+  <meta property="og:description" content="Specialsing in fleet management, growth strategy, and digital integration with blockchain ESG solutions." />
   <meta property="og:image" content="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" />
   <meta property="og:url" content="https://olaris-bry03f24s-alancarreras-projects.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -56,18 +56,19 @@
     gtag('config', 'G-BFJ8CC0RNJ');
   </script>
 
-  <!-- Tawk.to Chatbot -->
-  <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/66f8c5b54ea6b0b4f43a4e1f/1i8p7m8i7';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/1ipblouqa';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+  })();
   </script>
+  <!--End of Tawk.to Script-->
 
   <style>
     body {
@@ -559,7 +560,7 @@
       document.getElementById('root').innerHTML = `
         <div style="text-align: center; padding: 20px; background: #f9fafb;">
           <h1>Olaris Consulting Limited</h1>
-          <p>Error initializing the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+          <p>Error initialising the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
         </div>
       `;
     }
@@ -732,9 +733,9 @@ const Services = () => {
           {[
             { 
               title: "Fleet Management", 
-              desc: "Reduce costs by up to 10% with optimized leasing, vehicle tracking, and operational efficiency tailored to your fleet.", 
+              desc: "Reduce costs by up to 10% with optimised leasing, vehicle tracking, and operational efficiency tailored to your fleet.", 
               icon: "🚛",
-              details: "Our fleet management services include vehicle leasing optimization, real-time tracking, and compliance with the latest regulations, ensuring your operations run smoothly and cost-effectively."
+              details: "Our fleet management services include vehicle leasing optimisation, real-time tracking, and compliance with the latest regulations, ensuring your operations run smoothly and cost-effectively."
             },
             { 
               title: "Expansion Strategy", 
@@ -744,7 +745,7 @@ const Services = () => {
             },
             { 
               title: "M&A Advisory", 
-              desc: "Navigate complex mergers and acquisitions with expert guidance to maximize value and minimize risk.", 
+              desc: "Navigate complex mergers and acquisitions with expert guidance to maximise value and minimise risk.", 
               icon: "🤝",
               details: "Our M&A advisory services include due diligence, valuation analysis, and negotiation support to ensure successful transactions and long-term value creation."
             },
@@ -920,17 +921,44 @@ const Contact = () => {
           <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526187/profile_ixlfbz.png" alt="Alan Carreras, Consultant at Olaris Consulting" className={"rounded-lg shadow-2xl w-60 h-60 object-cover mb-6"} loading="lazy" />
           <p className={"text-lg leading-relaxed"}>👋 Hi, I'm Alan Carreras, Charlbury-based consultant. Let's discuss your business goals!</p>
         </div>
-        <form id="contactForm" onSubmit={validateForm} className={"bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800"} data-aos="fade-left">
+        <form 
+          action="https://formspree.io/f/mqaazqgy" 
+          method="POST" 
+          onSubmit={validateForm} 
+          className={"bg-white rounded-lg p-8 shadow-2xl space-y-4 text-gray-800"} 
+          data-aos="fade-left"
+        >
           <div>
-            <input type="text" placeholder="Name" aria-label="Name" className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} required />
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Name" 
+              aria-label="Name" 
+              className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} 
+              required 
+            />
             {errors.name && <p className={"error-message"}>{errors.name}</p>}
           </div>
           <div>
-            <input type="email" placeholder="Email" aria-label="Email" className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} required />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Email" 
+              aria-label="Email" 
+              className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} 
+              required 
+            />
             {errors.email && <p className={"error-message"}>{errors.email}</p>}
           </div>
           <div>
-            <textarea placeholder="Message" aria-label="Message" className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} rows="4" required></textarea>
+            <textarea 
+              name="message" 
+              placeholder="Message" 
+              aria-label="Message" 
+              className={"w-full p-3 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"} 
+              rows="4" 
+              required
+            ></textarea>
             {errors.message && <p className={"error-message"}>{errors.message}</p>}
           </div>
           <button 
@@ -941,7 +969,7 @@ const Contact = () => {
           >
             {isSubmitting ? <div className={"loading-spinner"}></div> : (ctaVariant === 'A' ? 'Send Message' : 'Get in Touch')}
           </button>
-          <p className="text-sm text-red-600 mt-4">Contact form awaits Formspree setup. Reach me directly at <a href="mailto:alan@olaris.co.uk" className="underline">alan@olaris.co.uk</a> or +44 7919 354068.</p>
+          <p className="text-sm text-gray-600 mt-4">Powered by Formspree. Reach me directly at <a href="mailto:alan@olaris.co.uk" className="underline">alan@olaris.co.uk</a> or +44 7919 354068.</p>
         </form>
       </div>
     </section>
