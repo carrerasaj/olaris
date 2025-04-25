@@ -511,25 +511,6 @@
         });
       }
 
-      // Countdown Timer Logic
-      const offerEndDate = new Date('2025-04-30T23:59:59').getTime();
-      const updateCountdown = () => {
-        const now = new Date().getTime();
-        const distance = offerEndDate - now;
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          document.getElementById('countdownTimer').innerHTML = "Offer Expired";
-          return;
-        }
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById('countdownTimer').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      };
-      const countdownInterval = setInterval(updateCountdown, 1000);
-      updateCountdown();
-
       // Dynamic Page Title on Scroll
       const sections = document.querySelectorAll('section');
       window.addEventListener('scroll', () => {
@@ -691,7 +672,6 @@ const Hero = () => {
         <h1 className={"text-5xl md:text-7xl font-bold mb-2 hero-title"} data-aos="fade-up">Olaris Consulting Limited</h1>
         <p className={"text-lg md:text-xl mb-4"} data-aos="fade-up" data-aos-delay="50">Driving Sustainable Growth with Blockchain Innovation</p>
         <p className={"text-xl md:text-2xl mb-4"} data-aos="fade-up" data-aos-delay="100">Charlbury-based experts in fleet management, strategic growth, and blockchain ESG solutions.</p>
-        <p className={"text-lg mb-4 text-yellow-300"} data-aos="fade-up" data-aos-delay="150">Limited Offer: <span id="countdownTimer"></span></p>
         <div className={"space-x-4"}>
           <a href="#contact" className={"bg-gradient-to-r from-blue-600 to-blue-800 py-3 px-8 rounded-full text-lg font-bold hover:scale-105 transform transition"} data-aos="fade-up" data-aos-delay="200" onClick={handleCTAClick}>
             {variant === 'A' ? 'Request a Free Consultation' : 'Get a Free Quote'}
