@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://olaris.co.uk/sitemap.xml
