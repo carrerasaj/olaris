@@ -823,14 +823,14 @@ const Hero = () => {
 
   return (
     <section id="home" className={"relative h-screen flex items-center justify-center text-white bg-gradient-to-br from-blue-900 via-blue-700 to-blue-900 animate-gradient overflow-hidden snap-start"}>
-      <video autoPlay muted loop playsInline loading="lazy" className={"absolute w-full h-full object-cover opacity-40 parallax-video"} id="heroVideo">
-        <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525999/cityscape1a_rntv5f.webm" type="video/webm" />
-        <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526129/cityscape1_gjmidm.mp4" type="video/mp4" />
-        <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745525981/cityscape-fallback_b3drkf.jpg" alt="Fleet Management Background" className={"w-full h-full object-cover"} />
+      <video autoPlay muted loop playsInline preload="none" poster="https://res.cloudinary.com/dd7svdirf/image/upload/v1745525981/cityscape-fallback_b3drkf.jpg" className="absolute w-full h-full object-cover opacity-40 parallax-video" id="heroVideo" aria-label="Dynamic cityscape background video showing fleet management excellence by Olaris Consulting">
+      <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525999/cityscape1a_rntv5f.webm" type="video/webm" />
+      <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526129/cityscape1_gjmidm.mp4" type="video/mp4" />
+      <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745525981/cityscape-fallback_b3drkf.jpg" alt="Olaris Consulting sustainable fleet management background - zero emission mobility solutions" className="w-full h-full object-cover" />
       </video>
       <div className={"relative z-10 text-center px-6 fade-in-hero hero-text-overlay"}>
         <h1 className={"text-5xl md:text-7xl font-bold mb-2 hero-title"} data-aos="fade-up">Olaris Consulting Limited</h1>
-        <p className={"text-lg md:text-xl mb-4"} data-aos="fade-up" data-aos-delay="50">ransforming Fleet Management for a Sustainable Future</p>
+        <p className={"text-lg md:text-xl mb-4"} data-aos="fade-up" data-aos-delay="50">Transforming Fleet Management for a Sustainable Future</p>
         <p className={"text-xl md:text-2xl mb-4"} data-aos="fade-up" data-aos-delay="100">Strategic Consulting and Zero-Emission Mobility Solutions to Drive Your Business Forward</p>
         <p className={"text-lg mb-4 text-yellow-300"} data-aos="fade-up" data-aos-delay="150">Limited Offer: <span id="countdownTimer"></span></p>
         <div className={"space-x-4"}>
@@ -849,17 +849,16 @@ const Hero = () => {
 const About = () => (
   <section id="about" className={"section py-24 gradient-section dark:text-gray-300 snap-start"}>
     <div className={"container mx-auto px-6 text-center"} data-aos="fade-up">
-      <h2 className={"text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300"}>About Us</h2>
+      <h2 className={"text-4xl font-extrabold mb-6 text-blue-800 dark:text-blue-300"}>About Olaris: Leading the Way in Fleet Sustainability and Business Transformation</h2>
       <p className={"max-w-3xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed mb-4"}>
-        Olaris was founded on a commitment to pioneering sustainable business transformations through expert fleet management and strategic advisory services. Our seasoned professionals, led by experienced fleet management executive Alan Carreras, bring unparalleled expertise, industry-leading insights, and a passion for sustainability to every client engagement. We’re more than consultants—we’re partners in your sustainable journey, dedicated to achieving your business objectives while contributing positively to the environment.
-      </p>
+        Olaris was founded on a commitment to pioneering sustainable business transformations through expert fleet management and strategic advisory services. Our seasoned professionals, led by experienced fleet management executive Alan Carreras, bring unparalleled expertise, industry-leading insights, and a passion for sustainability to every client engagement.</p>
       <div className={"mt-6"}>
         <video autoPlay muted loop playsInline loading="lazy" className={"w-full max-w-md mx-auto rounded-lg shadow-md"}>
           <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745525997/globe_uuq61l.webm" type="video/webm" />
           <source src="https://res.cloudinary.com/dd7svdirf/video/upload/v1745526034/globe_vvqqkg.mp4" type="video/mp4" />
           <img src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg" alt="Alan Carreras Message" className={"w-full max-w-md mx-auto rounded-lg"} />  
         </video>
-        <p className={"mt-4 text-gray-700 dark:text-gray-300 italic"}>"We’re more than consultants—we’re partners in your sustainable journey, dedicated to achieving your business objectives while contributing positively to the environment." - Alan Carreras, Founder</p>
+        <p className={"mt-4 text-gray-700 dark:text-gray-300 italic"}>"We’re more than advisors; we’re strategic partners dedicated to helping you navigate sustainability challenges, optimise fleet management, and achieve lasting business success." - Alan Carreras, Founder</p>
       </div>
     </div>
   </section>
