@@ -1,493 +1,62 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <link href="/css/aos.css" rel="stylesheet" />
-      <script defer src="/js/aos.js"></script>
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          AOS.init({ once: true });
-          const preloader = document.getElementById("preloader");
-          const preloaderImg = document.getElementById("preloaderImg");
-          const hidePreloader = () => {
-            preloader.style.opacity = "0";
-            setTimeout(() => {
-              preloader.style.display = "none";
-            }, 500);
-          };
-          setTimeout(hidePreloader, 2000);
-          preloaderImg.onerror = hidePreloader;
-          const toggleDarkMode = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-          };
-          document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
-          if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-          }
-        });
-      </script>
-
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Fleet Management Solutions in Charlbury | Olaris Consulting</title>
-      <meta name="description" content="Learn why Olaris Consulting is the top choice for fleet management solutions in Charlbury, UK, with expertise in sustainability and operational efficiency." />
-      <meta property="og:title" content="Fleet Management Solutions in Charlbury | Olaris Consulting" />
-      <meta property="og:description" content="Discover why Olaris Consulting is Charlbury's leading fleet management expert." />
-      <meta property="og:image" content="https://olaris.co.uk/images/fleet-management-charlbury.jpg" />
-      <meta property="og:url" content="https://olaris.co.uk/blog-post-2.html" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <link rel="icon" href="/images/logo.png" type="image/png" />
-      <link rel="canonical" href="https://olaris.co.uk/blog-post-2.html" />
-      <link rel="preload" href="/images/logo.png" as="image" />
-      <link rel="preload" href="/js/react.min.js" as="script" />
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-BFJ8CC0RNJ');
-      </script>
-      <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": "Fleet Management Solutions in Charlbury | Olaris Consulting",
-          "description": "Learn why Olaris Consulting is the top choice for fleet management solutions in Charlbury, UK, with expertise in sustainability and operational efficiency.",
-          "author": {
-            "@type": "Person",
-            "name": "Alan Carreras"
-          },
-          "publisher": {
-            "@type": "Organization",
-            "name": "Olaris Consulting Limited",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://olaris.co.uk/images/logo.png"
-            }
-          },
-          "datePublished": "2025-04-21",
-          "image": "https://olaris.co.uk/images/fleet-management-charlbury.jpg"
-        }
-      </script>
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-      <script src="/js/tailwindcss.min.js"></script>
-      <script src="/js/react.min.js"></script>
-      <script src="/js/react-dom.min.js"></script>
-      <script src="/js/babel.min.js"></script>
-
-      <style>
-        body {
-          margin: 0;
-          font-family: 'Inter', sans-serif;
-          background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
-          scroll-behavior: smooth;
-          transition: background-color 0.3s ease;
-        }
-        .dark body {
-          background: #1a202c;
-          color: #e2e8f0;
-        }
-        h1, h2, h3 {
-          font-family: 'Poppins', sans-serif;
-          color: #1e3a8a;
-        }
-        .dark h1, .dark h2, .dark h3 {
-          color: #93c5fd;
-        }
-        #preloader {
-          position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 50;
-        }
-        #navMenu {
-          background: white;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .dark #navMenu {
-          background: #2d3748;
-        }
-        #stickyCTA {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: linear-gradient(to right, #3b82f6, #1e40af);
-          color: white;
-          padding: 12px 24px;
-          border-radius: 9999px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-          z-index: 999;
-          transition: transform 0.3s ease;
-          display: none;
-        }
-        #stickyCTA:hover {
-          transform: scale(1.1);
-        }
-        #exitPopup {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.7);
-          display: none;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
-        #exitPopupContent {
-          background: white;
-          padding: 24px;
-          border-radius: 8px;
-          text-align: center;
-          max-width: 400px;
-        }
-        .dark #exitPopupContent {
-          background: #2d3748;
-          color: #e2e8f0;
-        }
-        .prose {
-          max-width: 65ch;
-          margin: 0 auto;
-        }
-        .prose h2 {
-          margin-top: 2rem;
-          margin-bottom: 1rem;
-          color: #1e40af;
-        }
-        .dark .prose h2 {
-          color: #93c5fd;
-        }
-        .prose p {
-          margin-bottom: 1rem;
-          line-height: 1.6;
-        }
-        .prose a {
-          position: relative;
-          transition: color 0.3s ease;
-        }
-        .prose a::after {
-          content: '';
-          position: absolute;
-          width: 0;
-          height: 2px;
-          bottom: -2px;
-          left: 0;
-          background-color: #1e40af;
-          transition: width 0.3s ease;
-        }
-        .prose a:hover::after {
-          width: 100%;
-        }
-        .dark .prose a::after {
-          background-color: #93c5fd;
-        }
-        .nav-button {
-          border: 1px solid #d1d5db;
-          border-radius: 9999px;
-          transition: all 0.3s ease;
-        }
-        .nav-button:hover {
-          background-color: #1e40af;
-          color: white;
-          border-color: #1e40af;
-        }
-        .dark .nav-button {
-          border-color: #4a5568;
-        }
-        .dark .nav-button:hover {
-          background-color: #4299e1;
-          border-color: #4299e1;
-        }
-      </style>
-    </head>
-
-    <body>
-      <noscript>
-        <div style="text-align: center; padding: 20px; background: #f9fafb;">
-          <h1>Olaris Consulting Limited</h1>
-          <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
-          <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
-        </div>
-      </noscript>
-
-      <div id="preloader">
-        <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
-      </div>
-
-      <a href="index.html#contact" id="stickyCTA">Contact Us</a>
-      <div id="exitPopup">
-        <div id="exitPopupContent">
-          <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
-          <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
-          <a href="index.html#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-          <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
-        </div>
-      </div>
-
-      <div id="root"></div>
-
-      <script type="text/babel">
-        const Navbar = () => {
-          const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-          const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-          return (
-            <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
-              <div className="flex items-center space-x-4">
-                <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
-                <span className="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <button id="darkModeToggle" aria-label="Toggle dark mode" className="text-gray-600 dark:text-gray-300 focus:outline-none">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-                  </svg>
-                </button>
-                <div className="md:hidden">
-                  <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 dark:text-gray-300 focus:outline-none" onClick={toggleMenu}>
-                    {isMenuOpen ? (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    ) : (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-              <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
-                <a href="index.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
-                <a href="index.html#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
-                <a href="index.html#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
-                <a href="index.html#projects" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Projects</a>
-                <a href="index.html#contact" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Contact</a>
-                <a href="blog.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Blog</a>
-              </div>
-            </nav>
-          );
-        };
-
-        const BlogHero = () => (
-          <section className="blog-hero py-24 text-center text-white relative">
-            <div className="container mx-auto px-6">
-              <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-blue-800 dark:text-blue-300" data-aos="fade-up">Olaris Consulting Blog</h1>
-              <p className="text-xl md:text-2xl mb-8 text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">Insights on fleet management, strategic growth, and ESG solutions.</p>
-            </div>
-          </section>
-        );
-
-        const FeaturedPost = () => (
-          <section className="py-16 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
-            <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-              <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Featured Post</h2>
-              <div className="max-w-3xl mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card">
-                <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-64 object-cover rounded-t-lg" />
-                <div className="p-6">
-                  <h2 className="text-2xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
-                  <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-                </div>
-              </div>
-            </div>
-          </section>
-        );
-
-        const RecentPosts = () => (
-          <section className="py-16 bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
-            <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-              <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Recent Posts</h2>
-              <div className="max-w-5xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="100">
-                  <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-48 object-cover rounded-t-lg" />
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
-                    <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        );
-
-        const Footer = () => (
-          <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
-            <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-            <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
-            <div className="mt-2">
-              <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
-              <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
-              <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
-              <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-                <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" required />
-                <button type="submit" className="bg-blue-600 text-white p-2 rounded-r">Subscribe</button>
-              </form>
-              <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
-            </div>
-            <div className="mt-4">
-              <a href="privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
-            </div>
-          </footer>
-        );
-
-        const App = () => (
-          <>
-            <Navbar />
-            <BlogHero />
-            <FeaturedPost />
-            <RecentPosts />
-            <Footer />
-          </>
-        );
-
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
-        window.addEventListener('scroll', () => {
-          const stickyCTA = document.getElementById('stickyCTA');
-          if (window.scrollY > 300) {
-            stickyCTA.style.display = 'block';
-          } else {
-            stickyCTA.style.display = 'none';
-          }
-        });
-
-        let isLeaving = false;
-        document.addEventListener('mouseout', (e) => {
-          if (e.clientY <= 0 && !isLeaving) {
-            isLeaving = true;
-            const exitPopup = document.getElementById('exitPopup');
-            exitPopup.style.display = 'flex';
-          }
-        });
-        document.getElementById('closePopup').addEventListener('click', () => {
-          document.getElementById('exitPopup').style.display = 'none';
-        });
-      </script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9336289aeb2b4554',t:'MTc0NTE2ODAxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'933b62d1788fdd1c',t:'MTc0NTIyMjgyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-    </body>
-    </html>
-    </DOCUMENT>
-ok grok, lets keep iterating, add your changes, let's also add blog-post-2.html to blog.html, lets improve the blog page further with a couple more blog posts, let's add some more content to blog-post-1.html, let's also fix the styling in privacy-policy.html to match the rest of the site, let's implement your A/B testing suggestion, let's also implement some of your other suggestions from your critique, I want to keep maximising exposure, engagement, opportunities and conversions
-
-### Iteration and Improvements
-
-Let's address the requested changes and further enhance `olaris.co.uk` to maximize exposure, engagement, opportunities, and conversions. We'll incorporate the changes from my previous critique, add new blog posts, improve existing content, implement A/B testing, and ensure consistency in styling across all pages.
-
----
-
-### 1. **Implement Changes from Previous Critique**
-
-#### Visual Storytelling and Emotional Connection
-- **Updated Hero Section**: The hero section in `index.html` now uses a fleet management-specific fallback image and includes a tagline for better branding.
-- **Enhanced About Section**: Added a placeholder for a video message from Alan Carreras with a quote to create a personal connection.
-
-#### Performance Optimization
-- **Local Scripts**: All pages now reference local scripts (`/js/` and `/css/` directories) for React, ReactDOM, Babel, AOS, and TailwindCSS.
-- **Preload Key Assets**: Added preload tags for critical assets.
-- **Noscript Fallback**: Added `<noscript>` fallback to all pages for users with JavaScript disabled.
-- **Video Optimization**: Assumed videos are compressed to ~10 MB each (as recommended).
-
-#### SEO and Exposure
-- **Updated Sitemap**: Already updated to include all pages.
-- **New Blog Post**: Added `blog-post-2.html` targeting "fleet management Charlbury" to improve local SEO.
-- **Image Alt Text**: Fixed in `blog-post-1.html`.
-
-#### User Experience and Design Trends
-- **Microinteractions**: Added animated underlines for links in `blog-post-1.html` and `blog-post-2.html`.
-- **Typography and Contrast**: Already using Poppins for headings and increased contrast for body text.
-
-#### Content and Emotional Connection
-- **Downloadable Resource**: Already added a checklist CTA in `index.html`.
-
-#### Advanced Features
-- **Chatbot Customization**: Will customize the Tawk.to chatbot to match Olaris’s branding.
-- **Accessibility**: Will run a Lighthouse audit post-implementation to ensure WCAG 2.1 compliance.
-
----
-
-### 2. **Add `blog-post-2.html` to `blog.html` and Add More Blog Posts**
-
-#### Update `blog.html` to Include More Blog Posts
-We'll add `blog-post-2.html` and create two more blog posts (`blog-post-3.html` and `blog-post-4.html`) to increase content depth and engagement. These posts will target additional keywords to boost SEO.
-
-- **Blog Post 2**: "Fleet Management Solutions in Charlbury | Olaris Consulting" (already created in previous step).
-- **Blog Post 3**: "How Blockchain Improves ESG Compliance in Fleet Management" (targeting "blockchain ESG solutions UK").
-- **Blog Post 4**: "Cost-Saving Strategies for UK Fleet Operators in 2025" (targeting "fleet management cost reduction UK").
-
-#### Updated `blog.html`
-<xaiArtifact artifact_id="aad86ccf-34a6-44ff-8d51-2522dda6aa00" artifact_version_id="f81bc8ab-eff3-4d36-834f-0a7a8f13c1ee" title="blog.html" contentType="text/html">
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="/css/aos.css" rel="stylesheet" />
-  <script defer src="/js/aos.js"></script>
-  <script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Management Solutions in Charlbury | Olaris Consulting</title>
+  <meta name="description" content="Discover how Olaris Consulting delivers tailored fleet management and growth strategies for Charlbury-based businesses and beyond." />
+  <link rel="icon" href="/images/logo.png" type="image/png" />
+  <link rel="canonical" href="https://olaris.co.uk/blog-post-2.html" />
+  <meta property="og:title" content="Fleet Management Solutions in Charlbury" />
+  <meta property="og:description" content="Discover how Olaris Consulting delivers tailored fleet management and growth strategies for Charlbury-based businesses." />
+  <meta property="og:image" content="https://olaris.co.uk/images/charlbury-fleet.webp" />
+  <meta property="og:url" content="https://olaris.co.uk/blog-post-2.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Fleet Management Solutions in Charlbury",
+    "description": "Discover how Olaris Consulting delivers tailored fleet management and growth strategies for Charlbury-based businesses and beyond.",
+    "image": "https://olaris.co.uk/images/charlbury-fleet.webp",
+    "author": {
+      "@type": "Organization",
+      "name": "Olaris Consulting Limited"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Olaris Consulting Limited",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://olaris.co.uk/images/logo.png"
+      }
+    },
+    "datePublished": "2025-04-26",
+    "dateModified": "2025-04-26",
+    "mainEntityOfPage": "https://olaris.co.uk/blog-post-2.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
+
+  <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+  <script defer>
     document.addEventListener('DOMContentLoaded', () => {
       AOS.init({ once: true });
-      const preloader = document.getElementById("preloader");
-      const preloaderImg = document.getElementById("preloaderImg");
-      const hidePreloader = () => {
-        preloader.style.opacity = "0";
-        setTimeout(() => {
-          preloader.style.display = "none";
-        }, 500);
-      };
-      setTimeout(hidePreloader, 2000);
-      preloaderImg.onerror = hidePreloader;
-      const toggleDarkMode = () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      };
-      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
       if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark');
       }
     });
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Olaris Consulting Blog | Insights on Fleet Management & Growth</title>
-  <meta name="description" content="Read the latest insights from Olaris Consulting on fleet management, strategic growth, blockchain, and ESG solutions." />
-  <meta property="og:title" content="Olaris Consulting Blog" />
-  <meta property="og:description" content="Expert insights on fleet management, growth strategies, and ESG solutions." />
-  <meta property="og:image" content="https://olaris.co.uk/images/logo.png" />
-  <meta property="og:url" content="https://olaris.co.uk/blog.html" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/images/logo.png" type="image/png" />
-  <link rel="canonical" href="https://olaris.co.uk/blog.html" />
-  <link rel="preload" href="/images/logo.png" as="image" />
-  <link rel="preload" href="/js/react.min.js" as="script" />
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BFJ8CC0RNJ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-BFJ8CC0RNJ');
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-  <script src="/js/tailwindcss.min.js"></script>
-  <script src="/js/react.min.js"></script>
-  <script src="/js/react-dom.min.js"></script>
-  <script src="/js/babel.min.js"></script>
-
   <style>
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+      background: #f9fafb;
       scroll-behavior: smooth;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s;
     }
     .dark body {
       background: #1a202c;
@@ -497,312 +66,43 @@ We'll add `blog-post-2.html` and create two more blog posts (`blog-post-3.html` 
       font-family: 'Poppins', sans-serif;
       color: #1e3a8a;
     }
-    .dark h1, .dark h2, .dark h3 {
-      color: #93c5fd;
-    }
-    #preloader {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-    }
-    #navMenu {
-      background: white;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .dark #navMenu {
-      background: #2d3748;
-    }
-    .nav-button {
-      border: 1px solid #d1d5db;
-      border-radius: 9999px;
-      transition: all 0.3s ease;
-    }
-    .nav-button:hover {
-      background-color: #1e40af;
-      color: white;
-      border-color: #1e40af;
-    }
-    .dark .nav-button {
-      border-color: #4a5568;
-    }
-    .dark .nav-button:hover {
-      background-color: #4299e1;
-      border-color: #4299e1;
-    }
-    #stickyCTA {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(to right, #3b82f6, #1e40af);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 9999px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 999;
-      transition: transform 0.3s ease;
-      display: none;
-    }
-    #stickyCTA:hover {
-      transform: scale(1.1);
-    }
-    #exitPopup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    #exitPopupContent {
-      background: white;
-      padding: 24px;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 400px;
-    }
-    .dark #exitPopupContent {
-      background: #2d3748;
-      color: #e2e8f0;
-    }
-    .blog-hero {
-      background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .dark .blog-hero {
-      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-    }
-    .blog-hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-      transform: rotate(45deg);
-      animation: rotateGlow 20s linear infinite;
-    }
-    @keyframes rotateGlow {
-      0% { transform: rotate(45deg); }
-      100% { transform: rotate(405deg); }
-    }
-    .blog-card:hover {
-      transform: translateY(-5px);
-      transition: transform 0.3s ease;
-    }
   </style>
 </head>
 
-<body>
-  <noscript>
-    <div style="text-align: center; padding: 20px; background: #f9fafb;">
-      <h1>Olaris Consulting Limited</h1>
-      <p>JavaScript is disabled. Please enable JavaScript to experience the full functionality of this site.</p>
-      <p>Contact us at <a href="mailto:info@olaris.co.uk">info@olaris.co.uk</a> or +44-7919-35-40-68.</p>
+<body class="text-gray-800 dark:text-gray-200">
+  <header class="py-6 bg-gradient-to-br from-blue-700 to-blue-900 dark:from-blue-900 dark:to-gray-800 text-white text-center">
+    <div class="container mx-auto px-6">
+      <h1 class="text-4xl font-extrabold mb-2">Fleet Management Solutions in Charlbury</h1>
+      <p class="text-lg">Empowering local businesses with world-class consulting expertise.</p>
     </div>
-  </noscript>
+  </header>
 
-  <div id="preloader">
-    <img id="preloaderImg" src="/images/logo.png" alt="Olaris Consulting Logo" width="80" height="80" />
-  </div>
+  <main class="py-12 container mx-auto px-6 max-w-4xl">
+    <article data-aos="fade-up">
+      <img src="/images/blog-post-2.jpeg" alt="Fleet Management in Charlbury" class="rounded-lg mb-8 w-full h-64 object-cover shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Why Charlbury Businesses Choose Olaris Consulting</h2>
+      <p class="mb-6">Charlbury’s dynamic business environment demands flexible, cost-efficient fleet management solutions. Olaris Consulting offers tailored strategies that scale with your operations — from small businesses to large enterprise fleets.</p>
 
-  <a href="index.html#contact" id="stickyCTA">Contact Us</a>
-  <div id="exitPopup">
-    <div id="exitPopupContent">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4 dark:text-blue-300">Don’t Leave Yet!</h2>
-      <p className="text-gray-700 mb-6 dark:text-gray-300">Get 10% off your first consultation with Olaris Consulting.</p>
-      <a href="index.html#contact" className="bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-2 px-6 rounded-full hover:scale-105 transform transition">Claim Offer</a>
-      <button id="closePopup" className="mt-4 text-gray-600 underline dark:text-gray-300">No Thanks</button>
+      <h2 class="text-2xl font-bold mb-4">Local Expertise with a Global Outlook</h2>
+      <p class="mb-6">Located in the heart of Charlbury, Olaris brings not only regional expertise but a global consulting perspective, ensuring your business remains competitive across national and international markets.</p>
+
+      <h2 class="text-2xl font-bold mb-4">Comprehensive Services for Every Growth Stage</h2>
+      <p class="mb-6">Whether launching a small fleet, scaling rapidly, or preparing for IPO-level growth, our services include compliance advisory, digital fleet transformation, and ESG-focused solutions — all customized to your needs.</p>
+
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-between">
+        <a href="blog.html" class="text-blue-600 hover:underline mb-4 sm:mb-0">← Back to Blog Home</a>
+        <a href="/index.html#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition">Request a Consultation</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="mt-12 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
+    <div class="mt-2">
+      <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> |
+      <a href="/index.html#contact" class="hover:underline">Contact</a>
     </div>
-  </div>
+  </footer>
 
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const Navbar = () => {
-      const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-      const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-      return (
-        <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white dark:bg-gray-800 sticky top-0 z-50">
-          <div className="flex items-center space-x-4">
-            <img src="/images/logo.png" alt="Olaris Consulting Logo" className="h-10 w-10" />
-            <span className="font-bold text-xl text-blue-800 dark:text-blue-300">Olaris Consulting</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button id="darkModeToggle" aria-label="Toggle dark mode" className="text-gray-600 dark:text-gray-300 focus:outline-none">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-              </svg>
-            </button>
-            <div className="md:hidden">
-              <button id="menuToggle" aria-label="Toggle navigation menu" className="text-gray-600 dark:text-gray-300 focus:outline-none" onClick={toggleMenu}>
-                {isMenuOpen ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
-          <div id="navMenu" className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex md:space-x-4 text-gray-600 dark:text-gray-300 text-lg flex-col md:flex-row absolute md:static top-16 left-0 right-0 bg-white dark:bg-gray-800 md:bg-transparent p-4 md:p-0`}>
-            <a href="index.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Home</a>
-            <a href="index.html#about" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">About</a>
-            <a href="index.html#services" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Services</a>
-            <a href="index.html#projects" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Projects</a>
-            <a href="index.html#contact" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Contact</a>
-            <a href="blog.html" className="nav-button hover:text-white hover:bg-blue-700 dark:hover:bg-blue-500 py-2 px-4 rounded-lg transition">Blog</a>
-          </div>
-        </nav>
-      );
-    };
-
-    const BlogHero = () => (
-      <section className="blog-hero py-24 text-center text-white relative">
-        <div className="container mx-auto px-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-blue-800 dark:text-blue-300" data-aos="fade-up">Olaris Consulting Blog</h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">Insights on fleet management, strategic growth, and ESG solutions.</p>
-        </div>
-      </section>
-    );
-
-    const FeaturedPost = () => (
-      <section className="py-16 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
-        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Featured Post</h2>
-          <div className="max-w-3xl mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card">
-            <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-64 object-cover rounded-t-lg" />
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
-              <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    const RecentPosts = () => (
-      <section className="py-16 bg-gray-200 dark:bg-gray-800 dark:text-gray-300">
-        <div className="container mx-auto px-6 text-center" data-aos="fade-up">
-          <h2 className="text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300">Recent Posts</h2>
-          <div className="max-w-5xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="100">
-              <img src="/images/blog-post-1.jpeg" alt="Fleet Management Trends" className="w-full h-48 object-cover rounded-t-lg" />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Top 5 Fleet Management Trends for 2025</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Discover the latest trends shaping the future of fleet management in the UK.</p>
-                <a href="blog-post-1.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="200">
-              <img src="/images/fleet-management-charlbury.jpg" alt="Fleet Management in Charlbury" className="w-full h-48 object-cover rounded-t-lg" />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Fleet Management Solutions in Charlbury</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Learn why Olaris Consulting is the top choice for fleet management in Charlbury, UK.</p>
-                <a href="blog-post-2.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="300">
-              <img src="/images/blockchain-esg.jpg" alt="Blockchain ESG Compliance" className="w-full h-48 object-cover rounded-t-lg" />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Blockchain for ESG Compliance</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">How blockchain technology improves ESG compliance in fleet management.</p>
-                <a href="blog-post-3.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md hover:shadow-xl blog-card" data-aos="fade-up" data-aos-delay="400">
-              <img src="/images/cost-saving-strategies.jpg" alt="Cost-Saving Strategies for Fleets" className="w-full h-48 object-cover rounded-t-lg" />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">Cost-Saving Strategies for UK Fleets</h2>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">Effective strategies to reduce fleet operating costs in 2025.</p>
-                <a href="blog-post-4.html" className="text-blue-600 dark:text-blue-300 hover:underline">Read More</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    const Footer = () => (
-      <footer className="text-center py-6 text-gray-500 dark:text-gray-300 text-sm bg-white dark:bg-gray-800">
-        <p>© 2025 Olaris Consulting Limited. All rights reserved.</p>
-        <p>Olaris Consulting Limited, 1 Graces Court, The Slade, Charlbury OX7 3EG, UK | Phone: +44-7919-35-40-68 | Email: info@olaris.co.uk</p>
-        <div className="mt-2">
-          <a href="https://linkedin.com/company/olaris-consulting-limited" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">LinkedIn</a> |
-          <a href="https://twitter.com/olarisconsult" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Twitter</a> |
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://olaris.co.uk" className="text-gray-600 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500 mx-2">Share on Facebook</a>
-        </div>
-        <div className="mt-4">
-          <h3 className="text-gray-700 dark:text-gray-300 font-semibold">Subscribe to Our Newsletter</h3>
-          <form action="https://olaris.us21.list-manage.com/subscribe/post?u=XXXX&id=XXXX" method="post" className="mt-2 flex justify-center" onSubmit={() => gtag('event', 'newsletter_signup', { 'event_category': 'Engagement', 'event_label': 'Newsletter Signup' })}>
-            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" className="p-2 rounded-l border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded-r hover:bg-blue-700 transition">Subscribe</button>
-          </form>
-          <p className="mt-2 text-xs">Get a Free Fleet Management Guide upon signup!</p>
-        </div>
-        <div className="mt-4">
-          <a href="privacy-policy.html" className="text-gray-600 dark:text-gray-300 hover:underline">Privacy Policy</a>
-        </div>
-      </footer>
-    );
-
-    const App = () => (
-      <>
-        <Navbar />
-        <BlogHero />
-        <FeaturedPost />
-        <RecentPosts />
-        <Footer />
-      </>
-    );
-
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
-    window.addEventListener('scroll', () => {
-      const stickyCTA = document.getElementById('stickyCTA');
-      if (window.scrollY > 300) {
-        stickyCTA.style.display = 'block';
-      } else {
-        stickyCTA.style.display = 'none';
-      }
-    });
-
-    let isLeaving = false;
-    document.addEventListener('mouseout', (e) => {
-      if (e.clientY <= 0 && !isLeaving) {
-        isLeaving = true;
-        const exitPopup = document.getElementById('exitPopup');
-        exitPopup.style.display = 'flex';
-      }
-    });
-    document.getElementById('closePopup').addEventListener('click', () => {
-      document.getElementById('exitPopup').style.display = 'none';
-    });
-  </script>
-  <script>
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/6805fb00f87931190c79f2dd/default';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-    })();
-    Tawk_API.onLoad = function(){
-      Tawk_API.setAttributes({
-        'widgetColor': '#1e40
+</body>
+</html>
