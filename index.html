@@ -1472,7 +1472,37 @@ const Footer = () => {
     </footer>
   );
 };
+</script>
+<script type="text/babel">
 
+// Define a very basic ErrorBoundary
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("❌ Error Boundary caught an error:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ textAlign: 'center', padding: '40px', background: '#f9fafb', minHeight: '100vh' }}>
+          <h1 style={{ fontSize: '2.5rem', color: '#1e40af' }}>Something went wrong.</h1>
+          <p style={{ marginTop: '1rem', fontSize: '1.2rem', color: '#4b5563' }}>
+            Please refresh the page or contact us at <a href="mailto:alan@olaris.co.uk" style={{ color: '#3b82f6', textDecoration: 'underline' }}>alan@olaris.co.uk</a>.
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Define the main App
 const App = () => (
   <ErrorBoundary>
     <>
@@ -1489,51 +1519,32 @@ const App = () => (
   </ErrorBoundary>
 );
 
-// Smarter render logic
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    const rootElement = document.getElementById('root');
-    if (!rootElement) {
-      throw new Error("Root element not found in DOM.");
-    }
+// No need for DOMContentLoaded with Babel
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(<App />);
+  console.log("%c✅ Olaris App Rendered Successfully!", "color: limegreen; font-weight: bold;");
 
-    // Hydrate app fast
-    ReactDOM.createRoot(rootElement).render(<App />);
-    console.log("%c✅ Olaris App Rendered Successfully!", "color: limegreen; font-weight: bold;");
-
-    // Hide Preloader
-    const preloader = document.getElementById("preloader");
-    if (preloader) {
-      preloader.style.opacity = "0";
-      setTimeout(() => {
-        preloader.style.display = "none";
-      }, 300);
-    }
-
-  } catch (error) {
-    console.error("❌ Error during app initialization:", error);
-
-    const preloader = document.getElementById("preloader");
-    if (preloader) {
-      preloader.style.opacity = "0";
-      setTimeout(() => {
-        preloader.style.display = "none";
-      }, 300);
-    }
-
-    // User-friendly fallback UI
-    const root = document.getElementById('root');
-    if (root) {
-      root.innerHTML = `
-        <div style="text-align: center; padding: 40px; background: #f9fafb; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
-          <h1 style="font-size: 2.5rem; color: #1e40af;">Olaris Consulting Limited</h1>
-          <p style="margin-top: 1rem; font-size: 1.2rem; color: #4b5563;">Oops, something went wrong. Please refresh the page or contact us at <a href="mailto:alan@olaris.co.uk" style="color: #3b82f6; text-decoration: underline;">alan@olaris.co.uk</a>.</p>
-          <button onclick="location.reload()" style="margin-top: 2rem; background: #3b82f6; color: white; padding: 0.8rem 2rem; border-radius: 0.5rem; font-size: 1rem;">Refresh Page</button>
-        </div>
-      `;
-    }
+  // Hide Preloader
+  const preloader = document.getElementById("preloader");
+  if (preloader) {
+    preloader.style.opacity = "0";
+    setTimeout(() => {
+      preloader.style.display = "none";
+    }, 300);
   }
-});
+} else {
+  console.error("❌ Root element not found!");
+
+  // Minimal fallback
+  document.body.innerHTML = `
+    <div style="text-align: center; padding: 40px; background: #f9fafb; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+      <h1 style="font-size: 2.5rem; color: #1e40af;">Olaris Consulting Limited</h1>
+      <p style="margin-top: 1rem; font-size: 1.2rem; color: #4b5563;">Oops, something went wrong. Please refresh the page or contact us at <a href="mailto:alan@olaris.co.uk" style="color: #3b82f6; text-decoration: underline;">alan@olaris.co.uk</a>.</p>
+      <button onclick="location.reload()" style="margin-top: 2rem; background: #3b82f6; color: white; padding: 0.8rem 2rem; border-radius: 0.5rem; font-size: 1rem;">Refresh Page</button>
+    </div>
+  `;
+}
 </script>
 
 <!-- Tawk.to Chatbot with Customization -->
