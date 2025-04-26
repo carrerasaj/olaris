@@ -1489,36 +1489,51 @@ const App = () => (
   </ErrorBoundary>
 );
 
-try {
-  // Delay rendering to ensure Cloudflare challenge completes
-  setTimeout(() => {
+// Smarter render logic
+document.addEventListener('DOMContentLoaded', () => {
+  try {
     const rootElement = document.getElementById('root');
-    if (rootElement) {
-      ReactDOM.createRoot(rootElement).render(<App />);
-      console.log("React app rendered successfully.");
-    } else {
+    if (!rootElement) {
       throw new Error("Root element not found in DOM.");
     }
-  }, 1000);
-} catch (error) {
-  console.error("Error rendering React app:", error);
-  const preloader = document.getElementById("preloader");
-  if (preloader) {
-    preloader.style.opacity = "0";
-    setTimeout(() => {
-      preloader.style.display = "none";
-      const root = document.getElementById('root');
-      if (root) {
-        root.innerHTML = `
-          <div style="text-align: center; padding: 20px; background: #f9fafb;">
-            <h1>Olaris Consulting Limited</h1>
-            <p>There was an error loading the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
-          </div>
-        `;
-      }
-    }, 500);
+
+    // Hydrate app fast
+    ReactDOM.createRoot(rootElement).render(<App />);
+    console.log("%c✅ Olaris App Rendered Successfully!", "color: limegreen; font-weight: bold;");
+
+    // Hide Preloader
+    const preloader = document.getElementById("preloader");
+    if (preloader) {
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 300);
+    }
+
+  } catch (error) {
+    console.error("❌ Error during app initialization:", error);
+
+    const preloader = document.getElementById("preloader");
+    if (preloader) {
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 300);
+    }
+
+    // User-friendly fallback UI
+    const root = document.getElementById('root');
+    if (root) {
+      root.innerHTML = `
+        <div style="text-align: center; padding: 40px; background: #f9fafb; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+          <h1 style="font-size: 2.5rem; color: #1e40af;">Olaris Consulting Limited</h1>
+          <p style="margin-top: 1rem; font-size: 1.2rem; color: #4b5563;">Oops, something went wrong. Please refresh the page or contact us at <a href="mailto:alan@olaris.co.uk" style="color: #3b82f6; text-decoration: underline;">alan@olaris.co.uk</a>.</p>
+          <button onclick="location.reload()" style="margin-top: 2rem; background: #3b82f6; color: white; padding: 0.8rem 2rem; border-radius: 0.5rem; font-size: 1rem;">Refresh Page</button>
+        </div>
+      `;
+    }
   }
-}
+});
 </script>
 
 <!-- Tawk.to Chatbot with Customization -->
