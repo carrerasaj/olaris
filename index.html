@@ -1145,22 +1145,47 @@ const FeaturedBlogPosts = () => (
 );
 
 const Testimonials = () => (
-  <section className={"py-12 gradient-section dark:text-gray-300"}>
-    <div className={"container mx-auto px-6 text-center"} data-aos="fade-up">
-      <h2 className={"text-3xl font-extrabold mb-8 text-blue-800 dark:text-blue-300"}>What Our Clients Say</h2>
-      <div className={"grid gap-8 md:grid-cols-2"}>
+  <section className="py-24 bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 snap-start">
+    <div className="container mx-auto px-6 text-center" data-aos="fade-up">
+      <h2 className="text-4xl font-extrabold mb-12 text-blue-800 dark:text-blue-300">
+        What Our Clients Say
+      </h2>
+      <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
         {[
-          { quote: "“Alan has extensive knowledge and vast experience in fleet management and financial services. His strategic insights and practical recommendations are incredibly valuable and effective. Alan is a highly recommended industry professional!", author: "— Industry Colleague, LinkedIn Recommendation" },
+          { quote: "Alan has extensive knowledge and vast experience in fleet management and financial services. His strategic insights and practical recommendations are incredibly valuable and effective. Alan is a highly recommended industry professional!", author: "— Industry Colleague, LinkedIn Recommendation" },
           { quote: "Alan consistently demonstrates strategic thinking and a deep understanding of the complexities involved in fleet management. His expertise has significantly contributed to the growth and operational success of our organisation.", author: "— Business Partner, LinkedIn Recommendation" },
         ].map((testimonial, idx) => (
-          <div key={idx} className={"p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md tilt-card"} data-tilt data-tilt-max="25" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.5" data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"} data-aos-delay={idx * 100}>
-            <p className={"text-gray-600 dark:text-gray-300 italic"}>"{testimonial.quote}"</p>
-            <p className={"mt-4 font-semibold text-blue-700 dark:text-blue-300"}>{testimonial.author}</p>
-          </div>
+          <blockquote 
+            key={idx}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105 tilt-card p-8 relative overflow-hidden"
+            data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-glare data-tilt-max-glare="0.4"
+            data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"} 
+            data-aos-delay={idx * 100}
+          >
+            {/* Quote Mark SVG */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-200 absolute top-4 left-4 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7H7a4 4 0 00-4 4v4h6V7zm10 0h-2a4 4 0 00-4 4v4h6V7z" />
+            </svg>
+            <p className="text-gray-700 dark:text-gray-300 italic mb-6">
+              "{testimonial.quote}"
+            </p>
+            <footer className="font-semibold text-blue-700 dark:text-blue-300">
+              {testimonial.author}
+            </footer>
+          </blockquote>
         ))}
       </div>
-      <div className={"mt-12"}>
-        <a href="#contact" onClick={() => gtag('event', 'cta_click', { 'event_category': 'CTA', 'event_label': 'Testimonial Consultation' })} className={"bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transform transition ripple"}>See How We Can Help You</a>
+
+      {/* CTA Button */}
+      <div className="mt-16" data-aos="zoom-in" data-aos-delay="300">
+        <a 
+          href="#contact" 
+          onClick={() => gtag('event', 'cta_click', { 'event_category': 'CTA', 'event_label': 'Testimonial Consultation' })}
+          className="inline-block bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-4 px-10 rounded-full hover:scale-110 transform transition ripple"
+          aria-label="See how we can help you"
+        >
+          See How We Can Help You
+        </a>
       </div>
     </div>
   </section>
