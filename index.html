@@ -477,29 +477,33 @@
 </script>
 
 <!-- Main JavaScript Logic -->
-<script>
+<script type="text/javascript">
   document.addEventListener('DOMContentLoaded', () => {
     try {
-      const preloader = document.getElementById("preloader");
-      const preloaderImg = document.getElementById("preloaderImg");
-
+      const preloader = document.getElementById('preloader');
+      const preloaderImg = document.getElementById('preloaderImg');
+      const progressBar = document.getElementById('progressBar');
+      const stickyCTA = document.getElementById('stickyCTA');
+      const backToTopBtn = document.getElementById('backToTopBtn');
+      const sections = document.querySelectorAll('section');
+  
+      // Preloader Handling
       const hidePreloader = () => {
         if (preloader) {
-          preloader.style.opacity = "0";
-          setTimeout(() => { preloader.style.display = "none"; }, 500);
+          preloader.style.opacity = '0';
+          setTimeout(() => { preloader.style.display = 'none'; }, 400);
         }
       };
-
-      setTimeout(hidePreloader, 2000);
+      setTimeout(hidePreloader, 1800);
       if (preloaderImg) {
         preloaderImg.onerror = hidePreloader;
         preloaderImg.onload = hidePreloader;
       }
-
+  
+      // Dark Mode Toggle
       if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark');
       }
-
       const darkModeToggle = document.getElementById('darkModeToggle');
       if (darkModeToggle) {
         darkModeToggle.addEventListener('click', () => {
@@ -507,35 +511,24 @@
           localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         });
       }
-
-      // Scroll Progress Bar
-      const progressBar = document.getElementById('progressBar');
+  
+      // Scroll Logic
       window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = (scrollTop / docHeight) * 100;
-        progressBar.style.width = scrollPercent + '%';
-
-        // Parallax Effect for Hero Video
+  
+        if (progressBar) progressBar.style.width = `${scrollPercent}%`;
+  
+        // Parallax Hero Video
         const heroVideo = document.querySelector('.parallax-video');
-        if (heroVideo) {
-          heroVideo.style.setProperty('--scroll-y', `${scrollTop}px`);
-        }
-
-        // Show Back to Top and Sticky CTA
-        const stickyCTA = document.getElementById('stickyCTA');
-        const backToTopBtn = document.getElementById('backToTopBtn');
-        if (stickyCTA && backToTopBtn) {
-          if (window.scrollY > 300) {
-            stickyCTA.style.display = 'block';
-            backToTopBtn.style.display = 'block';
-          } else {
-            stickyCTA.style.display = 'none';
-            backToTopBtn.style.display = 'none';
-          }
-        }
-
-        // Show Case Study Popup at 50% scroll
+        if (heroVideo) heroVideo.style.setProperty('--scroll-y', `${scrollTop}px`);
+  
+        // Sticky CTA + Back to Top visibility
+        if (stickyCTA) stickyCTA.style.display = scrollTop > 300 ? 'block' : 'none';
+        if (backToTopBtn) backToTopBtn.style.display = scrollTop > 300 ? 'block' : 'none';
+  
+        // Case Study Popup
         if (scrollPercent > 50 && !localStorage.getItem('caseStudyPopupShown')) {
           const caseStudyPopup = document.getElementById('caseStudyPopup');
           if (caseStudyPopup) {
@@ -543,186 +536,144 @@
             localStorage.setItem('caseStudyPopupShown', 'true');
           }
         }
-      });
-
-      // Exit Popup
-      let isLeaving = false;
-      document.addEventListener('mouseout', (e) => {
-        if (e.clientY <= 0 && !isLeaving) {
-          isLeaving = true;
-          const exitPopup = document.getElementById('exitPopup');
-          if (exitPopup) {
-            exitPopup.style.display = 'flex';
-          }
-        }
-      });
-
-      const closePopup = document.getElementById('closePopup');
-      if (closePopup) {
-        closePopup.addEventListener('click', () => {
-          const exitPopup = document.getElementById('exitPopup');
-          if (exitPopup) {
-            exitPopup.style.display = 'none';
-          }
-        });
-      }
-
-      const closeCaseStudyPopup = document.getElementById('closeCaseStudyPopup');
-      if (closeCaseStudyPopup) {
-        closeCaseStudyPopup.addEventListener('click', () => {
-          const caseStudyPopup = document.getElementById('caseStudyPopup');
-          if (caseStudyPopup) {
-            caseStudyPopup.style.display = 'none';
-          }
-        });
-      }
-
-      const closeConfirmationModal = document.getElementById('closeConfirmationModal');
-      if (closeConfirmationModal) {
-        closeConfirmationModal.addEventListener('click', () => {
-          const confirmationModal = document.getElementById('confirmationModal');
-          if (confirmationModal) {
-            confirmationModal.style.display = 'none';
-          }
-        });
-      }
-
-      // Countdown Timer Logic
-      const offerEndDate = new Date('2025-04-30T23:59:59').getTime();
-      const updateCountdown = () => {
-        const now = new Date().getTime();
-        const distance = offerEndDate - now;
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          document.getElementById('countdownTimer').innerHTML = "Offer Expired";
-          return;
-        }
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById('countdownTimer').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      };
-      const countdownInterval = setInterval(updateCountdown, 1000);
-      updateCountdown();
-
-      // Dynamic Page Title on Scroll
-      const sections = document.querySelectorAll('section');
-      window.addEventListener('scroll', () => {
+  
+        // Dynamic Page Title
         let currentSection = '';
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          if (window.scrollY >= sectionTop - 60) {
-            currentSection = section.getAttribute('id');
+        sections.forEach(sec => {
+          if (scrollTop >= sec.offsetTop - 80) {
+            currentSection = sec.getAttribute('id');
           }
         });
         const pageTitle = document.getElementById('pageTitle');
-        switch (currentSection) {
-          case 'home':
-            pageTitle.textContent = 'Olaris Consulting Limited | UK Fleet Management & Growth Experts';
-            break;
-          case 'about':
-            pageTitle.textContent = 'About Olaris Consulting | Charlbury, UK Experts';
-            break;
-          case 'services':
-            pageTitle.textContent = 'Our Services | Fleet Management & Blockchain ESG';
-            break;
-          case 'projects':
-            pageTitle.textContent = 'Our Projects | Jurni Leasing & Blockchain ESG';
-            break;
-          case 'contact':
-            pageTitle.textContent = 'Contact Olaris Consulting | Get in Touch';
-            break;
-          default:
-            pageTitle.textContent = 'Olaris Consulting Limited | UK Fleet Management & Growth Experts';
+        if (pageTitle) {
+          const titles = {
+            home: 'Olaris Consulting | Fleet Management Experts',
+            about: 'About Olaris | UK & Global Fleet Advisors',
+            services: 'Our Services | Fleet, ESG, Growth Strategy',
+            projects: 'Our Projects | Leasing & Blockchain Innovation',
+            contact: 'Contact Olaris | Let’s Talk Mobility',
+          };
+          pageTitle.textContent = titles[currentSection] || 'Olaris Consulting Limited | Growth & Fleet Consulting';
         }
       });
-
-      // Recent Activity Widget (Simulated)
+  
+      // Countdown Timer
+      const countdown = () => {
+        const endDate = new Date('2025-04-30T23:59:59').getTime();
+        const now = new Date().getTime();
+        const diff = endDate - now;
+        const timer = document.getElementById('countdownTimer');
+        if (!timer) return;
+  
+        if (diff < 0) {
+          timer.textContent = "Offer Expired";
+          return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        timer.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      };
+      setInterval(countdown, 1000);
+      countdown();
+  
+      // Popups
+      const bindPopupClose = (popupId, buttonId) => {
+        const popup = document.getElementById(popupId);
+        const button = document.getElementById(buttonId);
+        if (popup && button) {
+          button.addEventListener('click', () => popup.style.display = 'none');
+        }
+      };
+      bindPopupClose('exitPopup', 'closePopup');
+      bindPopupClose('caseStudyPopup', 'closeCaseStudyPopup');
+      bindPopupClose('confirmationModal', 'closeConfirmationModal');
+  
+      // Exit Intent Popup
+      let exitIntentShown = false;
+      document.addEventListener('mouseout', (e) => {
+        if (e.clientY <= 0 && !exitIntentShown) {
+          exitIntentShown = true;
+          const exitPopup = document.getElementById('exitPopup');
+          if (exitPopup) exitPopup.style.display = 'flex';
+        }
+      });
+  
+      // Recent Activity Widget
       setTimeout(() => {
-        const recentActivity = document.getElementById('recentActivity');
-        if (recentActivity) {
-          recentActivity.style.display = 'block';
-          setTimeout(() => {
-            recentActivity.style.opacity = '0';
-          }, 5000);
+        const activity = document.getElementById('recentActivity');
+        if (activity) {
+          activity.style.display = 'block';
+          setTimeout(() => activity.style.opacity = '0', 5000);
         }
       }, 10000);
-
-      // Initialize Vanilla Tilt for 3D Effects
-      setTimeout(() => {
-        if (typeof VanillaTilt !== 'undefined') {
-          VanillaTilt.init(document.querySelectorAll('.tilt-card'), {
-            max: 25,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.5,
-          });
-        }
-      }, 2000);
-
-      // Voice Search (Web Speech API)
-      const voiceSearchBtn = document.createElement('button');
-      voiceSearchBtn.id = 'voiceSearchBtn';
-      voiceSearchBtn.className = 'fixed bottom-20 right-20 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 transform transition';
-      voiceSearchBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>';
-      voiceSearchBtn.setAttribute('aria-label', 'Voice Search');
-      document.body.appendChild(voiceSearchBtn);
-
-      voiceSearchBtn.addEventListener('click', () => {
+  
+      // Vanilla Tilt Cards
+      if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll('.tilt-card'), {
+          max: 20,
+          speed: 400,
+          glare: true,
+          "max-glare": 0.4,
+        });
+      }
+  
+      // Voice Search Button
+      const voiceBtn = document.createElement('button');
+      voiceBtn.id = 'voiceSearchBtn';
+      voiceBtn.className = 'fixed bottom-20 right-20 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 transition';
+      voiceBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7v4H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>';
+      voiceBtn.setAttribute('aria-label', 'Voice Search');
+      document.body.appendChild(voiceBtn);
+  
+      voiceBtn.addEventListener('click', () => {
         if ('webkitSpeechRecognition' in window) {
           const recognition = new webkitSpeechRecognition();
           recognition.lang = 'en-US';
           recognition.start();
-          recognition.onresult = (event) => {
-            const query = event.results[0][0].transcript.toLowerCase();
-            if (query.includes('fleet management')) {
-              window.location.hash = '#services';
-            } else if (query.includes('contact')) {
-              window.location.hash = '#contact';
-            } else {
-              alert('Sorry, I didn’t understand. Try saying "fleet management" or "contact".');
-            }
-          };
-          recognition.onerror = (event) => {
-            console.error('Voice search error:', event.error);
+          recognition.onresult = (e) => {
+            const transcript = e.results[0][0].transcript.toLowerCase();
+            if (transcript.includes('fleet')) window.location.hash = '#services';
+            else if (transcript.includes('contact')) window.location.hash = '#contact';
+            else alert('Please try saying "fleet" or "contact".');
           };
         } else {
-          alert('Voice search is not supported in your browser.');
+          alert('Voice search not supported.');
         }
       });
-
-      // Ripple Effect on Buttons
-      document.querySelectorAll('.ripple').forEach(button => {
-        button.addEventListener('click', (e) => {
+  
+      // Button Ripple Effects
+      document.querySelectorAll('.ripple').forEach(btn => {
+        btn.addEventListener('click', (e) => {
           const ripple = document.createElement('span');
-          ripple.classList.add('ripple-effect');
-          button.appendChild(ripple);
+          ripple.className = 'ripple-effect';
+          btn.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
         });
       });
+  
     } catch (error) {
-      console.error('Error in DOMContentLoaded handler:', error);
+      console.error('🔥 Critical DOM Init Error:', error);
       document.getElementById('root').innerHTML = `
-        <div style="text-align: center; padding: 20px; background: #f9fafb;">
-          <h1>Olaris Consulting Limited</h1>
-          <p>Error initialising the page. Please try refreshing, or contact us at alan@olaris.co.uk.</p>
+        <div style="text-align: center; padding: 30px;">
+          <h1 style="color: #1e40af;">Olaris Consulting Limited</h1>
+          <p>Oops, something failed. Please refresh or contact <a href="mailto:alan@olaris.co.uk" style="color:#3b82f6;text-decoration:underline;">alan@olaris.co.uk</a>.</p>
         </div>
       `;
     }
   });
-
+  
+  // Final preloader kill after full page load (just in case)
   window.onload = () => {
-    try {
-      const preloader = document.getElementById("preloader");
-      if (preloader) {
-        preloader.style.opacity = "0";
-        setTimeout(() => { preloader.style.display = "none"; }, 500);
-      }
-    } catch (error) {
-      console.error('Error in window.onload handler:', error);
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      preloader.style.opacity = '0';
+      setTimeout(() => { preloader.style.display = 'none'; }, 300);
     }
   };
-</script>
+  </script>
+  
 
 <!-- React App (JSX) -->
 <script type="text/babel">
