@@ -975,19 +975,33 @@ const Projects = () => {
     setExpandedProject(expandedProject === idx ? null : idx);
   };
 
+  React.useEffect(() => {
+    if (typeof VanillaTilt !== "undefined") {
+      VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+        max: 15,
+        speed: 500,
+        glare: true,
+        "max-glare": 0.4,
+        scale: 1.02,
+      });
+    }
+  }, []);
+
   return (
-    <section id="projects" className={"section py-24 gradient-section dark:text-gray-300 snap-start"}>
-      <div className={"text-center mb-12"} data-aos="fade-up">
-        <h2 className={"text-4xl font-extrabold text-blue-800 dark:text-blue-300"}>Our Projects</h2>
+    <section id="projects" className="section py-24 bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 snap-start">
+      <div className="text-center mb-12" data-aos="fade-up">
+        <h2 className="text-4xl font-extrabold text-blue-800 dark:text-blue-300">
+          Our Projects
+        </h2>
       </div>
-      <div className={"max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0"}>
+      <div className="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 px-6 md:px-0">
         {[
           { 
             title: "Jurni Leasing Expansion", 
             videoWebm: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745525980/jurni-leasing_qwd7my.webm", 
             videoMp4: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745526040/jurni-leasing_em8trv.mp4", 
             fallback: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg", 
-            desc: "Successfully scaled Jurni Leasing into a Top 10 UK leasing broker, managing a fleet exceeding 30,000 vehicles through streamlined operations and strategic growth initiatives, including the successful completion of nearly 20 sector-specific acquisitions.",
+            desc: "Successfully scaled Jurni Leasing into a Top 10 UK leasing broker, managing a fleet exceeding 30,000 vehicles through streamlined operations and strategic growth initiatives.",
             details: "Achieved a 15% increase in operational efficiency and reduced costs by 8% through advanced vehicle tracking and leasing optimisation."
           },
           { 
@@ -995,29 +1009,50 @@ const Projects = () => {
             videoWebm: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745525998/web-salsac_xjlnkq.webm",
             videoMp4: "https://res.cloudinary.com/dd7svdirf/video/upload/v1745526172/web-salsac_gixh1e.mp4",
             fallback: "https://res.cloudinary.com/dd7svdirf/image/upload/v1745525976/jurni-ma-fallback_pciqua.webp", 
-            desc: "Developed ‘Perx’, an innovative blockchain-based ESG Salary Sacrifice solution, ensuring compliance and operational efficiency for fleet operators. Leveraged advanced integrations with Power Automate, Azure Functions, Python-based APIs, and Oracle Cloud to streamline data management and enhance system interoperability.",
-            details: "Enabled 100% compliance with ESG regulations through blockchain transparency. <a href='https://etherscan.io' target='_blank' class='text-blue-600 dark:text-blue-300 hover:underline'>View on Etherscan</a>"
+            desc: "Developed ‘Perx’, an innovative blockchain-based ESG Salary Sacrifice solution for fleet compliance, leveraging integrations across Power Automate, Azure, and Oracle Cloud.",
+            details: "Enabled 100% compliance with ESG regulations through blockchain transparency. <a href='https://etherscan.io' target='_blank' rel='noopener noreferrer' class='text-blue-600 dark:text-blue-300 hover:underline'>View on Etherscan</a>."
           },
         ].map((proj, idx) => (
-          <div key={idx} className={"bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition transform tilt-card"} data-tilt data-tilt-max="25" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.5" data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"} data-aos-delay={idx * 100}>
-            <video autoPlay muted loop playsInline loading="lazy" className={"w-full h-64 object-cover"}>
-              <source src={proj.videoWebm} type="video/webm" />
-              <source src={proj.videoMp4} type="video/mp4" />
-              <img src={proj.fallback} alt={proj.title} className={"w-full h-64 object-cover"} />
-            </video>
-            <div className={"p-6"}>
-              <h3 className={"text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2"}>{proj.title}</h3>
-              <p className={"text-gray-700 dark:text-gray-300 mb-4"}>{proj.desc}</p>
+          <div 
+            key={idx} 
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105 tilt-card relative overflow-hidden"
+            data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"} 
+            data-aos-delay={idx * 100}
+          >
+            <div className="relative w-full h-64 overflow-hidden">
+              <video 
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                preload="none" 
+                poster={proj.fallback}
+                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-80 hover:opacity-100"
+                aria-label={`Video cover for project: ${proj.title}`}
+              >
+                <source src={proj.videoWebm} type="video/webm" />
+                <source src={proj.videoMp4} type="video/mp4" />
+              </video>
+            </div>
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-2">
+                {proj.title}
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">{proj.desc}</p>
               <button 
                 onClick={() => toggleProjectDetails(idx)} 
-                className={"text-blue-600 dark:text-blue-300 hover:underline ripple"} 
+                className="text-blue-600 dark:text-blue-300 hover:underline ripple focus:outline-none" 
                 aria-expanded={expandedProject === idx}
                 aria-controls={`project-details-${idx}`}
               >
                 {expandedProject === idx ? 'Hide Details' : 'Learn More'}
               </button>
-              <div id={`project-details-${idx}`} className={`project-details ${expandedProject === idx ? 'show' : ''}`}>
-                <p className={"text-gray-600 dark:text-gray-300"} dangerouslySetInnerHTML={{ __html: proj.details }}></p>
+              <div 
+                id={`project-details-${idx}`} 
+                className={`mt-4 transition-all overflow-hidden ${expandedProject === idx ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+                aria-hidden={expandedProject !== idx}
+              >
+                <p className="text-gray-600 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: proj.details }}></p>
               </div>
             </div>
           </div>
@@ -1026,6 +1061,7 @@ const Projects = () => {
     </section>
   );
 };
+
 
 const FeaturedBlogPosts = () => (
   <section className={"py-16 gradient-section dark:text-gray-300"}>
