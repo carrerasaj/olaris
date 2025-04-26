@@ -20,6 +20,11 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/aos@3.0.0-beta.6/dist/aos.css" rel="stylesheet" />
   <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg">
+  <link rel="preload" as="font" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" crossorigin="anonymous">
+
+
 
   <!-- Structured Data (Schema.org) -->
   <script type="application/ld+json">
@@ -87,6 +92,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js" defer></script>
 
   <style>
+    <body class="snap-y snap-mandatory overflow-y-scroll h-screen">
+      
+    body {
+  font-family: 'Manrope', 'Inter', sans-serif;
+    }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -367,6 +377,23 @@
       transform: translateY(calc(var(--scroll-y) * 0.2));
       transition: transform 0.1s ease-out;
     }
+    .parallax-video {
+  transform: translateY(calc(var(--scroll-y, 0px) * -0.2));
+  transition: transform 0.2s ease-out;
+}
+.btn-shimmer {
+  background-image: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background-size: 200% auto;
+  color: white;
+  border-radius: 8px;
+  transition: 0.5s;
+}
+.btn-shimmer:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+  transform: scale(1.05);
+}
   </style>
 </head>
 
