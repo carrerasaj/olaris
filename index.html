@@ -1451,45 +1451,47 @@ const Footer = () => {
   const [downloadSuccess, setDownloadSuccess] = React.useState(false);
 
   const handleDownloadSubmit = (event) => {
-    event.preventDefault();
-    setDownloadError('');
-    setDownloadSuccess(false);
+  event.preventDefault();
+  setDownloadError('');
+  setDownloadSuccess(false);
 
-    if (!downloadEmail.includes('@')) {
-      setDownloadError('Please enter a valid email address.');
-      return;
-    }
+  if (!downloadEmail.includes('@')) {
+    setDownloadError('Please enter a valid email address.');
+    return;
+  }
 
-    gtag('event', 'lead_magnet_download', {
-      event_category: 'Lead Magnet',
-      event_label: 'Fleet Management Guide'
-    });
-    const subscribeButton = event.target.querySelector('button[type="submit"]');
-if (subscribeButton) {
-  subscribeButton.disabled = true;
-  subscribeButton.innerHTML = 'Subscribing...';
-}
-    fetch('https://olaris.us22.list-manage.com/subscribe/post?u=cf0988c830be5300c3cb0b50b&id=6bd067216d', {
-        method: 'POST',
-        mode: 'no-cors',
-        body: new FormData(event.target),
-    })
-    .then(response => {
-      if (response.ok) {
-        setDownloadSuccess(true);
-        setDownloadEmail('');
-      } else {
-        throw new Error('Newsletter signup failed.');
-      }
-    }).catch(error => {
-      console.error('Newsletter signup error:', error);
-      setDownloadError('There was an error subscribing. Please try again.');
-    });
-  };
+  gtag('event', 'lead_magnet_download', {
+    event_category: 'Lead Magnet',
+    event_label: 'Fleet Management Guide'
+  });
+
+  const subscribeButton = event.target.querySelector('button[type="submit"]');
   if (subscribeButton) {
-  subscribeButton.disabled = false;
-  subscribeButton.innerHTML = 'Subscribe';
-}
+    subscribeButton.disabled = true;
+    subscribeButton.innerHTML = 'Subscribing...';
+  }
+
+  fetch('https://olaris.us22.list-manage.com/subscribe/post?u=cf0988c830be5300c3cb0b50b&id=6bd067216d', {
+    method: 'POST',
+    mode: 'no-cors',
+    body: new FormData(event.target),
+  })
+  .then(() => {
+    setDownloadSuccess(true);
+    setDownloadEmail('');
+    if (subscribeButton) {
+      subscribeButton.disabled = false;
+      subscribeButton.innerHTML = 'Subscribed!';
+    }
+  })
+  .catch((error) => {
+    console.error('Newsletter signup error:', error);
+    setDownloadError('There was an error subscribing. Please try again.');
+    if (subscribeButton) {
+      subscribeButton.disabled = false;
+      subscribeButton.innerHTML = 'Subscribe';
+    }
+  });
 };
   return (
     <footer className="bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-sm pt-16 pb-8 snap-end">
