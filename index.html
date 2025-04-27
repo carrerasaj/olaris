@@ -1260,8 +1260,7 @@ const Testimonials = () => (
       </div>
     </div>
   </section>
-);
-
+);  
 const Contact = () => {
   const [step, setStep] = React.useState(1);
   const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
@@ -1491,6 +1490,7 @@ if (subscribeButton) {
   subscribeButton.disabled = false;
   subscribeButton.innerHTML = 'Subscribe';
 }
+};
   return (
     <footer className="bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-sm pt-16 pb-8 snap-end">
       <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12" data-aos="fade-up">
@@ -1552,7 +1552,6 @@ if (subscribeButton) {
       </div>
     </footer>
   );
-};
 </script>
 <script type="text/babel">
 
