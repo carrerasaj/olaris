@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Fleet Management Dashboard - Covase Ltd{% endblock %}
+{% block content %}
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .dashboard-header a {
+            color: var(--secondary-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .dashboard-header a:hover {
+            text-decoration: underline;
+        }
+        .summary-stats {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .summary-stats p {
+            margin: 5px 0;
+        }
+        .display-units {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--header-color);
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: var(--background-color);
+        }
+        button {
+            background-color: var(--secondary-accent);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1E82D8;
+        }
+    </style>
+
+    <div class="dashboard-header">
+        <h1>Vehicle Management Dashboard</h1>
+        <div>
+            <a href="/fleet-management">Fleet Management</a> | <a href="/available-vehicles">Available Vehicles</a>
+        </div>
+    </div>
+
+    <div class="summary-stats">
+        <h2>Current Fleet Status</h2>
+        <p><strong>Total Vehicles:</strong> {{ total_vehicles }}</p>
+        <p><strong>Total Mileage:</strong> {{ total_mileage_km }} km</p>
+        <p><strong>Total Excess Risk:</strong> {{ total_excess_risk_km }} km</p>
+        <div class="display-units">
+            <label for="display_units">Display Units:</label>
+            <select id="display_units" onchange="toggleUnits(this.value)">
+                <option value="km">Kilometers Only</option>
+                <option value="miles">Miles Only</option>
+                <option value="both">Both</option>
+            </select>
+        </div>
+    </div>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% else %}
+        <table id="fleet-table">
+            <thead>
+                <tr>
+                    <th>REG NO</th>
+                    <th>NAME</th>
+                    <th>MANUFACTURER</th>
+                    <th>MODEL</th>
+                    <th class="unit-km">ODOMETER (KM)</th>
+                    <th class="unit-miles">ODOMETER (MILES)</th>
+                    <th class="unit-km">ANNUAL LIMIT (KM)</th>
+                    <th class="unit-miles">ANNUAL LIMIT (MILES)</th>
+                    <th>TERM (MONTHS)</th>
+                    <th class="unit-km">DAILY RATE (KM)</th>
+                    <th class="unit-miles">DAILY RATE (MILES)</th>
+                    <th class="unit-km">PROJECTED ANNUAL (KM)</th>
+                    <th class="unit-miles">PROJECTED ANNUAL (MILES)</th>
+                    <th class="unit-km">EXCESS RISK (KM)</th>
+                    <th class="unit-miles">EXCESS RISK (MILES)</th>
+                    <th class="unit-km">PROJECTED CURRENT (KM)</th>
+                    <th class="unit-miles">PROJECTED CURRENT (MILES)</th>
+                    <th class="unit-km">MILEAGE DIFFERENCE (KM)</th>
+                    <th class="unit-miles">MILEAGE DIFFERENCE (MILES)</th>
+                    <th class="unit-km">PROJECTED END MILEAGE (KM)</th>
+                    <th class="unit-miles">PROJECTED END MILEAGE (MILES)</th>
+                    <th class="unit-km">ALLOWED END MILEAGE (KM)</th>
+                    <th class="unit-miles">ALLOWED END MILEAGE (MILES)</th>
+                    <th class="unit-km">EXCESS END MILEAGE (KM)</th>
+                    <th class="unit-miles">EXCESS END MILEAGE (MILES)</th>
+                    <th>EXCESS PENALTY (£)</th>
+                    <th>CO2</th>
+                    <th>P11D</th>
+                    <th>DELIVERY DATE</th>
+                    <th>RENEWAL DATE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vehicle in fleet %}
+                <tr>
+                    <td>{{ vehicle.reg_no }}</td>
+                    <td>{{ vehicle.name }}</td>
+                    <td>{{ vehicle.manufacturer }}</td>
+                    <td>{{ vehicle.model }}</td>
+                    <td class="unit-km">{{ vehicle.odometer_km }}</td>
+                    <td class="unit-miles">{{ vehicle.odometer_miles }}</td>
+                    <td class="unit-km">{{ vehicle.annual_limit_km }}</td>
+                    <td class="unit-miles">{{ vehicle.annual_limit_miles }}</td>
+                    <td>{{ vehicle.term_months }}</td>
+                    <td class="unit-km">{{ vehicle.daily_rate_km }}</td>
+                    <td class="unit-miles">{{ vehicle.daily_rate_miles }}</td>
+                    <td class="unit-km">{{ vehicle.projected_annual_km }}</td>
+                    <td class="unit-miles">{{ vehicle.projected_annual_miles }}</td>
+                    <td class="unit-km">{{ vehicle.excess_risk_km }}</td>
+                    <td class="unit-miles">{{ vehicle.excess_risk_miles }}</td>
+                    <td class="unit-km">{{ vehicle.projected_current_km }}</td>
+                    <td class="unit-miles">{{ vehicle.projected_current_miles }}</td>
+                    <td class="unit-km">{{ vehicle.mileage_difference_km }}</td>
+                    <td class="unit-miles">{{ vehicle.mileage_difference_miles }}</td>
+                    <td class="unit-km">{{ vehicle.projected_end_mileage_km }}</td>
+                    <td class="unit-miles">{{ vehicle.projected_end_mileage_miles }}</td>
+                    <td class="unit-km">{{ vehicle.allowed_end_mileage_km }}</td>
+                    <td class="unit-miles">{{ vehicle.allowed_end_mileage_miles }}</td>
+                    <td class="unit-km">{{ vehicle.excess_end_mileage_km }}</td>
+                    <td class="unit-miles">{{ vehicle.excess_end_mileage_miles }}</td>
+                    <td>{{ vehicle.excess_penalty }}</td>
+                    <td>{{ vehicle.co2 }}</td>
+                    <td>{{ vehicle.p11d }}</td>
+                    <td>{{ vehicle.delivery_date }}</td>
+                    <td>{{ vehicle.renewal_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <button onclick="refreshFleetData()">Refresh Data</button>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function toggleUnits(unit) {
+            const kmColumns = document.querySelectorAll('.unit-km');
+            const milesColumns = document.querySelectorAll('.unit-miles');
+            if (unit === 'km') {
+                kmColumns.forEach(col => col.style.display = 'table-cell');
+                milesColumns.forEach(col => col.style.display = 'none');
+            } else if (unit === 'miles') {
+                kmColumns.forEach(col => col.style.display = 'none');
+                milesColumns.forEach(col => col.style.display = 'table-cell');
+            } else {
+                kmColumns.forEach(col => col.style.display = 'table-cell');
+                milesColumns.forEach(col => col.style.display = 'table-cell');
+            }
+        }
+
+        async function refreshFleetData() {
+            try {
+                const response = await fetch('/refresh-fleet-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const result = await response.json();
+                alert(result.message);
+                // Reload the page to reflect updated data
+                window.location.reload();
+            } catch (error) {
+                console.error('Error refreshing fleet data:', error);
+                alert('Error refreshing fleet data: ' + error.message);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial display based on dropdown
+            const displayUnits = document.getElementById('display_units');
+            if (displayUnits) {
+                toggleUnits(displayUnits.value);
+            }
+        });
+    </script>
+{% endblock %}
