@@ -1465,11 +1465,17 @@ const Footer = () => {
       event_category: 'Lead Magnet',
       event_label: 'Fleet Management Guide'
     });
-
-    fetch('https://olaris.us22.list-manage.com/subscribe?u=cf0988c830be5300c3cb0b50b&id=6bd067216d', {
-      method: 'POST',
-      body: new FormData(event.target),
-    }).then(response => {
+    const subscribeButton = event.target.querySelector('button[type="submit"]');
+if (subscribeButton) {
+  subscribeButton.disabled = true;
+  subscribeButton.innerHTML = 'Subscribing...';
+}
+    fetch('https://olaris.us22.list-manage.com/subscribe/post?u=cf0988c830be5300c3cb0b50b&id=6bd067216d', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new FormData(event.target),
+    })
+    .then(response => {
       if (response.ok) {
         setDownloadSuccess(true);
         setDownloadEmail('');
@@ -1481,7 +1487,10 @@ const Footer = () => {
       setDownloadError('There was an error subscribing. Please try again.');
     });
   };
-
+  if (subscribeButton) {
+  subscribeButton.disabled = false;
+  subscribeButton.innerHTML = 'Subscribe';
+}
   return (
     <footer className="bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 text-gray-600 dark:text-gray-300 text-sm pt-16 pb-8 snap-end">
       <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12" data-aos="fade-up">
@@ -1507,6 +1516,7 @@ const Footer = () => {
         </div>
 
         {/* Newsletter Signup */}
+        
         <div className="text-center md:text-right" data-aos="fade-left">
           <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-3">Newsletter Signup</h3>
           <form onSubmit={handleDownloadSubmit} className="flex flex-col sm:flex-row justify-end gap-2 mt-2">
