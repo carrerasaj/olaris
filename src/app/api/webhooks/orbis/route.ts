@@ -1,27 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-// Store your Orbis webhook secret in environment variables
 const WEBHOOK_SECRET = process.env.ORBIS_WEBHOOK_SECRET || '';
 
-/**
- * Verify HMAC-SHA256 signature from Orbis Fleet
- * Orbis signs with: JSON.stringify(payload, sort_keys, compact_separators)
- */
+// In-memory event store (persists between requests on same instance)
+// For testing only -- clears on cold start/redeploy
+const eventStore: Array<{
+  delivery_id: string;
+  event_type: string;
+  payload: any;
+  timestamp: string;
+  received_at: string;
+  signature_valid: boolean | null;
+}> = [];
+
+const MAX_EVENTS = 100;
+
 function verifySignature(payload: string, secret: string, signature: string): boolean {
   if (!secret || !signature) return false;
-
-  // Orbis sends: sha256=<hex>
-  const expectedSig = 'sha256=' + crypto
-    .createHmac('sha256', secret)
-    .update(
-      JSON.stringify(JSON.parse(payload), Object.keys(JSON.parse(payload)).sort(), 0)
-        .replace(/\s/g, '')
-    )
-    .digest('hex');
-
-  // Constant-time comparison to prevent timing attacks
   try {
+    const expectedSig = 'sha256=' + crypto
+      .createHmac('sha256', secret)
+      .update(
+        JSON.stringify(JSON.parse(payload), Object.keys(JSON.parse(payload)).sort(), 0)
+          .replace(/\s/g, '')
+      )
+      .digest('hex');
     return crypto.timingSafeEqual(
       Buffer.from(expectedSig),
       Buffer.from(signature)
@@ -33,7 +37,7 @@ function verifySignature(payload: string, secret: string, signature: string): bo
 
 /**
  * POST /api/webhooks/orbis
- * Receives webhook events from Orbis Fleet Management
+ * Receives and stores webhook events from Orbis Fleet
  */
 export async function POST(request: NextRequest) {
   try {
@@ -43,62 +47,72 @@ export async function POST(request: NextRequest) {
     const deliveryId = request.headers.get('x-webhook-delivery-id') || '';
     const timestamp = request.headers.get('x-webhook-timestamp') || '';
 
-    // 1. Verify signature
-    if (WEBHOOK_SECRET && !verifySignature(body, WEBHOOK_SECRET, signature)) {
-      console.error(`[Orbis Webhook] Invalid signature for delivery ${deliveryId}`);
-      return NextResponse.json(
-        { error: 'Invalid signature' },
-        { status: 401 }
-      );
+    // Verify signature
+    let signatureValid: boolean | null = null;
+    if (WEBHOOK_SECRET) {
+      signatureValid = verifySignature(body, WEBHOOK_SECRET, signature);
+      if (!signatureValid) {
+        console.error(`[Orbis Webhook] Invalid signature for delivery ${deliveryId}`);
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+      }
     }
 
-    // 2. Parse the payload
     const payload = JSON.parse(body);
 
-    // 3. Log receipt (replace with your actual processing logic)
-    console.log(`[Orbis Webhook] Received: ${eventType} | Delivery: ${deliveryId} | Time: ${timestamp}`);
+    // Store the event
+    eventStore.unshift({
+      delivery_id: deliveryId,
+      event_type: eventType,
+      payload,
+      timestamp,
+      received_at: new Date().toISOString(),
+      signature_valid: signatureValid
+    });
 
-    // 4. Route by event type
-    switch (eventType) {
-      case 'expense.claim_submitted':
-        console.log('[Orbis Webhook] Expense claim submitted:', payload);
-        // TODO: Process new expense claim
-        break;
-
-      case 'expense.claim_approved':
-        console.log('[Orbis Webhook] Expense claim approved:', payload);
-        // TODO: Process approved claim (e.g. trigger payroll)
-        break;
-
-      case 'expense.batch_submitted':
-        console.log('[Orbis Webhook] Expense batch submitted:', payload);
-        // TODO: Process batch submission
-        break;
-
-      default:
-        console.log(`[Orbis Webhook] Unhandled event type: ${eventType}`, payload);
+    // Keep only the last MAX_EVENTS
+    if (eventStore.length > MAX_EVENTS) {
+      eventStore.splice(MAX_EVENTS);
     }
 
-    // 5. Return 200 promptly (Orbis expects 2xx)
+    console.log(`[Orbis Webhook] Stored: ${eventType} | Delivery: ${deliveryId} | Total events: ${eventStore.length}`);
+
     return NextResponse.json({
       received: true,
       delivery_id: deliveryId,
-      event_type: eventType
+      event_type: eventType,
+      events_stored: eventStore.length
     });
 
   } catch (error) {
     console.error('[Orbis Webhook] Processing error:', error);
-    return NextResponse.json(
-      { error: 'Internal processing error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal processing error' }, { status: 500 });
   }
 }
 
-// Reject non-POST methods
-export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed. This endpoint accepts POST requests only.' },
-    { status: 405 }
-  );
+/**
+ * GET /api/webhooks/orbis
+ * Retrieve stored events -- for Olaris systems to poll
+ * Query params: ?type=driver.alert&limit=10
+ */
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const eventType = searchParams.get('type');
+  const limit = parseInt(searchParams.get('limit') || '50', 10);
+
+  let events = eventStore;
+
+  // Filter by event type if specified
+  if (eventType) {
+    events = events.filter(e => e.event_type === eventType);
+  }
+
+  // Apply limit
+  events = events.slice(0, limit);
+
+  return NextResponse.json({
+    total_stored: eventStore.length,
+    returned: events.length,
+    filter: eventType || 'all',
+    events
+  });
 }
