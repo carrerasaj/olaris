@@ -3,6 +3,7 @@ import { constructMetadata } from '@/lib/seo'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { industries } from '@/data/industries'
 import { Truck, FileText, Factory, Handshake } from 'lucide-react'
 import { CheckCircle, XCircle } from 'lucide-react'
@@ -32,7 +33,7 @@ export default function IndustriesPage() {
 
         return (
           <SectionWrapper key={industry.id} variant={variant} id={industry.id}>
-            <div className="max-w-4xl mx-auto">
+            <AnimatedSection className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
                 <div className={`p-2 rounded-lg ${
                   variant === 'dark' ? 'bg-cyan-500/10' : 'bg-cyan-50'
@@ -61,7 +62,6 @@ export default function IndustriesPage() {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                {/* Pain points */}
                 <div>
                   <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
                     variant === 'dark' ? 'text-olaris-text-secondary' : 'text-olaris-text-dark/50'
@@ -84,7 +84,6 @@ export default function IndustriesPage() {
                   </ul>
                 </div>
 
-                {/* What changes */}
                 <div>
                   <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
                     variant === 'dark' ? 'text-olaris-text-secondary' : 'text-olaris-text-dark/50'
@@ -115,7 +114,7 @@ export default function IndustriesPage() {
               }`}>
                 {industry.keyLine}
               </p>
-            </div>
+            </AnimatedSection>
           </SectionWrapper>
         )
       })}

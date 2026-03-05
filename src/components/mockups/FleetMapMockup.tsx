@@ -1,3 +1,5 @@
+'use client'
+
 export function FleetMapMockup() {
   const vehicles = [
     { plate: 'AB21 XYZ', status: 'Moving', location: 'M40, Oxfordshire' },
@@ -7,16 +9,15 @@ export function FleetMapMockup() {
     { plate: 'JK25 JKL', status: 'Moving', location: 'M4, Swindon' },
   ]
 
-  // Scatter positions for map dots
   const dots = [
-    { top: '25%', left: '55%' },
-    { top: '40%', left: '35%' },
-    { top: '60%', left: '65%' },
-    { top: '45%', left: '50%' },
-    { top: '30%', left: '70%' },
-    { top: '55%', left: '40%' },
-    { top: '35%', left: '60%' },
-    { top: '50%', left: '45%' },
+    { top: '25%', left: '55%', pulse: true },
+    { top: '40%', left: '35%', pulse: false },
+    { top: '60%', left: '65%', pulse: true },
+    { top: '45%', left: '50%', pulse: false },
+    { top: '30%', left: '70%', pulse: false },
+    { top: '55%', left: '40%', pulse: true },
+    { top: '35%', left: '60%', pulse: false },
+    { top: '50%', left: '45%', pulse: false },
   ]
 
   return (
@@ -50,7 +51,7 @@ export function FleetMapMockup() {
 
       {/* Map area */}
       <div className="flex-1 relative bg-[#0B1120]">
-        {/* Grid lines to suggest a map */}
+        {/* Grid lines */}
         <div className="absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage: 'linear-gradient(#06B6D4 1px, transparent 1px), linear-gradient(90deg, #06B6D4 1px, transparent 1px)',
@@ -58,14 +59,20 @@ export function FleetMapMockup() {
           }}
         />
 
-        {/* Vehicle dots */}
+        {/* Vehicle dots — some with pulse ring */}
         {dots.map((pos, i) => (
           <div
             key={i}
             className="absolute"
             style={{ top: pos.top, left: pos.left }}
           >
-            <div className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
+            {pos.pulse && (
+              <div
+                className="absolute -inset-1.5 rounded-full bg-cyan-400/20 animate-ping"
+                style={{ animationDuration: `${2 + i * 0.5}s` }}
+              />
+            )}
+            <div className="relative w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
           </div>
         ))}
 

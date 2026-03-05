@@ -1,3 +1,7 @@
+'use client'
+
+import { motion } from 'framer-motion'
+
 export function CostDashboardMockup() {
   const months = [
     { label: 'Sep', value: 92 },
@@ -11,10 +15,10 @@ export function CostDashboardMockup() {
   const maxValue = Math.max(...months.map((m) => m.value))
 
   const topCosts = [
-    { category: 'Fuel & Energy', amount: '£42,800', pct: 41 },
-    { category: 'Finance Lease', amount: '£31,200', pct: 30 },
-    { category: 'Maintenance', amount: '£18,600', pct: 18 },
-    { category: 'Insurance', amount: '£11,400', pct: 11 },
+    { category: 'Fuel & Energy', amount: '\u00A3{}42,800'.replace('{}', ''), pct: 41 },
+    { category: 'Finance Lease', amount: '\u00A331,200', pct: 30 },
+    { category: 'Maintenance', amount: '\u00A318,600', pct: 18 },
+    { category: 'Insurance', amount: '\u00A311,400', pct: 11 },
   ]
 
   return (
@@ -35,15 +39,18 @@ export function CostDashboardMockup() {
         </div>
       </div>
 
-      {/* Bar chart */}
+      {/* Bar chart with animated bars */}
       <div>
         <div className="text-xs text-olaris-text-secondary mb-2">Monthly fleet cost (£k)</div>
         <div className="flex items-end gap-2 h-24">
-          {months.map((m) => (
+          {months.map((m, i) => (
             <div key={m.label} className="flex-1 flex flex-col items-center gap-1">
-              <div
-                className="w-full rounded-t bg-gradient-to-t from-cyan-600 to-cyan-400 transition-all"
-                style={{ height: `${(m.value / maxValue) * 100}%` }}
+              <motion.div
+                className="w-full rounded-t bg-gradient-to-t from-cyan-600 to-cyan-400"
+                initial={{ height: 0 }}
+                whileInView={{ height: `${(m.value / maxValue) * 100}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
               />
               <span className="text-[10px] text-olaris-text-secondary">{m.label}</span>
             </div>

@@ -134,6 +134,45 @@
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }
 
+/* Gradient shift for hero backgrounds */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease infinite;
+}
+
+/* Floating constellation dots */
+@keyframes constellationDrift {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(4px, -6px); }
+  50% { transform: translate(-3px, 4px); }
+  75% { transform: translate(5px, 2px); }
+}
+
+.constellation-dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #06B6D4;
+  animation: constellationDrift 20s ease-in-out infinite;
+}
+
+/* Logo centre pulse */
+@keyframes logoPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.logo-pulse {
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -16,10 +16,48 @@ const navigation = [
   { name: 'Blog', href: '/blog' },
 ]
 
+function OlarisLogoMark({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 44 56"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="nav-arc1" x1="0" y1="0" x2="40" y2="50" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#06B6D4" />
+          <stop offset="100%" stopColor="#0891B2" />
+        </linearGradient>
+        <linearGradient id="nav-arc2" x1="40" y1="0" x2="0" y2="50" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#22D3EE" />
+          <stop offset="100%" stopColor="#06B6D4" />
+        </linearGradient>
+      </defs>
+      {/* Left arc */}
+      <path d="M22 6 A20 20 0 0 0 22 50" stroke="url(#nav-arc1)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      {/* Right arc */}
+      <path d="M22 6 A20 20 0 0 1 22 50" stroke="url(#nav-arc2)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      {/* Data points */}
+      <circle cx="5" cy="28" r="2" fill="#06B6D4" />
+      <circle cx="39" cy="28" r="2" fill="#22D3EE" />
+      <circle cx="22" cy="6" r="2.5" fill="#F1F5F9" />
+      <circle cx="22" cy="50" r="2.5" fill="#F1F5F9" />
+      {/* Centre pulse */}
+      <circle cx="22" cy="28" r="3.5" fill="#06B6D4" className="logo-pulse" />
+      <circle cx="22" cy="28" r="2" fill="#06B6D4" />
+    </svg>
+  )
+}
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,22 +81,20 @@ export function Header() {
           : 'bg-[#0F172A]/80 backdrop-blur-sm'
       )}
     >
+      {/* Scroll progress bar */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-[2px] bg-cyan-400 origin-left z-50"
+        style={{ scaleX }}
+      />
+
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-2.5 group"
           aria-label="Olaris Home"
         >
-          <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-cyan-500/20 transition-transform group-hover:scale-110 group-hover:ring-cyan-500/40">
-            <Image
-              src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg"
-              alt="Olaris Logo"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+          <OlarisLogoMark className="h-9 w-auto transition-transform group-hover:scale-110" />
           <span className="hidden text-xl font-bold text-white sm:block font-heading">
             Olaris
           </span>
@@ -66,20 +102,32 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-1 lg:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
-                pathname === item.href
-                  ? 'text-cyan-400 bg-cyan-500/10'
-                  : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const isActive = pathname === item.href
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'relative px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                  isActive
+                    ? 'text-cyan-400'
+                    : 'text-olaris-text-secondary hover:text-white'
+                )}
+              >
+                {item.name}
+                {/* Animated underline */}
+                <motion.span
+                  className="absolute bottom-0 left-2 right-2 h-[2px] bg-cyan-400 rounded-full"
+                  initial={false}
+                  animate={{ scaleX: isActive ? 1 : 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  style={{ originX: 0 }}
+                />
+              </Link>
+            )
+          })}
         </div>
 
         {/* Right Side */}

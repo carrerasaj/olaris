@@ -5,8 +5,9 @@ import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { BrowserFrame } from '@/components/ui/BrowserFrame'
 import { Card } from '@/components/ui/Card'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { MockupEntrance } from '@/components/ui/MockupEntrance'
+import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FleetMapMockup } from '@/components/mockups/FleetMapMockup'
-import { MileageDashboardMockup } from '@/components/mockups/MileageDashboardMockup'
 import { DriverScoreboardMockup } from '@/components/mockups/DriverScoreboardMockup'
 import { CostDashboardMockup } from '@/components/mockups/CostDashboardMockup'
 import { CarbonTrackerMockup } from '@/components/mockups/CarbonTrackerMockup'
@@ -63,7 +64,7 @@ export default function PlatformPage() {
               }`}
             >
               {/* Text */}
-              <div className={i % 2 === 1 ? 'lg:col-start-2' : ''}>
+              <AnimatedSection className={i % 2 === 1 ? 'lg:col-start-2' : ''}>
                 <div className={`inline-flex p-2 rounded-lg mb-4 ${
                   variant === 'dark' ? 'bg-cyan-500/10' : 'bg-cyan-50'
                 }`}>
@@ -102,16 +103,16 @@ export default function PlatformPage() {
                     {outcome.callout}
                   </div>
                 )}
-              </div>
+              </AnimatedSection>
 
-              {/* Mockup */}
-              <div className={i % 2 === 1 ? 'lg:col-start-1' : ''}>
+              {/* Mockup with 3D entrance */}
+              <MockupEntrance className={i % 2 === 1 ? 'lg:col-start-1' : ''}>
                 {MockupComponent && (
                   <BrowserFrame url={mockupUrlMap[outcome.id]}>
                     <MockupComponent />
                   </BrowserFrame>
                 )}
-              </div>
+              </MockupEntrance>
             </div>
           </SectionWrapper>
         )

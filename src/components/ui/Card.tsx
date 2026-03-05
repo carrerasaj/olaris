@@ -1,4 +1,7 @@
+'use client'
+
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 
 interface CardProps {
   variant?: 'dark' | 'light'
@@ -14,18 +17,28 @@ export function Card({
   className,
 }: CardProps) {
   return (
-    <div
+    <motion.div
       className={cn(
         'rounded-xl border p-6',
         variant === 'dark'
           ? 'bg-[#1E293B] border-olaris-border-dark text-olaris-text-primary'
           : 'bg-white border-olaris-border-light text-olaris-text-dark',
-        hover &&
-          'transition-all duration-300 hover:shadow-lg hover:-translate-y-1',
         className
       )}
+      whileHover={
+        hover
+          ? {
+              y: -4,
+              boxShadow:
+                variant === 'dark'
+                  ? '0 8px 30px rgba(6, 182, 212, 0.15)'
+                  : '0 8px 30px rgba(0, 0, 0, 0.1)',
+            }
+          : undefined
+      }
+      transition={{ duration: 0.2, ease: 'easeOut' }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }

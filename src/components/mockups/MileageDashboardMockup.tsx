@@ -1,4 +1,23 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
+
 export function MileageDashboardMockup() {
+  const reduceMotion = useReducedMotion()
+  const [animatedPct, setAnimatedPct] = useState(60)
+
+  useEffect(() => {
+    if (reduceMotion) return
+    const interval = setInterval(() => {
+      setAnimatedPct((prev) => {
+        if (prev >= 85) return 60
+        return prev + 1
+      })
+    }, 120)
+    return () => clearInterval(interval)
+  }, [reduceMotion])
+
   const vehicles = [
     { plate: 'AB21 XYZ', driver: 'J. Williams', contract: 15000, current: 11200, projected: 14800 },
     { plate: 'CD22 ABC', driver: 'S. Patel', contract: 20000, current: 18400, projected: 22100 },
@@ -38,7 +57,6 @@ export function MileageDashboardMockup() {
 
       {/* Table */}
       <div className="space-y-1.5">
-        {/* Header */}
         <div className="grid grid-cols-[100px_1fr_80px_80px_1fr_70px] gap-2 text-xs text-olaris-text-secondary px-2 pb-1 border-b border-olaris-border-dark">
           <span>Reg</span>
           <span>Driver</span>
@@ -48,9 +66,11 @@ export function MileageDashboardMockup() {
           <span className="text-right">Status</span>
         </div>
 
-        {vehicles.map((v) => {
+        {vehicles.map((v, idx) => {
           const status = getStatus(v.projected, v.contract)
-          const pct = Math.min((v.current / v.contract) * 100, 100)
+          const basePct = Math.min((v.current / v.contract) * 100, 100)
+          // Animate the first row's progress bar
+          const pct = idx === 0 ? animatedPct : basePct
           return (
             <div
               key={v.plate}
@@ -66,7 +86,7 @@ export function MileageDashboardMockup() {
               </span>
               <div className="h-2 bg-[#1E293B] rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full ${status.colour}`}
+                  className={`h-full rounded-full transition-all duration-150 ${status.colour}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>

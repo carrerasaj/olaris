@@ -4,6 +4,7 @@ import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { Card } from '@/components/ui/Card'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { LogoReveal } from '@/components/ui/LogoReveal'
 import { Award, Wrench, Handshake } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
@@ -25,7 +26,9 @@ export default function AboutPage() {
           </>
         }
         subtitle="Olaris isn't a tech company that read about fleet management. It's a fleet company that learned to build technology."
-      />
+      >
+        <LogoReveal className="w-20 h-20 mx-auto mb-2" />
+      </GradientHero>
 
       {/* Founder story */}
       <SectionWrapper variant="light">

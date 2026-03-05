@@ -1,17 +1,23 @@
+'use client'
+
+import { motion } from 'framer-motion'
+
 export function CarbonTrackerMockup() {
   const scopes = [
-    { label: 'Scope 1', value: '1,240', unit: 'tCO₂e', desc: 'Direct fleet emissions', pct: 68 },
-    { label: 'Scope 2', value: '180', unit: 'tCO₂e', desc: 'Electricity (charging)', pct: 10 },
-    { label: 'Scope 3', value: '410', unit: 'tCO₂e', desc: 'Supply chain & travel', pct: 22 },
+    { label: 'Scope 1', value: '1,240', unit: 'tCO\u2082e', pct: 68 },
+    { label: 'Scope 2', value: '180', unit: 'tCO\u2082e', pct: 10 },
+    { label: 'Scope 3', value: '410', unit: 'tCO\u2082e', pct: 22 },
   ]
 
   const transitionPct = 34
+  const circumference = 2 * Math.PI * 40 // ~251
+  const arcLength = (transitionPct / 100) * circumference
 
   return (
     <div className="p-4 space-y-4">
       {/* Header with gauge */}
       <div className="flex items-center gap-6">
-        {/* Circular gauge */}
+        {/* Circular gauge with animated arc */}
         <div className="relative w-24 h-24 shrink-0">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
             <circle
@@ -20,13 +26,17 @@ export function CarbonTrackerMockup() {
               stroke="#1E293B"
               strokeWidth="8"
             />
-            <circle
+            <motion.circle
               cx="50" cy="50" r="40"
               fill="none"
               stroke="#10B981"
               strokeWidth="8"
               strokeLinecap="round"
-              strokeDasharray={`${transitionPct * 2.51} ${251 - transitionPct * 2.51}`}
+              strokeDasharray={`${arcLength} ${circumference - arcLength}`}
+              initial={{ strokeDasharray: `0 ${circumference}` }}
+              whileInView={{ strokeDasharray: `${arcLength} ${circumference - arcLength}` }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
