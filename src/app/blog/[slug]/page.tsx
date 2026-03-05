@@ -83,10 +83,22 @@ export async function generateMetadata({
   if (!post) return constructMetadata()
 
   const { frontmatter } = post
-  return constructMetadata({
+  const postUrl = `${siteConfig.url}/blog/${slug}`
+  const dateStr = frontmatter.date.toString().split('T')[0]
+  const base = constructMetadata({
     title: frontmatter.metaTitle || frontmatter.title,
     description: frontmatter.metaDescription || '',
+    url: postUrl,
   })
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      type: 'article',
+      publishedTime: dateStr,
+      authors: ['Alan Carreras'],
+    },
+  }
 }
 
 export default async function BlogPostPage({

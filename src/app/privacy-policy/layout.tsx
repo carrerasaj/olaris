@@ -5,6 +5,7 @@ export const metadata: Metadata = constructMetadata({
   title: 'Privacy Policy | Olaris',
   description:
     'How Olaris Consulting Limited collects, uses, and protects your personal data. GDPR compliant.',
+  url: 'https://olaris.co.uk/privacy-policy',
 })
 
 export default function PrivacyPolicyLayout({

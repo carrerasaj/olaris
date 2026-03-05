@@ -26,16 +26,21 @@ export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,
   image = siteConfig.ogImage,
+  url,
   noIndex = false,
 }: {
   title?: string
   description?: string
   image?: string
+  url?: string
   noIndex?: boolean
 } = {}): Metadata {
   return {
     title,
     description,
+    alternates: {
+      canonical: url || siteConfig.url,
+    },
     keywords: [
       'fleet management UK',
       'fleet visibility platform',

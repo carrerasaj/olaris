@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { CredibilitySection } from '@/components/sections/CredibilitySection'
@@ -6,7 +7,13 @@ import { WhatChanges } from '@/components/sections/WhatChanges'
 import { WhoWeHelp } from '@/components/sections/WhoWeHelp'
 import { CTABanner } from '@/components/ui/CTABanner'
 import { Button } from '@/components/ui/button'
-import { serviceSchema, faqSchema } from '@/lib/seo'
+import { constructMetadata, serviceSchema, faqSchema } from '@/lib/seo'
+
+export const metadata: Metadata = constructMetadata({
+  title: 'Fleet Intelligence & Management Software for UK Operators | Olaris',
+  description:
+    'Olaris gives fleet operators real-time tracking, mileage management, driver scoring & cost visibility. Built for UK lease companies, operators & OEMs.',
+})
 
 export default function HomePage() {
   return (

@@ -7,9 +7,10 @@ import { Card } from '@/components/ui/Card'
 import { blogPosts } from '@/data/blogPosts'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Blog | Olaris',
+  title: 'Fleet Management Blog: Insights, Tips & Industry News | Olaris',
   description:
-    'Fleet management insights, mileage tracking tips, driver behaviour analysis, and sustainability reporting — from people who actually run fleets.',
+    'Fleet management guides, industry insights and best practices for UK fleet operators. Mileage management, driver monitoring, compliance & EV transition.',
+  url: 'https://olaris.co.uk/blog',
 })
 
 function formatDate(dateStr: string) {

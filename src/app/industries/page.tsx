@@ -9,9 +9,10 @@ import { Truck, FileText, Factory, Handshake } from 'lucide-react'
 import { CheckCircle, XCircle } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Who We Help | Olaris',
+  title: 'Fleet Management for Operators, Lease & OEM Companies | Olaris',
   description:
-    'Fleet operators, lease companies, OEMs, and brokers — we speak your language because we have sat in your chair.',
+    'Purpose-built for UK lease companies, fleet operators, OEMs & brokers. Automated mileage tracking, compliance checking, cost analysis & driver monitoring.',
+  url: 'https://olaris.co.uk/industries',
 })
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {

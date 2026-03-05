@@ -19,9 +19,10 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'What We Do | Olaris',
+  title: 'Fleet Intelligence Platform: Tracking, Mileage & Cost Insights | Olaris',
   description:
-    'Fleet visibility, driver compliance, cost intelligence, and sustainability tools — built from 40 years of automotive experience.',
+    'Live tracking of 15+ manufacturers. Automated mileage vs contract monitoring, driver behaviour scoring, DVLA checks, cost tracking & EV transition planning.',
+  url: 'https://olaris.co.uk/platform',
 })
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -42,9 +43,24 @@ const mockupUrlMap: Record<string, string> = {
   sustainability: 'app.olaris.co.uk/carbon/tracker',
 }
 
+const softwareAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Olaris Fleet Intelligence Platform',
+  description:
+    'Live fleet tracking across 15+ manufacturers, automated mileage monitoring, driver behaviour scoring, DVLA compliance checks, cost analytics and EV transition planning.',
+  applicationCategory: 'Fleet Management Software',
+  operatingSystem: 'Web',
+  url: 'https://olaris.co.uk/platform',
+}
+
 export default function PlatformPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+      />
       <GradientHero
         size="compact"
         title="A platform built from the operator's chair"

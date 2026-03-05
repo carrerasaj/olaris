@@ -8,9 +8,10 @@ import { LogoReveal } from '@/components/ui/LogoReveal'
 import { Award, Wrench, Handshake } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'About | Olaris',
+  title: 'About Olaris: Fleet Intelligence Built by Automotive Experts',
   description:
-    '40 years in automotive. We built what we wished existed. Olaris is a fleet company that learned to build technology.',
+    'Founded by someone with 40 years of automotive experience who ran a lease company. Fleet intelligence built by people who know the industry.',
+  url: 'https://olaris.co.uk/about',
 })
 
 export default function AboutPage() {
