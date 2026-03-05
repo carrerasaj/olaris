@@ -40,7 +40,7 @@ function getBlogPost(slug: string) {
   const filename = slugToFile[slug]
   if (!filename) return null
 
-  const filePath = path.join(process.cwd(), 'blog-posts', filename)
+  const filePath = path.join(process.cwd(), 'marketing', 'blog-posts', filename)
   if (!fs.existsSync(filePath)) return null
 
   const raw = fs.readFileSync(filePath, 'utf-8')
