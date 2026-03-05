@@ -37,6 +37,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://olaris.co.uk/blog/fleet-cost-report</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://olaris.co.uk/blog/excess-mileage</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://olaris.co.uk/blog/driver-behaviour-insurance</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://olaris.co.uk/blog/dvla-compliance</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://olaris.co.uk/blog/scope-123-fleet</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://olaris.co.uk/privacy-policy</loc>
     <lastmod>2026-03-05</lastmod>
     <changefreq>yearly</changefreq>

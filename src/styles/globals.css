@@ -173,6 +173,55 @@
   animation: logoPulse 3s ease-in-out infinite;
 }
 
+/* Blog prose typography */
+.prose-blog {
+  @apply text-olaris-text-dark/80 leading-relaxed;
+}
+
+.prose-blog h2 {
+  @apply text-2xl font-bold font-heading text-olaris-text-dark mt-10 mb-4;
+}
+
+.prose-blog h3 {
+  @apply text-xl font-bold font-heading text-olaris-text-dark mt-8 mb-3;
+}
+
+.prose-blog p {
+  @apply mb-4 text-base leading-7;
+}
+
+.prose-blog strong {
+  @apply font-semibold text-olaris-text-dark;
+}
+
+.prose-blog ul, .prose-blog ol {
+  @apply mb-4 pl-6;
+}
+
+.prose-blog ul {
+  @apply list-disc;
+}
+
+.prose-blog ol {
+  @apply list-decimal;
+}
+
+.prose-blog li {
+  @apply mb-2 text-base leading-7;
+}
+
+.prose-blog a {
+  @apply text-cyan-600 underline underline-offset-2 hover:text-cyan-700 transition-colors;
+}
+
+.prose-blog blockquote {
+  @apply border-l-4 border-cyan-400 pl-4 italic text-olaris-text-dark/60 my-6;
+}
+
+.prose-blog hr {
+  @apply my-10 border-olaris-border-light;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
