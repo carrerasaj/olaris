@@ -223,26 +223,34 @@ export const faqSchema = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'What does Olaris do?',
+      name: 'What is fleet intelligence?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Olaris provides a fleet intelligence platform built from 40 years of automotive experience. We give fleet operators, lease companies, and brokers real-time visibility of their vehicles, drivers, costs, and compliance — all in one place.',
+        text: 'Fleet intelligence is the practice of unifying vehicle telematics, driver data, cost tracking, and compliance information into a single platform. Olaris provides real-time fleet intelligence that helps operators reduce costs, manage driver behaviour, and maintain DVLA compliance across their entire fleet.',
       },
     },
     {
       '@type': 'Question',
-      name: 'How does Olaris track vehicle mileage?',
+      name: 'How does Olaris help fleet managers reduce costs?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Olaris reads live odometer data directly from 15+ vehicle manufacturers via connected car APIs. No driver input needed. We track actual mileage against contract allowances and project annual totals so you can spot excess mileage charges months before they happen.',
+        text: "Olaris tracks real-time cost per mile, excess mileage exposure, fuel and energy consumption, and driver behaviour impact across your fleet. By surfacing hidden costs that spreadsheets miss — like the link between aggressive driving and excess mileage charges — fleet managers typically identify 10-15% in preventable costs.",
       },
     },
     {
       '@type': 'Question',
-      name: 'How does Olaris help with DVLA licence checking?',
+      name: 'What vehicle manufacturers does Olaris support?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Olaris integrates directly with the DVLA government API (not a scraper) to run automated licence checks on your schedule — quarterly, bi-annually, or annually. You get 48-hour advance expiry alerts, full audit trails, and PII masking with 7-year GDPR Article 30 retention.',
+        text: 'Olaris connects to multiple vehicle manufacturers including Mercedes-Benz, BMW, Tesla, Volkswagen, Ford, and more through connected vehicle APIs. This multi-manufacturer support means you get a single view across your entire fleet, regardless of make or model.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Olaris integrate with DVLA for driver compliance?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Olaris provides automated DVLA licence checking, endorsement monitoring, and compliance alerts. Instead of manual checks, the platform continuously monitors driver licence status and flags issues before they become risks — helping fleet operators stay compliant without the admin overhead.',
       },
     },
   ],
