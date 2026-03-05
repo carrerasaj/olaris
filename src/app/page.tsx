@@ -1,12 +1,12 @@
-import { Hero } from '@/components/sections/Hero'
-import { About } from '@/components/sections/About'
-import { Services } from '@/components/sections/Services'
-import { Projects } from '@/components/sections/Projects'
-import { Testimonials } from '@/components/sections/Testimonials'
-import { Contact } from '@/components/sections/Contact'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
-import { faqSchema, serviceSchema } from '@/lib/seo'
+import Link from 'next/link'
+import { GradientHero } from '@/components/ui/GradientHero'
+import { CredibilitySection } from '@/components/sections/CredibilitySection'
+import { PainPoints } from '@/components/sections/PainPoints'
+import { WhatChanges } from '@/components/sections/WhatChanges'
+import { WhoWeHelp } from '@/components/sections/WhoWeHelp'
+import { CTABanner } from '@/components/ui/CTABanner'
+import { Button } from '@/components/ui/button'
+import { serviceSchema, faqSchema } from '@/lib/seo'
 
 export default function HomePage() {
   return (
@@ -24,16 +24,37 @@ export default function HomePage() {
         }}
       />
 
-      <Header />
-      <main>
-        <Hero />
-        <About />
-        <Services />
-        <Projects />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
+      <GradientHero
+        badge="Fleet Intelligence, Built From Experience"
+        title={
+          <>
+            We&apos;ve run fleets. We&apos;ve built lease companies.
+            <br className="hidden md:block" />
+            {' '}Now we build the tools we wished we&apos;d had.
+          </>
+        }
+        subtitle="40 years of automotive experience, distilled into a platform that actually works the way fleet people think."
+        size="full"
+      >
+        <Button variant="gradient" size="lg" asChild>
+          <Link href="/platform">See What We Do</Link>
+        </Button>
+        <Button variant="secondary-outline" size="lg" asChild>
+          <Link href="/contact">Talk to Us</Link>
+        </Button>
+      </GradientHero>
+
+      <CredibilitySection />
+      <PainPoints />
+      <WhatChanges />
+      <WhoWeHelp />
+
+      <CTABanner
+        headline="We'd rather show you than tell you."
+        subtext="Book 20 minutes. We'll use your data, not a slide deck."
+        buttonText="Book a Demo"
+        buttonHref="/contact"
+      />
     </>
   )
 }

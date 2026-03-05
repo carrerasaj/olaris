@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { Inter, Manrope } from 'next/font/google'
-import { ThemeProvider } from '@/components/theme-provider'
+import { Inter, Manrope, JetBrains_Mono } from 'next/font/google'
 import { constructMetadata, organizationSchema } from '@/lib/seo'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 import '@/styles/globals.css'
 
 const inter = Inter({
@@ -17,6 +18,13 @@ const manrope = Manrope({
   weight: ['400', '600', '700', '800'],
 })
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
+  display: 'swap',
+  weight: ['400', '700'],
+})
+
 export const metadata: Metadata = constructMetadata()
 
 export default function RootLayout({
@@ -25,13 +33,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en-GB" suppressHydrationWarning>
+    <html lang="en-GB">
       <head>
-        {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
-        {/* Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -40,21 +46,14 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${manrope.variable} font-sans antialiased`}
+        className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <Header />
+        <main>{children}</main>
+        <Footer />
 
-        {/* Analytics Scripts */}
         {process.env.NODE_ENV === 'production' && (
           <>
-            {/* Google Analytics */}
             <script
               async
               src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}

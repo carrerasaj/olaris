@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const siteConfig = {
   name: 'Olaris Consulting Limited',
   description:
-    'Enterprise fleet intelligence platform with AI/ML predictive analytics. Serving 6+ major UK organizations with 293+ vehicles, 1.9M+ records processed, delivering >£250K annual value. 100% GDPR compliant with bank-level security.',
+    'Fleet intelligence platform built from 40 years of automotive experience. Visibility, compliance, cost control, and sustainability tools for fleet operators, lease companies, and brokers across the UK.',
   url: 'https://olaris.co.uk',
   ogImage: 'https://olaris.co.uk/og-image.jpg',
   links: {
@@ -38,36 +38,23 @@ export function constructMetadata({
     description,
     keywords: [
       'fleet management UK',
-      'AI predictive maintenance UK',
-      'enterprise fleet intelligence platform',
-      'GDPR compliant fleet management',
-      'zero-emission fleet transition',
-      'multi-tenant fleet SaaS',
-      'AI driver safety scoring',
-      'SECR compliance automation',
-      'EV TCO calculator',
+      'fleet visibility platform',
+      'mileage tracking fleet',
+      'excess mileage management',
+      'driver licence checking UK',
+      'DVLA compliance fleet',
+      'driver behaviour scoring',
+      'fleet cost management',
       'fleet carbon emissions tracking',
-      'XGBoost predictive maintenance',
-      'bank-level security fleet',
+      'EV fleet transition',
+      'lease company fleet management',
+      'fleet operator software',
+      'OEM connected vehicle data',
+      'broker vehicle sourcing',
       'grey fleet management UK',
-      'leased fleet compliance',
-      'DVLA API integration',
-      'driver duty of care compliance',
-      'driver licence validation',
-      'fleet compliance checks',
-      'grey fleet onboarding',
-      'nominated driver management',
-      'contractor fleet compliance',
-      'Aston consulting',
-      'Oxfordshire consulting',
-      'zero-emission vehicles',
-      'ESG solutions',
-      'blockchain fleet management',
-      'vehicle leasing',
-      'fleet optimization',
-      'sustainable mobility',
-      'growth strategy',
-      'M&A advisory',
+      'fleet sustainability reporting',
+      'Oxfordshire fleet consulting',
+      'fleet intelligence platform',
     ],
     authors: [{ name: 'Alan Carreras', url: siteConfig.url }],
     creator: 'Olaris Consulting Limited',
@@ -110,7 +97,6 @@ export function constructMetadata({
   }
 }
 
-// JSON-LD structured data schemas
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -159,7 +145,7 @@ export const localBusinessSchema = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 51.7134, // Aston (Nr Bampton) coordinates
+    latitude: 51.7134,
     longitude: -1.5498,
   },
   openingHoursSpecification: {
@@ -173,7 +159,7 @@ export const localBusinessSchema = {
 export const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  serviceType: 'Fleet Management Consulting',
+  serviceType: 'Fleet Management Intelligence',
   provider: {
     '@type': 'Organization',
     name: siteConfig.name,
@@ -184,60 +170,42 @@ export const serviceSchema = {
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Fleet Management Services',
+    name: 'Fleet Intelligence Services',
     itemListElement: [
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'AI Fleet Intelligence',
+          name: 'Fleet Visibility & Mileage Tracking',
           description:
-            'Machine learning-powered predictive maintenance and driver safety scoring delivering measurable ROI. XGBoost ML models analyzing 1.9M+ telemetry records.',
+            'Real-time telemetry from 15+ manufacturers with live odometer reads, mileage-vs-contract tracking, and projected annual mileage to prevent excess charges.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Zero-Emission Transformation',
+          name: 'Driver Compliance & Behaviour',
           description:
-            '5-year TCO analysis, 3-phase transition roadmaps, and charging infrastructure planning for EV fleets with proven >£50K engagement value.',
+            'Automated DVLA licence checking, driver behaviour scoring, gamification league tables, and coaching triggers to improve fleet safety and reduce insurance costs.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'ESG & Carbon Intelligence',
+          name: 'Cost & Contract Intelligence',
           description:
-            'Full Scope 1/2/3 emissions tracking, SECR compliance automation, and carbon offset marketplace integration delivering >£4K annual compliance time savings.',
+            'Real fuel and energy costs from telemetry data, TCO breakdown per vehicle, fleet-wide cost dashboards, and automated contract reporting.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Enterprise Integration & Security',
+          name: 'Sustainability & EV Transition',
           description:
-            'Multi-tenant SaaS architecture, 100% GDPR compliance, webhook infrastructure, and bank-level security with JWT + Row-Level Security.',
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Grey Fleet & Duty of Care',
-          description:
-            'Complete grey fleet management with live DVLA API integration for vehicle and driver compliance checks, licence validation, and automated expiry alerts.',
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Leased Fleet Compliance',
-          description:
-            'Rule-based automated DVLA API checks for leased fleet duty of care with secure permission-based tenant access, nominated driver and contractor functionality.',
+            'Scope 1, 2, 3 emissions tracking, EV transition planning from actual fleet data, carbon offset marketplace, and net-zero acceleration modelling.',
         },
       },
     ],
@@ -250,26 +218,26 @@ export const faqSchema = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'What is fleet management in the UK?',
+      name: 'What does Olaris do?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Fleet management in the UK involves optimising vehicle leasing, tracking, and operations to reduce costs and ensure compliance. Olaris Consulting Limited offers tailored fleet management solutions that help businesses reduce costs by up to 10% while improving sustainability.',
+        text: 'Olaris provides a fleet intelligence platform built from 40 years of automotive experience. We give fleet operators, lease companies, and brokers real-time visibility of their vehicles, drivers, costs, and compliance — all in one place.',
       },
     },
     {
       '@type': 'Question',
-      name: 'How can blockchain help with ESG compliance?',
+      name: 'How does Olaris track vehicle mileage?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Blockchain ensures transparency and traceability for ESG compliance by securely tracking environmental, social, and governance metrics. Olaris Consulting's blockchain-based ESG solution provides 100% transparency and immutable record-keeping.",
+        text: 'Olaris reads live odometer data directly from 15+ vehicle manufacturers via connected car APIs. No driver input needed. We track actual mileage against contract allowances and project annual totals so you can spot excess mileage charges months before they happen.',
       },
     },
     {
       '@type': 'Question',
-      name: 'What services does Olaris Consulting offer?',
+      name: 'How does Olaris help with DVLA licence checking?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Olaris Consulting offers fleet management consulting, expansion strategy, M&A advisory, and digital integration services including blockchain ESG solutions. We specialize in helping UK businesses optimize their fleet operations and achieve sustainable growth.',
+        text: 'Olaris integrates directly with the DVLA government API (not a scraper) to run automated licence checks on your schedule — quarterly, bi-annually, or annually. You get 48-hour advance expiry alerts, full audit trails, and PII masking with 7-year GDPR Article 30 retention.',
       },
     },
   ],

@@ -2,43 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://olaris.co.uk</loc>
-    <lastmod>2024-12-18</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://olaris.co.uk/#about</loc>
-    <lastmod>2024-12-18</lastmod>
+    <loc>https://olaris.co.uk/platform</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://olaris.co.uk/industries</loc>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://olaris.co.uk/#services</loc>
-    <lastmod>2024-12-18</lastmod>
+    <loc>https://olaris.co.uk/about</loc>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://olaris.co.uk/#projects</loc>
-    <lastmod>2024-12-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://olaris.co.uk/#contact</loc>
-    <lastmod>2024-12-18</lastmod>
+    <loc>https://olaris.co.uk/contact</loc>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://olaris.co.uk/blog</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://olaris.co.uk/privacy-policy</loc>
-    <lastmod>2024-12-18</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://olaris.co.uk/terms</loc>
-    <lastmod>2024-12-18</lastmod>
+    <lastmod>2026-03-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

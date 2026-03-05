@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,11 +11,12 @@ const config: Config = {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px',
+        '2xl': '1280px',
       },
     },
     extend: {
       colors: {
+        // Legacy HSL tokens — kept for privacy-policy and terms pages
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -50,6 +50,22 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Olaris design system
+        olaris: {
+          dark: '#0F172A',
+          light: '#F8FAFC',
+          cyan: '#06B6D4',
+          emerald: '#10B981',
+          text: {
+            primary: '#F1F5F9',
+            secondary: '#94A3B8',
+            dark: '#0F172A',
+          },
+          border: {
+            dark: '#1E293B',
+            light: '#E2E8F0',
+          },
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -59,6 +75,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         heading: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
       },
       keyframes: {
         'accordion-down': {
@@ -85,6 +102,10 @@ const config: Config = {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        'grid-pulse': {
+          '0%, 100%': { opacity: '0.03' },
+          '50%': { opacity: '0.08' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -93,6 +114,7 @@ const config: Config = {
         'fade-up': 'fade-up 0.6s ease-out',
         'slide-in': 'slide-in 0.3s ease-out',
         shimmer: 'shimmer 2s linear infinite',
+        'grid-pulse': 'grid-pulse 4s ease-in-out infinite',
       },
     },
   },

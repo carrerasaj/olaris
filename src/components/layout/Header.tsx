@@ -3,120 +3,90 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Moon, Sun, Menu, X } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Home', href: '/' },
-  { name: 'About', href: '#about' },
-  { name: 'Services', href: '#services' },
-  { name: 'Projects', href: '#projects' },
+  { name: 'What We Do', href: '/platform' },
+  { name: 'Who We Help', href: '/industries' },
+  { name: 'About', href: '/about' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Contact', href: '#contact' },
 ]
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
-    setMounted(true)
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleNavClick = (href: string) => {
+  // Close mobile menu on route change
+  useEffect(() => {
     setIsMobileMenuOpen(false)
-    if (href.startsWith('#')) {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-  }
+  }, [pathname])
 
   return (
     <header
       className={cn(
         'fixed top-0 z-50 w-full transition-all duration-300',
         isScrolled
-          ? 'glass shadow-lg backdrop-blur-xl bg-white/80 dark:bg-gray-950/80'
-          : 'bg-transparent'
+          ? 'bg-[#0F172A]/95 backdrop-blur-xl shadow-lg border-b border-olaris-border-dark'
+          : 'bg-[#0F172A]/80 backdrop-blur-sm'
       )}
     >
-      <nav className="container-wide flex items-center justify-between py-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-3 group"
-          aria-label="Olaris Consulting Home"
+          aria-label="Olaris Home"
         >
-          <div className="relative h-12 w-12 overflow-hidden rounded-full ring-2 ring-primary/20 transition-transform group-hover:scale-110 group-hover:ring-primary/40">
+          <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-cyan-500/20 transition-transform group-hover:scale-110 group-hover:ring-cyan-500/40">
             <Image
               src="https://res.cloudinary.com/dd7svdirf/image/upload/v1745526178/logo_mxa378.jpg"
-              alt="Olaris Consulting Logo"
+              alt="Olaris Logo"
               fill
               className="object-cover"
               priority
             />
           </div>
-          <span className="hidden text-xl font-bold text-foreground sm:block font-heading">
-            Olaris Consulting
+          <span className="hidden text-xl font-bold text-white sm:block font-heading">
+            Olaris
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {navigation.map((item) => (
-            <Button
+            <Link
               key={item.name}
-              variant="ghost"
-              asChild
-              className="text-base hover:text-primary"
-            >
-              {item.href.startsWith('#') ? (
-                <button onClick={() => handleNavClick(item.href)}>
-                  {item.name}
-                </button>
-              ) : (
-                <Link href={item.href}>{item.name}</Link>
+              href={item.href}
+              className={cn(
+                'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                pathname === item.href
+                  ? 'text-cyan-400 bg-cyan-500/10'
+                  : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
               )}
-            </Button>
+            >
+              {item.name}
+            </Link>
           ))}
         </div>
 
-        {/* Right Side Actions */}
-        <div className="flex items-center gap-2">
-          {/* Theme Toggle */}
-          {mounted && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label="Toggle theme"
-              className="rounded-full"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </Button>
-          )}
-
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
           {/* Mobile Menu Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden rounded-full"
+          <button
+            className="lg:hidden p-2 text-olaris-text-secondary hover:text-white rounded-lg"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -125,43 +95,35 @@ export function Header() {
             ) : (
               <Menu className="h-6 w-6" />
             )}
-          </Button>
+          </button>
 
-          {/* CTA Button - Desktop */}
-          <Button variant="gradient" size="lg" className="hidden lg:flex" asChild>
-            <button onClick={() => handleNavClick('#contact')}>
-              Get Started
-            </button>
+          {/* CTA */}
+          <Button variant="gradient" size="default" className="hidden lg:flex" asChild>
+            <Link href="/contact">Talk to Us</Link>
           </Button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="glass-dark border-t border-border lg:hidden">
-          <div className="container-wide flex flex-col gap-2 py-4">
+        <div className="lg:hidden bg-[#0F172A] border-t border-olaris-border-dark">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-1">
             {navigation.map((item) => (
-              <Button
+              <Link
                 key={item.name}
-                variant="ghost"
-                className="w-full justify-start text-base"
-                asChild={!item.href.startsWith('#')}
-                onClick={() => handleNavClick(item.href)}
-              >
-                {item.href.startsWith('#') ? (
-                  <button className="w-full text-left">{item.name}</button>
-                ) : (
-                  <Link href={item.href}>{item.name}</Link>
+                href={item.href}
+                className={cn(
+                  'px-4 py-3 text-base font-medium rounded-lg transition-colors',
+                  pathname === item.href
+                    ? 'text-cyan-400 bg-cyan-500/10'
+                    : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
                 )}
-              </Button>
+              >
+                {item.name}
+              </Link>
             ))}
-            <Button
-              variant="gradient"
-              size="lg"
-              className="mt-4 w-full"
-              onClick={() => handleNavClick('#contact')}
-            >
-              Get Started
+            <Button variant="gradient" size="lg" className="mt-4 w-full" asChild>
+              <Link href="/contact">Talk to Us</Link>
             </Button>
           </div>
         </div>
