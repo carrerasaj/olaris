@@ -79,6 +79,26 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/blog-post-1.html',
+        destination: '/blog/fleet-cost-report',
+        permanent: true,
+      },
+      {
+        source: '/blog-post-2.html',
+        destination: '/blog/excess-mileage',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy.html',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
     ]
   },
   poweredByHeader: false,
