@@ -134,16 +134,28 @@
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }
 
-/* Gradient shift for hero backgrounds */
+/* Gradient shift for hero backgrounds — uses transform (GPU composited) */
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 
 .gradient-shift {
-  background-size: 200% 200%;
+  position: relative;
+}
+
+.gradient-shift::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 200%;
+  background: inherit;
+  background-size: 100% 100%;
   animation: gradientShift 10s ease infinite;
+  will-change: transform;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Floating constellation dots */

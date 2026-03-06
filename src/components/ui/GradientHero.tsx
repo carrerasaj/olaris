@@ -108,12 +108,11 @@ export function GradientHero({
           </motion.div>
         )}
 
-        <motion.h1
+        <h1
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight text-white mb-6 text-balance"
-          variants={fadeUp}
         >
           {title}
-        </motion.h1>
+        </h1>
 
         {subtitle && (
           <motion.p
