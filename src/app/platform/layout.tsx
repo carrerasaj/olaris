@@ -12,12 +12,10 @@ const softwareAppSchema = {
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
-        />
-      </head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+      />
       {children}
     </>
   )
