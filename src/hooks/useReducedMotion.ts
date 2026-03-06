@@ -1,7 +1,18 @@
 'use client'
 
-import { useReducedMotion as useFramerReducedMotion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 export function useReducedMotion(): boolean {
-  return useFramerReducedMotion() ?? false
+  const [reduceMotion, setReduceMotion] = useState(false)
+
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReduceMotion(mql.matches)
+
+    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
+
+  return reduceMotion
 }
