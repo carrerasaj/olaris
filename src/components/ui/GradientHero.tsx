@@ -3,7 +3,6 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface GradientHeroProps {
   title: string | React.ReactNode
@@ -73,8 +72,6 @@ export function GradientHero({
   size = 'full',
   children,
 }: GradientHeroProps) {
-  const reduceMotion = useReducedMotion()
-
   return (
     <section
       className={cn(
@@ -91,8 +88,8 @@ export function GradientHero({
         />
       )}
 
-      {/* Floating constellation */}
-      {!reduceMotion && <ConstellationDots />}
+      {/* Floating constellation — CSS handles reduced-motion */}
+      <ConstellationDots />
 
       <motion.div
         className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
