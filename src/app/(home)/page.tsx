@@ -7,7 +7,7 @@ import { WhatChanges } from '@/components/sections/WhatChanges'
 import { WhoWeHelp } from '@/components/sections/WhoWeHelp'
 import { CTABanner } from '@/components/ui/CTABanner'
 import { Button } from '@/components/ui/button'
-import { constructMetadata, serviceSchema, faqSchema } from '@/lib/seo'
+import { constructMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = constructMetadata({
   title: 'Fleet Intelligence & Management Software for UK Operators | Olaris',
@@ -18,19 +18,6 @@ export const metadata: Metadata = constructMetadata({
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(serviceSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema),
-        }}
-      />
-
       <GradientHero
         badge="Fleet Intelligence, Built From Experience"
         title={

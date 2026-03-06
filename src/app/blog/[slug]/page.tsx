@@ -113,57 +113,6 @@ export default async function BlogPostPage({
   const { frontmatter, content } = post
   const htmlContent = await markdownToHtml(content)
   const readTime = getReadTime(content)
-  const postUrl = `${siteConfig.url}/blog/${slug}`
-  const dateStr = frontmatter.date.toString().split('T')[0]
-
-  const blogPostingSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: frontmatter.title,
-    description: frontmatter.metaDescription || '',
-    datePublished: dateStr,
-    dateModified: dateStr,
-    author: {
-      '@type': 'Person',
-      name: 'Alan Carreras',
-      url: siteConfig.url,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': postUrl,
-    },
-    url: postUrl,
-  }
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: siteConfig.url,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blog',
-        item: `${siteConfig.url}/blog`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: frontmatter.title,
-        item: postUrl,
-      },
-    ],
-  }
 
   const related = (relatedPosts[slug] || [])
     .map((id) => blogPosts.find((p) => p.id === id))
@@ -171,19 +120,6 @@ export default async function BlogPostPage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogPostingSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema),
-        }}
-      />
-
       <GradientHero
         size="compact"
         title={
