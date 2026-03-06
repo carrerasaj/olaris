@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     'Fleet intelligence platform built from 40 years of automotive experience. Visibility, compliance, cost control, and sustainability tools for fleet operators, lease companies, and brokers across the UK.',
   url: 'https://olaris.co.uk',
-  ogImage: 'https://olaris.co.uk/og-image.jpg',
+  ogImage: 'https://olaris.co.uk/opengraph-image',
   links: {
     linkedin: 'https://linkedin.com/company/olaris-consulting-limited',
     twitter: 'https://twitter.com/olarisconsult',

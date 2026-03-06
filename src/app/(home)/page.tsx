@@ -20,14 +20,8 @@ export default function HomePage() {
     <>
       <GradientHero
         badge="Fleet Intelligence, Built From Experience"
-        title={
-          <>
-            We&apos;ve run fleets. We&apos;ve built lease companies.
-            <br className="hidden md:block" />
-            {' '}Now we build the tools we wished we&apos;d had.
-          </>
-        }
-        subtitle="40 years of automotive experience, distilled into a platform that actually works the way fleet people think."
+        title="Fleet Intelligence Software for UK Operators"
+        subtitle="We've run fleets. We've built lease companies. Now we build the tools we wished we'd had."
         size="full"
       >
         <Button variant="gradient" size="lg" asChild>
