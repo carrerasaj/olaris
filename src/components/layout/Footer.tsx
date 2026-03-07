@@ -124,22 +124,33 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter — Beehiiv embed */}
+          {/* Newsletter */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold font-heading text-white">Newsletter</h3>
             <p className="text-sm text-olaris-text-secondary">
               Fleet management insights and industry updates, fortnightly.
             </p>
-            <iframe
-              src="https://subscribe-forms.beehiiv.com/72d7fe62-5c71-4dec-b1f5-2fbdfefb972b"
-              data-test-id="beehiiv-embed"
-              style={{
-                width: '100%',
-                height: '180px',
-                backgroundColor: 'transparent',
-                border: 'none',
-              }}
-            />
+            <form
+              action="https://olaris-fleet.beehiiv.com/subscribe"
+              method="post"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="space-y-2"
+            >
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+                className="w-full px-3 py-2 text-sm rounded-lg bg-[#1E293B] border border-olaris-border-dark text-white placeholder:text-olaris-text-secondary focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              />
+              <button
+                type="submit"
+                className="w-full px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 text-white hover:from-cyan-400 hover:to-cyan-500 transition-all"
+              >
+                Subscribe
+              </button>
+            </form>
           </div>
         </div>
 
