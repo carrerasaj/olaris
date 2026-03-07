@@ -4,6 +4,7 @@ import { constructMetadata } from '@/lib/seo'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { Card } from '@/components/ui/Card'
+import { NewsletterSignup } from '@/components/sections/NewsletterSignup'
 import { blogPosts } from '@/data/blogPosts'
 
 export const metadata: Metadata = constructMetadata({
@@ -82,6 +83,10 @@ export default function BlogPage() {
           ))}
         </div>
       </SectionWrapper>
+      <NewsletterSignup
+        heading="Stay ahead of the fleet"
+        subtext="Join UK fleet operators getting industry insights, practical guides, and expert commentary."
+      />
     </>
   )
 }

@@ -6,6 +6,7 @@ import { PainPoints } from '@/components/sections/PainPoints'
 import { WhatChanges } from '@/components/sections/WhatChanges'
 import { WhoWeHelp } from '@/components/sections/WhoWeHelp'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { NewsletterSignup } from '@/components/sections/NewsletterSignup'
 import { Button } from '@/components/ui/button'
 import { constructMetadata } from '@/lib/seo'
 
@@ -36,6 +37,7 @@ export default function HomePage() {
       <PainPoints />
       <WhatChanges />
       <WhoWeHelp />
+      <NewsletterSignup />
 
       <CTABanner
         headline="We'd rather show you than tell you."

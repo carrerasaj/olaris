@@ -52,6 +52,11 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
 
+        <Script
+          src="https://subscribe-forms.beehiiv.com/attribution.js"
+          strategy="lazyOnload"
+        />
+
         {process.env.NODE_ENV === 'production' && (
           <>
             <Script
