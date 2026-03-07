@@ -1,8 +1,4 @@
-'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { LinkedinIcon, TwitterIcon, Mail, Phone, MapPin } from 'lucide-react'
 import { siteConfig } from '@/lib/seo'
 
@@ -25,56 +21,21 @@ function OlarisLogoFull({ className }: { className?: string }) {
           <stop offset="100%" stopColor="#06B6D4" />
         </linearGradient>
       </defs>
-      {/* Left arc */}
       <path d="M22 6 A20 20 0 0 0 22 50" stroke="url(#footer-arc1)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      {/* Right arc */}
       <path d="M22 6 A20 20 0 0 1 22 50" stroke="url(#footer-arc2)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      {/* Data points */}
       <circle cx="5" cy="28" r="2" fill="#06B6D4" />
       <circle cx="39" cy="28" r="2" fill="#22D3EE" />
       <circle cx="22" cy="6" r="2.5" fill="#F1F5F9" />
       <circle cx="22" cy="50" r="2.5" fill="#F1F5F9" />
-      {/* Centre */}
       <circle cx="22" cy="28" r="3.5" fill="#06B6D4" opacity="0.3" />
       <circle cx="22" cy="28" r="2" fill="#06B6D4" />
-      {/* Wordmark */}
       <text x="54" y="35" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontSize="30" fontWeight="700" letterSpacing="-0.5" fill="#F1F5F9">Olaris</text>
-      {/* Tagline */}
       <text x="54" y="50" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontSize="9" fontWeight="400" letterSpacing="3" fill="#94A3B8">FLEET INTELLIGENCE</text>
     </svg>
   )
 }
 
 export function Footer() {
-  const [email, setEmail] = useState('')
-  const [isSubscribing, setIsSubscribing] = useState(false)
-  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubscribing(true)
-
-    try {
-      const response = await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-
-      if (response.ok) {
-        setSubscribeStatus('success')
-        setEmail('')
-      } else {
-        setSubscribeStatus('error')
-      }
-    } catch {
-      setSubscribeStatus('error')
-    } finally {
-      setIsSubscribing(false)
-      setTimeout(() => setSubscribeStatus('idle'), 5000)
-    }
-  }
-
   const currentYear = new Date().getFullYear()
 
   return (
@@ -163,37 +124,22 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Newsletter — Beehiiv embed */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold font-heading text-white">Newsletter</h3>
             <p className="text-sm text-olaris-text-secondary">
-              Fleet management insights and industry updates, monthly.
+              Fleet management insights and industry updates, fortnightly.
             </p>
-            <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isSubscribing}
-                className="w-full px-3 py-2 text-sm rounded-lg bg-[#1E293B] border border-olaris-border-dark text-white placeholder:text-olaris-text-secondary focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-              />
-              <Button
-                type="submit"
-                variant="gradient"
-                className="w-full"
-                disabled={isSubscribing}
-              >
-                {isSubscribing ? 'Subscribing...' : 'Subscribe'}
-              </Button>
-              {subscribeStatus === 'success' && (
-                <p className="text-sm text-emerald-400">Successfully subscribed!</p>
-              )}
-              {subscribeStatus === 'error' && (
-                <p className="text-sm text-red-400">Failed to subscribe. Please try again.</p>
-              )}
-            </form>
+            <iframe
+              src="https://subscribe-forms.beehiiv.com/72d7fe62-5c71-4dec-b1f5-2fbdfefb972b"
+              data-test-id="beehiiv-embed"
+              style={{
+                width: '100%',
+                height: '180px',
+                backgroundColor: 'transparent',
+                border: 'none',
+              }}
+            />
           </div>
         </div>
 
