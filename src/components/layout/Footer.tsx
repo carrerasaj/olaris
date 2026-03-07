@@ -132,7 +132,7 @@ export function Footer() {
             </p>
             <form
               action="https://olaris-fleet.beehiiv.com/subscribe"
-              method="post"
+              method="get"
               target="_blank"
               rel="noopener noreferrer"
               className="space-y-2"
