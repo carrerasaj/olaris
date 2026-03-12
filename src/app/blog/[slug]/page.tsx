@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
+import { AuthorBio } from '@/components/ui/AuthorBio'
 import { constructMetadata, siteConfig } from '@/lib/seo'
 import { blogPosts } from '@/data/blogPosts'
 
@@ -159,6 +160,8 @@ export default async function BlogPostPage({
             className="prose-blog"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
+
+          <AuthorBio />
 
           {related.length > 0 && (
             <div className="mt-16 pt-8 border-t border-olaris-border-light">

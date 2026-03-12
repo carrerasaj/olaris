@@ -14,9 +14,75 @@ export const metadata: Metadata = constructMetadata({
   url: 'https://olaris.co.uk/about',
 })
 
+const founderSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Alan Carreras',
+  jobTitle: 'Founder & CEO',
+  url: 'https://olaris.co.uk/about',
+  sameAs: [
+    'https://www.linkedin.com/in/alan-carreras-7543231a/',
+    'https://leasingbrokernews.co.uk/tag/alan-carreras/',
+  ],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Olaris',
+    url: 'https://olaris.co.uk',
+  },
+  knowsAbout: [
+    'Fleet Management',
+    'Vehicle Leasing',
+    'Fleet Intelligence',
+    'BVRLA',
+    'Fleet Compliance',
+  ],
+  description:
+    'Former Chair of the BVRLA Leasing Broker Committee. Led 18 acquisitions and grew Bridle Group (now Jurni Leasing) to 37,000+ vehicles over 12 years. Founder of Olaris fleet intelligence platform.',
+}
+
+const pressItems = [
+  {
+    publication: 'Leasing Broker News',
+    title: 'Olaris and Carmmunity Form Strategic Partnership',
+    href: 'https://leasingbrokernews.co.uk/olaris-and-carmmunity-form-strategic-partnership/',
+  },
+  {
+    publication: 'Broker News',
+    title: 'Carmmunity Partners with Olaris Consulting',
+    href: 'https://brokernews.co.uk/carmmunity-partners-with-olaris-consulting-run-by-former-bridle-executive-alan-carreras/',
+  },
+  {
+    publication: 'Broker News',
+    title: 'Alan Carreras Leaves Bridle as Neil Fox Moves to Chief Executive Role',
+    href: 'https://brokernews.co.uk/alan-carreras-leaves-bridle-as-neil-fox-moves-to-chief-executive-role/',
+  },
+  {
+    publication: 'Leasing Broker News',
+    title: 'Carreras Leaves Bridle Group',
+    href: 'https://leasingbrokernews.co.uk/carreras-leaves-bridle-group/',
+  },
+  {
+    publication: 'Fleet News',
+    title: 'Jurni Expands Partner Programme',
+    href: 'https://www.fleetnews.co.uk/news/jurni-expands-partner-programme-with-three-uk-leasing-brokers',
+  },
+]
+
+const credentials = [
+  'Former Chair, BVRLA Leasing Broker Committee (2019–2021)',
+  'FLA Committee Member',
+  '12 years at Bridle Group (now Jurni Leasing) — grew to 37,000+ vehicles',
+  'Led 18 acquisitions — including Churchill Vehicle Leasing, Sprint Contracts & Kew Vehicle Leasing',
+]
+
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
+      />
+
       <GradientHero
         size="compact"
         title={
@@ -54,6 +120,21 @@ export default function AboutPage() {
               the tools we needed. Every feature exists because someone who runs vehicles asked
               for it — not because a product roadmap said it was time.
             </p>
+          </div>
+
+          {/* Credentials bar */}
+          <div className="mt-10 pt-8 border-t border-gray-200">
+            <p className="text-xs font-semibold uppercase tracking-wider text-olaris-text-dark/40 mb-4">
+              Alan Carreras — credentials
+            </p>
+            <ul className="space-y-2">
+              {credentials.map((c) => (
+                <li key={c} className="flex items-start gap-2 text-sm text-olaris-text-dark/70">
+                  <span className="text-cyan-500 mt-1 shrink-0">•</span>
+                  {c}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </SectionWrapper>
@@ -128,20 +209,24 @@ export default function AboutPage() {
       {/* In the Press */}
       <SectionWrapper variant="light" padding="compact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-xl font-bold font-heading tracking-tight mb-4 text-olaris-text-dark">
+          <h2 className="text-xl font-bold font-heading tracking-tight mb-5 text-olaris-text-dark">
             In the Press
           </h2>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="https://leasingbrokernews.co.uk/olaris-and-carmmunity-form-strategic-partnership/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-cyan-600 hover:text-cyan-700 hover:underline transition-colors"
-              >
-                Leasing Broker News — &ldquo;Olaris and Carmmunity Form Strategic Partnership&rdquo;
-              </a>
-            </li>
+          <ul className="space-y-3">
+            {pressItems.map((item) => (
+              <li key={item.href} className="flex items-baseline gap-2 text-sm">
+                <span className="font-semibold text-olaris-text-dark shrink-0">{item.publication}</span>
+                <span className="text-olaris-text-dark/30">—</span>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors"
+                >
+                  &ldquo;{item.title}&rdquo;
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </SectionWrapper>
