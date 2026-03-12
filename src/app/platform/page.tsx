@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { constructMetadata } from '@/lib/seo'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
@@ -41,6 +42,22 @@ const mockupUrlMap: Record<string, string> = {
   'driver-management': 'app.olaris.co.uk/drivers/scoreboard',
   'cost-control': 'app.olaris.co.uk/costs/dashboard',
   sustainability: 'app.olaris.co.uk/carbon/tracker',
+}
+
+const featureLinkMap: Record<string, { href: string; label: string }[]> = {
+  'fleet-visibility': [
+    { href: '/features/mileage-tracking', label: 'Learn more about mileage tracking' },
+  ],
+  'driver-management': [
+    { href: '/features/driver-behaviour', label: 'Learn more about driver behaviour scoring' },
+    { href: '/features/dvla-compliance', label: 'Learn more about DVLA licence checking' },
+  ],
+  'cost-control': [
+    { href: '/features/cost-tracking', label: 'Learn more about cost tracking & TCO' },
+  ],
+  sustainability: [
+    { href: '/features/ev-transition', label: 'Learn more about EV transition planning' },
+  ],
 }
 
 export default function PlatformPage() {
@@ -102,6 +119,23 @@ export default function PlatformPage() {
                       : 'bg-cyan-50 border-cyan-200 text-cyan-800'
                   }`}>
                     {outcome.callout}
+                  </div>
+                )}
+                {featureLinkMap[outcome.id] && (
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {featureLinkMap[outcome.id].map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className={`text-sm font-medium underline underline-offset-2 transition-colors ${
+                          variant === 'dark'
+                            ? 'text-cyan-400 hover:text-cyan-300'
+                            : 'text-cyan-600 hover:text-cyan-700'
+                        }`}
+                      >
+                        {link.label} →
+                      </Link>
+                    ))}
                   </div>
                 )}
               </AnimatedSection>

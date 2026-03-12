@@ -99,6 +99,10 @@ Here's what a real-time cost dashboard should show you — and what you're proba
 
 If your current cost report doesn't give you this granularity, and it doesn't update more frequently than monthly, you're managing your fleet on assumptions and historical data. The real costs are in the gaps.
 
+## How much does fleet management cost?
+
+Fleet management costs vary by fleet size and complexity, but typically include vehicle acquisition, fuel, maintenance, insurance, compliance, and administration. For a mid-sized UK fleet of 50–200 vehicles, total cost of ownership typically runs £5,000–£12,000 per vehicle per year. Fleet intelligence software helps operators identify and eliminate hidden costs across these categories.
+
 ## What to Do About It
 
 Moving from manual to real-time cost reporting isn't just about accuracy (though accuracy matters). It's about moving from reactive to proactive management. Instead of discovering problems at budget review, you intervene when they're still small.

@@ -125,6 +125,27 @@ export default function AboutPage() {
         </div>
       </SectionWrapper>
 
+      {/* In the Press */}
+      <SectionWrapper variant="light" padding="compact">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-xl font-bold font-heading tracking-tight mb-4 text-olaris-text-dark">
+            In the Press
+          </h2>
+          <ul className="space-y-2">
+            <li>
+              <a
+                href="https://leasingbrokernews.co.uk/olaris-and-carmmunity-form-strategic-partnership/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-cyan-600 hover:text-cyan-700 hover:underline transition-colors"
+              >
+                Leasing Broker News — &ldquo;Olaris and Carmmunity Form Strategic Partnership&rdquo;
+              </a>
+            </li>
+          </ul>
+        </div>
+      </SectionWrapper>
+
       <CTABanner
         headline="Whether you want a demo or just want to talk fleet — we're here."
         buttonText="Get in Touch"

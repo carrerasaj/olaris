@@ -10,6 +10,14 @@ const blogSlugs = [
   'scope-123-fleet',
 ]
 
+const featureSlugs = [
+  'mileage-tracking',
+  'driver-behaviour',
+  'dvla-compliance',
+  'ev-transition',
+  'cost-tracking',
+]
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
@@ -29,5 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...blogPages]
+  const featurePages: MetadataRoute.Sitemap = featureSlugs.map((slug) => ({
+    url: `${BASE_URL}/features/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }))
+
+  return [...staticPages, ...featurePages, ...blogPages]
 }

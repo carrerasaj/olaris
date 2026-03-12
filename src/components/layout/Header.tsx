@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navigation = [
@@ -14,6 +14,14 @@ const navigation = [
   { name: 'Who We Help', href: '/industries' },
   { name: 'About', href: '/about' },
   { name: 'Blog', href: '/blog' },
+]
+
+const featuresNav = [
+  { name: 'Mileage Tracking', href: '/features/mileage-tracking' },
+  { name: 'Driver Behaviour', href: '/features/driver-behaviour' },
+  { name: 'DVLA Compliance', href: '/features/dvla-compliance' },
+  { name: 'EV Transition', href: '/features/ev-transition' },
+  { name: 'Cost Tracking', href: '/features/cost-tracking' },
 ]
 
 function OlarisLogoMark({ className }: { className?: string }) {
@@ -54,6 +62,7 @@ function OlarisLogoMark({ className }: { className?: string }) {
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFeaturesOpen, setIsFeaturesOpen] = useState(false)
   const pathname = usePathname()
 
   const { scrollYProgress } = useScroll()
@@ -128,6 +137,45 @@ export function Header() {
               </Link>
             )
           })}
+
+          {/* Features dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsFeaturesOpen(true)}
+            onMouseLeave={() => setIsFeaturesOpen(false)}
+          >
+            <button
+              className={cn(
+                'relative flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                pathname.startsWith('/features')
+                  ? 'text-cyan-400'
+                  : 'text-olaris-text-secondary hover:text-white'
+              )}
+            >
+              Features
+              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', isFeaturesOpen && 'rotate-180')} />
+            </button>
+            {isFeaturesOpen && (
+              <div className="absolute top-full left-0 pt-1 z-50">
+                <div className="w-52 rounded-xl bg-[#0F172A] border border-olaris-border-dark shadow-xl py-1">
+                  {featuresNav.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        'block px-4 py-2 text-sm transition-colors',
+                        pathname === item.href
+                          ? 'text-cyan-400'
+                          : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Side */}
@@ -162,6 +210,24 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   'px-4 py-3 text-base font-medium rounded-lg transition-colors',
+                  pathname === item.href
+                    ? 'text-cyan-400 bg-cyan-500/10'
+                    : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+            {/* Features sub-links */}
+            <p className="px-4 pt-2 pb-1 text-xs font-semibold uppercase tracking-wider text-olaris-text-secondary/50">
+              Features
+            </p>
+            {featuresNav.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'px-6 py-2 text-sm font-medium rounded-lg transition-colors',
                   pathname === item.href
                     ? 'text-cyan-400 bg-cyan-500/10'
                     : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
