@@ -139,6 +139,46 @@ export default function AboutPage() {
         </div>
       </SectionWrapper>
 
+      {/* As Featured In */}
+      <SectionWrapper variant="light" padding="compact" className="bg-slate-50">
+        <div className="max-w-5xl mx-auto">
+          {/* Publication trust bar */}
+          <p className="text-xs font-semibold uppercase tracking-widest text-olaris-text-dark/35 text-center mb-6">
+            As Featured In
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 mb-10">
+            {['Broker News', 'Leasing Broker News', 'Fleet News'].map((pub) => (
+              <span
+                key={pub}
+                className="text-sm font-bold tracking-wide text-olaris-text-dark/25 uppercase"
+              >
+                {pub}
+              </span>
+            ))}
+          </div>
+
+          {/* Article cards grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {pressItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block p-4 rounded-xl bg-white border border-gray-200 hover:border-cyan-300 hover:shadow-sm transition-all"
+              >
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-olaris-text-dark/40 mb-2">
+                  {item.publication}
+                </p>
+                <p className="text-sm font-medium text-olaris-text-dark group-hover:text-cyan-700 leading-snug transition-colors">
+                  &ldquo;{item.title}&rdquo;
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </SectionWrapper>
+
       {/* What makes us different */}
       <SectionWrapper variant="dark">
         <div className="text-center mb-12">
@@ -203,31 +243,6 @@ export default function AboutPage() {
             <span>DVLA</span>
             <span>Oracle Cloud</span>
           </div>
-        </div>
-      </SectionWrapper>
-
-      {/* In the Press */}
-      <SectionWrapper variant="light" padding="compact">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-xl font-bold font-heading tracking-tight mb-5 text-olaris-text-dark">
-            In the Press
-          </h2>
-          <ul className="space-y-3">
-            {pressItems.map((item) => (
-              <li key={item.href} className="flex items-baseline gap-2 text-sm">
-                <span className="font-semibold text-olaris-text-dark shrink-0">{item.publication}</span>
-                <span className="text-olaris-text-dark/30">—</span>
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors"
-                >
-                  &ldquo;{item.title}&rdquo;
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </SectionWrapper>
 
