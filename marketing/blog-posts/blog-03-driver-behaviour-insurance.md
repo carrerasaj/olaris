@@ -126,6 +126,10 @@ This is where the industry is going. Fleets that have systematic driver behaviou
 
 The underwriter also mentioned something else: if the fleet continued improving and kept the data up, the next renewal conversation would be easier. One year of data suggesting "this fleet is taking safety seriously" is valuable. Two years of consistent improvement is gold.
 
+## What is driver behaviour scoring?
+
+Driver behaviour scoring uses telematics data from connected vehicles to rate how safely and efficiently each driver operates their vehicle. Metrics typically include harsh braking, rapid acceleration, cornering, speeding, and idling. Scores help fleet managers identify coaching opportunities and reduce accident rates and insurance premiums.
+
 ## What You Need to Get Started
 
 If you want to replicate this for your fleet, here's what you need:

@@ -167,6 +167,10 @@ For a 50-vehicle fleet, the combined impact is:
 - Less unexpected downtime: £10,000–£20,000 impact on service delivery
 - Better utilisation: £5,000–£12,000 in fuel and vehicle cost savings
 
+## What are the 5 pillars of fleet management?
+
+The five pillars of fleet management are: vehicle acquisition and lifecycle management, driver safety and behaviour monitoring, compliance and regulatory adherence, cost control and financial reporting, and sustainability including carbon reduction and EV transition. Effective fleet intelligence platforms integrate all five pillars into a single view.
+
 ## Why These Five Trends Matter Together
 
 Individually, each trend is significant. Together, they fundamentally reshape how fleet management works.

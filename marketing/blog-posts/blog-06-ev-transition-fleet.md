@@ -118,6 +118,10 @@ Use pilot data to build your multi-year transition. Stagger purchases by quarter
 
 Do this and you'll have a transition that actually makes financial sense. Skip it and you'll have a car park full of expensive vehicles that don't match your operations.
 
+## How do you plan an EV fleet transition?
+
+Planning an EV fleet transition starts with analysing your current fleet's usage patterns — daily mileage, route profiles, and dwell times — to identify which vehicles are suitable for electric replacements. The next step is total cost of ownership comparison between ICE and EV options, followed by charge point infrastructure planning and driver training.
+
 ## Why This Matters to Your Bottom Line
 
 EV transition isn't a compliance exercise. It's a fleet operation question disguised as a vehicle question.
