@@ -4,7 +4,7 @@ metaTitle: "EV Fleet Transition: Start With Data, Not Hype"
 metaDescription: "Why blanket EV mandates fail. Use real usage data to transition the right vehicles first and unlock genuine ROI."
 category: "ESG"
 headerImage: "Mixed electric and diesel vehicles in a modern fleet depot, with an analytics dashboard overlay showing mileage patterns and charging infrastructure costs"
-date: 2026-03-18
+date: 2025-11-19
 ---
 
 # Your Fleet's EV Transition: Start With Data, Not Enthusiasm

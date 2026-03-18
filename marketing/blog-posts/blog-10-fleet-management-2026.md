@@ -4,7 +4,7 @@ metaTitle: "Fleet Trends 2026: Five Shifts Defining the Year"
 metaDescription: "Connected vehicle APIs, real-time mileage tracking, mandatory ESG reporting, and practical AI. What's changing in fleet management in 2026."
 category: "Thought Leadership"
 headerImage: "Modern fleet operations centre with multiple screens showing connected vehicle data, ESG compliance dashboards, predictive maintenance alerts, and driver performance metrics"
-date: 2026-03-18
+date: 2026-01-28
 ---
 
 # Fleet Management in 2026: Five Trends That Will Define the Year

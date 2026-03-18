@@ -4,7 +4,7 @@ metaTitle: "What is Fleet Intelligence? | From Fleet Management to Fleet Intelli
 metaDescription: "Fleet intelligence turns raw vehicle data into decisions. Learn how it differs from fleet management and why UK operators are making the shift."
 category: "Thought Leadership"
 headerImage: "Fleet manager reviewing real-time vehicle data dashboard on multiple screens"
-date: 2026-03-18
+date: 2026-02-11
 faqSchema:
   - question: "What is the difference between fleet intelligence and fleet management?"
     answer: "Fleet management focuses on administration — tracking vehicles, scheduling maintenance, recording costs. Fleet intelligence builds on this by analysing data across multiple sources to identify trends, predict costs, and flag risks before they become problems. Management is reactive; intelligence is proactive."

@@ -4,7 +4,7 @@ metaTitle: "Excess Mileage Charges: Prevent £1000s in Fees"
 metaDescription: "Learn why excess mileage charges blindside fleet managers and how live mileage tracking prevents costly overages at lease return."
 category: "Mileage"
 headerImage: "Dashboard showing odometer data and mileage allowance progress bars across multiple vehicles"
-date: 2026-03-05
+date: 2025-09-24
 ---
 
 # The Hidden Cost of Excess Mileage — and How to See It Coming

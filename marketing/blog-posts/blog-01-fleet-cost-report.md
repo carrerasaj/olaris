@@ -4,7 +4,7 @@ metaTitle: "Fleet Cost Reports: Why Numbers Don't Add Up"
 metaDescription: "Discover why your fleet cost figures are misleading and how real-time dashboards reveal the hidden costs in your operation."
 category: "Cost Intelligence"
 headerImage: "Frustrated fleet manager looking at spreadsheet with contradicting numbers displayed on screen"
-date: 2026-03-05
+date: 2025-09-10
 ---
 
 # Why Your Fleet Cost Report Is Wrong (And What to Do About It)

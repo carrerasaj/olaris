@@ -4,7 +4,7 @@ metaTitle: "Connected Vehicle Data: Your Fleet Is Talking"
 metaDescription: "15+ manufacturers now share live telemetry via OEM APIs. Most fleets don't know it exists. Here's what changes when you plug in."
 category: "Thought Leadership"
 headerImage: "Modern vehicle dashboard interface showing real-time telemetry: GPS location, odometer, battery health, tyre pressure, and diagnostic alerts across multiple vehicle brands"
-date: 2026-03-18
+date: 2025-12-03
 ---
 
 # Your Vehicles Are Already Talking. Are You Listening?

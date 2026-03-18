@@ -4,7 +4,7 @@ metaTitle: "DVLA Licence Checking: Legal Requirements & Risks"
 metaDescription: "Understand your DVLA compliance obligations. One unlicensed driver can void your insurance and expose you to criminal liability."
 category: "Compliance"
 headerImage: "Fleet manager reviewing digital DVLA licence check results showing verification dates and expiry alerts"
-date: 2026-03-05
+date: 2025-10-22
 ---
 
 # DVLA Compliance: What Most Fleet Managers Get Wrong

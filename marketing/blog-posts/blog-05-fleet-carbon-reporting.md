@@ -4,7 +4,7 @@ metaTitle: "Fleet Carbon Reporting: Scope 1, 2, 3 Explained"
 metaDescription: "Understand carbon scopes for fleets. Real emissions data beats lab figures. EV planning, home charging economics, net zero strategy."
 category: "ESG"
 headerImage: "Fleet manager reviewing live carbon emissions dashboard showing Scope 1, 2, 3 breakdown with net zero targets"
-date: 2026-03-05
+date: 2025-11-05
 ---
 
 # Scope 1, 2, 3: A Practical Guide to Fleet Carbon Reporting

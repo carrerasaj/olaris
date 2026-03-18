@@ -4,7 +4,7 @@ metaTitle: "Lease Company Mileage: Where Fleet Margins Live"
 metaDescription: "Excess mileage charges, residual values, condition assessment—why live mileage tracking is now table stakes for lease fleet operations."
 category: "Mileage"
 headerImage: "Fleet manager reviewing live mileage data on multiple vehicles, with a calendar showing key contract dates and trend analysis graphs indicating vehicles trending over annual allowances"
-date: 2026-03-18
+date: 2025-12-17
 ---
 
 # Mileage Compliance Is Where Lease Company Margins Live and Die

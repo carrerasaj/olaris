@@ -4,7 +4,7 @@ metaTitle: "What is Grey Fleet? A UK Employer's Guide | Olaris"
 metaDescription: "Grey fleet vehicles outnumber company cars 14 to 1 in the UK. Here's what grey fleet means, what you're legally responsible for, and how to manage it properly."
 category: "Compliance"
 headerImage: "Employee driving personal car on business journey, with compliance checklist overlay showing licence, MOT, and insurance verification status"
-date: 2026-03-18
+date: 2026-03-04
 faqSchema:
   - question: "What is grey fleet?"
     answer: "Grey fleet refers to privately owned vehicles used by employees for business journeys. These are not company cars or leased vehicles — they are the employee's personal car, used for work travel such as client visits, site meetings, or trips between offices."

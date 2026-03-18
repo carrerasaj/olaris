@@ -4,7 +4,7 @@ metaTitle: "Driver Behaviour Data & Insurance Premiums: A Real Case"
 metaDescription: "See how one fleet reduced insurance costs by 12% using driver behaviour scoring and measurable safety improvements."
 category: "Driver Behaviour"
 headerImage: "Fleet manager reviewing driver behaviour league table on tablet with improvement trends highlighted"
-date: 2026-03-05
+date: 2025-10-08
 ---
 
 # How Driver Behaviour Scoring Changed One Fleet's Insurance Renewal
