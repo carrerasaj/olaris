@@ -11,6 +11,45 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://olaris.co.uk/features/driver-behaviour' },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is driver behaviour scoring?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Driver behaviour scoring uses telematics data from connected vehicles to rate how safely and efficiently each driver operates their vehicle. Metrics typically include harsh braking, rapid acceleration, cornering, speeding, and idling. Scores help fleet managers identify coaching opportunities and reduce accident rates and insurance premiums.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does driver behaviour scoring reduce insurance costs?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Insurers increasingly price commercial fleet premiums based on telematics evidence of driving standards. Fleets that can demonstrate consistent high-scoring driver behaviour see measurable premium reductions at renewal. Beyond insurance, improving driver scores reduces fuel consumption by 15–20%, extends brake and tyre life, and lowers accident frequency.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is real-time monitoring better than periodic driver reviews?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Periodic reviews tell you what happened; real-time monitoring tells you what is happening. By the time a pattern appears in a quarterly report, it has already cost you in fuel, wear, or incidents. Continuous monitoring also means drivers receive feedback closer in time to the behaviour itself, which is more effective for changing habits.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What data do I need to start driver behaviour scoring?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'If your vehicles have built-in OEM connectivity — which most new vehicles manufactured after 2019 do — Olaris can pull telematics data directly without any hardware installation. For older vehicles, compatible aftermarket telematics devices can be added.',
+      },
+    },
+  ],
+}
+
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -34,6 +73,10 @@ export default function DriverBehaviourPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <GradientHero

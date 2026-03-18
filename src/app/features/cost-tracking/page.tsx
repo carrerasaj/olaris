@@ -11,6 +11,45 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://olaris.co.uk/features/cost-tracking' },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How much does it cost to run a fleet per vehicle per year?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For a mid-sized UK fleet of 50–200 vehicles, total cost of ownership typically runs £5,000–£12,000 per vehicle per year, depending on vehicle type, usage intensity, and funding method. This includes acquisition or lease costs, fuel, maintenance, insurance, compliance, and administration — many of which are underestimated because they are tracked across separate systems.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is included in fleet total cost of ownership?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Fleet TCO covers the full vehicle lifecycle: acquisition or lease cost, fuel and energy consumption, servicing and maintenance, tyres, insurance premiums, compliance costs (DVLA, MOT, road tax), excess mileage charges, and depreciation or residual value at disposal. Most fleet managers undercount because these costs sit across different systems and suppliers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why is real-time cost tracking better than monthly reporting?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Monthly reports show you what went wrong last month. Real-time tracking shows you what is going wrong now — early enough to act. When a vehicle\'s fuel costs spike mid-month, real-time data lets you investigate immediately rather than discovering the problem in a report three weeks later when the cost is already locked in.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can fleet cost data be exported for finance teams?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Olaris produces exportable cost reports formatted for finance use — budget vs actual by vehicle, driver, department, or cost category. Reports can be scheduled to run automatically and distributed to stakeholders. The underlying data can also be exported to Excel or connected to BI tools for more complex reporting.',
+      },
+    },
+  ],
+}
+
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -34,6 +73,10 @@ export default function CostTrackingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <GradientHero

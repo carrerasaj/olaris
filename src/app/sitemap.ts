@@ -8,6 +8,13 @@ const blogSlugs = [
   'driver-behaviour-insurance',
   'dvla-compliance',
   'scope-123-fleet',
+  'ev-transition-fleet',
+  'connected-vehicle-data',
+  'lease-company-mileage',
+  'fleet-data-single-view',
+  'fleet-management-2026',
+  'what-is-fleet-intelligence',
+  'what-is-grey-fleet',
 ]
 
 const featureSlugs = [

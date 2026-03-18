@@ -1,7 +1,10 @@
 ---
-meta_title: "Fleet Data Management: Why Single-View Matters"
-meta_description: "Telematics, fuel cards, DVLA, maintenance, insurance scattered across systems. Here's how to bring it together without rip-and-replace."
-header_image_description: "Fleet operations dashboard with integrated data feeds: telematics, fuel cards, maintenance schedules, insurance renewals, and DVLA information unified in one interface"
+title: "Five Systems, One Spreadsheet, and a Prayer: Why Fleet Data Needs a Single View"
+metaTitle: "Fleet Data Management: Why Single-View Matters"
+metaDescription: "Telematics, fuel cards, DVLA, maintenance, insurance scattered across systems. Here's how to bring it together without rip-and-replace."
+category: "Thought Leadership"
+headerImage: "Fleet operations dashboard with integrated data feeds: telematics, fuel cards, maintenance schedules, insurance renewals, and DVLA information unified in one interface"
+date: 2026-03-18
 ---
 
 # Five Systems, One Spreadsheet, and a Prayer: Why Fleet Data Needs a Single View

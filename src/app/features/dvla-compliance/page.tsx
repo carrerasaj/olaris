@@ -11,6 +11,45 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://olaris.co.uk/features/dvla-compliance' },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is DVLA licence checking for fleets?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'DVLA licence checking is the process of verifying that every driver operating a company vehicle holds a valid licence appropriate for that vehicle. UK employers have a legal duty of care to ensure this. Checks must be performed regularly across all drivers — not just at onboarding — and should cover licence validity, endorsements, penalty points, disqualifications, and category entitlements.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How often should fleet operators check driver licences?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The DVLA and industry bodies recommend checking at least every six months for standard drivers, and quarterly for high-risk drivers or those with existing endorsements. Automated systems like Olaris allow you to set custom check frequencies per driver risk level, ensuring higher-risk drivers are monitored more frequently without additional admin.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens if a driver receives penalty points between checks?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'With manual checking, you may not find out until the next scheduled review — which could be months later. Olaris detects changes at the next automated check and immediately alerts the fleet manager. For high-risk events such as disqualification or points approaching a threshold, you can configure real-time notifications.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does DVLA licence checking require driver consent?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Drivers must provide consent for their licence data to be accessed via the DVLA\'s driver data service. Olaris manages this consent process — each driver provides a one-time consent, after which automated checks can run on schedule without requiring further driver action.',
+      },
+    },
+  ],
+}
+
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -34,6 +73,10 @@ export default function DvlaCompliancePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <GradientHero

@@ -11,6 +11,45 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://olaris.co.uk/features/ev-transition' },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is EV fleet transition planning?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'EV fleet transition planning is the process of systematically replacing ICE vehicles in a fleet with electric alternatives in a sequence and at a pace that is operationally and financially sustainable. In the UK, this is increasingly driven by the ZEV mandate and BIK tax incentives that make EVs attractive for company car drivers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do you identify which fleet vehicles are ready for EV replacement?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'EV readiness depends on daily mileage patterns, route types, dwell locations, and charging access. Olaris analyses your live fleet data — actual daily distances, overnight parking locations, journey patterns — and identifies which vehicles are operationally suited for electric replacement today versus those that need infrastructure changes or more time.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do you calculate total cost of ownership for EV vs ICE vehicles?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A full TCO comparison covers acquisition or lease cost, fuel vs electricity (at actual consumption rates), maintenance, insurance, BIK tax, and residual value. Olaris builds this model using your real mileage and energy tariff data rather than industry averages, so the output reflects what the transition will actually cost your business.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the ZEV mandate and how does it affect fleet planning?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Zero Emission Vehicle (ZEV) mandate requires vehicle manufacturers to sell a rising percentage of zero-emission cars and vans each year. This is changing vehicle availability and pricing incentives, making earlier EV adoption increasingly advantageous for fleet operators who plan transition schedules in advance.',
+      },
+    },
+  ],
+}
+
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -34,6 +73,10 @@ export default function EvTransitionPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <GradientHero

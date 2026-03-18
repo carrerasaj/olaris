@@ -53,4 +53,67 @@ export const blogPosts: BlogPostPreview[] = [
     readTime: '12 min read',
     date: '2026-03-05',
   },
+  {
+    id: 'ev-transition-fleet',
+    title: "Your Fleet's EV Transition: Start With Data, Not Enthusiasm",
+    excerpt:
+      "Why blanket EV mandates fail. Use real usage data to transition the right vehicles first and unlock genuine ROI.",
+    category: 'ESG',
+    readTime: '9 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'connected-vehicle-data',
+    title: 'Your Vehicles Are Already Talking. Are You Listening?',
+    excerpt:
+      "15+ manufacturers now share live telemetry via OEM APIs. Most fleets don't know it exists. Here's what changes when you plug in.",
+    category: 'Thought Leadership',
+    readTime: '8 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'lease-company-mileage',
+    title: 'Mileage Compliance Is Where Lease Company Margins Live and Die',
+    excerpt:
+      "Excess mileage charges, residual values, condition assessment — why live mileage tracking is now table stakes for lease fleet operations.",
+    category: 'Mileage',
+    readTime: '7 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'fleet-data-single-view',
+    title: 'Five Systems, One Spreadsheet, and a Prayer: Why Fleet Data Needs a Single View',
+    excerpt:
+      "Telematics, fuel cards, DVLA, maintenance, insurance scattered across systems. Here's how to bring it together without rip-and-replace.",
+    category: 'Thought Leadership',
+    readTime: '8 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'fleet-management-2026',
+    title: 'Fleet Management in 2026: Five Trends That Will Define the Year',
+    excerpt:
+      "Connected vehicle APIs, real-time mileage tracking, mandatory ESG reporting, and practical AI. What's changing in fleet management in 2026.",
+    category: 'Thought Leadership',
+    readTime: '10 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'what-is-grey-fleet',
+    title: 'What is Grey Fleet? And What Are You Actually Responsible For?',
+    excerpt:
+      "Grey fleet vehicles outnumber company cars 14 to 1 in the UK. Here's what grey fleet means, what you're legally responsible for, and how to manage it properly.",
+    category: 'Compliance',
+    readTime: '8 min read',
+    date: '2026-03-18',
+  },
+  {
+    id: 'what-is-fleet-intelligence',
+    title: 'What is Fleet Intelligence?',
+    excerpt:
+      'Fleet intelligence turns raw vehicle data into decisions. Learn how it differs from fleet management and why UK operators are making the shift.',
+    category: 'Thought Leadership',
+    readTime: '7 min read',
+    date: '2026-03-18',
+  },
 ]

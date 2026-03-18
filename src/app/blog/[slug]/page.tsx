@@ -19,6 +19,13 @@ const slugToFile: Record<string, string> = {
   'driver-behaviour-insurance': 'blog-03-driver-behaviour-insurance.md',
   'dvla-compliance': 'blog-04-dvla-compliance.md',
   'scope-123-fleet': 'blog-05-fleet-carbon-reporting.md',
+  'ev-transition-fleet': 'blog-06-ev-transition-fleet.md',
+  'connected-vehicle-data': 'blog-07-connected-vehicle-data.md',
+  'lease-company-mileage': 'blog-08-lease-company-mileage.md',
+  'fleet-data-single-view': 'blog-09-fleet-data-single-view.md',
+  'fleet-management-2026': 'blog-10-fleet-management-2026.md',
+  'what-is-fleet-intelligence': 'blog-11-what-is-fleet-intelligence.md',
+  'what-is-grey-fleet': 'blog-12-what-is-grey-fleet.md',
 }
 
 const categoryColours: Record<string, string> = {
@@ -27,14 +34,22 @@ const categoryColours: Record<string, string> = {
   'Driver Behaviour': 'bg-emerald-100 text-emerald-800',
   Compliance: 'bg-amber-100 text-amber-800',
   ESG: 'bg-teal-100 text-teal-800',
+  'Thought Leadership': 'bg-violet-100 text-violet-800',
 }
 
 const relatedPosts: Record<string, string[]> = {
   'fleet-cost-report': ['excess-mileage', 'driver-behaviour-insurance'],
-  'excess-mileage': ['fleet-cost-report', 'scope-123-fleet'],
+  'excess-mileage': ['fleet-cost-report', 'lease-company-mileage'],
   'driver-behaviour-insurance': ['dvla-compliance', 'fleet-cost-report'],
   'dvla-compliance': ['driver-behaviour-insurance', 'scope-123-fleet'],
-  'scope-123-fleet': ['excess-mileage', 'dvla-compliance'],
+  'scope-123-fleet': ['ev-transition-fleet', 'fleet-management-2026'],
+  'ev-transition-fleet': ['scope-123-fleet', 'connected-vehicle-data'],
+  'connected-vehicle-data': ['fleet-data-single-view', 'fleet-management-2026'],
+  'lease-company-mileage': ['excess-mileage', 'fleet-cost-report'],
+  'fleet-data-single-view': ['connected-vehicle-data', 'fleet-management-2026'],
+  'fleet-management-2026': ['what-is-fleet-intelligence', 'fleet-data-single-view'],
+  'what-is-fleet-intelligence': ['fleet-cost-report', 'excess-mileage'],
+  'what-is-grey-fleet': ['dvla-compliance', 'fleet-cost-report'],
 }
 
 function getBlogPost(slug: string) {

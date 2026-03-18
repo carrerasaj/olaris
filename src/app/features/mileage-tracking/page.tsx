@@ -11,6 +11,45 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://olaris.co.uk/features/mileage-tracking' },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is excess mileage and why does it matter?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Excess mileage is the difference between the contractual mileage agreed at lease inception and the actual mileage driven over the contract term. When a vehicle is returned with more miles than agreed, the leasing company charges a per-mile penalty — typically 5–15p per mile. These charges are often a surprise because they only become visible when the vehicle is returned.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does automated mileage tracking work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Automated mileage tracking connects directly to your vehicles via OEM telematics integrations. Live odometer data is pulled from the manufacturer\'s connected vehicle platform and matched against the contracted mileage stored in your fleet records. The system continuously calculates each vehicle\'s mileage trajectory and alerts you when a vehicle is trending over its allowance.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I need to install hardware for mileage tracking?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most modern vehicles have built-in OEM connectivity. Olaris integrates directly with manufacturer data feeds across 15+ brands, so no aftermarket hardware is required for most fleets. For older vehicles without factory telematics, compatible aftermarket devices can be used.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How far in advance will I be alerted to mileage overruns?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Olaris analyses mileage trajectory continuously and will flag a vehicle as soon as it is statistically trending over its contract allowance — typically months before lease end, when there is still time to take action such as reallocating the vehicle, adjusting driver behaviour, or renegotiating contract terms.',
+      },
+    },
+  ],
+}
+
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -34,6 +73,10 @@ export default function MileageTrackingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <GradientHero
