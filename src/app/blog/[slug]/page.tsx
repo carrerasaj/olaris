@@ -26,6 +26,7 @@ const slugToFile: Record<string, string> = {
   'fleet-management-2026': 'blog-10-fleet-management-2026.md',
   'what-is-fleet-intelligence': 'blog-11-what-is-fleet-intelligence.md',
   'what-is-grey-fleet': 'blog-12-what-is-grey-fleet.md',
+  'what-is-driver-behaviour-scoring': 'blog-13-what-is-driver-behaviour-scoring.md',
 }
 
 const categoryColours: Record<string, string> = {
@@ -50,6 +51,7 @@ const relatedPosts: Record<string, string[]> = {
   'fleet-management-2026': ['what-is-fleet-intelligence', 'fleet-data-single-view'],
   'what-is-fleet-intelligence': ['fleet-cost-report', 'excess-mileage'],
   'what-is-grey-fleet': ['dvla-compliance', 'fleet-cost-report'],
+  'what-is-driver-behaviour-scoring': ['what-is-grey-fleet', 'what-is-fleet-intelligence'],
 }
 
 function getBlogPost(slug: string) {

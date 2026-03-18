@@ -108,6 +108,15 @@ export const blogPosts: BlogPostPreview[] = [
     date: '2026-02-11',
   },
   {
+    id: 'what-is-driver-behaviour-scoring',
+    title: 'What is Driver Behaviour Scoring? Why Reward Beats Surveillance',
+    excerpt:
+      "Driver behaviour scoring measures how your fleet drives — but scoring alone changes nothing. Here's how reward-led programmes cut accidents by 40% and fuel costs by 15%.",
+    category: 'Driver Behaviour',
+    readTime: '8 min read',
+    date: '2026-03-18',
+  },
+  {
     id: 'what-is-fleet-intelligence',
     title: 'What is Fleet Intelligence?',
     excerpt:

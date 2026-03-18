@@ -15,6 +15,7 @@ const blogSlugs = [
   'fleet-management-2026',
   'what-is-fleet-intelligence',
   'what-is-grey-fleet',
+  'what-is-driver-behaviour-scoring',
 ]
 
 const featureSlugs = [
