@@ -5,9 +5,24 @@ metaDescription: "Learn why excess mileage charges blindside fleet managers and 
 category: "Mileage"
 headerImage: "Dashboard showing odometer data and mileage allowance progress bars across multiple vehicles"
 date: 2025-09-24
+faqSchema:
+  - question: "What is an excess mileage charge?"
+    answer: "An excess mileage charge is a penalty levied by a leasing company when a vehicle is returned at the end of a contract having travelled more miles than the agreed allowance. The charge is calculated per mile over the limit — typically 5–15 pence per mile in the UK — and applied to all excess miles across the contract term. It is billed at vehicle return, by which point nothing can be done to avoid it."
+  - question: "How much are excess mileage charges per mile in the UK?"
+    answer: "Excess mileage charges in the UK typically range from 5 to 15 pence per mile, depending on the vehicle type and the terms negotiated at lease inception. Most standard lease agreements charge around 8 pence per mile. On a fleet where multiple vehicles are over their allowance, these per-mile charges accumulate rapidly — a 200-vehicle fleet with an average 10,000-mile overrun per vehicle would face £160,000 in charges at 8p per mile."
+  - question: "How can I prevent excess mileage charges?"
+    answer: "Excess mileage charges are preventable with real-time mileage monitoring. By tracking each vehicle's mileage against its contracted allowance continuously — rather than at lease return — fleet managers can identify vehicles trending over their limit months in advance. Action can then be taken: redistributing mileage across the fleet, adjusting driver allocation, or renegotiating the contract before charges accumulate."
+  - question: "Can I get excess mileage charges waived?"
+    answer: "Once a vehicle is returned over its mileage allowance, charges are contractually owed and rarely waived. Some leasing companies will negotiate if the overage is minor and you have a long-standing relationship, but this is the exception rather than the rule. The only reliable way to avoid excess mileage charges is proactive tracking during the contract term."
+  - question: "What is the average excess mileage per lease vehicle?"
+    answer: "Fleet industry data suggests that vehicles without active mileage monitoring commonly return with 5,000–15,000 excess miles over a three-year contract. For fleets of 50–200 vehicles, the aggregate excess mileage charge at contract end typically represents 3–7% of total fleet costs — a significant unbudgeted expense that is almost entirely avoidable."
 ---
 
 # The Hidden Cost of Excess Mileage — and How to See It Coming
+
+## What is an excess mileage charge?
+
+An excess mileage charge is a penalty levied by a leasing company when a vehicle is returned at the end of a contract having travelled more miles than the agreed allowance. The charge is calculated per mile over the limit — typically 5–15 pence per mile in the UK, with 8 pence being the standard rate — and applied to every excess mile across the full contract term. It is billed at vehicle return, by which point nothing can be done to avoid it.
 
 The invoice arrived on a Tuesday in November.
 

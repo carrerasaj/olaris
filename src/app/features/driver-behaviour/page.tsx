@@ -7,7 +7,7 @@ import { CTABanner } from '@/components/ui/CTABanner'
 export const metadata: Metadata = {
   title: 'Driver Behaviour Scoring & Monitoring Software | Olaris',
   description:
-    'Monitor and score driver behaviour across your fleet. Reduce accidents, lower insurance costs, and improve safety with real-time telematics data.',
+    'Driver behaviour scoring and driver monitoring software for UK fleets. Reduce accidents by up to 40%, lower insurance costs, and improve safety with real-time telematics data.',
   alternates: { canonical: 'https://olaris.co.uk/features/driver-behaviour' },
 }
 
@@ -119,7 +119,7 @@ export default function DriverBehaviourPage() {
 
           <div>
             <h2 className="text-2xl md:text-3xl font-bold font-heading tracking-tight mb-4">
-              Real-time monitoring vs periodic reviews
+              Real-time driver monitoring vs periodic reviews
             </h2>
             <p className="text-olaris-text-dark/70 leading-relaxed">
               Periodic driver reviews — monthly or quarterly — tell you what happened, not what
