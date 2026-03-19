@@ -167,6 +167,11 @@ export default function CostTrackingPage() {
                   Automated Mileage Tracking
                 </Link>
               </li>
+              <li>
+                <Link href="/tools/excess-mileage-calculator" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
+                  Estimate your excess mileage exposure →
+                </Link>
+              </li>
             </ul>
           </div>
 

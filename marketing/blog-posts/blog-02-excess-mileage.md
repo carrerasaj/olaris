@@ -194,3 +194,5 @@ The fleets managing mileage actively are avoiding 30-50% of the excess mileage c
 ## Next Step
 
 Live mileage tracking works best when it's integrated with your other fleet data: costs, driver behaviour, maintenance. If you'd like to see how projected mileage charges change when you have real-time visibility, [contact us](/contact). We can show you what your fleet's mileage exposure actually is — and what it could be with active management.
+
+**Try our free excess mileage calculator →** [Calculate your fleet's projected mileage charges](/tools/excess-mileage-calculator) — enter up to 10 vehicles and see which ones are heading for an excess charge before lease return.

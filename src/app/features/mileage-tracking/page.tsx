@@ -161,6 +161,11 @@ export default function MileageTrackingPage() {
                   Fleet Cost Tracking & TCO Analysis
                 </Link>
               </li>
+              <li>
+                <Link href="/tools/excess-mileage-calculator" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
+                  Try the free excess mileage calculator →
+                </Link>
+              </li>
             </ul>
           </div>
 

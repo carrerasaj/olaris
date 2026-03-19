@@ -27,6 +27,10 @@ const featureSlugs = [
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const toolPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/tools/excess-mileage-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+  ]
+
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
     { url: `${BASE_URL}/platform`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
@@ -52,5 +56,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...staticPages, ...featurePages, ...blogPages]
+  return [...staticPages, ...toolPages, ...featurePages, ...blogPages]
 }

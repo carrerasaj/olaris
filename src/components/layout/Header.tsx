@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Who We Help', href: '/industries' },
   { name: 'About', href: '/about' },
   { name: 'Blog', href: '/blog' },
+  { name: 'Tools', href: '/tools/excess-mileage-calculator' },
 ]
 
 const featuresNav = [
