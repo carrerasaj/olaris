@@ -26,6 +26,41 @@ export const metadata: Metadata = constructMetadata({
   url: 'https://olaris.co.uk/platform',
 })
 
+const softwareApplicationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Olaris Fleet Intelligence Platform',
+  description:
+    'Fleet intelligence platform providing real-time mileage tracking, driver behaviour scoring, DVLA compliance checking, cost tracking, and EV transition planning for UK fleet operators.',
+  applicationCategory: 'Fleet Management Software',
+  operatingSystem: 'Web',
+  url: 'https://olaris.co.uk/platform',
+  provider: {
+    '@type': 'Organization',
+    name: 'Olaris Consulting Limited',
+    url: 'https://olaris.co.uk',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'GBP',
+    description: 'Contact for pricing',
+  },
+  featureList: [
+    'Real-time mileage vs contract monitoring',
+    'Driver behaviour scoring and league tables',
+    'Automated DVLA licence checking',
+    'Fleet cost tracking and TCO analysis',
+    'EV transition planning',
+    'Multi-manufacturer OEM telematics integration',
+    'Carbon emissions reporting (Scope 1, 2, 3)',
+  ],
+  areaServed: {
+    '@type': 'Country',
+    name: 'United Kingdom',
+  },
+}
+
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   MapPin, Users, TrendingDown, Leaf, Car, ShieldCheck, Wrench, Lock, Plug,
 }
@@ -63,6 +98,10 @@ const featureLinkMap: Record<string, { href: string; label: string }[]> = {
 export default function PlatformPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
       <GradientHero
         size="compact"
         title="A platform built from the operator's chair"
