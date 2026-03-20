@@ -26,6 +26,8 @@ faqSchema:
 
 Grey fleet refers to privately owned vehicles that employees use for business journeys. Every time a member of staff drives their own car to visit a client, attend a meeting at another office, or make a delivery on behalf of your organisation, that vehicle becomes part of your grey fleet — whether you realise it or not.
 
+According to the Energy Saving Trust, grey fleet vehicles drive approximately 12 billion business miles each year on Britain's roads, costing UK employers more than £5.5 billion annually in mileage claims and car allowances (Source: Energy Saving Trust, Grey Fleet Review). In the public sector alone, 1.5 billion grey fleet miles are driven each year at a cost of £786 million. These are not niche numbers. Grey fleet is the single largest unmanaged transport cost for most UK organisations.
+
 It is a much larger issue than most businesses appreciate. According to ONS and Department for Transport data, there are an estimated 14 million grey fleet vehicles on UK roads compared to roughly 1 million traditional company cars. That is a ratio of 14 to 1. And yet 6 out of 10 companies have no grey fleet policy in place at all.
 
 I have spent 40 years in the UK automotive sector — running lease companies, managing fleets, and building the technology to support fleet operations. In that time, I have watched organisations invest heavily in managing their company vehicle fleets while completely overlooking the thousands of employee-owned cars being driven on company business every day. The legal exposure is identical. The attention it receives is not.
@@ -35,6 +37,8 @@ I have spent 40 years in the UK automotive sector — running lease companies, m
 Here is the part that catches organisations off guard: the law does not distinguish between a company car and an employee's personal vehicle when that vehicle is being used for work purposes.
 
 Under the Health and Safety at Work Act 1974, you owe the same duty of care to an employee driving their own car to a client meeting as you do to someone driving a liveried company van. The same obligation. The same liability. The same potential consequences.
+
+The scale of risk is significant. According to the Department for Transport, approximately one third of all road fatalities in Great Britain involve someone who was driving for work at the time (Source: DfT, Reported Road Casualties Great Britain: Estimates Involving Driving for Work). Brake, the road safety charity, estimates that work-related road collisions account for around a third of all road deaths and a fifth of serious injuries. Many of these involve grey fleet vehicles that employers did not even know were being used for work purposes.
 
 This extends further than most people realise. Under the Corporate Manslaughter and Corporate Homicide Act 2007, if an employee is involved in a fatal road incident while driving on company business — in any vehicle — and the organisation failed to take reasonable steps to ensure that driver and vehicle were fit to be on the road, the consequences are severe. Fines rarely come in below half a million pounds and more typically run into several million. Senior management can face personal liability.
 
@@ -76,7 +80,11 @@ A grey fleet policy does not need to be a 40-page legal document. It needs to be
 
 The essentials are: a clear definition of what constitutes a grey fleet journey (any business trip in a privately owned vehicle), the checks required before an employee can use their own car for work (licence, MOT, insurance, self-certification), who is responsible for conducting those checks and how often, the process for recording and storing the evidence, the mileage reimbursement rate (the HMRC Approved Mileage Allowance is 45p per mile for the first 10,000 business miles, then 25p), and what happens if an employee fails a check or refuses to participate.
 
-The policy should also consider whether a grey fleet journey is actually the most cost-effective option. Research from Fleet News found that grey fleet issues cost UK firms more than nine working days per affected employee per year. At some point, the mileage reimbursement, administrative overhead, and risk exposure of grey fleet may exceed the cost of providing a company vehicle or salary sacrifice arrangement.
+The policy should also consider whether a grey fleet journey is actually the most cost-effective option.
+
+Energy Saving Trust data shows that grey fleet mileage is heavily skewed: 61% of grey fleet drivers claim fewer than 1,000 miles per year, while a small proportion account for the bulk of total mileage (Source: [Energy Saving Trust, Grey Fleet Review](https://energysavingtrust.org.uk/service/grey-fleet-review/)). This means a targeted approach — focusing your compliance efforts and considering company vehicle alternatives for the highest-mileage grey fleet drivers — delivers the best return on investment.
+
+Research from Fleet News found that grey fleet issues cost UK firms more than nine working days per affected employee per year. At some point, the mileage reimbursement, administrative overhead, and risk exposure of grey fleet may exceed the cost of providing a company vehicle or salary sacrifice arrangement.
 
 This is where [cost tracking becomes valuable](/features/cost-tracking). If you can see what your grey fleet is actually costing — not just the mileage payments but the administrative burden, the insurance risk, and the productivity lost to vehicle breakdowns — you can make an informed decision about whether to continue with grey fleet or transition some frequent drivers into managed vehicles.
 
@@ -103,6 +111,13 @@ The organisations that struggle are not the ones that face a difficult complianc
 It is not about adding bureaucracy. It is about knowing what you are responsible for and handling it properly. That is duty of care in practice, and it protects everyone: your employees, your organisation, and the other road users around them.
 
 For more on the broader picture of [what fleet intelligence means for UK operators](/blog/what-is-fleet-intelligence), and how platforms like Olaris connect compliance, cost, and driver data into a single view, see the [Olaris platform overview](/platform).
+
+## Further Reading
+
+- [Energy Saving Trust — Grey Fleet Review](https://energysavingtrust.org.uk/service/grey-fleet-review/)
+- [Department for Transport — Reported Road Casualties Involving Driving for Work](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-involving-driving-for-work/)
+- [GOV.UK — Check a vehicle's MOT history](https://www.gov.uk/check-mot-history)
+- [HMRC — Approved Mileage Allowance Payments](https://www.gov.uk/expenses-and-benefits-business-travel-mileage/rules-for-tax)
 
 ## Frequently Asked Questions
 

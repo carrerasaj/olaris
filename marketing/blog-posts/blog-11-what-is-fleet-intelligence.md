@@ -58,6 +58,8 @@ Environmental data is increasingly critical. Carbon emissions reporting, [EV tra
 
 Fleet intelligence platforms pull these streams together. Not into a bigger spreadsheet, but into a system that understands the connections — that a driver's mileage trajectory affects lease return costs, which affects total cost of ownership, which affects the EV transition business case.
 
+The volume of data now available is substantial. According to McKinsey & Company, a modern connected vehicle generates up to 25 gigabytes of data per hour (Source: McKinsey, The Race for Connected-Car Data). By 2030, the connected vehicle data market is projected to be worth $250–400 billion globally. For fleet operators, this means the raw material for intelligence is already flowing — the challenge has shifted entirely from data collection to data interpretation.
+
 ## Why Fleet Intelligence Matters Now
 
 Connected vehicles have crossed a threshold. Ten years ago, fleet telematics meant fitting aftermarket black boxes to vehicles and pulling CSV files once a month. Today, most new vehicles ship with built-in connectivity and stream data continuously.
@@ -68,9 +70,13 @@ This is the gap fleet intelligence fills. Not by adding another dashboard to the
 
 Three developments make this particularly urgent for UK operators right now.
 
-First, the ZEV Mandate is forcing fleet composition decisions that require data most operators do not have readily available. Which vehicles are candidates for electric replacement based on actual daily mileage? What would charging costs look like at current tariffs? Where do drivers live relative to charging infrastructure? These questions need integrated data to answer properly.
+The UK has approximately 5 million vehicles registered to fleet operators, according to the British Vehicle Rental and Leasing Association (Source: [BVRLA, Annual Report](https://www.bvrla.co.uk/)). These vehicles account for roughly half of all new car registrations in any given year, meaning the fleet sector drives vehicle manufacturer strategy as much as private buyers do. The operational decisions fleet managers make — about mileage, maintenance, replacement cycles, and driver management — ripple across the entire automotive supply chain.
 
-Second, insurance costs are climbing, and underwriters are demanding telematics-backed evidence of driver risk profiles. The days of getting a competitive fleet insurance quote without data are ending.
+First, the ZEV Mandate is forcing fleet composition decisions that require data most operators do not have readily available. Under the UK's Zero Emission Vehicle (ZEV) Mandate, manufacturers must ensure that at least 28% of new car sales and 10% of new van sales are zero emission by 2026, rising to 80% and 46% respectively by 2030 (Source: [Department for Transport, ZEV Mandate Regulations 2024](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation)). Fleet operators account for a disproportionate share of new vehicle purchases, making them central to meeting these targets. But choosing which vehicles to transition requires data that most operators simply do not have in one place.
+
+Which vehicles are candidates for electric replacement based on actual daily mileage? What would charging costs look like at current tariffs? Where do drivers live relative to charging infrastructure? These questions need integrated data to answer properly.
+
+Second, insurance costs are climbing, and underwriters are demanding telematics-backed evidence of driver risk profiles. Fleet motor insurance premiums have increased by an estimated 20–30% since 2022, driven by rising repair costs, parts inflation, and more expensive vehicle technology (Source: [Association of British Insurers, Motor Insurance Data](https://www.abi.org.uk/)). Insurers are responding by differentiating more aggressively on risk data — fleets that can evidence good driving behaviour through telematics data are securing materially better terms than those operating without data. The days of getting a competitive fleet insurance quote without data are ending.
 
 Third, lease return costs remain one of the largest unmanaged expenses in fleet operations. Excess mileage, damage, and early termination charges are predictable — but only if you are tracking the right data continuously, not checking it at the end of the contract.
 
@@ -93,6 +99,12 @@ Olaris was built to close that gap. Not as a tracking platform that added featur
 We work with fleet operators, lease companies, OEMs, and brokers across the UK. The platform integrates with 15+ vehicle manufacturers, the DVLA, Mapbox for geospatial intelligence, and Oracle Cloud infrastructure for secure, scalable data processing.
 
 The goal is straightforward: give fleet operators the clarity to make decisions based on where things are heading, not where they have been. [Learn more about the team behind Olaris](/about).
+
+## Further Reading
+
+- [BVRLA — British Vehicle Rental and Leasing Association](https://www.bvrla.co.uk/)
+- [Department for Transport — ZEV Mandate Regulations](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation)
+- [Association of British Insurers — Motor Insurance Data](https://www.abi.org.uk/)
 
 ## Frequently Asked Questions
 

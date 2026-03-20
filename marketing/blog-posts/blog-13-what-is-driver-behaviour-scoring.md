@@ -30,6 +30,8 @@ But here is the part that most fleet technology providers get wrong: the score i
 
 I have spent 40 years in the UK automotive sector, and I have seen both approaches. Surveillance-led programmes create resentment, low engagement, and drivers who learn to game the system. Reward-led programmes — where better driving earns recognition, incentives, and tangible benefits — create genuine culture change. The data is clear on which one works.
 
+The stakes are real. According to the Department for Transport, 1,602 people were killed on Britain's roads in 2024, with a further 27,865 seriously injured (Source: DfT, Reported Road Casualties Great Britain Annual Report 2024). Brake, the road safety charity, estimates that more than a third of these fatalities involve someone driving for work. Driver behaviour — speed, attention, fatigue — is a factor in the majority of incidents. This is what scoring systems are trying to change.
+
 ## What Gets Measured
 
 A driver behaviour score is built from several components, each weighted according to its impact on safety and cost.
@@ -60,7 +62,7 @@ This is not a technology failure. It is a culture failure. And it is the single 
 
 The companies getting genuine results from driver behaviour scoring are the ones treating it as a positive programme rather than a punitive one.
 
-Lightfoot, a UK-based fleet technology company, has pioneered this approach. Their platform combines real-time in-cab coaching with a rewards programme that gives drivers tangible incentives for maintaining good scores. Drivers who achieve "elite" standard — the level at which accident risk drops by up to 40% and fuel consumption falls by up to 15% — gain access to weekly cash prize draws, vouchers, and recognition. The results speak for themselves: over 90% driver engagement, compared to the 5% industry average for traditional telematics. Asda's delivery fleet of over 3,000 vehicles saw dangerous driving events halved and fuel consumption cut by 5.1%, saving the equivalent of 2,482 tonnes of CO2 annually.
+Lightfoot, a UK-based fleet technology company, has pioneered this approach. Their platform combines real-time in-cab coaching with a rewards programme that gives drivers tangible incentives for maintaining good scores. Drivers who achieve "elite" standard — the level at which accident risk drops by up to 40% and fuel consumption falls by up to 15% — gain access to weekly cash prize draws, vouchers, and recognition. The results speak for themselves: over 90% driver engagement, compared to the 5% industry average for traditional telematics. According to Lightfoot's published case study, Asda's delivery fleet of over 3,000 vehicles saw a 50% reduction in dangerous driving events, a 5.1% improvement in average MPG, and annual CO2 savings equivalent to 2,482 tonnes — simply by changing how drivers handled their vehicles (Source: [Lightfoot, Asda Case Study, 2022](https://www.lightfoot.co.uk/success-stories/asda-case-study/)). Currys, another Lightfoot client, reported similar results across their delivery operation.
 
 The principle is simple. People respond better to "here's what you earn by driving well" than "here's what happens if you drive badly."
 
@@ -71,6 +73,8 @@ Fleet managers can configure reward thresholds — set a target score, define th
 ## The Insurance Dividend
 
 Here is where driver behaviour scoring delivers financial value that goes beyond fuel savings.
+
+The Occupational Road Safety Alliance (ORSA) reports that work-related road collisions cost UK employers an estimated £2.7 billion per year in lost time, vehicle damage, increased insurance premiums, and legal costs (Source: [ORSA, Facts and Figures](https://orsa.org.uk/facts-and-figures/)). For individual fleet operators, the average cost of an at-fault incident — including vehicle repair, replacement hire, third-party claims, and administrative time — typically falls between £10,000 and £20,000. Even modest improvements in driving behaviour produce measurable financial returns.
 
 Fleet insurers are increasingly asking for telematics data. Not because they want to catch drivers out, but because data allows them to price risk accurately. A fleet with demonstrable behaviour scoring, improving trends, and active driver engagement programmes presents a quantifiably lower risk than one operating blind.
 
@@ -86,7 +90,7 @@ The operational benefits of improved driver behaviour compound across every cost
 
 Vehicle condition improves measurably. Smoother driving reduces wear on brakes, tyres, and suspension. A driver who brakes harshly 15 times per 100 kilometres will chew through brake pads twice as fast as one averaging 3 events per 100 kilometres. The same applies to tyres — aggressive cornering and harsh acceleration scrub rubber faster. Over a three-year lease term, the difference in end-of-contract vehicle condition directly affects return charges.
 
-Downtime drops. Vehicles driven aggressively break down more often. Harsh driving triggers more frequent warning lights, accelerates component wear, and increases the likelihood of roadside breakdowns. Every vehicle off the road is a driver without transport, a job delayed, and a cost incurred.
+Downtime drops. Vehicles driven aggressively break down more often. This is particularly acute for van fleets. Department for Transport data shows that Light Goods Vehicles (LGVs) were involved in 2,835 fatal or serious collisions in 2021 — a 12% increase on the previous decade (Source: [DfT, Reported Road Casualties Great Britain 2021](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)). Aggressive driving in LGVs compounds the risk because of their higher centre of gravity and longer stopping distances compared to cars. Harsh driving triggers more frequent warning lights, accelerates component wear, and increases the likelihood of roadside breakdowns. Every vehicle off the road is a driver without transport, a job delayed, and a cost incurred.
 
 Fuel consumption falls. Aggressive acceleration and excessive speed are the two biggest controllable factors in fuel consumption. Behaviour programmes that specifically target these events routinely achieve 10–15% fuel savings across the fleet. For a 200-vehicle fleet averaging £3,000 per vehicle per year in fuel, that is £60,000–£90,000 in annual savings.
 
@@ -107,6 +111,13 @@ Use the data constructively. When a driver's score drops, the first response sho
 Finally, connect the programme to outcomes the business cares about. When you can show the board that driver behaviour scores improved from an average of 65 to 78 over six months, and in the same period fuel costs dropped by 12%, accident frequency fell by 30%, and the insurance renewal came in 8% lower than projected — that is a programme that earns permanent investment.
 
 For broader context on how driver behaviour data fits into a complete fleet intelligence picture, see [What is Fleet Intelligence?](/blog/what-is-fleet-intelligence). And if your organisation relies on privately owned vehicles for business travel, the same principles apply to grey fleet — see [What is Grey Fleet?](/blog/what-is-grey-fleet).
+
+## Further Reading
+
+- [Department for Transport — Reported Road Casualties Great Britain Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)
+- [Lightfoot — Asda Case Study](https://www.lightfoot.co.uk/success-stories/asda-case-study/)
+- [Brake — Workplace Road Safety](https://www.brake.org.uk/get-involved/take-action/in-your-workplace)
+- [ORSA — Facts and Figures](https://orsa.org.uk/facts-and-figures/)
 
 ## Frequently Asked Questions
 
