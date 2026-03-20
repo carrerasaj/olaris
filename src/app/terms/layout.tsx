@@ -4,7 +4,7 @@ import { constructMetadata } from '@/lib/seo'
 export const metadata: Metadata = constructMetadata({
   title: 'Terms of Service | Olaris',
   description:
-    'Terms and conditions for using the Olaris fleet intelligence platform and website.',
+    'Terms and conditions for using the Olaris fleet intelligence platform and website. Covers acceptable use, intellectual property, and liability.',
   url: 'https://olaris.co.uk/terms',
 })
 

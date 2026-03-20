@@ -1,7 +1,7 @@
 ---
 title: "What is Driver Behaviour Scoring? Why Reward Beats Surveillance"
 metaTitle: "What is Driver Behaviour Scoring? Reward Beats Surveillance | Olaris"
-metaDescription: "Driver behaviour scoring measures how your fleet drives — but scoring alone changes nothing. Here's how reward-led programmes cut accidents by 40% and fuel costs by 15%."
+metaDescription: "Driver behaviour scoring measures how your fleet drives — but scoring alone changes nothing. Reward-led programmes cut accidents by 40%."
 category: "Driver Behaviour"
 headerImage: "Fleet driver dashboard showing real-time behaviour score with gamification badges and weekly challenge progress"
 date: 2026-03-18

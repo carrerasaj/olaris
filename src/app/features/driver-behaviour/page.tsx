@@ -7,7 +7,7 @@ import { CTABanner } from '@/components/ui/CTABanner'
 export const metadata: Metadata = {
   title: 'Driver Behaviour Scoring & Monitoring Software | Olaris',
   description:
-    'Driver behaviour scoring and driver monitoring software for UK fleets. Reduce accidents by up to 40%, lower insurance costs, and improve safety with real-time telematics data.',
+    'Driver behaviour scoring and monitoring for UK fleets. Cut accidents by 40%, lower insurance costs, and improve safety with real-time data.',
   alternates: { canonical: 'https://olaris.co.uk/features/driver-behaviour' },
 }
 
