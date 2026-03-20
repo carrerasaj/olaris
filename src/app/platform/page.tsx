@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Fleet Intelligence Platform: Tracking, Mileage & Cost Insights | Olaris',
+  title: 'Fleet Intelligence Platform | Olaris',
   description:
     'Live tracking of 15+ manufacturers. Automated mileage vs contract monitoring, driver behaviour scoring, DVLA checks, cost tracking & EV transition planning.',
   url: 'https://olaris.co.uk/platform',

@@ -1,6 +1,6 @@
 ---
 title: "What is Fleet Intelligence?"
-metaTitle: "What is Fleet Intelligence? | From Fleet Management to Fleet Intelligence"
+metaTitle: "What is Fleet Intelligence? | The Complete Guide | Olaris"
 metaDescription: "Fleet intelligence turns raw vehicle data into decisions. Learn how it differs from fleet management and why UK operators are making the shift."
 category: "Thought Leadership"
 headerImage: "Fleet manager reviewing real-time vehicle data dashboard on multiple screens"

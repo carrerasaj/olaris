@@ -5,7 +5,7 @@ import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import ExcessMileageCalculator from '@/components/tools/ExcessMileageCalculator'
 
 export const metadata: Metadata = {
-  title: 'Free Excess Mileage Calculator | Fleet Mileage Projection Tool | Olaris',
+  title: 'Free Excess Mileage Calculator | Fleet Tool | Olaris',
   description:
     'Calculate projected excess mileage charges for your fleet. Free interactive tool using the same methodology as the Olaris platform.',
   alternates: { canonical: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
