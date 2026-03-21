@@ -2,37 +2,37 @@
 /**
  * IndexNow ping script — run after deploy to notify Bing of updated URLs.
  * Usage: node scripts/indexnow-ping.js
+ *
+ * Blog slugs are discovered dynamically by scanning marketing/blog-posts/
+ * so new posts are picked up automatically without editing this script.
  */
+
+const { readdirSync } = require('fs')
+const { join } = require('path')
+
+const ROOT = join(__dirname, '..')
 
 const BASE_URL = 'https://olaris.co.uk'
 const INDEXNOW_KEY = 'a3f8c2d17e4b59061f0e3a825d6c9741'
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
 
-const BLOG_SLUGS = [
-  'fleet-cost-report',
-  'excess-mileage',
-  'driver-behaviour-insurance',
-  'dvla-compliance',
-  'scope-123-fleet',
-  'ev-transition-fleet',
-  'connected-vehicle-data',
-  'lease-company-mileage',
-  'fleet-data-single-view',
-  'fleet-management-2026',
-  'what-is-fleet-intelligence',
-  'what-is-grey-fleet',
-  'what-is-driver-behaviour-scoring',
-  'what-is-fleet-compliance',
-  'what-is-an-at-risk-driver',
-]
+// Derive slugs from markdown filenames: blog-01-fleet-cost-report.md -> fleet-cost-report
+function discoverBlogSlugs() {
+  const dir = join(ROOT, 'marketing', 'blog-posts')
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => f.replace(/^blog-\d+-/, '').replace(/\.md$/, ''))
+    .sort()
+}
 
-const FEATURE_SLUGS = [
-  'mileage-tracking',
-  'driver-behaviour',
-  'dvla-compliance',
-  'ev-transition',
-  'cost-tracking',
-]
+// Derive slugs from subdirectory names under src/app/features/
+function discoverFeatureSlugs() {
+  const dir = join(ROOT, 'src', 'app', 'features')
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .sort()
+}
 
 const STATIC_URLS = [
   `${BASE_URL}/`,
@@ -44,8 +44,8 @@ const STATIC_URLS = [
   `${BASE_URL}/tools/excess-mileage-calculator`,
 ]
 
-const BLOG_URLS = BLOG_SLUGS.map((slug) => `${BASE_URL}/blog/${slug}`)
-const FEATURE_URLS = FEATURE_SLUGS.map((slug) => `${BASE_URL}/features/${slug}`)
+const BLOG_URLS = discoverBlogSlugs().map((slug) => `${BASE_URL}/blog/${slug}`)
+const FEATURE_URLS = discoverFeatureSlugs().map((slug) => `${BASE_URL}/features/${slug}`)
 
 const ALL_URLS = [...STATIC_URLS, ...BLOG_URLS, ...FEATURE_URLS]
 
