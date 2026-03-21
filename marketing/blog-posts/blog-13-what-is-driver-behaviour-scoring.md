@@ -24,7 +24,7 @@ faqSchema:
 
 # What is Driver Behaviour Scoring? Why Reward Beats Surveillance
 
-Driver behaviour scoring is the practice of measuring how individuals drive a fleet vehicle — not just where they go or how far, but how they accelerate, brake, corner, and respond to speed limits. Each driver receives a numerical score, typically on a scale of 0 to 100, calculated from telematics data captured in real time. The score provides fleet operators with an objective measure of driving style that can be tracked, compared, and acted upon.
+Driver behaviour — how your fleet's drivers accelerate, brake, corner, and respond to road conditions — is one of the strongest predictors of fleet safety and cost. It determines who has accidents, how much fuel you burn, how quickly vehicles wear out, and what your insurance renewal looks like. Driver behaviour scoring is the practice of turning those patterns into a measurable number: a score from 0 to 100, calculated from telematics data in real time, that gives fleet operators an objective measure of driving style for every driver in the fleet.
 
 But here is the part that most fleet technology providers get wrong: the score itself is not the point. A number on a dashboard changes nothing. What matters is what you do with it — and the difference between a behaviour programme that works and one that gets ignored comes down to a single question. Are you using data to catch people out, or to help them improve?
 
