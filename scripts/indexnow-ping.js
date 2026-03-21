@@ -5,6 +5,8 @@
  *
  * Blog slugs are discovered dynamically by scanning marketing/blog-posts/
  * so new posts are picked up automatically without editing this script.
+ *
+ * Uses the bulk POST API to submit all URLs in a single request.
  */
 
 const { readdirSync } = require('fs')
@@ -12,8 +14,9 @@ const { join } = require('path')
 
 const ROOT = join(__dirname, '..')
 
-const BASE_URL = 'https://olaris.co.uk'
-const INDEXNOW_KEY = 'a3f8c2d17e4b59061f0e3a825d6c9741'
+const HOST = 'olaris.co.uk'
+const BASE_URL = `https://${HOST}`
+const INDEXNOW_KEY = '66d844914d944ade83dedcc592be221a'
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
 
 // Derive slugs from markdown filenames: blog-01-fleet-cost-report.md -> fleet-cost-report
@@ -49,43 +52,29 @@ const FEATURE_URLS = discoverFeatureSlugs().map((slug) => `${BASE_URL}/features/
 
 const ALL_URLS = [...STATIC_URLS, ...BLOG_URLS, ...FEATURE_URLS]
 
-async function pingUrl(url) {
-  const endpoint = `${INDEXNOW_ENDPOINT}?url=${encodeURIComponent(url)}&key=${INDEXNOW_KEY}`
-  const res = await fetch(endpoint)
-  return { url, status: res.status }
-}
-
 async function main() {
-  console.log(`Pinging IndexNow for ${ALL_URLS.length} URLs...`)
+  console.log(`Submitting ${ALL_URLS.length} URLs to IndexNow...`)
 
-  const results = await Promise.allSettled(ALL_URLS.map(pingUrl))
+  const res = await fetch(INDEXNOW_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({
+      host: HOST,
+      key: INDEXNOW_KEY,
+      keyLocation: `${BASE_URL}/${INDEXNOW_KEY}.txt`,
+      urlList: ALL_URLS,
+    }),
+  })
 
-  let ok = 0
-  let failed = 0
-
-  for (const result of results) {
-    if (result.status === 'fulfilled') {
-      const { url, status } = result.value
-      // 200 = submitted, 202 = accepted (already known), both are success
-      if (status === 200 || status === 202) {
-        console.log(`  ✓ ${status} ${url}`)
-        ok++
-      } else {
-        console.warn(`  ✗ ${status} ${url}`)
-        failed++
-      }
-    } else {
-      console.error(`  ✗ ERROR ${result.reason}`)
-      failed++
-    }
+  if (res.status === 200 || res.status === 202) {
+    console.log(`  ✓ ${res.status} — all ${ALL_URLS.length} URLs submitted successfully.`)
+  } else {
+    console.warn(`  ✗ ${res.status} — IndexNow submission failed.`)
+    console.warn('  This is non-fatal; the build will continue.')
   }
-
-  console.log(`\nDone: ${ok} succeeded, ${failed} failed.`)
-
-  if (failed > 0) process.exit(1)
 }
 
 main().catch((err) => {
   console.error('IndexNow ping failed:', err)
-  process.exit(1)
+  console.warn('This is non-fatal; the build will continue.')
 })
