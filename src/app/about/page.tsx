@@ -118,7 +118,8 @@ export default function AboutPage() {
             <p>
               So we built Olaris. Not as a startup chasing a market. As practitioners building
               the tools we needed. Every feature exists because someone who runs vehicles asked
-              for it — not because a product roadmap said it was time.
+              for it — not because a product roadmap said it was time. As a fleet intelligence
+              company built by industry practitioners, that distinction shapes everything we do.
             </p>
           </div>
 

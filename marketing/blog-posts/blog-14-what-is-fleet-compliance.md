@@ -34,6 +34,10 @@ I've spent 40 years in the UK automotive sector, and the pattern I see again and
 
 So let's break down what fleet compliance actually involves, what the law requires, and what a proper compliance programme looks like.
 
+## Fleet Compliance Requirements UK: What the Law Actually Demands
+
+Before diving into the detail, it helps to know the landscape. Fleet compliance requirements in the UK are drawn from several pieces of legislation: the Road Traffic Act 1988 (licence validity and insurance), the Health and Safety at Work Act 1974 (duty of care for employees driving for work), the Corporate Manslaughter and Corporate Homicide Act 2007 (organisational liability for fatal incidents), and EC Regulation 561/2006 as retained in UK law (drivers' hours for HGV and PSV operations). These aren't optional standards — they're legal minimums, and ignorance of them is not a defence.
+
 ## The Five Pillars of Fleet Compliance
 
 Every fleet compliance obligation in the UK falls into one of five areas. Miss any one of them and you've got an exposure.
@@ -68,7 +72,7 @@ For more on the grey fleet insurance challenge specifically, see [What is Grey F
 
 If your fleet includes vehicles over 3.5 tonnes or carries passengers in vehicles with more than 9 seats, you're subject to EU-derived drivers' hours regulations (retained in UK law as EC Regulation 561/2006). These set maximum daily and weekly driving limits and minimum rest period requirements.
 
-Even for fleets that fall outside the tachograph regulations, there's still a general duty of care under the Health and Safety at Work Act 1974 not to require or permit drivers to work in conditions that put them or others at risk. That includes fatigue. If you're scheduling a driver to make a 6-hour round trip at the end of an 8-hour shift, and they have an incident, the question will be asked: did you know? Should you have known?
+Even for fleets that fall outside the tachograph regulations, there's still a general duty of care under the Health and Safety at Work Act 1974 not to require or permit drivers to work in conditions that put them or others at risk. This is the employer's responsibility for company vehicles and grey fleet alike — the obligation doesn't stop at the vehicle type. That includes fatigue. If you're scheduling a driver to make a 6-hour round trip at the end of an 8-hour shift, and they have an incident, the question will be asked: did you know? Should you have known?
 
 This is one of the harder compliance areas to manage because it's less about checking documents and more about understanding patterns. [Driver behaviour data](/features/driver-behaviour) — acceleration, braking, speed consistency — can give you early indicators of fatigue before an incident happens. I covered how this works in [What is Driver Behaviour Scoring?](/blog/what-is-driver-behaviour-scoring).
 
@@ -94,7 +98,7 @@ The common thread in every prosecution I've seen is the same: the company didn't
 
 ## What Good Compliance Looks Like
 
-If you're building or reviewing a compliance programme, here's what separates the operations that survive scrutiny from those that don't.
+If you're thinking about how to manage fleet compliance properly — rather than just tick boxes — here's what separates the operations that survive scrutiny from those that don't. Think of this as your fleet compliance checklist: the non-negotiables that a robust programme must cover.
 
 **Continuous, not periodic.** Compliance isn't a quarterly exercise. It's a continuous state that gets monitored in real time. Licence expires? You know today, not in three months when someone remembers to check. MOT approaching? The alert goes out with enough lead time to schedule the work.
 

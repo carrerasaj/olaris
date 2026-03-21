@@ -34,7 +34,7 @@ I have spent 40 years in the UK automotive sector — running lease companies, m
 
 ## Why Grey Fleet Matters More Than You Think
 
-Here is the part that catches organisations off guard: the law does not distinguish between a company car and an employee's personal vehicle when that vehicle is being used for work purposes.
+Here is the part that catches organisations off guard: the law does not distinguish between a company car and an employee's personal vehicle when that vehicle is being used for work purposes. Grey fleet risks — legal, financial, and reputational — are identical to those that apply to a fully managed company vehicle fleet.
 
 Under the Health and Safety at Work Act 1974, you owe the same duty of care to an employee driving their own car to a client meeting as you do to someone driving a liveried company van. The same obligation. The same liability. The same potential consequences.
 
