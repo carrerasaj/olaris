@@ -8,7 +8,7 @@ export const siteConfig = {
   ogImage: 'https://olaris.co.uk/opengraph-image',
   links: {
     linkedin: 'https://linkedin.com/company/olaris-consulting-limited',
-    twitter: 'https://twitter.com/olarisconsult',
+    twitter: 'https://twitter.com/olarisconsulting',
   },
   contact: {
     email: 'alan@olaris.co.uk',
@@ -84,7 +84,7 @@ export function constructMetadata({
       title,
       description,
       images: [image],
-      creator: '@olarisconsult',
+      creator: '@olarisconsulting',
     },
     icons: {
       icon: '/favicon.ico',
