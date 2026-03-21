@@ -26,7 +26,14 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ['400', '700'],
 })
 
-export const metadata: Metadata = constructMetadata()
+export const metadata: Metadata = {
+  ...constructMetadata(),
+  verification: {
+    other: {
+      'msvalidate.01': '581CE3401F19F5B8A577031D31B2894D',
+    },
+  },
+}
 
 export default function RootLayout({
   children,
