@@ -17,6 +17,8 @@ const slugToFile: Record<string, string> = {
   'what-is-fleet-intelligence': 'blog-11-what-is-fleet-intelligence.md',
   'what-is-grey-fleet': 'blog-12-what-is-grey-fleet.md',
   'what-is-driver-behaviour-scoring': 'blog-13-what-is-driver-behaviour-scoring.md',
+  'what-is-fleet-compliance': 'blog-14-what-is-fleet-compliance.md',
+  'what-is-an-at-risk-driver': 'blog-15-what-is-an-at-risk-driver.md',
 }
 
 function getFrontmatter(slug: string) {

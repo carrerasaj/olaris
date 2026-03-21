@@ -125,4 +125,22 @@ export const blogPosts: BlogPostPreview[] = [
     readTime: '7 min read',
     date: '2026-03-04',
   },
+  {
+    id: 'what-is-fleet-compliance',
+    title: 'What is Fleet Compliance? The Complete UK Guide',
+    excerpt:
+      "Fleet compliance means keeping every driver, vehicle, and document legally road-ready. Here's what UK fleet operators must check, how often, and what happens if you don't.",
+    category: 'Compliance',
+    readTime: '9 min read',
+    date: '2026-03-21',
+  },
+  {
+    id: 'what-is-an-at-risk-driver',
+    title: 'What is an At-Risk Driver? How to Identify, Score, and Manage Driver Risk',
+    excerpt:
+      "An at-risk driver is anyone whose behaviour, licence status, or compliance gaps make them statistically more likely to be involved in an incident. Here's how to identify and manage them.",
+    category: 'Driver Behaviour',
+    readTime: '9 min read',
+    date: '2026-03-21',
+  },
 ]
