@@ -72,7 +72,7 @@ Three developments make this particularly urgent for UK operators right now.
 
 The UK has approximately 5 million vehicles registered to fleet operators, according to the British Vehicle Rental and Leasing Association (Source: [BVRLA, Annual Report](https://www.bvrla.co.uk/)). These vehicles account for roughly half of all new car registrations in any given year, meaning the fleet sector drives vehicle manufacturer strategy as much as private buyers do. The operational decisions fleet managers make — about mileage, maintenance, replacement cycles, and driver management — ripple across the entire automotive supply chain.
 
-First, the ZEV Mandate is forcing fleet composition decisions that require data most operators do not have readily available. Under the UK's Zero Emission Vehicle (ZEV) Mandate, manufacturers must ensure that at least 28% of new car sales and 10% of new van sales are zero emission by 2026, rising to 80% and 46% respectively by 2030 (Source: [Department for Transport, ZEV Mandate Regulations 2024](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation)). Fleet operators account for a disproportionate share of new vehicle purchases, making them central to meeting these targets. But choosing which vehicles to transition requires data that most operators simply do not have in one place.
+First, the ZEV Mandate is forcing fleet composition decisions that require data most operators do not have readily available. Under the UK's Zero Emission Vehicle (ZEV) Mandate, manufacturers must ensure that at least 28% of new car sales and 10% of new van sales are zero emission by 2026, rising to 80% and 46% respectively by 2030 (Source: [Department for Transport, ZEV Mandate Regulations 2024](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation-for-new-cars-and-vans-in-the-uk)). Fleet operators account for a disproportionate share of new vehicle purchases, making them central to meeting these targets. But choosing which vehicles to transition requires data that most operators simply do not have in one place.
 
 Which vehicles are candidates for electric replacement based on actual daily mileage? What would charging costs look like at current tariffs? Where do drivers live relative to charging infrastructure? These questions need integrated data to answer properly.
 
@@ -103,7 +103,7 @@ The goal is straightforward: give fleet operators the clarity to make decisions 
 ## Further Reading
 
 - [BVRLA — British Vehicle Rental and Leasing Association](https://www.bvrla.co.uk/)
-- [Department for Transport — ZEV Mandate Regulations](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation)
+- [Department for Transport — ZEV Mandate Regulations](https://www.gov.uk/government/consultations/a-zero-emission-vehicle-zev-mandate-and-co2-emissions-regulation-for-new-cars-and-vans-in-the-uk)
 - [Association of British Insurers — Motor Insurance Data](https://www.abi.org.uk/)
 
 ## Frequently Asked Questions
