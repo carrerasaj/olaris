@@ -39,6 +39,9 @@ function discoverFeatureSlugs() {
 
 const STATIC_URLS = [
   `${BASE_URL}/`,
+  `${BASE_URL}/leasing`,
+  `${BASE_URL}/leasing/business-contract-hire`,
+  `${BASE_URL}/leasing/salary-sacrifice`,
   `${BASE_URL}/platform`,
   `${BASE_URL}/industries`,
   `${BASE_URL}/about`,

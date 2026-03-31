@@ -35,6 +35,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${BASE_URL}/leasing`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE_URL}/leasing/business-contract-hire`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/leasing/salary-sacrifice`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE_URL}/platform`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE_URL}/industries`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },

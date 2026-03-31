@@ -121,6 +121,13 @@ export default function AboutPage() {
               for it — not because a product roadmap said it was time. As a fleet intelligence
               company built by industry practitioners, that distinction shapes everything we do.
             </p>
+            <p>
+              In 2026, Olaris expanded to provide{' '}
+              <a href="/leasing/business-contract-hire" className="text-cyan-600 hover:text-cyan-700 font-medium underline underline-offset-2">business contract hire</a>
+              {' '}and{' '}
+              <a href="/leasing/salary-sacrifice" className="text-cyan-600 hover:text-cyan-700 font-medium underline underline-offset-2">salary sacrifice</a>
+              {' '}solutions — bringing fleet intelligence and vehicle finance together in a single relationship.
+            </p>
           </div>
 
           {/* Credentials bar */}

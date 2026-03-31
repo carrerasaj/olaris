@@ -84,6 +84,13 @@ export default function ContactPage() {
                   placeholder="Company"
                   className={inputStyles}
                 />
+                <select name="enquiry" className={inputStyles} defaultValue="">
+                  <option value="" disabled>Enquiry type</option>
+                  <option>Business Contract Hire</option>
+                  <option>Salary Sacrifice</option>
+                  <option>Platform Demo</option>
+                  <option>General Enquiry</option>
+                </select>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <select name="role" className={inputStyles} defaultValue="">
                     <option value="" disabled>Your role</option>

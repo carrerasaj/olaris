@@ -17,6 +17,11 @@ const navigation = [
   { name: 'Tools', href: '/tools/excess-mileage-calculator' },
 ]
 
+const leasingNav = [
+  { name: 'Business Contract Hire', href: '/leasing/business-contract-hire' },
+  { name: 'Salary Sacrifice', href: '/leasing/salary-sacrifice' },
+]
+
 const featuresNav = [
   { name: 'Mileage Tracking', href: '/features/mileage-tracking' },
   { name: 'Driver Behaviour', href: '/features/driver-behaviour' },
@@ -64,6 +69,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false)
+  const [isLeasingOpen, setIsLeasingOpen] = useState(false)
   const pathname = usePathname()
 
   const { scrollYProgress } = useScroll()
@@ -112,6 +118,46 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-1 lg:flex">
+          {/* Leasing dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsLeasingOpen(true)}
+            onMouseLeave={() => setIsLeasingOpen(false)}
+          >
+            <Link
+              href="/leasing"
+              className={cn(
+                'relative flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors',
+                pathname.startsWith('/leasing')
+                  ? 'text-cyan-400'
+                  : 'text-olaris-text-secondary hover:text-white'
+              )}
+            >
+              Leasing
+              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', isLeasingOpen && 'rotate-180')} />
+            </Link>
+            {isLeasingOpen && (
+              <div className="absolute top-full left-0 pt-1 z-50">
+                <div className="w-52 rounded-xl bg-[#0F172A] border border-olaris-border-dark shadow-xl py-1">
+                  {leasingNav.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        'block px-4 py-2 text-sm transition-colors',
+                        pathname === item.href
+                          ? 'text-cyan-400'
+                          : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {navigation.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -205,6 +251,35 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-[#0F172A] border-t border-olaris-border-dark">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-1">
+            {/* Leasing sub-links */}
+            <p className="px-4 pt-2 pb-1 text-xs font-semibold uppercase tracking-wider text-olaris-text-secondary/50">
+              Leasing
+            </p>
+            <Link
+              href="/leasing"
+              className={cn(
+                'px-6 py-2 text-sm font-medium rounded-lg transition-colors',
+                pathname === '/leasing'
+                  ? 'text-cyan-400 bg-cyan-500/10'
+                  : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
+              )}
+            >
+              All Leasing
+            </Link>
+            {leasingNav.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'px-6 py-2 text-sm font-medium rounded-lg transition-colors',
+                  pathname === item.href
+                    ? 'text-cyan-400 bg-cyan-500/10'
+                    : 'text-olaris-text-secondary hover:text-white hover:bg-white/5'
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
             {navigation.map((item) => (
               <Link
                 key={item.name}

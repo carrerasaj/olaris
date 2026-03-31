@@ -108,6 +108,14 @@ export default function PlatformPage() {
         subtitle="Everything here exists because someone who has actually run a fleet said 'I need this.' Not because a product manager thought it sounded good."
       />
 
+      {/* Leasing note */}
+      <SectionWrapper variant="light" padding="compact">
+        <p className="text-center text-olaris-text-dark/70 leading-relaxed max-w-3xl mx-auto">
+          Every Olaris <Link href="/leasing" className="text-cyan-600 hover:text-cyan-700 font-medium underline underline-offset-2">leasing customer</Link> gets
+          access to the full Orbis platform as part of their agreement — no separate subscription required.
+        </p>
+      </SectionWrapper>
+
       {outcomes.map((outcome, i) => {
         const variant = i % 2 === 0 ? 'light' : 'dark'
         const MockupComponent = mockupMap[outcome.id]
