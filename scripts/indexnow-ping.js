@@ -48,6 +48,7 @@ const STATIC_URLS = [
   `${BASE_URL}/contact`,
   `${BASE_URL}/blog`,
   `${BASE_URL}/tools/excess-mileage-calculator`,
+  `${BASE_URL}/tools/ev-transition-planner`,
 ]
 
 const BLOG_URLS = discoverBlogSlugs().map((slug) => `${BASE_URL}/blog/${slug}`)

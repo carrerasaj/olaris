@@ -95,6 +95,16 @@ export default function HomePage() {
             )
           })}
         </div>
+        <p className="text-center text-sm text-olaris-text-secondary mt-8">
+          Try our free{' '}
+          <Link href="/tools/excess-mileage-calculator" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2">
+            Excess Mileage Calculator
+          </Link>{' '}
+          or explore the{' '}
+          <Link href="/tools/ev-transition-planner" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2">
+            EV Transition Planner
+          </Link>
+        </p>
       </SectionWrapper>
 
       <CredibilitySection />

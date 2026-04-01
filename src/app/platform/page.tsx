@@ -82,6 +82,7 @@ const mockupUrlMap: Record<string, string> = {
 const featureLinkMap: Record<string, { href: string; label: string }[]> = {
   'fleet-visibility': [
     { href: '/features/mileage-tracking', label: 'Learn more about mileage tracking' },
+    { href: '/tools/excess-mileage-calculator', label: 'Try the free excess mileage calculator' },
   ],
   'driver-management': [
     { href: '/features/driver-behaviour', label: 'Learn more about driver behaviour scoring' },
@@ -92,6 +93,7 @@ const featureLinkMap: Record<string, { href: string; label: string }[]> = {
   ],
   sustainability: [
     { href: '/features/ev-transition', label: 'Learn more about EV transition planning' },
+    { href: '/tools/ev-transition-planner', label: 'Try the EV Transition Planner' },
   ],
 }
 

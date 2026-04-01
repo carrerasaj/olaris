@@ -2,12 +2,14 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
-import ExcessMileageCalculator from '@/components/tools/ExcessMileageCalculator'
+import { AnimatedSection } from '@/components/ui/AnimatedSection'
+import { FleetMileageCalculator } from '@/components/tools/FleetMileageCalculator'
+import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: 'Free Excess Mileage Calculator | Fleet Tool | Olaris',
+  title: 'Excess Mileage Calculator | Olaris',
   description:
-    'Calculate projected excess mileage charges for your fleet. Free interactive tool using the same methodology as the Olaris platform.',
+    "Calculate your fleet's excess mileage exposure before end of contract. Free tool from Olaris — fleet leasing with intelligence built in.",
   alternates: { canonical: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
 }
 
@@ -15,14 +17,11 @@ const appSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'Olaris Excess Mileage Calculator',
-  description: 'Free tool to project excess mileage charges across a fleet of up to 10 vehicles.',
+  description:
+    'Free tool to calculate fleet excess mileage exposure and projected charges before end of contract.',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web browser',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'GBP',
-  },
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'GBP' },
   provider: {
     '@type': 'Organization',
     name: 'Olaris',
@@ -39,39 +38,31 @@ const faqSchema = {
       name: 'What is an excess mileage charge?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'An excess mileage charge is a fee applied when a leased vehicle exceeds its contracted annual mileage allowance. Charges are calculated at a set rate per mile (pence per mile) for every mile over the allowance, applied at lease return.',
+        text: 'An excess mileage charge is a fee applied by the leasing company when a vehicle is returned at end of contract having exceeded the agreed annual mileage. Charges typically range from 6p to 20p per mile depending on the vehicle and funder.',
       },
     },
     {
       '@type': 'Question',
-      name: 'How is excess mileage calculated?',
+      name: 'How can I avoid excess mileage charges on my fleet?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Excess mileage is the difference between actual miles driven and the contracted mileage allowance. The charge is calculated as: (Actual Miles − Contract Allowance) × Pence Per Mile rate. This calculator projects that charge based on current trajectory rather than waiting until lease end.',
+        text: 'Monitor actual vs contracted mileage across your fleet at least quarterly. Redistribute vehicles between high and low mileage drivers where possible. Consider mileage pooling if your funder supports it. Platforms like Orbis automate this tracking and alert you to excess mileage risk months before end of contract.',
       },
     },
     {
       '@type': 'Question',
-      name: 'What is a typical excess mileage charge rate?',
+      name: 'What is the average excess mileage charge per mile in the UK?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Rates vary by vehicle, funder, and contract but typically range from 3p to 15p per mile for cars and light commercial vehicles. Premium and specialist vehicles may attract higher rates. Your lease agreement will specify the exact rate.',
+        text: 'Most UK leasing companies charge between 6p and 20p per excess mile, with the average around 10-14p per mile. The rate is set at the start of the contract and specified in the lease agreement.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Can I avoid excess mileage charges?',
+      name: 'Can I negotiate excess mileage charges?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes — the key is early identification. By monitoring mileage trajectory against contract allowance throughout the lease term, you can take action: redistribute mileage across the fleet, negotiate a contract amendment, extend the lease, or swap the vehicle early.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How often should I check fleet mileage against contract?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'At minimum quarterly. Best practice is continuous monitoring using telematics data. This calculator is designed for periodic reviews; for real-time monitoring, the Olaris mileage tracking platform provides live visibility across your entire fleet.',
+        text: 'It is difficult to negotiate once the vehicle has been returned. The best approach is to identify excess mileage risk early in the contract — ideally 6-12 months before end of term — and either adjust driver behaviour, swap vehicles between high and low mileage users, or renegotiate the contracted mileage with the funder before return.',
       },
     },
   ],
@@ -83,32 +74,14 @@ const breadcrumbSchema = {
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://olaris.co.uk' },
     { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://olaris.co.uk/tools' },
-    { '@type': 'ListItem', position: 3, name: 'Excess Mileage Calculator', item: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Excess Mileage Calculator',
+      item: 'https://olaris.co.uk/tools/excess-mileage-calculator',
+    },
   ],
 }
-
-const faqs = [
-  {
-    q: 'What is an excess mileage charge?',
-    a: 'An excess mileage charge is a fee applied when a leased vehicle exceeds its contracted annual mileage allowance. Charges are calculated at a set rate per mile (pence per mile) for every mile over the allowance, applied at lease return.',
-  },
-  {
-    q: 'How is excess mileage calculated?',
-    a: 'Excess mileage is the difference between actual miles driven and the contracted mileage allowance. The charge is calculated as: (Actual Miles − Contract Allowance) × Pence Per Mile rate. This calculator projects that charge based on current trajectory rather than waiting until lease end.',
-  },
-  {
-    q: 'What is a typical excess mileage charge rate?',
-    a: 'Rates vary by vehicle, funder, and contract but typically range from 3p to 15p per mile for cars and light commercial vehicles. Premium and specialist vehicles may attract higher rates. Your lease agreement will specify the exact rate.',
-  },
-  {
-    q: 'Can I avoid excess mileage charges?',
-    a: 'Yes — the key is early identification. By monitoring mileage trajectory against contract allowance throughout the lease term, you can take action: redistribute mileage across the fleet, negotiate a contract amendment, extend the lease, or swap the vehicle early.',
-  },
-  {
-    q: 'How often should I check fleet mileage against contract?',
-    a: 'At minimum quarterly. Best practice is continuous monitoring using telematics data. This calculator is designed for periodic reviews; for real-time monitoring, see the Olaris mileage tracking feature.',
-  },
-]
 
 export default function ExcessMileageCalculatorPage() {
   return (
@@ -118,64 +91,92 @@ export default function ExcessMileageCalculatorPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       <GradientHero
+        badge="Free Fleet Tool"
         size="compact"
-        title="Free Excess Mileage Calculator"
-        subtitle="Excess mileage charges are one of the largest avoidable costs in fleet operations. Project annual mileage for every vehicle and estimate the charges you are heading for — before they hit."
+        title="Excess Mileage Calculator"
+        subtitle="Find out what your fleet's excess mileage charges could cost you — before the invoice lands."
       />
 
-      <SectionWrapper variant="light">
-        <ExcessMileageCalculator />
+      {/* Calculator */}
+      <SectionWrapper variant="dark">
+        <FleetMileageCalculator />
+      </SectionWrapper>
 
-        {/* FAQ Section */}
-        <div className="max-w-3xl mx-auto mt-16 pt-12 border-t border-gray-100">
-          <h2 className="text-2xl font-bold font-heading tracking-tight mb-8">
+      {/* Context */}
+      <SectionWrapper variant="dark" padding="compact">
+        <div className="max-w-3xl mx-auto space-y-6">
+          <AnimatedSection>
+            <h2 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-white mb-6">
+              Why excess mileage charges catch fleets off guard
+            </h2>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
+            <p className="text-olaris-text-secondary leading-relaxed">
+              Most fleet managers don&apos;t know their excess mileage exposure until the vehicle comes
+              back. By then, the invoice is a fait accompli — no time to adjust driver behaviour,
+              redistribute vehicles, or negotiate with the funder.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2}>
+            <p className="text-olaris-text-secondary leading-relaxed">
+              The industry average excess charge is 6p–20p per mile depending on vehicle type and
+              funder. On a fleet of 50 vehicles running 2,000 miles over contract per year, that&apos;s
+              £12,000–£40,000 in charges that could have been spotted and managed 6–12 months earlier.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.3}>
+            <p className="text-olaris-text-secondary leading-relaxed">
+              This calculator gives you a snapshot. Orbis gives you the full picture — live mileage
+              tracking across every vehicle, excess charge forecasting updated monthly, and automatic
+              alerts when a vehicle is trending over. Built into every Olaris lease agreement at no
+              extra cost.
+            </p>
+          </AnimatedSection>
+        </div>
+      </SectionWrapper>
+
+      {/* CTA */}
+      <SectionWrapper variant="dark">
+        <div className="max-w-3xl mx-auto text-center">
+          <AnimatedSection>
+            <h2 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-white mb-4">
+              Stop guessing. Start forecasting.
+            </h2>
+            <p className="text-olaris-text-secondary mb-8 max-w-2xl mx-auto">
+              Every Olaris lease includes Orbis mileage intelligence — excess charge forecasting that
+              flags risk 6 months before the vehicle comes back. No separate software. No integration.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button variant="gradient" size="lg" asChild>
+                <Link href="/contact">Get a Quote</Link>
+              </Button>
+              <Button variant="secondary-outline" size="lg" asChild>
+                <Link href="/platform">See How Orbis Works</Link>
+              </Button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </SectionWrapper>
+
+      {/* FAQ */}
+      <SectionWrapper variant="dark" padding="compact">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold font-heading tracking-tight text-white mb-8">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
-            {faqs.map((faq) => (
-              <div key={faq.q}>
-                <h3 className="text-base font-semibold text-olaris-text-dark mb-2">{faq.q}</h3>
-                <p className="text-sm text-olaris-text-dark/70 leading-relaxed">{faq.a}</p>
-              </div>
+            {faqSchema.mainEntity.map((faq) => (
+              <AnimatedSection key={faq.name}>
+                <h3 className="text-lg font-bold text-white mb-2">{faq.name}</h3>
+                <p className="text-olaris-text-secondary leading-relaxed">
+                  {faq.acceptedAnswer.text}
+                </p>
+              </AnimatedSection>
             ))}
           </div>
-        </div>
-
-        {/* Related content */}
-        <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-gray-100">
-          <p className="text-sm text-olaris-text-dark/50 mb-4">Related</p>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/features/mileage-tracking" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                See real-time mileage monitoring →
-              </Link>
-            </li>
-            <li>
-              <Link href="/features/cost-tracking" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                Track total fleet cost per mile →
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog/excess-mileage" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                Read: Why Excess Mileage Is the Cost Nobody Tracks
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog/what-is-fleet-intelligence" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                Read: What is Fleet Intelligence?
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog/fleet-cost-report" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                Read: Understanding Your Fleet Cost Report
-              </Link>
-            </li>
-            <li>
-              <Link href="/platform" className="text-cyan-600 hover:text-cyan-700 hover:underline transition-colors">
-                See the full Olaris platform →
-              </Link>
-            </li>
-          </ul>
         </div>
       </SectionWrapper>
     </>

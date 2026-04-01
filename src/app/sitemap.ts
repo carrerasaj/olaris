@@ -31,6 +31,7 @@ const featureSlugs = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const toolPages: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/tools/excess-mileage-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/tools/ev-transition-planner`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
   ]
 
   const staticPages: MetadataRoute.Sitemap = [

@@ -138,3 +138,5 @@ Use it. Don't transition your fleet. Transition the vehicles that deserve to be 
 ---
 
 **Ready to build your EV transition strategy on actual data?** [Contact us for a fleet analysis](/contact) or [explore how Olaris gives you the visibility you need](/platform).
+
+**Plan your transition with real numbers →** Use our [EV Transition Planner](/tools/ev-transition-planner) to compare total cost of ownership — including BIK rates through 2030, real-world charging costs, and the new eVED from 2028.

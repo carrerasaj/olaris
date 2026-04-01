@@ -263,6 +263,7 @@ export default function BusinessContractHirePage() {
           <h3 className="text-lg font-bold text-white mb-4">Related reading</h3>
           <div className="flex flex-wrap gap-3">
             {[
+              { href: '/tools/excess-mileage-calculator', label: 'Free Excess Mileage Calculator' },
               { href: '/blog/what-is-fleet-intelligence', label: 'What is Fleet Intelligence?' },
               { href: '/blog/what-is-fleet-compliance', label: 'What is Fleet Compliance?' },
               { href: '/platform', label: 'Orbis Platform Overview' },

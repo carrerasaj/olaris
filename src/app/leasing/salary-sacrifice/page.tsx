@@ -286,6 +286,7 @@ export default function SalarySacrificePage() {
           <h3 className="text-lg font-bold mb-4">Related reading</h3>
           <div className="flex flex-wrap gap-3">
             {[
+              { href: '/tools/ev-transition-planner', label: 'EV Transition Planner' },
               { href: '/blog/what-is-fleet-intelligence', label: 'What is Fleet Intelligence?' },
               { href: '/features/ev-transition', label: 'EV Transition Planning' },
               { href: '/platform', label: 'Orbis Platform Overview' },
