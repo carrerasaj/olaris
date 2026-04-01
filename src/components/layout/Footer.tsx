@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LinkedinIcon, TwitterIcon, Mail, Phone, MapPin } from 'lucide-react'
+import { LinkedinIcon, Mail, Phone, MapPin } from 'lucide-react'
 import { siteConfig } from '@/lib/seo'
 
 function OlarisLogoFull({ className }: { className?: string }) {
@@ -30,7 +30,7 @@ function OlarisLogoFull({ className }: { className?: string }) {
       <circle cx="22" cy="28" r="3.5" fill="#06B6D4" opacity="0.3" />
       <circle cx="22" cy="28" r="2" fill="#06B6D4" />
       <text x="54" y="35" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontSize="30" fontWeight="700" letterSpacing="-0.5" fill="#F1F5F9">Olaris</text>
-      <text x="54" y="50" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontSize="9" fontWeight="400" letterSpacing="3" fill="#94A3B8">FLEET INTELLIGENCE</text>
+      <text x="54" y="50" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontSize="9" fontWeight="400" letterSpacing="3" fill="#94A3B8">FLEET LEASING &amp; INTELLIGENCE</text>
     </svg>
   )
 }
@@ -58,15 +58,6 @@ export function Footer() {
               >
                 <LinkedinIcon className="h-4 w-4" />
               </a>
-              <a
-                href={siteConfig.links.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="p-2 rounded-lg border border-olaris-border-dark text-olaris-text-secondary hover:text-cyan-400 hover:border-cyan-500/30 transition-colors"
-              >
-                <TwitterIcon className="h-4 w-4" />
-              </a>
             </div>
           </div>
 
@@ -75,10 +66,10 @@ export function Footer() {
             <h3 className="text-lg font-bold font-heading text-white">What We Do</h3>
             <ul className="space-y-2 text-sm">
               {[
-                { name: 'Fleet Visibility', href: '/platform#fleet-visibility' },
-                { name: 'Driver Management', href: '/platform#driver-management' },
-                { name: 'Cost & Mileage', href: '/platform#cost-control' },
-                { name: 'Sustainability', href: '/platform#sustainability' },
+                { name: 'Business Contract Hire', href: '/leasing/business-contract-hire' },
+                { name: 'Salary Sacrifice', href: '/leasing/salary-sacrifice' },
+                { name: 'Platform', href: '/platform' },
+                { name: 'Blog', href: '/blog' },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

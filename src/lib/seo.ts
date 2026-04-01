@@ -8,7 +8,6 @@ export const siteConfig = {
   ogImage: 'https://olaris.co.uk/opengraph-image',
   links: {
     linkedin: 'https://linkedin.com/company/olaris-consulting-limited',
-    twitter: 'https://twitter.com/olarisconsulting',
   },
   contact: {
     email: 'alan@olaris.co.uk',
@@ -124,7 +123,7 @@ export const organizationSchema = {
     postalCode: siteConfig.contact.address.postcode,
     addressCountry: 'GB',
   },
-  sameAs: [siteConfig.links.linkedin, siteConfig.links.twitter],
+  sameAs: [siteConfig.links.linkedin],
   founder: {
     '@type': 'Person',
     name: 'Alan Carreras',

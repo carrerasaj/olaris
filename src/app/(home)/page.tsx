@@ -5,11 +5,9 @@ import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { Card } from '@/components/ui/Card'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { CredibilitySection } from '@/components/sections/CredibilitySection'
-import { PainPoints } from '@/components/sections/PainPoints'
+import { OrbisDemo } from '@/components/ui/OrbisDemo'
 import { WhatChanges } from '@/components/sections/WhatChanges'
-import { WhoWeHelp } from '@/components/sections/WhoWeHelp'
 import { CTABanner } from '@/components/ui/CTABanner'
-import { NewsletterSignup } from '@/components/sections/NewsletterSignup'
 import { Button } from '@/components/ui/button'
 import { constructMetadata } from '@/lib/seo'
 import { Car, Users, BrainCircuit } from 'lucide-react'
@@ -65,6 +63,9 @@ export default function HomePage() {
         </Button>
       </GradientHero>
 
+      {/* Orbis platform demo */}
+      <OrbisDemo />
+
       {/* Supporting line + leasing cards */}
       <SectionWrapper variant="dark" padding="compact">
         <p className="text-center text-sm font-semibold uppercase tracking-widest text-olaris-text-secondary/50 mb-10">
@@ -97,15 +98,12 @@ export default function HomePage() {
       </SectionWrapper>
 
       <CredibilitySection />
-      <PainPoints />
       <WhatChanges />
-      <WhoWeHelp />
-      <NewsletterSignup />
 
       <CTABanner
         headline="We'd rather show you than tell you."
-        subtext="Book 20 minutes. We'll use your data, not a slide deck."
-        buttonText="Book a Demo"
+        subtext="Tell us about your fleet and we'll show you what intelligence built in actually looks like."
+        buttonText="Get a Quote"
         buttonHref="/contact"
       />
     </>
