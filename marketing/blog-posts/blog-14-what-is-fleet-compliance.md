@@ -157,3 +157,7 @@ At minimum: current DVLA licence check records for every driver, MOT certificate
 ### Can I manage fleet compliance with spreadsheets?
 
 You can try, but spreadsheets don't scale. They don't send alerts when documents expire, they don't generate audit trails automatically, and they depend on someone remembering to update them. For fleets over 50 vehicles, a dedicated compliance management system is the only reliable approach.
+
+---
+
+Check your fleet's compliance right now with our [free fleet compliance checker](/tools/fleet-compliance-checker) — 10 questions, 2 minutes.

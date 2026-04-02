@@ -21,7 +21,9 @@ const leasingNav = [
 
 const toolsNav = [
   { name: 'Excess Mileage Calculator', href: '/tools/excess-mileage-calculator' },
+  { name: 'Company Car Tax Calculator', href: '/tools/company-car-tax-calculator' },
   { name: 'EV Transition Planner', href: '/tools/ev-transition-planner' },
+  { name: 'Fleet Compliance Checker', href: '/tools/fleet-compliance-checker' },
 ]
 
 

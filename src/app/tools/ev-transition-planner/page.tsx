@@ -279,6 +279,21 @@ export default function EVTransitionPlannerPage() {
         </div>
       </SectionWrapper>
 
+      {/* Cross-link */}
+      <SectionWrapper variant="dark" padding="compact">
+        <div className="max-w-3xl mx-auto text-center">
+          <AnimatedSection>
+            <p className="text-olaris-text-secondary">
+              Want to check the BIK on a specific car? Use our{' '}
+              <Link href="/tools/company-car-tax-calculator" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2">
+                free BIK tax calculator
+              </Link>{' '}
+              with HMRC-confirmed rates through 2030.
+            </p>
+          </AnimatedSection>
+        </div>
+      </SectionWrapper>
+
       {/* CTA */}
       <SectionWrapper variant="dark">
         <div className="max-w-3xl mx-auto text-center">

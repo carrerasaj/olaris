@@ -39,6 +39,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# lead capture data
+data/email-leads.json
+
 # old files
 package-old.json
 tsconfig-old.json

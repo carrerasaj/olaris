@@ -173,3 +173,7 @@ Increasingly, yes. Insurers use telematics-based risk data to price fleet polici
 ### Can you reduce driver risk without telematics?
 
 Partially. You can manage licence and compliance risk through regular DVLA checks and document verification. But without telematics, you have no visibility of actual driving behaviour — which is the strongest predictor of incident risk. Licence checks tell you about past offences; telematics tells you about current behaviour. A comprehensive driver risk programme needs both.
+
+---
+
+Driver risk management is one pillar of fleet compliance. Check all ten with our [free compliance checker](/tools/fleet-compliance-checker).

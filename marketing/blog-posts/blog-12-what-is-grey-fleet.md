@@ -148,3 +148,7 @@ Yes. If a grey fleet driver is involved in a serious road incident while driving
 ### What should a grey fleet policy include?
 
 A grey fleet policy should define what constitutes a grey fleet journey, specify the checks required (driving licence, MOT, insurance, vehicle condition), set the frequency of those checks, establish mileage reimbursement rates, and outline the consequences of non-compliance. It should be practical and enforceable rather than lengthy and ignored.
+
+---
+
+Not sure if your grey fleet policy covers everything? Take the [fleet compliance checker](/tools/fleet-compliance-checker) to find out.

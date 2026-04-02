@@ -4,13 +4,23 @@ import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FleetMileageCalculator } from '@/components/tools/FleetMileageCalculator'
-import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: 'Excess Mileage Calculator | Olaris',
+  title: 'Free Excess Mileage Calculator UK — Check Your Fleet Exposure | Olaris',
   description:
-    "Calculate your fleet's excess mileage exposure before end of contract. Free tool from Olaris — fleet leasing with intelligence built in.",
+    "Calculate what your fleet's excess mileage charges will cost at end of contract. Free tool — plug in your numbers and see your exposure instantly. No signup required.",
   alternates: { canonical: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
+  openGraph: {
+    title: 'Free Excess Mileage Calculator UK | Olaris',
+    description:
+      "Calculate what your fleet's excess mileage charges will cost at end of contract. Free tool — no signup required.",
+    type: 'website',
+    url: 'https://olaris.co.uk/tools/excess-mileage-calculator',
+    images: [{ url: 'https://olaris.co.uk/images/fleet-hero.webp' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 }
 
 const appSchema = {
@@ -38,7 +48,15 @@ const faqSchema = {
       name: 'What is an excess mileage charge?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'An excess mileage charge is a fee applied by the leasing company when a vehicle is returned at end of contract having exceeded the agreed annual mileage. Charges typically range from 6p to 20p per mile depending on the vehicle and funder.',
+        text: 'An excess mileage charge is a per-mile fee applied when a leased vehicle exceeds its contracted annual mileage allowance. Rates typically range from 6p to 20p per mile depending on the vehicle and funder, and charges are assessed at the end of the contract term.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How are excess mileage charges calculated UK?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Excess mileage charges are calculated by multiplying the number of miles driven over the contracted allowance by the agreed pence-per-mile rate. For example, if you contracted 10,000 miles per year but drove 12,000, and your excess rate is 12p per mile, the charge is 2,000 × £0.12 = £240 per vehicle per year.',
       },
     },
     {
@@ -46,7 +64,7 @@ const faqSchema = {
       name: 'How can I avoid excess mileage charges on my fleet?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Monitor actual vs contracted mileage across your fleet at least quarterly. Redistribute vehicles between high and low mileage drivers where possible. Consider mileage pooling if your funder supports it. Platforms like Orbis automate this tracking and alert you to excess mileage risk months before end of contract.',
+        text: 'The most effective way to avoid excess mileage charges is to monitor actual mileage against contracted allowances throughout the lease term, not just at the end. Regular monitoring lets you renegotiate contracts, redistribute mileage across vehicles (mileage pooling), or adjust driver assignments before charges compound. Fleet intelligence platforms like Orbis track this automatically using connected vehicle data.',
       },
     },
     {
@@ -54,15 +72,15 @@ const faqSchema = {
       name: 'What is the average excess mileage charge per mile in the UK?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Most UK leasing companies charge between 6p and 20p per excess mile, with the average around 10-14p per mile. The rate is set at the start of the contract and specified in the lease agreement.',
+        text: 'The average excess mileage charge in the UK ranges from 6p to 20p per mile depending on the vehicle type, funder, and contract terms. Premium and electric vehicles typically attract higher rates (12p-20p), while standard fleet vehicles are usually 6p-12p. These charges are set at the start of the contract and apply to every mile over the allowance.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Can I negotiate excess mileage charges?',
+      name: 'Can you negotiate excess mileage charges at end of lease?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'It is difficult to negotiate once the vehicle has been returned. The best approach is to identify excess mileage risk early in the contract — ideally 6-12 months before end of term — and either adjust driver behaviour, swap vehicles between high and low mileage users, or renegotiate the contracted mileage with the funder before return.',
+        text: 'Some funders will negotiate excess mileage charges at end of lease, particularly if the vehicle is in good condition or if you are renewing with them. However, negotiation is much harder after the fact. The most effective approach is to flag excess mileage early in the contract term and request a mileage amendment or contract variation before the lease ends.',
       },
     },
   ],
@@ -93,8 +111,8 @@ export default function ExcessMileageCalculatorPage() {
       <GradientHero
         badge="Free Fleet Tool"
         size="compact"
-        title="Excess Mileage Calculator"
-        subtitle="Find out what your fleet's excess mileage charges could cost you — before the invoice lands."
+        title="Free Excess Mileage Charge Calculator"
+        subtitle="Find out what your fleet's excess mileage charges could cost — before the invoice lands"
       />
 
       {/* Calculator */}
@@ -113,51 +131,79 @@ export default function ExcessMileageCalculatorPage() {
 
           <AnimatedSection delay={0.1}>
             <p className="text-olaris-text-secondary leading-relaxed">
-              Most fleet managers don&apos;t know their excess mileage exposure until the vehicle comes
-              back. By then, the invoice is a fait accompli — no time to adjust driver behaviour,
-              redistribute vehicles, or negotiate with the funder.
+              Most fleet managers only check mileage when the vehicle comes back at end of contract.
+              By then, the invoice is a fait accompli — no time to adjust driver behaviour,
+              redistribute vehicles, or negotiate with the funder. The charges are baked in.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.15}>
+            <p className="text-olaris-text-secondary leading-relaxed">
+              The compounding effect is what catches people out. An extra 200 miles per month sounds
+              trivial — but multiply that across 50 vehicles over a 36-month contract and the numbers
+              become serious. At 12p per mile, that&apos;s £43,200 in excess charges that accumulated
+              gradually and landed as a single bill at lease end.
             </p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
             <p className="text-olaris-text-secondary leading-relaxed">
-              The industry average excess charge is 6p–20p per mile depending on vehicle type and
-              funder. On a fleet of 50 vehicles running 2,000 miles over contract per year, that&apos;s
-              £12,000–£40,000 in charges that could have been spotted and managed 6–12 months earlier.
+              Mileage pooling — offsetting over-mileage vehicles against under-mileage ones — can
+              reduce the hit significantly. Some funders support it, but most don&apos;t make it easy
+              to track. Without a live view of where every vehicle sits against contract, pooling
+              remains a theoretical benefit rather than a practical tool.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.25}>
+            <p className="text-olaris-text-secondary leading-relaxed">
+              Connected vehicle data has changed the equation. Real-time odometer feeds from 15+
+              manufacturers mean fleet operators can now track mileage continuously, not quarterly.
+              The data exists — the question is whether your systems are set up to use it.
             </p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.3}>
             <p className="text-olaris-text-secondary leading-relaxed">
-              This calculator gives you a snapshot. Orbis gives you the full picture — live mileage
-              tracking across every vehicle, excess charge forecasting updated monthly, and automatic
-              alerts when a vehicle is trending over. Built into every Olaris lease agreement at no
-              extra cost.
+              The calculator above gives you a snapshot. Orbis gives you the live picture — continuous
+              mileage tracking, excess charge forecasting, mileage pooling analysis, and automatic
+              alerts when a vehicle trends over contract.{' '}
+              <Link href="/contact" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2">
+                Talk to us about mileage management →
+              </Link>
             </p>
           </AnimatedSection>
         </div>
       </SectionWrapper>
 
-      {/* CTA */}
+      {/* Next Steps */}
       <SectionWrapper variant="dark">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto">
           <AnimatedSection>
-            <h2 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-white mb-4">
-              Stop guessing. Start forecasting.
+            <h2 className="text-2xl md:text-3xl font-bold font-heading tracking-tight text-white mb-8">
+              What to do about excess mileage
             </h2>
-            <p className="text-olaris-text-secondary mb-8 max-w-2xl mx-auto">
-              Every Olaris lease includes Orbis mileage intelligence — excess charge forecasting that
-              flags risk 6 months before the vehicle comes back. No separate software. No integration.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="gradient" size="lg" asChild>
-                <Link href="/contact">Get a Quote</Link>
-              </Button>
-              <Button variant="secondary-outline" size="lg" asChild>
-                <Link href="/platform">See How Orbis Works</Link>
-              </Button>
-            </div>
           </AnimatedSection>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <AnimatedSection delay={0.1}>
+              <Link href="/contact" className="block rounded-xl border border-olaris-border-dark bg-[#1C2128] p-6 hover:border-cyan-500/40 transition-colors h-full">
+                <h3 className="text-lg font-bold text-white mb-2">Get a Quote</h3>
+                <p className="text-sm text-olaris-text-secondary">Talk to us about fleet leasing with mileage intelligence built in.</p>
+              </Link>
+            </AnimatedSection>
+            <AnimatedSection delay={0.2}>
+              <Link href="/platform" className="block rounded-xl border border-olaris-border-dark bg-[#1C2128] p-6 hover:border-cyan-500/40 transition-colors h-full">
+                <h3 className="text-lg font-bold text-white mb-2">See How Orbis Tracks Mileage</h3>
+                <p className="text-sm text-olaris-text-secondary">Real-time mileage monitoring, forecast alerts, and mileage pooling analysis.</p>
+              </Link>
+            </AnimatedSection>
+            <AnimatedSection delay={0.3}>
+              <Link href="/tools/fleet-compliance-checker" className="block rounded-xl border border-olaris-border-dark bg-[#1C2128] p-6 hover:border-cyan-500/40 transition-colors h-full">
+                <h3 className="text-lg font-bold text-white mb-2">Fleet Compliance Checker</h3>
+                <p className="text-sm text-olaris-text-secondary">Looking beyond mileage? Check your fleet&apos;s overall compliance in 2 minutes.</p>
+              </Link>
+            </AnimatedSection>
+          </div>
         </div>
       </SectionWrapper>
 

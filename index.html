@@ -1141,7 +1141,41 @@ const FeaturedBlogPosts = () => (
         Featured Blog Posts
       </h2>
       <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        
+
+        {/* Blog Card 3 — Orbis IO Launch */}
+        <article
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105 tilt-card overflow-hidden"
+          data-tilt data-tilt-max="20" data-tilt-speed="500" data-tilt-glare data-tilt-max-glare="0.4"
+          data-aos="fade-up" data-aos-delay="100"
+        >
+          <div className="relative w-full h-48 overflow-hidden">
+            <picture>
+              <source srcSet="/images/fleet-hero.webp" type="image/webp" />
+              <img
+                src="/images/fleet-hero.webp"
+                alt="Introducing Orbis IO: Fleet Intelligence for the Connected Vehicle Era"
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+          <div className="p-6 text-left">
+            <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-2">
+              Introducing Orbis IO: Fleet Intelligence for the Connected Vehicle Era
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Three fleet and leasing veterans form Orbis IO Ltd to build next-generation fleet intelligence software.
+            </p>
+            <a
+              href="blog-post-3.html"
+              className="text-blue-600 dark:text-blue-300 font-semibold hover:underline ripple"
+              aria-label="Read more about Introducing Orbis IO"
+            >
+              Read More →
+            </a>
+          </div>
+        </article>
+
         {/* Blog Card 1 */}
         <article 
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:scale-105 tilt-card overflow-hidden"
