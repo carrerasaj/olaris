@@ -32,7 +32,7 @@ const softwareApplicationSchema = {
   name: 'Olaris Fleet Intelligence Platform',
   description:
     'Fleet intelligence platform providing real-time mileage tracking, driver behaviour scoring, DVLA compliance checking, cost tracking, and EV transition planning for UK fleet operators.',
-  applicationCategory: 'Fleet Management Software',
+  applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   url: 'https://olaris.co.uk/platform',
   provider: {

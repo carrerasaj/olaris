@@ -1,7 +1,7 @@
 ---
 title: "What is Fleet Compliance? The Complete UK Guide"
 metaTitle: "What is Fleet Compliance? The Complete UK Guide | Olaris"
-metaDescription: "Fleet compliance means keeping every driver, vehicle, and document legally road-ready. Here's what UK fleet operators must check, how often, and what happens if you don't."
+metaDescription: "Fleet compliance means keeping every driver, vehicle, and document legally road-ready. What UK operators must check, how often, and the cost of failure."
 category: "Compliance"
 headerImage: "Fleet compliance dashboard showing driver licence status, MOT expiry dates, and insurance verification across a fleet of vehicles"
 date: 2026-03-21
@@ -29,6 +29,8 @@ Fleet compliance is the process of ensuring every driver, vehicle, and supportin
 That paragraph sounds simple enough. In practice, fleet compliance is the thing that keeps operations directors awake at 2am — because the consequences of getting it wrong aren't a slap on the wrist. They're criminal prosecutions, voided insurance, and vehicles taken off the road.
 
 The scale of the challenge is significant. According to the Department for Transport, approximately one third of all road fatalities in Great Britain involve someone who was driving for work at the time (Source: [DfT, Reported Road Casualties Great Britain: Estimates Involving Driving for Work](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-involving-driving-for-work/)). Brake, the road safety charity, reports that work-related road collisions account for around a third of all road deaths and a fifth of serious injuries. In 2024 alone, 1,602 people were killed on Britain's roads, with a further 27,865 seriously injured (Source: DfT, Reported Road Casualties Great Britain Annual Report 2024). Many of these incidents trace back to compliance failures — unchecked licences, expired MOTs, lapsed insurance, fatigued drivers.
+
+Whether you're a fleet operator, broker, or OEM — [explore how Olaris supports your sector](/industries).
 
 I've spent 40 years in the UK automotive sector, and the pattern I see again and again is this: companies think they're compliant because they checked everything once. They onboarded the driver, photocopied the licence, filed the insurance certificate. Job done. Except compliance isn't a moment — it's a continuous state. A driver's licence can be revoked the day after you check it. An MOT expires whether you're watching or not. Insurance lapses. Documents drift out of date. And the legal responsibility for knowing all of this sits with you, the fleet operator.
 

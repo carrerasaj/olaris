@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = constructMetadata({
   title: 'Salary Sacrifice Car Scheme | EV & ULEV | Olaris',
   description:
-    'Salary sacrifice car schemes for UK employers with Orbis fleet intelligence included. Employees save up to 40% on a new car. Employers get full fleet visibility.',
+    'Salary sacrifice car schemes for UK employers with Orbis intelligence included. Employees save up to 40% on a new car with full fleet visibility.',
   url: 'https://olaris.co.uk/leasing/salary-sacrifice',
 })
 

@@ -64,7 +64,7 @@ const pressItems = [
   {
     publication: 'Fleet News',
     title: 'Jurni Expands Partner Programme',
-    href: 'https://www.fleetnews.co.uk/news/jurni-expands-partner-programme-with-three-uk-leasing-brokers',
+    href: 'https://www.fleetnews.co.uk/',
   },
 ]
 

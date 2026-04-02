@@ -1,7 +1,7 @@
 ---
 title: "What is an At-Risk Driver? How to Identify, Score, and Manage Driver Risk"
 metaTitle: "What is an At-Risk Driver? Identification & Management Guide | Olaris"
-metaDescription: "An at-risk driver is anyone whose behaviour, licence status, or compliance gaps make them statistically more likely to be involved in an incident. Here's how to identify and manage them."
+metaDescription: "An at-risk driver is anyone whose behaviour, licence status, or compliance gaps raise their incident risk. How to identify and manage them in your fleet."
 category: "Driver Behaviour"
 headerImage: "Fleet risk dashboard showing driver risk scores colour-coded by severity, with penalty points, behaviour scores, and compliance status per driver"
 date: 2026-03-21

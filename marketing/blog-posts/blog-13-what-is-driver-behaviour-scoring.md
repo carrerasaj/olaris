@@ -115,7 +115,7 @@ For broader context on how driver behaviour data fits into a complete fleet inte
 ## Further Reading
 
 - [Department for Transport — Reported Road Casualties Great Britain Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)
-- [Lightfoot — Asda Case Study](https://www.lightfoot.co.uk/success-stories/asda-case-study/)
+- [Lightfoot — Driver Behaviour Technology](https://www.lightfoot.co.uk/)
 - [Brake — Workplace Road Safety](https://www.brake.org.uk/get-involved/take-action/in-your-workplace)
 - [ORSA — Facts and Figures](https://orsa.org.uk/facts-and-figures/)
 

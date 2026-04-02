@@ -69,6 +69,7 @@ export function Footer() {
                 { name: 'Business Contract Hire', href: '/leasing/business-contract-hire' },
                 { name: 'Salary Sacrifice', href: '/leasing/salary-sacrifice' },
                 { name: 'Platform', href: '/platform' },
+                { name: 'Industries', href: '/industries' },
                 { name: 'Blog', href: '/blog' },
               ].map((link) => (
                 <li key={link.name}>

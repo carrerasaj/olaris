@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = constructMetadata({
   title: 'Business Contract Hire | Fleet Leasing with Intelligence | Olaris',
   description:
-    'Business contract hire for UK fleets with Orbis fleet intelligence included. Competitive rates across all makes, real-time fleet visibility, and no separate software cost.',
+    'Business contract hire for UK fleets with Orbis intelligence included. Competitive rates across all makes with real-time fleet visibility built in.',
   url: 'https://olaris.co.uk/leasing/business-contract-hire',
 })
 
