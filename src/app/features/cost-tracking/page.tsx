@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { constructMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Fleet Cost Tracking & Total Cost of Ownership Analysis | Olaris',
   description:
     'See the true cost of every vehicle in your fleet. Real-time cost tracking, TCO analysis, fuel monitoring, and financial reporting for fleet operators.',
-  alternates: { canonical: 'https://olaris.co.uk/features/cost-tracking' },
-}
+  url: 'https://olaris.co.uk/features/cost-tracking',
+})
 
 const faqSchema = {
   '@context': 'https://schema.org',

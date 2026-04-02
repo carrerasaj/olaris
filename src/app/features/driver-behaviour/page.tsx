@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { constructMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Driver Behaviour Scoring & Monitoring Software | Olaris',
   description:
     'Driver behaviour scoring and monitoring for UK fleets. Cut accidents by 40%, lower insurance costs, and improve safety with real-time data.',
-  alternates: { canonical: 'https://olaris.co.uk/features/driver-behaviour' },
-}
+  url: 'https://olaris.co.uk/features/driver-behaviour',
+})
 
 const faqSchema = {
   '@context': 'https://schema.org',

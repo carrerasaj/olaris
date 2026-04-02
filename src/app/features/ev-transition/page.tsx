@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { constructMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'EV Fleet Transition Planning & Management Software | Olaris',
   description:
     'Plan your fleet electrification with data. EV readiness assessment, TCO comparison, charge point monitoring, and carbon reporting for UK fleets.',
-  alternates: { canonical: 'https://olaris.co.uk/features/ev-transition' },
-}
+  url: 'https://olaris.co.uk/features/ev-transition',
+})
 
 const faqSchema = {
   '@context': 'https://schema.org',

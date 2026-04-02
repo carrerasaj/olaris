@@ -65,6 +65,7 @@ export function constructMetadata({
     openGraph: {
       type: 'website',
       locale: 'en_GB',
+      url: url || siteConfig.url,
       title,
       description,
       siteName: siteConfig.name,

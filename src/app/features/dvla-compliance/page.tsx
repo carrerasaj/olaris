@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { CTABanner } from '@/components/ui/CTABanner'
+import { constructMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Automated DVLA Licence Checking for Fleet Compliance | Olaris',
   description:
     'Automated DVLA licence checking at scale. Verify driver licences, track endorsements, and ensure fleet compliance without manual admin.',
-  alternates: { canonical: 'https://olaris.co.uk/features/dvla-compliance' },
-}
+  url: 'https://olaris.co.uk/features/dvla-compliance',
+})
 
 const faqSchema = {
   '@context': 'https://schema.org',
