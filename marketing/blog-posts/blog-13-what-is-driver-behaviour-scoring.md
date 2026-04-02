@@ -74,7 +74,7 @@ Fleet managers can configure reward thresholds — set a target score, define th
 
 Here is where driver behaviour scoring delivers financial value that goes beyond fuel savings.
 
-The Occupational Road Safety Alliance (ORSA) reports that work-related road collisions cost UK employers an estimated £2.7 billion per year in lost time, vehicle damage, increased insurance premiums, and legal costs (Source: [ORSA, Facts and Figures](https://orsa.org.uk/facts-and-figures/)). For individual fleet operators, the average cost of an at-fault incident — including vehicle repair, replacement hire, third-party claims, and administrative time — typically falls between £10,000 and £20,000. Even modest improvements in driving behaviour produce measurable financial returns.
+The Occupational Road Safety Alliance (ORSA) reports that work-related road collisions cost UK employers an estimated £2.7 billion per year in lost time, vehicle damage, increased insurance premiums, and legal costs (Source: [ORSA, Facts and Figures](https://www.orsa.org.uk/facts-and-figures/)). For individual fleet operators, the average cost of an at-fault incident — including vehicle repair, replacement hire, third-party claims, and administrative time — typically falls between £10,000 and £20,000. Even modest improvements in driving behaviour produce measurable financial returns.
 
 Fleet insurers are increasingly asking for telematics data. Not because they want to catch drivers out, but because data allows them to price risk accurately. A fleet with demonstrable behaviour scoring, improving trends, and active driver engagement programmes presents a quantifiably lower risk than one operating blind.
 
@@ -117,7 +117,7 @@ For broader context on how driver behaviour data fits into a complete fleet inte
 - [Department for Transport — Reported Road Casualties Great Britain Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)
 - [Lightfoot — Driver Behaviour Technology](https://www.lightfoot.co.uk/)
 - [Brake — Workplace Road Safety](https://www.brake.org.uk/get-involved/take-action/in-your-workplace)
-- [ORSA — Facts and Figures](https://orsa.org.uk/facts-and-figures/)
+- [ORSA — Facts and Figures](https://www.orsa.org.uk/facts-and-figures/)
 
 ## Frequently Asked Questions
 

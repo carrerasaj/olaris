@@ -30,7 +30,7 @@ Most fleet managers think they know who their at-risk drivers are. It's the one 
 
 After 40 years in the UK automotive sector, I can tell you that the biggest risk in any fleet isn't the driver everyone knows about. It's the one nobody's looking at.
 
-The numbers bear this out. According to the Department for Transport, 1,602 people were killed on Britain's roads in 2024, with a further 27,865 seriously injured (Source: [DfT, Reported Road Casualties Great Britain Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)). Brake, the road safety charity, estimates that more than a third of road fatalities involve someone driving for work. The Occupational Road Safety Alliance (ORSA) puts the cost to UK employers at £2.7 billion per year in lost time, vehicle damage, increased insurance premiums, and legal costs (Source: [ORSA, Facts and Figures](https://orsa.org.uk/facts-and-figures/)). Behind every one of those statistics is a driver whose risk indicators were visible — if anyone had been looking.
+The numbers bear this out. According to the Department for Transport, 1,602 people were killed on Britain's roads in 2024, with a further 27,865 seriously injured (Source: [DfT, Reported Road Casualties Great Britain Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/)). Brake, the road safety charity, estimates that more than a third of road fatalities involve someone driving for work. The Occupational Road Safety Alliance (ORSA) puts the cost to UK employers at £2.7 billion per year in lost time, vehicle damage, increased insurance premiums, and legal costs (Source: [ORSA, Facts and Figures](https://www.orsa.org.uk/facts-and-figures/)). Behind every one of those statistics is a driver whose risk indicators were visible — if anyone had been looking.
 
 ## The Three Dimensions of Driver Risk
 
@@ -139,7 +139,7 @@ For drivers who use their own vehicles for work, the same risk framework applies
 ## Further Reading
 
 - [Reported Road Casualties Great Britain: Annual Report 2024](https://www.gov.uk/government/statistics/reported-road-casualties-great-britain-annual-report-2024/) — Department for Transport
-- [Facts and Figures: Work-Related Road Risk](https://orsa.org.uk/facts-and-figures/) — Occupational Road Safety Alliance
+- [Facts and Figures: Work-Related Road Risk](https://www.orsa.org.uk/facts-and-figures/) — Occupational Road Safety Alliance
 - [In My Workplace: Fleet Road Safety](https://www.brake.org.uk/get-involved/take-action/in-your-workplace) — Brake, the Road Safety Charity
 - [DVLA Online Driving Licence Checking Service](https://www.gov.uk/check-driving-information) — GOV.UK
 - [Motor Insurance Data](https://www.abi.org.uk/) — Association of British Insurers

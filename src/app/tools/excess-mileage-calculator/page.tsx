@@ -8,7 +8,7 @@ import { FleetMileageCalculator } from '@/components/tools/FleetMileageCalculato
 export const metadata: Metadata = {
   title: 'Free Excess Mileage Calculator UK — Check Your Fleet Exposure | Olaris',
   description:
-    "Calculate what your fleet's excess mileage charges will cost at end of contract. Free tool — plug in your numbers and see your exposure instantly. No signup required.",
+    "Calculate your fleet's excess mileage charges before end of contract. Free tool — plug in your numbers and see your exposure instantly. No signup.",
   alternates: { canonical: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
   openGraph: {
     title: 'Free Excess Mileage Calculator UK | Olaris',

@@ -7,9 +7,9 @@ import { FleetComplianceChecker } from '@/components/tools/FleetComplianceChecke
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: 'Free Fleet Compliance Checker UK — Audit Your Fleet in 2 Minutes | Olaris',
+  title: 'Free Fleet Compliance Checker UK — Audit Your Fleet | Olaris',
   description:
-    "Check your fleet's compliance against UK requirements in 2 minutes. Free assessment covering DVLA checks, grey fleet policy, MOT tracking, insurance, and duty of care. No signup.",
+    "Check your fleet's compliance against UK requirements in 2 minutes. Free assessment covering DVLA checks, grey fleet, MOT, insurance, and duty of care.",
   alternates: { canonical: 'https://olaris.co.uk/tools/fleet-compliance-checker' },
   openGraph: {
     title: 'Free Fleet Compliance Checker UK | Olaris',
