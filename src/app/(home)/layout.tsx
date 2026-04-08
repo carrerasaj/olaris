@@ -1,4 +1,5 @@
 import { serviceSchema, faqSchema } from '@/lib/seo'
+import { MarketingLayout } from '@/components/marketing/MarketingLayout'
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +16,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
           __html: JSON.stringify(faqSchema),
         }}
       />
-      {children}
+      <MarketingLayout>{children}</MarketingLayout>
     </>
   )
 }

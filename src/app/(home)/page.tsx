@@ -9,6 +9,8 @@ import { OrbisDemo } from '@/components/ui/OrbisDemo'
 import { WhatChanges } from '@/components/sections/WhatChanges'
 import { CTABanner } from '@/components/ui/CTABanner'
 import { Button } from '@/components/ui/button'
+import { Reveal } from '@/components/marketing/Reveal'
+import { GradientBorderButton } from '@/components/marketing/GradientBorderButton'
 import { constructMetadata } from '@/lib/seo'
 import { Car, Users, BrainCircuit } from 'lucide-react'
 
@@ -54,10 +56,9 @@ export default function HomePage() {
         title="Fleet Leasing with Intelligence Built In"
         subtitle="Business contract hire and salary sacrifice for VAT-registered businesses — with Orbis fleet intelligence included in every agreement. No separate software subscription. No integration project. Insight from day one."
         size="full"
+        editorial
       >
-        <Button variant="gradient" size="lg" asChild>
-          <Link href="/contact">Get a Quote</Link>
-        </Button>
+        <GradientBorderButton href="/contact">Get a Quote</GradientBorderButton>
         <Button variant="secondary-outline" size="lg" asChild>
           <Link href="/leasing">Explore Our Platform</Link>
         </Button>
@@ -68,9 +69,11 @@ export default function HomePage() {
 
       {/* Supporting line + leasing cards */}
       <SectionWrapper variant="dark" padding="compact">
-        <p className="text-center text-sm font-semibold uppercase tracking-widest text-olaris-text-secondary/50 mb-10">
-          All makes. All sectors. Intelligence as standard.
-        </p>
+        <Reveal>
+          <p className="text-center text-sm font-semibold uppercase tracking-widest text-olaris-text-secondary/50 mb-10">
+            All makes. All sectors. Intelligence as standard.
+          </p>
+        </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {leasingCards.map((card, i) => {
             const Icon = card.icon

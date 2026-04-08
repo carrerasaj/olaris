@@ -106,6 +106,7 @@ export default function PlatformPage() {
       />
       <GradientHero
         size="compact"
+        editorial
         title="A platform built from the operator's chair"
         subtitle="Everything here exists because someone who has actually run a fleet said 'I need this.' Not because a product manager thought it sounded good."
       />

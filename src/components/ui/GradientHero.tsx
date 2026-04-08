@@ -10,6 +10,12 @@ interface GradientHeroProps {
   badge?: string
   showPattern?: boolean
   size?: 'full' | 'compact'
+  /**
+   * When true, renders the H1 in Space Grotesk at the larger "hero" scale
+   * (72px desktop, scaled down on mobile). Opt-in so only marketing heroes
+   * get the editorial treatment; content-page heroes retain the default sizing.
+   */
+  editorial?: boolean
   children?: React.ReactNode
 }
 
@@ -70,6 +76,7 @@ export function GradientHero({
   badge,
   showPattern = true,
   size = 'full',
+  editorial = false,
   children,
 }: GradientHeroProps) {
   return (
@@ -106,7 +113,12 @@ export function GradientHero({
         )}
 
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight text-white mb-6 text-balance"
+          className={cn(
+            'text-white mb-6 text-balance',
+            editorial
+              ? 'font-display font-semibold tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-[72px] lg:leading-[79.92px] lg:tracking-[-1.12px]'
+              : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight'
+          )}
         >
           {title}
         </h1>

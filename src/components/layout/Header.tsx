@@ -100,15 +100,15 @@ export function Header() {
         style={{ scaleX }}
       />
 
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-6">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-3 group"
           aria-label="Olaris Home"
         >
-          <OlarisLogoMark className="h-9 w-auto transition-transform group-hover:scale-110" />
-          <span className="hidden text-xl font-bold text-white sm:block font-heading">
+          <OlarisLogoMark className="h-9 w-auto md:h-11 transition-transform group-hover:scale-110" />
+          <span className="hidden text-2xl font-semibold tracking-tight text-white sm:block font-display">
             Olaris
           </span>
         </Link>

@@ -75,7 +75,16 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         heading: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-space-grotesk)', 'var(--font-manrope)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
+      },
+      fontSize: {
+        hero: ['72px', { lineHeight: '79.92px', letterSpacing: '-1.12px', fontWeight: '600' }],
+        'section-title': ['48px', { lineHeight: '56px', fontWeight: '400' }],
+        'body-lg': ['24px', { lineHeight: '40.08px', letterSpacing: '0.5px', fontWeight: '400' }],
+      },
+      maxWidth: {
+        content: '1140px',
       },
       keyframes: {
         'accordion-down': {
