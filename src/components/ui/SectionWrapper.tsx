@@ -1,7 +1,13 @@
 import { cn } from '@/lib/utils'
 
 interface SectionWrapperProps {
-  variant: 'dark' | 'light'
+  /**
+   * `dark` / `light` paint a solid background and are opaque.
+   * `dark-transparent` paints no background so whatever sits behind the
+   * section (e.g. the MarketingLayout wave canvas) is visible through it.
+   * Text colour still matches the dark variant.
+   */
+  variant: 'dark' | 'light' | 'dark-transparent'
   children: React.ReactNode
   className?: string
   id?: string
@@ -21,9 +27,9 @@ export function SectionWrapper({
     <section
       id={id}
       className={cn(
-        variant === 'dark'
-          ? 'bg-olaris-dark text-olaris-text-primary'
-          : 'bg-olaris-light text-olaris-text-dark',
+        variant === 'dark' && 'bg-olaris-dark text-olaris-text-primary',
+        variant === 'light' && 'bg-olaris-light text-olaris-text-dark',
+        variant === 'dark-transparent' && 'text-olaris-text-primary',
         padding === 'default' && 'py-20 md:py-28',
         padding === 'compact' && 'py-12 md:py-16',
         padding === 'spacious' && 'py-32 md:py-40',

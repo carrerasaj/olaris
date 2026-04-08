@@ -56,7 +56,8 @@ export function ScrollPathLine() {
 
   return (
     <svg
-      className="fixed inset-0 w-full h-full pointer-events-none -z-[5]"
+      className="fixed inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 1 }}
       viewBox="0 0 1920 8000"
       preserveAspectRatio="xMidYMin slice"
       aria-hidden="true"

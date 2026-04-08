@@ -68,7 +68,7 @@ export default function HomePage() {
       <OrbisDemo />
 
       {/* Supporting line + leasing cards */}
-      <SectionWrapper variant="dark" padding="compact">
+      <SectionWrapper variant="dark-transparent" padding="compact">
         <Reveal>
           <p className="text-center text-sm font-semibold uppercase tracking-widest text-olaris-text-secondary/50 mb-10">
             All makes. All sectors. Intelligence as standard.

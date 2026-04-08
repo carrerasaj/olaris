@@ -59,7 +59,8 @@ export function WaveBackground() {
 
   return (
     <div
-      className="fixed inset-0 -z-10 pointer-events-none overflow-hidden"
+      className="fixed inset-0 pointer-events-none overflow-hidden"
+      style={{ zIndex: 0 }}
       aria-hidden="true"
     >
       {/* Base layer: all wave lines in dark grey */}
