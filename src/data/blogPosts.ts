@@ -141,7 +141,7 @@ export const blogPosts: BlogPostPreview[] = [
       "An at-risk driver is anyone whose behaviour, licence status, or compliance gaps make them statistically more likely to be involved in an incident. Here's how to identify and manage them.",
     category: 'Driver Behaviour',
     readTime: '9 min read',
-    date: '2026-03-21',
+    date: '2026-03-30',
   },
   {
     id: 'fleet-data-audit',
