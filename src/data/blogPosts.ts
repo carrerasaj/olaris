@@ -143,4 +143,13 @@ export const blogPosts: BlogPostPreview[] = [
     readTime: '9 min read',
     date: '2026-03-21',
   },
+  {
+    id: 'fleet-data-audit',
+    title: 'What a Fleet Data Audit Actually Reveals — And Why Most Operators Are Surprised',
+    excerpt:
+      "Ask a fleet manager how many data sources their operation runs on, and they'll usually say three or four. Run an actual fleet data audit and you'll find eight or more.",
+    category: 'Fleet Management',
+    readTime: '8 min read',
+    date: '2026-04-13',
+  },
 ]

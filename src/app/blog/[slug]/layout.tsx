@@ -19,6 +19,7 @@ const slugToFile: Record<string, string> = {
   'what-is-driver-behaviour-scoring': 'blog-13-what-is-driver-behaviour-scoring.md',
   'what-is-fleet-compliance': 'blog-14-what-is-fleet-compliance.md',
   'what-is-an-at-risk-driver': 'blog-15-what-is-an-at-risk-driver.md',
+  'fleet-data-audit': 'blog-16-fleet-data-audit.md',
 }
 
 function getFrontmatter(slug: string) {
