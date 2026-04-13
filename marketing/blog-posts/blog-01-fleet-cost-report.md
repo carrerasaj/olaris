@@ -1,7 +1,7 @@
 ---
 title: "Why Your Fleet Cost Report Is Wrong (And What to Do About It)"
-metaTitle: "Fleet Cost Reports: Why Numbers Don't Add Up"
-metaDescription: "Discover why your fleet cost figures are misleading and how real-time dashboards reveal the hidden costs in your operation."
+metaTitle: "Fleet Cost Per Mile: Why Your Report Is Wrong"
+metaDescription: "Your fleet cost report is probably wrong. Discover why manual reporting hides thousands in fuel, maintenance and mileage costs — and how real-time dashboards fix it."
 category: "Cost Intelligence"
 headerImage: "Frustrated fleet manager looking at spreadsheet with contradicting numbers displayed on screen"
 date: 2025-09-10
@@ -25,7 +25,7 @@ Here's why:
 
 **The assumption problem.** Most fleet cost models assume an MPG figure that never reflects reality. You might assume 45 MPG across a fleet of vans, based on manufacturer figures or industry averages. In reality, real-world consumption varies wildly depending on driving style, road conditions, load, and maintenance standards. We've seen fleets discover they're actually averaging 38 MPG across the same vehicles — and they didn't realise because they were using assumptions instead of actuals.
 
-**The incompleteness problem.** Manual systems miss data. A maintenance invoice gets filed with the wrong invoice number and doesn't match the vehicle. A fuel card transaction gets coded to the wrong cost centre. Excess mileage charges turn up months after the vehicle's been returned. These gaps create costs that don't appear in your reports until someone stumbles across them, usually at budget review time.
+**The incompleteness problem.** Manual systems miss data. A maintenance invoice gets filed with the wrong invoice number and doesn't match the vehicle. A fuel card transaction gets coded to the wrong cost centre. These are [excess mileage charges that never appear in your cost report](/blog/excess-mileage) until months after the vehicle's been returned. These gaps create costs that don't show up until someone stumbles across them, usually at budget review time.
 
 **The reconciliation problem.** Even when you do have the data, matching it across systems is a nightmare. Lease company X refers to vehicle ABC123; fuel card provider Y calls it DEF456. Maintenance contractor Z has their own naming convention. Getting all of this to speak the same language requires manual intervention, and that's where errors compound.
 
@@ -94,7 +94,7 @@ Here's what a real-time cost dashboard should show you — and what you're proba
 - **Fuel consumption per vehicle per week**: with deviation from baseline
 - **Mileage vs. allowance**: how each vehicle is tracking against its lease limit, updated daily
 - **Maintenance costs by category**: with invoices matched to vehicles and due dates tracked
-- **Cost per driver**: because driver behaviour drives costs
+- **Cost per driver**: because [driver behaviour drives costs](/blog/driver-behaviour-insurance)
 - **Excess mileage risk**: which vehicles are on track to exceed their limits, with months to spare
 
 If your current cost report doesn't give you this granularity, and it doesn't update more frequently than monthly, you're managing your fleet on assumptions and historical data. The real costs are in the gaps.

@@ -1,7 +1,7 @@
 ---
 title: "The Hidden Cost of Excess Mileage — and How to See It Coming"
 metaTitle: "Excess Mileage Charges: Prevent £1000s in Fees"
-metaDescription: "Learn why excess mileage charges blindside fleet managers and how live mileage tracking prevents costly overages at lease return."
+metaDescription: "Excess mileage charges blindside UK fleet managers every year. Learn how live odometer tracking prevents costly overages and saves thousands at lease return."
 category: "Mileage"
 headerImage: "Dashboard showing odometer data and mileage allowance progress bars across multiple vehicles"
 date: 2025-09-24
@@ -60,7 +60,7 @@ The root cause is simple: lack of visibility.
 
 **Drivers don't self-report accurately.** You might rely on drivers to report high-mileage jobs or trips that will push their vehicles toward the limit. But drivers rarely have good visibility of their vehicle's cumulative mileage, and they have no incentive to flag that they're approaching an overage. If a driver's regularly doing 2,000 miles a week and their vehicle has a 12,000-mile annual allowance (230 miles per week), they're overrunning by a factor of 9. But they don't see this in their job briefing.
 
-**Mileage is treated as separate from cost.** In most fleet operations, mileage management sits with operations and cost management sits with finance. They don't talk to each other. Mileage doesn't get factored into the vehicle cost equation until the lease is returned. By then, it's too late to do anything but pay the bill.
+**Mileage is treated as separate from cost.** In most fleet operations, mileage management sits with operations and cost management sits with finance. They don't talk to each other. Mileage doesn't get factored into the vehicle cost equation until the lease is returned. By then, it's too late to do anything but pay the bill. This disconnect is exactly why [mileage compliance for lease companies](/blog/lease-company-mileage) has become a critical operational priority.
 
 ## The Maths: Why It Adds Up So Fast
 
@@ -106,7 +106,7 @@ Here's what changes when you have live mileage data:
 
 **You know, in real time, which vehicles are on track to exceed their allowance.** Not at lease return. Not at annual review. Today. In month 8 of a three-year lease, you can see that three vehicles in your fleet are tracking 18% above their pro-rata allowance. You can investigate why. Is it a changed duty pattern? An inefficient route? A driver who's relocated? You can course-correct.
 
-**You can predict the final bill.** If you know each vehicle's mileage, its allowance, and the time remaining on the lease, you can calculate projected excess mileage charges with accuracy. Instead of it being a surprise, it's a known cost that you can budget for or act on.
+**You can predict the final bill.** If you know each vehicle's mileage, its allowance, and the time remaining on the lease, you can calculate projected excess mileage charges with accuracy. A [real-time cost dashboard](/blog/fleet-cost-report) turns this from a surprise into a known cost that you can budget for or act on.
 
 **You can intervene by vehicle and by driver.** Maybe vehicle ABC123, a van assigned to a major client, genuinely needs a higher mileage allowance. You have data to renegotiate the lease. Maybe vehicle DEF456 has an inefficient route plan. You can re-route. Maybe driver X is covering more territory than their peers. You can investigate whether there's a workload issue or a driving behaviour issue.
 

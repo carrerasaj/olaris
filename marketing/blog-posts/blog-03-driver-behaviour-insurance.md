@@ -1,7 +1,7 @@
 ---
 title: "How Driver Behaviour Scoring Changed One Fleet's Insurance Renewal"
 metaTitle: "Driver Behaviour Data & Insurance Premiums: A Real Case"
-metaDescription: "See how one fleet reduced insurance costs by 12% using driver behaviour scoring and measurable safety improvements."
+metaDescription: "A 120-vehicle fleet cut insurance premiums by 12% using driver behaviour scoring. See how gamification, league tables and measurable safety data moved the needle."
 category: "Driver Behaviour"
 headerImage: "Fleet manager reviewing driver behaviour league table on tablet with improvement trends highlighted"
 date: 2025-10-08
@@ -90,7 +90,7 @@ The 12% insurance saving is real and material. But it's not the biggest impact f
 
 Here's what else changed:
 
-**Fuel consumption fell.** Aggressive driving — harsh acceleration, speeding, harsh braking — burns fuel. Data shows aggressive driving increases fuel consumption by 25-33%. Once drivers became aware they were being scored on acceleration and braking events, they naturally started accelerating more smoothly and braking less suddenly. Fuel consumption dropped 8% across the fleet over six months. For a 120-vehicle fleet running on diesel, at current prices, that's roughly £12,000 in annual fuel savings.
+**Fuel consumption fell.** Aggressive driving — harsh acceleration, speeding, harsh braking — burns fuel. Data shows aggressive driving increases fuel consumption by 25-33%. Once drivers became aware they were being scored on acceleration and braking events, they naturally started accelerating more smoothly and braking less suddenly. [Fuel consumption and maintenance costs](/blog/fleet-cost-report) dropped 8% across the fleet over six months. For a 120-vehicle fleet running on diesel, at current prices, that's roughly £12,000 in annual fuel savings.
 
 **Maintenance costs declined.** Aggressive driving increases brake wear, tyre wear, and suspension stress. Smoother driving extends component life. The fleet saw brake-related maintenance drop by 15%. Tyre replacement intervals extended by an average of 3,000 miles per set. Shock absorber and suspension work declined. Maintenance savings: approximately £18,000 per year.
 
@@ -100,7 +100,7 @@ Here's what else changed:
 
 **Culture changed.** Senior management expected push-back against behaviour monitoring. They got none. Drivers engaged because it felt fair, transparent, and rewarding. When the fleet did their next internal safety audit, scores went up because the culture had shifted.
 
-All told, the 12% insurance saving was the most visible win, but the aggregate benefit — fuel savings, maintenance savings, insurance savings, retention savings, and fewer incident costs — came to roughly £50,000 per year.
+All told, the 12% insurance saving was the most visible win, but the aggregate benefit — fuel savings, maintenance savings, insurance savings, retention savings, and fewer incident costs — came to roughly £50,000 per year. The data also supports [fleet emissions reduction through driver behaviour](/blog/scope-123-fleet), since smoother driving directly lowers carbon output.
 
 ## The Shift from "Surveillance" to "Recognition and Accountability"
 

@@ -93,7 +93,7 @@ Here's what matters for residual value:
 - Depth of discharge cycles (regularly running to 5% capacity reduces lifespan)
 - Actual mileage (higher mileage faster degrades capacity, obviously)
 
-Connected vehicle data that monitors actual battery health — not just estimated state of charge, but actual cycle health metrics — gives you early warning of vehicles trending toward lower residual values.
+Using [connected vehicle data for battery health monitoring](/blog/connected-vehicle-data) — not just estimated state of charge, but actual cycle health metrics from OEM telemetry — gives you early warning of vehicles trending toward lower residual values.
 
 A fleet with battery health monitoring can:
 - Rotate high-mileage drivers away from fast chargers
@@ -127,7 +127,7 @@ Planning an EV fleet transition starts with analysing your current fleet's usage
 
 ## Why This Matters to Your Bottom Line
 
-EV transition isn't a compliance exercise. It's a fleet operation question disguised as a vehicle question.
+EV transition isn't a compliance exercise. It's a fleet operation question disguised as a vehicle question. And it ties directly into [carbon reporting and Scope 1 emissions](/blog/scope-123-fleet) — because every diesel vehicle you replace changes your numbers.
 
 The operator who does this with data will spend less on vehicles, less on charging infrastructure, and more on the vehicles that actually work. The operator who does it on enthusiasm will spend more, get sub-optimal utilisation, and wonder why EV transition didn't deliver the savings they were promised.
 

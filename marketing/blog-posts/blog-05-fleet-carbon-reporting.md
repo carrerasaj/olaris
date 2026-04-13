@@ -1,7 +1,7 @@
 ---
 title: "Scope 1, 2, 3: A Practical Guide to Fleet Carbon Reporting"
 metaTitle: "Fleet Carbon Reporting: Scope 1, 2, 3 Explained"
-metaDescription: "Understand carbon scopes for fleets. Real emissions data beats lab figures. EV planning, home charging economics, net zero strategy."
+metaDescription: "Your fleet emits roughly 2.5 tonnes of CO2 per vehicle per year. Learn how to measure Scope 1, 2 and 3 emissions and plan your EV transition."
 category: "ESG"
 headerImage: "Fleet manager reviewing live carbon emissions dashboard showing Scope 1, 2, 3 breakdown with net zero targets"
 date: 2025-11-05
@@ -95,7 +95,7 @@ Here's a critical insight: the emissions figures manufacturers publish for vehic
 
 When a vehicle is tested for emissions, it's done in a lab under controlled conditions: steady speed, mild acceleration, optimal temperature. Real-world driving is different: city traffic, motorway sprints, cold starts, variable load, poor maintenance.
 
-Real-world fuel consumption is typically 15-25% higher than lab figures. That means real-world emissions are 15-25% higher too.
+Real-world fuel consumption is typically 15-25% higher than lab figures. That means real-world emissions are 15-25% higher too. Accurate carbon reporting depends on [fuel consumption data from real-time tracking](/blog/fleet-cost-report), not manufacturer estimates.
 
 If you're calculating fleet carbon using lab figures (or average industry assumptions), you're understating your true emissions by up to 25%.
 
@@ -115,7 +115,7 @@ For electric vehicles, use actual energy consumption (kWh from charging data) mu
 
 Most fleet managers know they need to transition to electric. The questions are: when, which vehicles, how fast?
 
-Start with your emissions data:
+Start with your emissions data — and consider [EV transition planning based on data](/blog/ev-transition-fleet) as your primary decarbonisation lever:
 
 **Step 1: Measure current fleet emissions.**
 

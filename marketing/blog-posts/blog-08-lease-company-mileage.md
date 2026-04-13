@@ -19,7 +19,7 @@ A typical contract fleet of 50 vehicles across a 3-year lease, average annual mi
 
 If your fleet averages 8,000 miles per vehicle per year? Clean contracts, no excess mileage charges.
 
-If your fleet averages 14,000 miles per vehicle per year? You're paying the lease company £3.60 per excess mile, times 2,000 excess miles, times 50 vehicles, times 3 years. That's £1.08 million in excess mileage charges.
+If your fleet averages 14,000 miles per vehicle per year? You're paying the lease company £3.60 per excess mile, times 2,000 excess miles, times 50 vehicles, times 3 years. That's £1.08 million in excess mileage charges — and that's just [the hidden cost of excess mileage](/blog/excess-mileage) at scale.
 
 But that's just the charge. The real cost is uglier.
 
@@ -158,7 +158,7 @@ I built Olaris because of this exact problem. I ran a lease company. I knew the 
 
 The leap forward isn't a magic solution. It's visibility. It's having the data every day, automatically, accurately. It's being able to see trends instead of surprises. It's being able to act on mileage at month 4 instead of month 14.
 
-Most lease companies will tell you they don't have the tools to make mileage data visible to their customers in real-time. That's changing now. OEM APIs mean you can get odometer data directly from the vehicle.
+Most lease companies will tell you they don't have the tools to make mileage data visible to their customers in real-time. That's changing now. [OEM telemetry for live odometer readings](/blog/connected-vehicle-data) means you can get data directly from the vehicle, without driver input or aftermarket hardware.
 
 The fleets that use it will outperform. They'll catch over-mileage trends early. They'll manage their vehicle allocation more efficiently. Their vehicles will come back in better condition. Their excess charges will be lower. Their residual values will be protected.
 

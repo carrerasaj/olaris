@@ -1,6 +1,6 @@
 ---
 title: "Your Vehicles Are Already Talking. Are You Listening?"
-metaTitle: "Connected Vehicle Data: Your Fleet Is Talking"
+metaTitle: "Connected Vehicle Data Platform: What Fleets Miss"
 metaDescription: "15+ manufacturers now share live telemetry via OEM APIs. Most fleets don't know it exists. Here's what changes when you plug in."
 category: "Thought Leadership"
 headerImage: "Modern vehicle dashboard interface showing real-time telemetry: GPS location, odometer, battery health, tyre pressure, and diagnostic alerts across multiple vehicle brands"
@@ -79,8 +79,8 @@ Let me walk through what actually changes when you move from "I'll ask the drive
 **With connected vehicle data:**
 - The odometer is live. Right now. No entry required.
 - You can see mileage by vehicle, by day, by trip
-- Lease reconciliation happens automatically every month. You see any discrepancies in real-time.
-- Driver behaviour is visible: idle time, harsh acceleration, speeding — not from a black box, from the OEM telemetry
+- Lease reconciliation happens automatically every month — enabling [live mileage tracking against lease allowances](/blog/excess-mileage). You see any discrepancies in real-time.
+- [Driver behaviour insight from OEM telemetry](/blog/driver-behaviour-insurance) is visible: idle time, harsh acceleration, speeding — not from a black box, from the manufacturer's own systems
 - Charging patterns (EVs) show actual energy consumption and range efficiency
 - Tyre pressure alerts come directly from the vehicle. You know when pressure drops before it becomes a roadside repair
 - Diagnostic alerts come straight from the manufacturer's system. You know about issues before they become failures

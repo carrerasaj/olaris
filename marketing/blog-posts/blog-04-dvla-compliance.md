@@ -1,7 +1,7 @@
 ---
 title: "DVLA Compliance: What Most Fleet Managers Get Wrong"
 metaTitle: "DVLA Licence Checking: Legal Requirements & Risks"
-metaDescription: "Understand your DVLA compliance obligations. One unlicensed driver can void your insurance and expose you to criminal liability."
+metaDescription: "One unlicensed driver can void your fleet insurance and expose you to criminal liability. Understand your DVLA compliance obligations and how to automate checking."
 category: "Compliance"
 headerImage: "Fleet manager reviewing digital DVLA licence check results showing verification dates and expiry alerts"
 date: 2025-10-22
@@ -84,7 +84,7 @@ That's a clear, dated, specific record. If you don't have that, you have a probl
 
 **Mistake 4: Not checking for penalties, points, or medical restrictions.**
 
-A driver might have a valid licence but have 12 points on it (meaning they're close to disqualification). Or a medical condition that requires annual checks. Or a restriction that limits them to automatic vehicles.
+A driver might have a valid licence but have 12 points on it (meaning they're close to disqualification). Or a medical condition that requires annual checks. Or a restriction that limits them to automatic vehicles. Combining licence checks with [driver behaviour monitoring](/blog/driver-behaviour-insurance) gives you a complete picture of risk — not just whether someone is licensed, but how they're actually driving.
 
 If you're not looking at the full licence detail, you're missing risks.
 
