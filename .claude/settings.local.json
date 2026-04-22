@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(DATABASE_URL=\"postgres://placeholder:placeholder@localhost:5432/placeholder\" npx drizzle-kit generate)",
+      "Bash(ls node_modules/tsx)",
+      "Bash(ls node_modules/pg/package.json)",
+      "Bash(npx next *)"
+    ]
+  }
+}

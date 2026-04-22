@@ -71,6 +71,14 @@ const nextConfig = {
       }
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: '/.well-known/olaris-signing-pubkey.json',
+        destination: '/api/well-known/olaris-signing-pubkey',
+      },
+    ]
+  },
   async redirects() {
     return [
       {

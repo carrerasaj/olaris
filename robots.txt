@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /sign/
+Disallow: /api/auth/
+Disallow: /api/sign/
+Disallow: /api/admin/
+Disallow: /internal/
 
 Sitemap: https://olaris.co.uk/sitemap.xml

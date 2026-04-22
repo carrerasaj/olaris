@@ -1,0 +1,630 @@
+/**
+ * Olaris CRM + order execution schema.
+ *
+ * Conventions:
+ *   - IDs are text (nanoid-21) unless stated otherwise
+ *   - Money is stored as integer pence, never float
+ *   - All timestamps are TIMESTAMPTZ, default now()
+ *   - JSONB blobs are typed via $type<T>() so callers get autocomplete
+ *   - Enums are Postgres-native (not CHECK constraints) for readability
+ */
+
+import { relations, sql } from 'drizzle-orm'
+import {
+  boolean,
+  index,
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core'
+import { nanoid } from 'nanoid'
+
+// ─── Enums ─────────────────────────────────────────────────────────────────
+
+export const userRole = pgEnum('user_role', ['admin'])
+export const customerType = pgEnum('customer_type', ['business', 'personal'])
+export const financeType = pgEnum('finance_type', [
+  'BCH',
+  'PCH',
+  'FL',
+  'HP',
+  'CP',
+  'OP',
+])
+export const orderStatus = pgEnum('order_status', [
+  'draft',
+  'sent',
+  'partially_signed',
+  'signed',
+  'delivered',
+  'cancelled',
+])
+export const signerRole = pgEnum('signer_role', ['customer', 'rep'])
+export const signatureType = pgEnum('signature_type', ['typed', 'drawn'])
+export const otpMethod = pgEnum('otp_method', ['email'])
+export const auditEventType = pgEnum('audit_event_type', [
+  'order.created',
+  'order.updated',
+  'order.sent',
+  'order.cancelled',
+  'link.viewed',
+  'otp.requested',
+  'otp.verified',
+  'otp.failed',
+  'signed',
+  'sign.declined',
+  'pdf.generated',
+  'pdf.downloaded',
+  'reminder.sent',
+  'email.sent',
+  'email.failed',
+])
+export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
+export const documentKind = pgEnum('document_kind', [
+  'id',
+  'proof_of_address',
+  'proof_of_income',
+  'signed_order_pdf',
+  'other',
+])
+export const activityKind = pgEnum('activity_kind', [
+  'note',
+  'call',
+  'email',
+  'meeting',
+  'task',
+])
+
+// ─── Helpers ───────────────────────────────────────────────────────────────
+
+const id = () =>
+  text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid(21))
+
+const createdAt = () =>
+  timestamp('created_at', { withTimezone: true })
+    .default(sql`now()`)
+    .notNull()
+
+const updatedAt = () =>
+  timestamp('updated_at', { withTimezone: true })
+    .default(sql`now()`)
+    .notNull()
+
+// ─── JSONB payload types ───────────────────────────────────────────────────
+
+export interface AddressJson {
+  line1: string
+  line2?: string
+  city: string
+  postcode: string
+  country: string
+}
+
+export interface VehicleJson {
+  category: string
+  make: string
+  model: string
+  derivative: string
+  fuel: string
+  transmission: string
+  colour: string
+  trim: string
+  registration: string
+  co2: number
+}
+
+export interface OrderOptionJson {
+  id: string
+  name: string
+  sku: string
+  qty: number
+  netPence: number
+  vatRate: number
+}
+
+export interface DeliveryJson {
+  method: string
+  address: string
+  city: string
+  postcode: string
+  preferredDate: string
+  contact: string
+  contactPhone: string
+  notes: string
+}
+
+export interface PricingJson {
+  vehicleNetPence: number
+  discountPence: number
+  vatRate: number
+  vedPence: number
+  firstRegFeePence: number
+  deliveryFeePence: number
+  numberPlatesPence: number
+}
+
+export interface FinanceJson {
+  term: number
+  annualMileage: number
+  initialRental: number
+  monthlyNetPence: number
+  balloonPence: number
+}
+
+export interface AddonsJson {
+  maintenance: boolean
+  maintenanceMonthlyPence: number
+  gap: boolean
+  gapTotalPence: number
+  tyreCover: boolean
+  tyreMonthlyPence: number
+  breakdown: boolean
+  breakdownMonthlyPence: number
+}
+
+export interface PartExchangeJson {
+  enabled: boolean
+  reg: string
+  make: string
+  model: string
+  mileage: string
+  condition: string
+  valuationPence: number
+  outstandingFinancePence: number
+}
+
+export interface ConsentJson {
+  terms: boolean
+  gdpr: boolean
+  marketing: boolean
+  fcaDisclosure: boolean
+}
+
+// ─── Auth.js tables (Drizzle adapter standard shape, with `role` added) ────
+
+export const users = pgTable('users', {
+  id: id(),
+  name: text('name'),
+  email: text('email').notNull().unique(),
+  emailVerified: timestamp('email_verified', { withTimezone: true }),
+  image: text('image'),
+  role: userRole('role').default('admin').notNull(),
+  createdAt: createdAt(),
+})
+
+export const accounts = pgTable(
+  'accounts',
+  {
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: text('type').notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('provider_account_id').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
+    scope: text('scope'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.provider, t.providerAccountId] }),
+  }),
+)
+
+export const sessions = pgTable('sessions', {
+  sessionToken: text('session_token').primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  expires: timestamp('expires', { withTimezone: true }).notNull(),
+})
+
+export const verificationTokens = pgTable(
+  'verification_tokens',
+  {
+    identifier: text('identifier').notNull(),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { withTimezone: true }).notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.identifier, t.token] }),
+  }),
+)
+
+// ─── Domain tables ─────────────────────────────────────────────────────────
+
+export const companies = pgTable(
+  'companies',
+  {
+    id: id(),
+    name: text('name').notNull(),
+    companiesHouseNumber: text('companies_house_number'),
+    vatNumber: text('vat_number'),
+    billingAddress: jsonb('billing_address').$type<AddressJson>(),
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    nameIdx: index('companies_name_idx').on(t.name),
+  }),
+)
+
+export const customers = pgTable(
+  'customers',
+  {
+    id: id(),
+    type: customerType('type').notNull().default('business'),
+    salutation: text('salutation'),
+    firstName: text('first_name').notNull(),
+    lastName: text('last_name').notNull(),
+    email: text('email').notNull(),
+    phone: text('phone'),
+    dob: text('dob'), // ISO date string; no timezone needed
+    position: text('position'),
+    companyId: text('company_id').references(() => companies.id, {
+      onDelete: 'set null',
+    }),
+    billingAddress: jsonb('billing_address').$type<AddressJson>(),
+    notes: text('notes'),
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    emailIdx: index('customers_email_idx').on(t.email),
+    lastNameIdx: index('customers_last_name_idx').on(t.lastName),
+  }),
+)
+
+export const orders = pgTable(
+  'orders',
+  {
+    id: id(),
+    // Human-facing order ref like OL-2026-04-8F3K. Generated server-side at
+    // creation; unique within the system.
+    ref: text('ref').notNull().unique(),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'restrict' }),
+    companyId: text('company_id').references(() => companies.id, {
+      onDelete: 'set null',
+    }),
+    status: orderStatus('status').notNull().default('draft'),
+    customerType: customerType('customer_type').notNull().default('business'),
+    financeType: financeType('finance_type').notNull().default('BCH'),
+
+    // Snapshot of the order at whatever the current edit state is. jsonb so
+    // we can evolve the form without DB migrations for every field.
+    vehicle: jsonb('vehicle').$type<VehicleJson>().notNull(),
+    options: jsonb('options').$type<OrderOptionJson[]>().notNull().default([]),
+    delivery: jsonb('delivery').$type<DeliveryJson>().notNull(),
+    pricing: jsonb('pricing').$type<PricingJson>().notNull(),
+    finance: jsonb('finance').$type<FinanceJson>().notNull(),
+    addons: jsonb('addons').$type<AddonsJson>().notNull(),
+    partExchange: jsonb('part_exchange').$type<PartExchangeJson>(),
+    consent: jsonb('consent').$type<ConsentJson>(),
+
+    notes: text('notes'),
+
+    // Derived totals at the moment of last save — in pence. Source of truth is
+    // still the pricing/finance jsonb above; these are denormalised for list
+    // views that don't want to re-run the calc per row.
+    totalAmountPence: integer('total_amount_pence').notNull().default(0),
+    monthlyAmountPence: integer('monthly_amount_pence').notNull().default(0),
+
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    signedAt: timestamp('signed_at', { withTimezone: true }),
+    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    statusIdx: index('orders_status_idx').on(t.status),
+    customerIdx: index('orders_customer_idx').on(t.customerId),
+    createdAtIdx: index('orders_created_at_idx').on(t.createdAt),
+    refIdx: uniqueIndex('orders_ref_idx').on(t.ref),
+  }),
+)
+
+export const signingTokens = pgTable(
+  'signing_tokens',
+  {
+    id: id(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    // The token itself — 32 bytes, base64url. Indexed for lookup.
+    token: text('token').notNull().unique(),
+    signerRole: signerRole('signer_role').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    tokenIdx: uniqueIndex('signing_tokens_token_idx').on(t.token),
+    orderIdx: index('signing_tokens_order_idx').on(t.orderId),
+  }),
+)
+
+export const otpCodes = pgTable(
+  'otp_codes',
+  {
+    id: id(),
+    signingTokenId: text('signing_token_id')
+      .notNull()
+      .references(() => signingTokens.id, { onDelete: 'cascade' }),
+    // SHA-256 of the 6-digit code. Plaintext never stored.
+    codeHash: text('code_hash').notNull(),
+    sentToEmail: text('sent_to_email').notNull(),
+    method: otpMethod('method').notNull().default('email'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    attempts: integer('attempts').notNull().default(0),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    tokenIdx: index('otp_codes_token_idx').on(t.signingTokenId),
+  }),
+)
+
+export const signatures = pgTable(
+  'signatures',
+  {
+    id: id(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'restrict' }),
+    signerRole: signerRole('signer_role').notNull(),
+    signerName: text('signer_name').notNull(),
+    signerEmail: text('signer_email').notNull(),
+    signatureType: signatureType('signature_type').notNull(),
+    // Base64 PNG (drawn) or the text string (typed).
+    signatureData: text('signature_data').notNull(),
+    signedAt: timestamp('signed_at', { withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    geoCity: text('geo_city'),
+    geoCountry: text('geo_country'),
+
+    // Forensic envelope
+    otpMethod: otpMethod('otp_method'),
+    otpVerifiedAt: timestamp('otp_verified_at', { withTimezone: true }),
+    // SHA-256 hex of the exact PDF bytes presented at sign time.
+    documentSha256: text('document_sha256').notNull(),
+    // Ed25519 signature (base64) of the documentSha256 by the server key.
+    // Lets future readers verify the document was approved by our server.
+    serverSignature: text('server_signature').notNull(),
+    signingKeyFingerprint: text('signing_key_fingerprint').notNull(),
+  },
+  (t) => ({
+    orderIdx: index('signatures_order_idx').on(t.orderId),
+    uniqueRolePerOrder: uniqueIndex('signatures_unique_role_per_order').on(
+      t.orderId,
+      t.signerRole,
+    ),
+  }),
+)
+
+export const auditEvents = pgTable(
+  'audit_events',
+  {
+    id: id(),
+    orderId: text('order_id').references(() => orders.id, { onDelete: 'cascade' }),
+    customerId: text('customer_id').references(() => customers.id, {
+      onDelete: 'set null',
+    }),
+    actorType: actorType('actor_type').notNull(),
+    // For rep actors, userId; for customer actors, signingTokenId; null for system.
+    actorId: text('actor_id'),
+    eventType: auditEventType('event_type').notNull(),
+    // Free-form payload: OTP method, email provider message id, token id, etc.
+    payload: jsonb('payload').$type<Record<string, unknown>>(),
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    geoCity: text('geo_city'),
+    geoCountry: text('geo_country'),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    orderIdx: index('audit_events_order_idx').on(t.orderId),
+    customerIdx: index('audit_events_customer_idx').on(t.customerId),
+    eventTypeIdx: index('audit_events_event_type_idx').on(t.eventType),
+    createdAtIdx: index('audit_events_created_at_idx').on(t.createdAt),
+  }),
+)
+
+export const documents = pgTable(
+  'documents',
+  {
+    id: id(),
+    orderId: text('order_id').references(() => orders.id, { onDelete: 'cascade' }),
+    customerId: text('customer_id').references(() => customers.id, {
+      onDelete: 'cascade',
+    }),
+    kind: documentKind('kind').notNull(),
+    filename: text('filename').notNull(),
+    blobUrl: text('blob_url').notNull(),
+    sha256: text('sha256').notNull(),
+    mimeType: text('mime_type'),
+    sizeBytes: integer('size_bytes'),
+    uploadedBy: text('uploaded_by').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    uploadedAt: createdAt(),
+  },
+  (t) => ({
+    orderIdx: index('documents_order_idx').on(t.orderId),
+    customerIdx: index('documents_customer_idx').on(t.customerId),
+    kindIdx: index('documents_kind_idx').on(t.kind),
+  }),
+)
+
+export const activities = pgTable(
+  'activities',
+  {
+    id: id(),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'cascade' }),
+    orderId: text('order_id').references(() => orders.id, { onDelete: 'set null' }),
+    kind: activityKind('kind').notNull(),
+    title: text('title').notNull(),
+    body: text('body'),
+    dueDate: timestamp('due_date', { withTimezone: true }),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    customerIdx: index('activities_customer_idx').on(t.customerId),
+    orderIdx: index('activities_order_idx').on(t.orderId),
+    dueDateIdx: index('activities_due_date_idx').on(t.dueDate),
+  }),
+)
+
+// Reminders for customer signing links. One row per scheduled reminder;
+// Vercel Cron sweeps at 07:00 UTC daily, sends any where scheduledFor <= now()
+// and sentAt is null.
+export const reminderSchedule = pgTable(
+  'reminder_schedule',
+  {
+    id: id(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
+    kind: text('kind').notNull(), // 'day_3' | 'day_6'
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    scheduledIdx: index('reminder_schedule_scheduled_idx').on(t.scheduledFor),
+    orderIdx: index('reminder_schedule_order_idx').on(t.orderId),
+  }),
+)
+
+// ─── Relations ─────────────────────────────────────────────────────────────
+// Drizzle relations — used for typed joins via db.query.* API.
+
+export const usersRelations = relations(users, ({ many }) => ({
+  ordersCreated: many(orders),
+  customersCreated: many(customers),
+  activities: many(activities),
+}))
+
+export const companiesRelations = relations(companies, ({ many, one }) => ({
+  customers: many(customers),
+  orders: many(orders),
+  createdBy: one(users, { fields: [companies.createdBy], references: [users.id] }),
+}))
+
+export const customersRelations = relations(customers, ({ many, one }) => ({
+  company: one(companies, {
+    fields: [customers.companyId],
+    references: [companies.id],
+  }),
+  orders: many(orders),
+  activities: many(activities),
+  documents: many(documents),
+  createdBy: one(users, { fields: [customers.createdBy], references: [users.id] }),
+}))
+
+export const ordersRelations = relations(orders, ({ many, one }) => ({
+  customer: one(customers, {
+    fields: [orders.customerId],
+    references: [customers.id],
+  }),
+  company: one(companies, { fields: [orders.companyId], references: [companies.id] }),
+  signatures: many(signatures),
+  auditEvents: many(auditEvents),
+  signingTokens: many(signingTokens),
+  activities: many(activities),
+  documents: many(documents),
+  reminders: many(reminderSchedule),
+  createdBy: one(users, { fields: [orders.createdBy], references: [users.id] }),
+}))
+
+export const signingTokensRelations = relations(signingTokens, ({ one, many }) => ({
+  order: one(orders, { fields: [signingTokens.orderId], references: [orders.id] }),
+  otpCodes: many(otpCodes),
+}))
+
+export const otpCodesRelations = relations(otpCodes, ({ one }) => ({
+  signingToken: one(signingTokens, {
+    fields: [otpCodes.signingTokenId],
+    references: [signingTokens.id],
+  }),
+}))
+
+export const signaturesRelations = relations(signatures, ({ one }) => ({
+  order: one(orders, { fields: [signatures.orderId], references: [orders.id] }),
+}))
+
+export const auditEventsRelations = relations(auditEvents, ({ one }) => ({
+  order: one(orders, { fields: [auditEvents.orderId], references: [orders.id] }),
+  customer: one(customers, {
+    fields: [auditEvents.customerId],
+    references: [customers.id],
+  }),
+}))
+
+export const activitiesRelations = relations(activities, ({ one }) => ({
+  customer: one(customers, {
+    fields: [activities.customerId],
+    references: [customers.id],
+  }),
+  order: one(orders, { fields: [activities.orderId], references: [orders.id] }),
+  createdBy: one(users, { fields: [activities.createdBy], references: [users.id] }),
+}))
+
+export const documentsRelations = relations(documents, ({ one }) => ({
+  order: one(orders, { fields: [documents.orderId], references: [orders.id] }),
+  customer: one(customers, {
+    fields: [documents.customerId],
+    references: [customers.id],
+  }),
+  uploadedBy: one(users, { fields: [documents.uploadedBy], references: [users.id] }),
+}))
+
+export const reminderScheduleRelations = relations(reminderSchedule, ({ one }) => ({
+  order: one(orders, { fields: [reminderSchedule.orderId], references: [orders.id] }),
+}))
+
+// ─── Inferred types (for use across the app) ──────────────────────────────
+
+export type User = typeof users.$inferSelect
+export type NewUser = typeof users.$inferInsert
+export type Customer = typeof customers.$inferSelect
+export type NewCustomer = typeof customers.$inferInsert
+export type Company = typeof companies.$inferSelect
+export type NewCompany = typeof companies.$inferInsert
+export type Order = typeof orders.$inferSelect
+export type NewOrder = typeof orders.$inferInsert
+export type Signature = typeof signatures.$inferSelect
+export type NewSignature = typeof signatures.$inferInsert
+export type AuditEvent = typeof auditEvents.$inferSelect
+export type NewAuditEvent = typeof auditEvents.$inferInsert
+export type SigningToken = typeof signingTokens.$inferSelect
+export type OtpCode = typeof otpCodes.$inferSelect
+export type Document = typeof documents.$inferSelect
+export type NewDocument = typeof documents.$inferInsert
+export type Activity = typeof activities.$inferSelect
+export type NewActivity = typeof activities.$inferInsert
+export type ReminderSchedule = typeof reminderSchedule.$inferSelect
