@@ -9,7 +9,10 @@
  * To add a third admin: edit ADMIN_EMAILS and re-run.
  */
 
-import 'dotenv/config'
+import { config as loadEnv } from 'dotenv'
+loadEnv({ path: '.env.local' })
+loadEnv({ path: '.env' })
+
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { sql } from 'drizzle-orm'

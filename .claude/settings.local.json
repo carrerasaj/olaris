@@ -4,7 +4,17 @@
       "Bash(DATABASE_URL=\"postgres://placeholder:placeholder@localhost:5432/placeholder\" npx drizzle-kit generate)",
       "Bash(ls node_modules/tsx)",
       "Bash(ls node_modules/pg/package.json)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(code --list-extensions)",
+      "Bash(brew list *)",
+      "Read(//opt/homebrew/var/**)",
+      "Bash(launchctl list *)",
+      "Bash(pg_isready)",
+      "Bash(echo \"---exit: $?---\")",
+      "Bash(brew services *)",
+      "Bash(psql -l)",
+      "Bash(createdb olaris_dev)",
+      "Bash(psql -d olaris_dev -c \"SELECT version\\(\\);\")"
     ]
   }
 }

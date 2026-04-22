@@ -3,10 +3,11 @@ import { redirect } from 'next/navigation'
 import { eq } from 'drizzle-orm'
 import { db, customers, companies } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
-import { DEFAULT_ORDER, type Order as UiOrder } from '@/components/order-form'
+import type { Order as UiOrder } from '@/components/order-form'
 import { OrderAdminEditor } from '../OrderAdminEditor'
 import { createOrderAction } from '../../actions/orders'
 import { uiOrderToInput } from '@/lib/order-mapping'
+import { emptyOrder } from '@/lib/empty-order'
 
 export const metadata = { title: 'New order' }
 
@@ -35,10 +36,13 @@ export default async function NewOrderPage({
   }
   const { customer, company } = rows[0]
 
-  // Seed the form with the selected customer's details — the rest comes from
-  // DEFAULT_ORDER so Alan has a starting point, not an empty form.
+  // Seed from a fresh empty order, then overlay the selected customer's
+  // details. Building the object here (rather than spreading an imported
+  // const from a 'use client' module) keeps every sub-object intact across
+  // the RSC prop boundary.
+  const base = emptyOrder()
   const initial: UiOrder = {
-    ...DEFAULT_ORDER,
+    ...base,
     orderType: customer.type,
     customer: {
       salutation: customer.salutation ?? 'Mr',

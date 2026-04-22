@@ -34,7 +34,10 @@ declare module 'next-auth' {
   }
 }
 
-const EMAIL_FROM = 'Olaris <alan@olaris.co.uk>'
+// In production we send from `alan@olaris.co.uk` via a verified domain.
+// Dev/preview can override with EMAIL_FROM (e.g. `onboarding@resend.dev` before
+// DNS is live) so the flow is testable without domain verification.
+const EMAIL_FROM = process.env.EMAIL_FROM ?? 'Olaris <alan@olaris.co.uk>'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {

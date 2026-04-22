@@ -165,117 +165,6 @@ export const fmtGBP = (n: number | string | null | undefined): string =>
     maximumFractionDigits: 2,
   })
 
-// Kept for dev/mock use only. Production refs come from the server.
-export function generateMockRef(): string {
-  const d = new Date()
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const rand = Array.from(
-    { length: 4 },
-    () => 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 31)],
-  ).join('')
-  return `OL-${y}-${m}-${rand}`
-}
-
-// ─── Default order (demo data; will be replaced by real drafts in Phase 2) ─
-
-export const DEFAULT_ORDER: Order = {
-  orderType: 'business',
-  financeType: 'BCH',
-  customer: {
-    salutation: 'Mr',
-    firstName: 'Alexander',
-    lastName: 'Pemberton',
-    email: 'a.pemberton@pembertonlogistics.co.uk',
-    phone: '+44 7700 900 314',
-    dob: '1982-03-14',
-    company: 'Pemberton Logistics Ltd',
-    companyNumber: '09412857',
-    vatNumber: 'GB 284 1193 47',
-    position: 'Managing Director',
-    billingAddress: '14 Ashgrove Business Park, Suite 3',
-    billingCity: 'Witney',
-    billingPostcode: 'OX28 4GE',
-    billingCountry: 'United Kingdom',
-  },
-  vehicle: {
-    category: 'Commercial Van',
-    make: 'Ford',
-    model: 'Transit Custom',
-    derivative: '320 L2H1 Trend 170 Auto',
-    fuel: 'Diesel',
-    transmission: 'Automatic',
-    colour: 'Frozen White',
-    trim: 'Ebony Cloth',
-    registration: 'New Plate (26-reg)',
-    co2: 168,
-  },
-  options: [
-    { id: 'opt-1', name: 'Technology Pack', sku: 'TP-170', qty: 1, net: 650.0, vatRate: 20 },
-    { id: 'opt-2', name: 'Towbar — Fixed', sku: 'TB-FIX', qty: 1, net: 475.0, vatRate: 20 },
-    { id: 'opt-3', name: 'Side Loading Door', sku: 'SLD-NS', qty: 1, net: 295.0, vatRate: 20 },
-    { id: 'opt-4', name: 'Ply Lining Kit', sku: 'PLY-L2', qty: 1, net: 420.0, vatRate: 20 },
-  ],
-  delivery: {
-    method: 'Driven to address',
-    address: 'Pemberton Logistics Ltd, 14 Ashgrove Business Park',
-    city: 'Witney',
-    postcode: 'OX28 4GE',
-    preferredDate: '2026-06-14',
-    contact: 'Alexander Pemberton',
-    contactPhone: '+44 7700 900 314',
-    notes: 'Gate code 4421. Please call on arrival; reception closes at 17:00.',
-  },
-  pricing: {
-    vehicleNet: 34250.0,
-    discount: 1250.0,
-    vatRate: 20,
-    ved: 335.0,
-    firstRegFee: 55.0,
-    deliveryFee: 149.0,
-    numberPlates: 25.0,
-  },
-  finance: {
-    term: 48,
-    annualMileage: 15000,
-    initialRental: 6,
-    monthlyNet: 389.5,
-    balloon: 0,
-  },
-  addons: {
-    maintenance: true,
-    maintenanceMonthly: 42.5,
-    gap: false,
-    gapTotal: 0,
-    tyreCover: true,
-    tyreMonthly: 14.0,
-    breakdown: true,
-    breakdownMonthly: 9.5,
-  },
-  partExchange: {
-    enabled: false,
-    reg: '',
-    make: '',
-    model: '',
-    mileage: '',
-    condition: 'Good',
-    valuation: 0,
-    outstandingFinance: 0,
-  },
-  notes: '',
-  consent: { terms: false, gdpr: false, marketing: false, fcaDisclosure: false },
-  signatures: {
-    customer: { signed: false, method: 'pending', name: '', signedAt: null, ip: null },
-    representative: {
-      signed: false,
-      method: 'pending',
-      name: '',
-      signedAt: null,
-      ip: null,
-    },
-  },
-}
-
 // ─── Dot-path state helpers ────────────────────────────────────────────────
 
 // Immutable set for 'a.b.c' paths. Used by the form's `set()` callback.
@@ -301,32 +190,62 @@ export function makeSetter<T extends object>(
 
 // ─── Pricing math ──────────────────────────────────────────────────────────
 
+// Empty defaults used when a sub-object is missing on the input — guards
+// against partially-hydrated order shapes (e.g. first paint before state
+// settles, or malformed server props).
+const EMPTY_PRICING: Pricing = {
+  vehicleNet: 0,
+  discount: 0,
+  vatRate: 20,
+  ved: 0,
+  firstRegFee: 0,
+  deliveryFee: 0,
+  numberPlates: 0,
+}
+const EMPTY_ADDONS: Addons = {
+  maintenance: false,
+  maintenanceMonthly: 0,
+  gap: false,
+  gapTotal: 0,
+  tyreCover: false,
+  tyreMonthly: 0,
+  breakdown: false,
+  breakdownMonthly: 0,
+}
+const EMPTY_FINANCE: Finance = {
+  term: 0,
+  annualMileage: 0,
+  initialRental: 0,
+  monthlyNet: 0,
+  balloon: 0,
+}
+
 export function useCalc(order: Order): CalcResult {
   return useMemo(() => {
-    const p = order.pricing
+    const p = order.pricing ?? EMPTY_PRICING
+    const a = order.addons ?? EMPTY_ADDONS
+    const f = order.finance ?? EMPTY_FINANCE
     const options = order.options || []
     const optionsNet = options.reduce(
       (s, o) => s + (Number(o.net) || 0) * (Number(o.qty) || 0),
       0,
     )
-    const netBeforeVat = p.vehicleNet + optionsNet - p.discount
+    const netBeforeVat = (p.vehicleNet || 0) + optionsNet - (p.discount || 0)
     const vat = (netBeforeVat * (p.vatRate || 0)) / 100
-    const onRoad = p.ved + p.firstRegFee + p.deliveryFee + p.numberPlates
+    const onRoad =
+      (p.ved || 0) + (p.firstRegFee || 0) + (p.deliveryFee || 0) + (p.numberPlates || 0)
     const total = netBeforeVat + vat + onRoad
 
-    const a = order.addons
     const monthlyAddons =
       (a.maintenance ? a.maintenanceMonthly : 0) +
       (a.tyreCover ? a.tyreMonthly : 0) +
       (a.breakdown ? a.breakdownMonthly : 0)
-    const monthlyTotal = (order.finance.monthlyNet || 0) + monthlyAddons
-    const initialPayment =
-      (order.finance.monthlyNet || 0) * (order.finance.initialRental || 0)
+    const monthlyTotal = (f.monthlyNet || 0) + monthlyAddons
+    const initialPayment = (f.monthlyNet || 0) * (f.initialRental || 0)
     const totalFinanceCost =
       initialPayment +
-      (order.finance.monthlyNet || 0) *
-        Math.max(0, (order.finance.term || 0) - (order.finance.initialRental || 0)) +
-      (order.finance.balloon || 0)
+      (f.monthlyNet || 0) * Math.max(0, (f.term || 0) - (f.initialRental || 0)) +
+      (f.balloon || 0)
 
     return {
       optionsNet,
