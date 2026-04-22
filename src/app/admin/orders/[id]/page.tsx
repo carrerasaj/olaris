@@ -19,7 +19,10 @@ import {
   markDeliveredAction,
   resendSigningLinkAction,
   deleteDraftAction,
+  signAsRepAction,
+  type RepSignInput,
 } from '../../actions/orders'
+import { RepSignButton } from './RepSignButton'
 
 export const metadata = { title: 'Order' }
 
@@ -67,6 +70,11 @@ export default async function OrderDetailPage({
   const canDeliver = order.status === 'signed'
   const canResend = order.status === 'sent' || order.status === 'partially_signed'
   const canDelete = order.status === 'draft'
+  const repHasSigned = orderSigs.some((s) => s.signerRole === 'rep')
+  const canRepSign =
+    (order.status === 'sent' || order.status === 'partially_signed') && !repHasSigned
+  const user = await requireAdmin()
+  const repName = user.name ?? user.email ?? 'Olaris representative'
 
   // Server-action binders
   async function send() {
@@ -88,6 +96,10 @@ export default async function OrderDetailPage({
   async function del() {
     'use server'
     await deleteDraftAction(id)
+  }
+  async function repSign(orderId: string, input: RepSignInput) {
+    'use server'
+    return signAsRepAction(orderId, input)
   }
 
   return (
@@ -131,6 +143,9 @@ export default async function OrderDetailPage({
                 Send for signature
               </button>
             </form>
+          )}
+          {canRepSign && (
+            <RepSignButton orderId={id} repName={repName} onSign={repSign} />
           )}
           {canResend && (
             <form action={resend}>

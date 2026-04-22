@@ -1,0 +1,229 @@
+/**
+ * Transactional email templates for Olaris.
+ *
+ * Each exported function returns { subject, html, text } ready to hand to
+ * sendEmail(). Templates are plain HTML with inline styles — no React
+ * Email dependency. They're simple enough not to warrant one.
+ *
+ * Style: white card on navy background, Inter/Manrope fonts, cyan accent.
+ * Mirrors the admin sign-in email for visual continuity.
+ */
+
+interface OrderSentInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  totalGBP: string
+  signingUrl: string
+  expiresAt: Date
+}
+
+export function orderSentEmail(input: OrderSentInput) {
+  const expiry = input.expiresAt.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+  return {
+    subject: `Your Olaris order is ready to review and sign — ${input.orderRef}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Ready for your signature</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Your order for the <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>
+        is ready for you to review and sign.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Order reference</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.orderRef)}</td></tr>
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Drive-away total</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.totalGBP)}</td></tr>
+      </table>
+      <div style="text-align:center;margin:28px 0">
+        <a href="${input.signingUrl}" style="${BTN}">Review & sign order</a>
+      </div>
+      <p style="${SMALL}">
+        This link expires on <strong>${expiry}</strong> and can only be used once.
+        If you didn't expect this email, please ignore it.
+      </p>
+      <p style="${SMALL}">
+        Any questions? Just reply to this email.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Your order for the ${input.vehicleMake} ${input.vehicleModel} is ready for you to review and sign.
+
+Order reference: ${input.orderRef}
+Drive-away total: ${input.totalGBP}
+
+Review and sign: ${input.signingUrl}
+
+This link expires on ${expiry} and can only be used once.
+
+Any questions? Just reply to this email.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface OtpInput {
+  code: string
+  customerFirstName: string
+  orderRef: string
+}
+
+export function otpEmail(input: OtpInput) {
+  return {
+    subject: `Your Olaris verification code: ${input.code}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Your verification code</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Use this code to finish signing your order
+        <strong style="font-family:'JetBrains Mono',monospace">${escapeHtml(input.orderRef)}</strong>:
+      </p>
+      <div style="text-align:center;margin:28px 0">
+        <div style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:0.2em;color:#0b1e3f;background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:18px 28px">${escapeHtml(input.code)}</div>
+      </div>
+      <p style="${SMALL}">
+        This code expires in <strong>10 minutes</strong>. If you didn't request it, someone may be trying to sign into your order — please contact us.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Your Olaris verification code for order ${input.orderRef} is:
+
+  ${input.code}
+
+This code expires in 10 minutes. If you didn't request it, please contact us.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface OrderSignedInput {
+  recipientFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  totalGBP: string
+  verifyUrl: string
+}
+
+export function orderSignedEmail(input: OrderSignedInput) {
+  return {
+    subject: `Order ${input.orderRef} — fully executed`,
+    html: cardTemplate(`
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:24px;background:#d1fae5;color:#059669">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+      </div>
+      <h1 style="${H1};text-align:center">Order signed and complete</h1>
+      <p style="${P}">Hi ${escapeHtml(input.recipientFirstName)},</p>
+      <p style="${P}">
+        Your order for the <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong> has been fully signed by both parties.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Order reference</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.orderRef)}</td></tr>
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Total</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.totalGBP)}</td></tr>
+      </table>
+      <p style="${P}">
+        You can independently verify this signed order at any time using the public verification page:
+      </p>
+      <div style="text-align:center;margin:20px 0">
+        <a href="${input.verifyUrl}" style="${BTN_GHOST}">Verify the signed order</a>
+      </div>
+      <p style="${SMALL}">
+        We'll be in touch shortly with next steps.
+      </p>
+    `),
+    text: `Hi ${input.recipientFirstName},
+
+Your order for the ${input.vehicleMake} ${input.vehicleModel} has been fully signed by both parties.
+
+Order reference: ${input.orderRef}
+Total: ${input.totalGBP}
+
+Verify the signed order: ${input.verifyUrl}
+
+We'll be in touch shortly with next steps.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface DeclinedInput {
+  customerName: string
+  orderRef: string
+  reason: string
+  adminUrl: string
+}
+
+export function signDeclinedEmail(input: DeclinedInput) {
+  return {
+    subject: `Order ${input.orderRef} declined by customer`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Customer declined to sign</h1>
+      <p style="${P}">
+        <strong>${escapeHtml(input.customerName)}</strong> declined to sign order
+        <strong style="font-family:'JetBrains Mono',monospace">${escapeHtml(input.orderRef)}</strong>.
+      </p>
+      <div style="padding:14px 16px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:4px;margin:18px 0">
+        <div style="font-size:11px;color:#991b1b;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;margin-bottom:6px">Reason</div>
+        <div style="font-size:13px;color:#0f172a;line-height:1.5;white-space:pre-wrap">${escapeHtml(input.reason || '(none provided)')}</div>
+      </div>
+      <div style="text-align:center;margin:24px 0">
+        <a href="${input.adminUrl}" style="${BTN}">View order in admin</a>
+      </div>
+    `),
+    text: `${input.customerName} declined to sign order ${input.orderRef}.
+
+Reason: ${input.reason || '(none provided)'}
+
+View in admin: ${input.adminUrl}`,
+  }
+}
+
+// ─── shared bits ────────────────────────────────────────────────────────
+
+const H1 =
+  'font-family:Manrope,-apple-system,sans-serif;font-size:20px;font-weight:700;color:#0b1e3f;margin:0 0 14px;letter-spacing:-0.01em'
+const P =
+  'font-family:Inter,-apple-system,sans-serif;font-size:14px;color:#334155;line-height:1.55;margin:0 0 14px'
+const SMALL =
+  'font-family:Inter,-apple-system,sans-serif;font-size:12px;color:#64748b;line-height:1.55;margin:18px 0 0'
+const BTN =
+  'display:inline-block;background:#0b1e3f;color:#fff;text-decoration:none;padding:12px 28px;border-radius:6px;font-family:Inter,-apple-system,sans-serif;font-weight:600;font-size:14px'
+const BTN_GHOST =
+  'display:inline-block;background:#fff;color:#0b1e3f;text-decoration:none;padding:10px 22px;border-radius:6px;font-family:Inter,-apple-system,sans-serif;font-weight:600;font-size:13px;border:1px solid #cbd5e1'
+
+function cardTemplate(inner: string): string {
+  return `<!DOCTYPE html>
+<html><body style="margin:0;padding:32px 16px;background:#f1f5f9;font-family:Inter,-apple-system,sans-serif">
+  <table cellpadding="0" cellspacing="0" style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #e4e9f1;border-radius:10px;overflow:hidden">
+    <tr><td style="padding:24px 32px;border-bottom:1px solid #e4e9f1;background:linear-gradient(180deg,#fdfefe 0%,#f8fafc 100%)">
+      <div style="font-family:Manrope,sans-serif;font-size:20px;font-weight:700;color:#0b1e3f;letter-spacing:-0.01em">Olaris</div>
+      <div style="font-size:10px;color:#64748b;letter-spacing:0.12em;text-transform:uppercase;margin-top:2px;font-weight:600">Fleet Intelligence</div>
+    </td></tr>
+    <tr><td style="padding:28px 32px">
+      ${inner}
+    </td></tr>
+    <tr><td style="padding:16px 32px;border-top:1px solid #e4e9f1;background:#f8fafc;font-size:11px;color:#94a3b8;font-family:Inter,-apple-system,sans-serif;line-height:1.5">
+      Olaris Consulting Ltd · Charlbury OX7 3EG · Authorised and regulated by the FCA
+    </td></tr>
+  </table>
+</body></html>`
+}
+
+// HTML-entity escape to avoid injection in templated fields (customer names,
+// free-text reasons, etc. are interpolated). Keep minimal — just the five
+// characters that can break HTML context.
+function escapeHtml(s: string): string {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}

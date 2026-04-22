@@ -1,0 +1,296 @@
+/* Styles scoped to /sign/* — customer-facing, deliberately distinct from
+   the admin `adm-*` namespace so we can iterate on customer UX without
+   touching admin. `sgn-*` prefix.
+
+   A signing page is not a marketing page; no nav, no footer. The root layout
+   always renders <Header/> and <Footer/> for the whole app, and this layout
+   file can't undo that — so hide them via CSS while this stylesheet is
+   loaded. It only applies inside /sign/* routes because the stylesheet is
+   scoped there by the nested layout. */
+body > header,
+body > footer {
+  display: none !important;
+}
+body > main {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.sgn-shell {
+  min-height: 100vh;
+  background: #f1f5f9;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #0f172a;
+  padding: 32px 16px 48px;
+}
+
+.sgn-page {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── Header with logo ────────────────────────────────────────── */
+.sgn-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.sgn-header svg { display: inline-block; }
+.sgn-header .tag {
+  display: inline-block;
+  background: rgba(6, 182, 212, 0.12);
+  color: #0891b2;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* ── Cards ──────────────────────────────────────────────────── */
+.sgn-card {
+  background: #fff;
+  border: 1px solid #e4e9f1;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.sgn-card-head {
+  padding: 18px 24px;
+  border-bottom: 1px solid #e4e9f1;
+  background: linear-gradient(180deg, #fdfefe 0%, #f8fafc 100%);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sgn-card-title {
+  font-family: Manrope, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b1e3f;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.sgn-card-body { padding: 22px 24px; }
+
+/* ── Price summary ──────────────────────────────────────────── */
+.sgn-hero {
+  padding: 28px 24px;
+  background: linear-gradient(135deg, #0b1e3f 0%, #1e3a8a 100%);
+  color: #fff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.sgn-hero::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(34,211,238,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sgn-hero .ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #7dd3fc;
+  background: rgba(6,182,212,0.18);
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.sgn-hero h1 {
+  font-family: Manrope, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
+  color: #fff;
+}
+.sgn-hero .trim { color: #7dd3fc; font-size: 13px; }
+.sgn-hero .total {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(125,211,252,0.25);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.sgn-hero .total .lbl {
+  font-size: 11px; color: #7dd3fc; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.sgn-hero .total .amt {
+  font-family: Manrope, sans-serif;
+  font-size: 32px; font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── Key-value grid ─────────────────────────────────────────── */
+.sgn-kv {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px 16px;
+  font-size: 13.5px;
+}
+.sgn-kv dt { color: #64748b; font-weight: 500; }
+.sgn-kv dd { margin: 0; color: #0f172a; }
+@media (max-width: 480px) {
+  .sgn-kv { grid-template-columns: 1fr; gap: 2px; }
+  .sgn-kv dt { font-size: 11.5px; color: #94a3b8; }
+  .sgn-kv dd { margin-bottom: 10px; }
+}
+
+/* ── Price breakdown table ──────────────────────────────────── */
+.sgn-price-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0;
+  font-size: 13.5px;
+  border-bottom: 1px solid #e4e9f1;
+}
+.sgn-price-row:last-child { border-bottom: none; }
+.sgn-price-row .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.sgn-price-row.total {
+  border-top: 2px solid #0b1e3f;
+  margin-top: 8px;
+  padding-top: 14px;
+}
+.sgn-price-row.total .lbl { font-weight: 700; color: #0b1e3f; font-size: 14.5px; }
+.sgn-price-row.total .v { font-size: 18px; font-weight: 700; color: #0b1e3f; }
+
+/* ── Consent checkboxes ─────────────────────────────────────── */
+.sgn-consent {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid #e4e9f1;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  transition: border-color .12s, background .12s;
+}
+.sgn-consent:hover { border-color: #06b6d4; background: #ecfeff; }
+.sgn-consent.checked { border-color: #06b6d4; background: #ecfeff; }
+.sgn-consent input {
+  margin: 3px 0 0; width: 18px; height: 18px; flex-shrink: 0;
+  accent-color: #06b6d4; cursor: pointer;
+}
+.sgn-consent strong { display: block; color: #0b1e3f; font-weight: 600; margin-bottom: 2px; }
+.sgn-consent span { color: #64748b; font-size: 12px; }
+
+/* ── OTP input ──────────────────────────────────────────────── */
+.sgn-otp-row {
+  display: flex; gap: 10px; align-items: center;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid #e4e9f1;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.sgn-otp-row input {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-align: center;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #0b1e3f;
+}
+.sgn-otp-row input:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 3px rgba(6,182,212,0.15);
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.sgn-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .12s, border-color .12s, color .12s, opacity .12s;
+}
+.sgn-btn-primary { background: #0b1e3f; color: #fff; border-color: #0b1e3f; }
+.sgn-btn-primary:hover { background: #1e3a8a; border-color: #1e3a8a; }
+.sgn-btn-accent { background: #06b6d4; color: #fff; border-color: #06b6d4; }
+.sgn-btn-accent:hover { background: #0891b2; border-color: #0891b2; }
+.sgn-btn-ghost { background: #fff; color: #334155; border-color: #cbd5e1; }
+.sgn-btn-ghost:hover { background: #f1f5f9; }
+.sgn-btn-danger { background: #fff; color: #dc2626; border-color: #fecaca; }
+.sgn-btn-danger:hover { background: #fef2f2; }
+.sgn-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.sgn-btn-lg { padding: 14px 28px; font-size: 15px; width: 100%; }
+
+/* ── Alerts ─────────────────────────────────────────────────── */
+.sgn-alert {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.sgn-alert-success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+.sgn-alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.sgn-alert-info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+
+/* ── Sticky CTA bar on mobile ───────────────────────────────── */
+.sgn-cta-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e4e9f1;
+  padding: 12px 16px;
+  margin: 16px -16px -48px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.04);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.sgn-footer {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* ── Error state ────────────────────────────────────────────── */
+.sgn-empty {
+  max-width: 480px;
+  margin: 60px auto;
+  background: #fff;
+  border: 1px solid #e4e9f1;
+  border-radius: 12px;
+  padding: 40px 32px;
+  text-align: center;
+}
+.sgn-empty-icon {
+  width: 56px; height: 56px; border-radius: 28px;
+  background: #fef2f2; color: #dc2626;
+  margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sgn-empty h1 {
+  font-family: Manrope, sans-serif;
+  font-size: 20px; font-weight: 700;
+  color: #0b1e3f;
+  margin: 0 0 8px;
+}
+.sgn-empty p { color: #64748b; font-size: 14px; line-height: 1.6; margin: 0; }

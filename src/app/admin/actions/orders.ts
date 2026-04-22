@@ -19,6 +19,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { createHash } from 'node:crypto'
 import { and, eq, inArray } from 'drizzle-orm'
 import { customAlphabet } from 'nanoid'
 import {
@@ -27,6 +28,7 @@ import {
   customers,
   auditEvents,
   signingTokens,
+  signatures,
   reminderSchedule,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
@@ -35,7 +37,14 @@ import {
   orderSendSchema,
   type OrderDraftInput,
 } from '@/lib/validation'
-import { generateOrderRef } from '@/lib/format'
+import { generateOrderRef, fmtGBPFromPence } from '@/lib/format'
+import { captureForensics, canonicalJson } from '@/lib/forensics'
+import { signBytes, signingKeyFingerprint } from '@/lib/signing-key'
+import { sendEmail } from '@/lib/email'
+import {
+  orderSentEmail,
+  orderSignedEmail,
+} from '@/lib/email-templates'
 
 export interface OrderActionResult {
   ok: boolean
@@ -308,10 +317,35 @@ export async function sendForSignatureAction(
     payload: { to: customer.email, tokenExpiresAt: expiresAt.toISOString() },
   })
 
-  // Phase 4 wires Resend here. For now, log so the flow is visible in dev.
-  console.log(
-    `[orders.send] Would email ${customer.email} with signing link for ${order.ref} (token ${token.slice(0, 8)}…)`,
-  )
+  // Send the signing-link email
+  const signingUrl = `${siteUrl()}/sign/${token}`
+  const email = orderSentEmail({
+    customerFirstName: customer.firstName,
+    orderRef: order.ref,
+    vehicleMake: order.vehicle.make,
+    vehicleModel: order.vehicle.model,
+    totalGBP: fmtGBPFromPence(order.totalAmountPence),
+    signingUrl,
+    expiresAt,
+  })
+  const sendResult = await sendEmail({
+    to: customer.email,
+    subject: email.subject,
+    html: email.html,
+    text: email.text,
+  })
+  await db.insert(auditEvents).values({
+    orderId: order.id,
+    customerId: order.customerId,
+    actorType: 'system',
+    eventType: sendResult.ok ? 'email.sent' : 'email.failed',
+    payload: {
+      template: 'order.sent',
+      to: customer.email,
+      messageId: sendResult.id,
+      error: sendResult.error,
+    },
+  })
 
   revalidatePath(`/admin/orders/${order.id}`)
   revalidatePath('/admin/orders')
@@ -455,12 +489,205 @@ export async function resendSigningLinkAction(
     payload: { manual: true, to: customer.email },
   })
 
-  console.log(
-    `[orders.resend] Would re-email ${customer.email} for ${order.ref} (token ${token.slice(0, 8)}…)`,
-  )
+  const signingUrl = `${siteUrl()}/sign/${token}`
+  const email = orderSentEmail({
+    customerFirstName: customer.firstName,
+    orderRef: order.ref,
+    vehicleMake: order.vehicle.make,
+    vehicleModel: order.vehicle.model,
+    totalGBP: fmtGBPFromPence(order.totalAmountPence),
+    signingUrl,
+    expiresAt,
+  })
+  const sendResult = await sendEmail({
+    to: customer.email,
+    subject: email.subject,
+    html: email.html,
+    text: email.text,
+  })
+  await db.insert(auditEvents).values({
+    orderId: order.id,
+    customerId: order.customerId,
+    actorType: 'system',
+    eventType: sendResult.ok ? 'email.sent' : 'email.failed',
+    payload: {
+      template: 'order.sent',
+      to: customer.email,
+      manual: true,
+      messageId: sendResult.id,
+      error: sendResult.error,
+    },
+  })
 
   revalidatePath(`/admin/orders/${order.id}`)
   return { ok: true, id: order.id }
+}
+
+function siteUrl(): string {
+  return (
+    process.env.NEXTAUTH_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    'http://localhost:3000'
+  )
+}
+
+// ─── rep signature ────────────────────────────────────────────────────────
+
+export interface RepSignInput {
+  signature: { type: 'typed' | 'drawn'; data: string }
+  intent: true
+}
+
+export async function signAsRepAction(
+  orderId: string,
+  input: RepSignInput,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+  if (!input.intent) {
+    return { ok: false, error: 'Intent to sign must be confirmed' }
+  }
+  if (input.signature.type === 'typed') {
+    if (!input.signature.data || input.signature.data.trim().length < 2) {
+      return { ok: false, error: 'Typed signature required' }
+    }
+  } else if (input.signature.type === 'drawn') {
+    if (!input.signature.data?.startsWith('data:image/png;base64,')) {
+      return { ok: false, error: 'Drawn signature invalid' }
+    }
+  } else {
+    return { ok: false, error: 'Invalid signature payload' }
+  }
+
+  const rows = await db
+    .select({ order: orders, customer: customers })
+    .from(orders)
+    .innerJoin(customers, eq(orders.customerId, customers.id))
+    .where(eq(orders.id, orderId))
+    .limit(1)
+  if (rows.length === 0) return { ok: false, error: 'Order not found' }
+  const { order, customer } = rows[0]
+
+  if (!['sent', 'partially_signed'].includes(order.status)) {
+    return {
+      ok: false,
+      error: `Cannot sign from status "${order.status}"`,
+    }
+  }
+
+  // Has this order already got a rep signature?
+  const existingSigs = await db
+    .select({ role: signatures.signerRole })
+    .from(signatures)
+    .where(eq(signatures.orderId, orderId))
+  if (existingSigs.some((s) => s.role === 'rep')) {
+    return { ok: false, error: 'This order already has a representative signature' }
+  }
+
+  const forensics = await captureForensics()
+
+  const snapshotForHash = {
+    ref: order.ref,
+    vehicle: order.vehicle,
+    options: order.options,
+    delivery: order.delivery,
+    pricing: order.pricing,
+    finance: order.finance,
+    addons: order.addons,
+    partExchange: order.partExchange,
+    totalAmountPence: order.totalAmountPence,
+    monthlyAmountPence: order.monthlyAmountPence,
+    customerId: order.customerId,
+    financeType: order.financeType,
+  }
+  const docHash = createHash('sha256')
+    .update(canonicalJson(snapshotForHash))
+    .digest('hex')
+  const serverSig = signBytes(docHash)
+  const keyFp = signingKeyFingerprint()
+
+  await db.insert(signatures).values({
+    orderId,
+    signerRole: 'rep',
+    signerName:
+      input.signature.type === 'typed'
+        ? input.signature.data.trim()
+        : user.name ?? user.email ?? 'Olaris representative',
+    signerEmail: user.email ?? 'alan@olaris.co.uk',
+    signatureType: input.signature.type,
+    signatureData: input.signature.data,
+    ip: forensics.ip,
+    userAgent: forensics.userAgent,
+    geoCity: forensics.geoCity,
+    geoCountry: forensics.geoCountry,
+    // Rep signing is auth'd via session, not OTP
+    otpMethod: null,
+    otpVerifiedAt: null,
+    documentSha256: docHash,
+    serverSignature: serverSig,
+    signingKeyFingerprint: keyFp,
+  })
+
+  const bothSigned = existingSigs.some((s) => s.role === 'customer')
+
+  await db
+    .update(orders)
+    .set({
+      status: bothSigned ? 'signed' : 'partially_signed',
+      signedAt: bothSigned ? new Date() : undefined,
+      updatedAt: new Date(),
+    })
+    .where(eq(orders.id, orderId))
+
+  await db.insert(auditEvents).values({
+    orderId,
+    customerId: order.customerId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'signed',
+    payload: { role: 'rep', method: input.signature.type, docSha256: docHash },
+    ip: forensics.ip,
+    userAgent: forensics.userAgent,
+    geoCity: forensics.geoCity,
+    geoCountry: forensics.geoCountry,
+  })
+
+  if (bothSigned) {
+    const verifyUrl = `${siteUrl()}/verify/${order.ref}`
+    const totalGBP = fmtGBPFromPence(order.totalAmountPence)
+    // Email both parties. Alan gets notified at his email (from session).
+    const customerMail = orderSignedEmail({
+      recipientFirstName: customer.firstName,
+      orderRef: order.ref,
+      vehicleMake: order.vehicle.make,
+      vehicleModel: order.vehicle.model,
+      totalGBP,
+      verifyUrl,
+    })
+    const repMail = orderSignedEmail({
+      recipientFirstName: 'Alan', // rep-facing — personalisation minimal
+      orderRef: order.ref,
+      vehicleMake: order.vehicle.make,
+      vehicleModel: order.vehicle.model,
+      totalGBP,
+      verifyUrl,
+    })
+    await Promise.all([
+      sendEmail({ to: customer.email, ...customerMail }),
+      sendEmail({ to: user.email ?? 'alan@olaris.co.uk', ...repMail }),
+    ])
+    await db.insert(auditEvents).values({
+      orderId,
+      customerId: order.customerId,
+      actorType: 'system',
+      eventType: 'email.sent',
+      payload: { template: 'order.signed', recipients: 2 },
+    })
+  }
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/orders')
+  revalidatePath('/admin')
+  return { ok: true, id: orderId }
 }
 
 // ─── delete draft (distinct from cancel — draft→gone, no audit trail needed) ─
