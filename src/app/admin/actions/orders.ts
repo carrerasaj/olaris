@@ -30,6 +30,7 @@ import {
   signingTokens,
   signatures,
   reminderSchedule,
+  documents,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import {
@@ -224,6 +225,107 @@ export async function updateOrderAction(
   revalidatePath(`/admin/orders/${orderId}`)
   revalidatePath('/admin/orders')
   return { ok: true, id: orderId }
+}
+
+// ─── duplicate ─────────────────────────────────────────────────────────────
+//
+// Copies every order attribute — vehicle, options, pricing, finance, addons,
+// part-exchange, delivery, notes, customer/company — into a new DRAFT. Does
+// NOT copy signing state (signatures, tokens, documents, audit trail, status
+// dates). New draft gets its own fresh ref.
+//
+// Use case: re-quote the same spec to another customer, or refresh an order
+// after a pricing change without re-keying every field.
+//
+// Works on any source order regardless of status (a signed or cancelled
+// order is just as valid a template as a draft).
+
+export async function duplicateOrderAction(
+  sourceOrderId: string,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+
+  const rows = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, sourceOrderId))
+    .limit(1)
+  if (rows.length === 0) return { ok: false, error: 'Source order not found' }
+  const source = rows[0]
+
+  // New ref, fresh. Retry on vanishing-probability ref collisions.
+  let ref = generateOrderRef()
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const dupe = await db
+      .select({ id: orders.id })
+      .from(orders)
+      .where(eq(orders.ref, ref))
+      .limit(1)
+    if (dupe.length === 0) break
+    ref = generateOrderRef()
+  }
+
+  // Explicit field copy. Safer than spreading `...source` because that would
+  // also copy id/ref/status/timestamps/createdBy — all of which must be
+  // reset or regenerated for the new draft.
+  const [newOrder] = await db
+    .insert(orders)
+    .values({
+      ref,
+      customerId: source.customerId,
+      companyId: source.companyId,
+      status: 'draft',
+      customerType: source.customerType,
+      financeType: source.financeType,
+      vehicle: source.vehicle,
+      options: source.options,
+      delivery: source.delivery,
+      pricing: source.pricing,
+      finance: source.finance,
+      addons: source.addons,
+      partExchange: source.partExchange,
+      // Consents are re-captured from the new customer at sign time — drop
+      // the source's consents rather than carrying stale ticks over.
+      consent: null,
+      notes: source.notes,
+      totalAmountPence: source.totalAmountPence,
+      monthlyAmountPence: source.monthlyAmountPence,
+      createdBy: user.id,
+    })
+    .returning({ id: orders.id, ref: orders.ref })
+
+  // Audit event on both orders: new order gets a "created (duplicated)"
+  // marker, source order gets a "duplicated from here" breadcrumb.
+  await db.insert(auditEvents).values([
+    {
+      orderId: newOrder.id,
+      customerId: source.customerId,
+      actorType: 'rep',
+      actorId: user.id,
+      eventType: 'order.created',
+      payload: {
+        ref: newOrder.ref,
+        duplicatedFrom: { id: source.id, ref: source.ref },
+      },
+    },
+    {
+      orderId: source.id,
+      customerId: source.customerId,
+      actorType: 'rep',
+      actorId: user.id,
+      eventType: 'order.updated',
+      payload: {
+        kind: 'duplicated_to',
+        newOrderId: newOrder.id,
+        newOrderRef: newOrder.ref,
+      },
+    },
+  ])
+
+  revalidatePath('/admin/orders')
+  revalidatePath('/admin')
+  revalidatePath(`/admin/customers/${source.customerId}`)
+  return { ok: true, id: newOrder.id, ref: newOrder.ref }
 }
 
 // ─── send for signature ───────────────────────────────────────────────────
@@ -652,35 +754,17 @@ export async function signAsRepAction(
   })
 
   if (bothSigned) {
-    const verifyUrl = `${siteUrl()}/verify/${order.ref}`
-    const totalGBP = fmtGBPFromPence(order.totalAmountPence)
-    // Email both parties. Alan gets notified at his email (from session).
-    const customerMail = orderSignedEmail({
-      recipientFirstName: customer.firstName,
-      orderRef: order.ref,
-      vehicleMake: order.vehicle.make,
-      vehicleModel: order.vehicle.model,
-      totalGBP,
-      verifyUrl,
-    })
-    const repMail = orderSignedEmail({
-      recipientFirstName: 'Alan', // rep-facing — personalisation minimal
-      orderRef: order.ref,
-      vehicleMake: order.vehicle.make,
-      vehicleModel: order.vehicle.model,
-      totalGBP,
-      verifyUrl,
-    })
-    await Promise.all([
-      sendEmail({ to: customer.email, ...customerMail }),
-      sendEmail({ to: user.email ?? 'alan@olaris.co.uk', ...repMail }),
-    ])
-    await db.insert(auditEvents).values({
+    await finalisePdfAndNotify({
       orderId,
+      orderRef: order.ref,
       customerId: order.customerId,
-      actorType: 'system',
-      eventType: 'email.sent',
-      payload: { template: 'order.signed', recipients: 2 },
+      customerEmail: customer.email,
+      customerFirstName: customer.firstName,
+      vehicleMake: order.vehicle.make,
+      vehicleModel: order.vehicle.model,
+      totalGBP: fmtGBPFromPence(order.totalAmountPence),
+      repEmail: user.email ?? 'alan@olaris.co.uk',
+      repFirstName: user.name?.split(' ')[0] ?? 'Alan',
     })
   }
 
@@ -688,6 +772,152 @@ export async function signAsRepAction(
   revalidatePath('/admin/orders')
   revalidatePath('/admin')
   return { ok: true, id: orderId }
+}
+
+// ─── Shared: render PDF + email both parties with the PDF attached ─────
+//
+// Called from two signing completion paths:
+//   - signAsRepAction (when rep signs second)
+//   - /api/sign/submit (when customer signs second — see route handler)
+//
+// Wrapped in try/catch so failure here doesn't roll back the already-recorded
+// signatures. If PDF gen or email fails we record audit events and the admin
+// can manually "Regenerate PDF" / "Resend signed copy" later (Phase 7 UI).
+
+interface FinaliseInput {
+  orderId: string
+  orderRef: string
+  customerId: string
+  customerEmail: string
+  customerFirstName: string
+  vehicleMake: string
+  vehicleModel: string
+  totalGBP: string
+  repEmail: string
+  repFirstName: string
+}
+
+async function finalisePdfAndNotify(input: FinaliseInput): Promise<void> {
+  // Deferred imports — puppeteer-core + @vercel/blob + @sparticuz/chromium
+  // are heavy. Pay the cost only when we actually finalise.
+  const { generateOrderPdf } = await import('@/lib/pdf/generate')
+  const { mintDownloadToken } = await import('@/lib/pdf/download-token')
+  const { get: blobGet } = await import('@vercel/blob')
+
+  const verifyUrl = `${siteUrl()}/verify/${input.orderRef}`
+  const downloadToken = mintDownloadToken(input.orderId)
+  const downloadUrl = `${siteUrl()}/api/orders/${input.orderId}/pdf?t=${encodeURIComponent(downloadToken)}`
+
+  let pdfBuffer: Buffer | undefined
+  let pdfSha: string | undefined
+  const pdfResult = await generateOrderPdf(input.orderId)
+  if (pdfResult.ok) {
+    pdfSha = pdfResult.pdfSha256
+    // Fresh render returns the buffer directly; idempotent cache-hit path
+    // doesn't, so fall back to fetching from Blob by pathname.
+    if (pdfResult.buffer) {
+      pdfBuffer = pdfResult.buffer
+    } else if (pdfResult.documentId) {
+      try {
+        const docRow = await db
+          .select({ filename: documents.filename })
+          .from(documents)
+          .where(eq(documents.id, pdfResult.documentId))
+          .limit(1)
+        if (docRow[0]) {
+          const blobResult = await blobGet(docRow[0].filename, { access: 'private' })
+          if (blobResult && blobResult.statusCode === 200) {
+            const reader = blobResult.stream.getReader()
+            const chunks: Uint8Array[] = []
+            // eslint-disable-next-line no-constant-condition
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+              if (value) chunks.push(value)
+            }
+            pdfBuffer = Buffer.concat(chunks.map((c) => Buffer.from(c)))
+          }
+        }
+      } catch {
+        // non-fatal — link-based email still goes out below
+      }
+    }
+  } else {
+    await db.insert(auditEvents).values({
+      orderId: input.orderId,
+      customerId: input.customerId,
+      actorType: 'system',
+      eventType: 'email.failed',
+      payload: { template: 'order.signed', stage: 'pdf_generate', error: pdfResult.error },
+    })
+  }
+
+  const attachments = pdfBuffer
+    ? [{ filename: `${input.orderRef}.pdf`, content: pdfBuffer, contentType: 'application/pdf' }]
+    : undefined
+
+  const customerMail = orderSignedEmail({
+    recipientFirstName: input.customerFirstName,
+    orderRef: input.orderRef,
+    vehicleMake: input.vehicleMake,
+    vehicleModel: input.vehicleModel,
+    totalGBP: input.totalGBP,
+    verifyUrl,
+  })
+  const repMail = orderSignedEmail({
+    recipientFirstName: input.repFirstName,
+    orderRef: input.orderRef,
+    vehicleMake: input.vehicleMake,
+    vehicleModel: input.vehicleModel,
+    totalGBP: input.totalGBP,
+    verifyUrl,
+  })
+
+  const [custSend, repSend] = await Promise.all([
+    sendEmail({ to: input.customerEmail, ...customerMail, attachments }),
+    sendEmail({ to: input.repEmail, ...repMail, attachments }),
+  ])
+
+  await db.insert(auditEvents).values({
+    orderId: input.orderId,
+    customerId: input.customerId,
+    actorType: 'system',
+    eventType: custSend.ok && repSend.ok ? 'email.sent' : 'email.failed',
+    payload: {
+      template: 'order.signed',
+      recipients: 2,
+      pdfAttached: !!pdfBuffer,
+      pdfSha256: pdfSha,
+      downloadUrl,
+      customerMessageId: custSend.id,
+      repMessageId: repSend.id,
+      customerError: custSend.error,
+      repError: repSend.error,
+    },
+  })
+}
+
+// Exported for the /api/sign/submit route to call when the customer signs
+// as the second party.
+export async function finalisePdfAndNotifyPublic(input: FinaliseInput): Promise<void> {
+  return finalisePdfAndNotify(input)
+}
+
+// ─── ensure PDF exists (on-demand generation for admin download) ──────────
+// Returns the redirector URL (not the raw Blob URL), since the store is
+// private — the Blob URL can't be dereferenced directly. The redirector
+// authenticates by admin session.
+
+export async function ensureOrderPdfAction(
+  orderId: string,
+): Promise<{ ok: boolean; url?: string; error?: string }> {
+  await requireAdmin()
+  const { generateOrderPdf } = await import('@/lib/pdf/generate')
+  const result = await generateOrderPdf(orderId)
+  if (!result.ok) {
+    return { ok: false, error: result.error }
+  }
+  return { ok: true, url: `${siteUrl()}/api/orders/${orderId}/pdf` }
 }
 
 // ─── delete draft (distinct from cancel — draft→gone, no audit trail needed) ─

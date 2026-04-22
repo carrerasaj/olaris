@@ -22,12 +22,21 @@ function getClient(): Resend | null {
   return client
 }
 
+export interface EmailAttachment {
+  /** Filename shown in the email client */
+  filename: string
+  /** Binary content as Buffer, Uint8Array, or base64 string */
+  content: Buffer | Uint8Array | string
+  contentType?: string
+}
+
 interface SendInput {
   to: string | string[]
   subject: string
   html: string
   text: string
   replyTo?: string
+  attachments?: EmailAttachment[]
 }
 
 export interface SendResult {
@@ -55,6 +64,17 @@ export async function sendEmail(input: SendInput): Promise<SendResult> {
       html: input.html,
       text: input.text,
       replyTo: input.replyTo,
+      attachments: input.attachments?.map((a) => ({
+        filename: a.filename,
+        // Resend's SDK accepts Buffer | string (base64) | Uint8Array here
+        content:
+          a.content instanceof Buffer
+            ? a.content
+            : a.content instanceof Uint8Array
+              ? Buffer.from(a.content)
+              : a.content,
+        contentType: a.contentType,
+      })),
     })
     if (error) {
       console.error('[email] resend error', error)

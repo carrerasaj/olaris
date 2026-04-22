@@ -23,13 +23,10 @@ import {
   signatures,
   orders,
   auditEvents,
-  customers,
 } from '@/db/client'
 import { lookupSigningToken } from '@/lib/signing-token'
 import { captureForensics, canonicalJson } from '@/lib/forensics'
 import { signBytes, signingKeyFingerprint } from '@/lib/signing-key'
-import { sendEmail } from '@/lib/email'
-import { orderSignedEmail } from '@/lib/email-templates'
 import { fmtGBPFromPence } from '@/lib/format'
 
 export const runtime = 'nodejs'
@@ -232,32 +229,29 @@ export async function POST(req: Request) {
     docSha256: docHash,
   })
 
-  // ── If fully signed, email both parties ──────────────────────
+  // ── If fully signed, render PDF + email both parties with PDF attached ──
   if (bothSigned) {
-    const verifyUrl = `${siteUrl()}/verify/${lookup.order.ref}`
-    const totalGBP = fmtGBPFromPence(lookup.order.totalAmountPence)
-    const vehicleMake = lookup.order.vehicle.make
-    const vehicleModel = lookup.order.vehicle.model
-
-    const customerMail = orderSignedEmail({
-      recipientFirstName: lookup.customer.firstName,
-      orderRef: lookup.order.ref,
-      vehicleMake,
-      vehicleModel,
-      totalGBP,
-      verifyUrl,
-    })
-    const customerSend = await sendEmail({
-      to: lookup.customer.email,
-      ...customerMail,
-    })
-    await audit(
-      lookup,
-      forensics,
-      customerSend.ok ? 'email.sent' : 'email.failed',
-      { template: 'order.signed', to: lookup.customer.email },
+    // Shared finalisation path (also used from signAsRepAction when rep is
+    // the second signer). Generates PDF, uploads to Blob, attaches to both
+    // emails, writes audit events. Non-throwing — failures are logged.
+    const { finalisePdfAndNotifyPublic } = await import(
+      '@/app/admin/actions/orders'
     )
-    // Phase 5 attaches the PDF. For now the email just points at /verify.
+    await finalisePdfAndNotifyPublic({
+      orderId: lookup.order.id,
+      orderRef: lookup.order.ref,
+      customerId: lookup.order.customerId,
+      customerEmail: lookup.customer.email,
+      customerFirstName: lookup.customer.firstName,
+      vehicleMake: lookup.order.vehicle.make,
+      vehicleModel: lookup.order.vehicle.model,
+      totalGBP: fmtGBPFromPence(lookup.order.totalAmountPence),
+      // In this branch the rep is Alan (only admin with visible identity for
+      // customer-facing flows). If we later support multi-rep, look up the
+      // rep signature and read its signerEmail here.
+      repEmail: 'alan@olaris.co.uk',
+      repFirstName: 'Alan',
+    })
   }
 
   return Response.json({
@@ -297,10 +291,3 @@ async function audit(
   })
 }
 
-function siteUrl(): string {
-  return (
-    process.env.NEXTAUTH_URL ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    'http://localhost:3000'
-  )
-}

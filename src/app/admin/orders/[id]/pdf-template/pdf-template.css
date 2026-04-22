@@ -1,0 +1,398 @@
+/* Olaris signed-order PDF — rendered to PDF by Puppeteer.
+   Print-optimised: page-break-before on each .pdf-page, no viewport
+   adaptations, fonts available via the Next layout. */
+
+/* Hide every global chrome element inherited from ancestor layouts.
+   We're inside /admin/orders/[id]/pdf-template — the root layout's
+   Header/Footer and the admin layout's topbar/nav all end up on the
+   page. display:none strips them before Puppeteer snapshots. */
+body > header,
+body > footer,
+.adm-topbar,
+.adm-nav,
+.adm-user,
+.adm-signout {
+  display: none !important;
+}
+body > main,
+.adm-shell {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #fff !important;
+}
+
+/* Hide everything under /admin that isn't the pdf-template itself. */
+.pdf-template-root {
+  background: #fff;
+  color: #0f172a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.4;
+}
+
+/* Page boundaries for Puppeteer's page.pdf() — forces a new page per block */
+.pdf-page {
+  padding: 20mm 18mm;
+  box-sizing: border-box;
+  min-height: 297mm;
+}
+.pdf-page + .pdf-page {
+  page-break-before: always;
+}
+@media print {
+  .pdf-page + .pdf-page {
+    page-break-before: always;
+  }
+}
+
+/* ─── header ─────────────────────────────────────────── */
+.pdf-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 10pt;
+  border-bottom: 2pt solid #0b1e3f;
+  margin-bottom: 18pt;
+}
+.pdf-brand {
+  font-family: 'Manrope', sans-serif;
+  font-size: 20pt;
+  font-weight: 700;
+  color: #0b1e3f;
+  letter-spacing: -0.3pt;
+  line-height: 1;
+}
+.pdf-tag {
+  font-size: 7pt;
+  letter-spacing: 1.5pt;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-top: 3pt;
+  font-weight: 600;
+}
+.pdf-doctitle {
+  text-align: right;
+}
+.pdf-doctitle .title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #0b1e3f;
+  letter-spacing: -0.1pt;
+}
+.pdf-doctitle .ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9pt;
+  color: #0891b2;
+  margin-top: 2pt;
+}
+
+/* ─── hero ───────────────────────────────────────────── */
+.pdf-hero {
+  background: #0b1e3f;
+  color: #fff;
+  padding: 16pt 18pt;
+  border-radius: 4pt;
+  margin-bottom: 14pt;
+}
+.pdf-hero .ref {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  color: #7dd3fc;
+  letter-spacing: 1.5pt;
+  margin-bottom: 6pt;
+}
+.pdf-hero h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5pt;
+}
+.pdf-hero .trim {
+  color: #7dd3fc;
+  font-size: 10pt;
+  margin-top: 2pt;
+}
+.pdf-hero .total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 12pt;
+  padding-top: 12pt;
+  border-top: 1pt solid rgba(125, 211, 252, 0.3);
+}
+.pdf-hero .total .lbl {
+  font-size: 8pt;
+  color: #7dd3fc;
+  text-transform: uppercase;
+  letter-spacing: 1.2pt;
+  font-weight: 700;
+}
+.pdf-hero .total .amt {
+  font-family: 'Manrope', sans-serif;
+  font-size: 22pt;
+  font-weight: 700;
+  letter-spacing: -0.6pt;
+}
+
+/* ─── section cards ──────────────────────────────────── */
+.pdf-section {
+  border: 1pt solid #e4e9f1;
+  border-radius: 3pt;
+  margin-bottom: 10pt;
+  page-break-inside: avoid;
+}
+.pdf-section-head {
+  background: #f1f5f9;
+  padding: 6pt 12pt;
+  border-bottom: 1pt solid #e4e9f1;
+  font-family: 'Manrope', sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #0b1e3f;
+  letter-spacing: -0.1pt;
+}
+.pdf-section-body {
+  padding: 10pt 12pt;
+}
+
+/* ─── key-value rows ─────────────────────────────────── */
+.pdf-kv {
+  display: grid;
+  grid-template-columns: 28% 1fr;
+  gap: 3pt 10pt;
+  font-size: 9.5pt;
+}
+.pdf-kv dt {
+  color: #64748b;
+  font-size: 9pt;
+}
+.pdf-kv dd {
+  margin: 0;
+  color: #0f172a;
+}
+
+/* ─── price rows ────────────────────────────────────── */
+.pdf-price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5pt 0;
+  border-bottom: 1pt solid #e4e9f1;
+  font-size: 9.5pt;
+}
+.pdf-price-row:last-child {
+  border-bottom: none;
+}
+.pdf-price-row .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+.pdf-price-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10pt;
+  margin-top: 5pt;
+  border-top: 2pt solid #0b1e3f;
+}
+.pdf-price-total .lbl {
+  font-weight: 700;
+  color: #0b1e3f;
+  font-size: 11pt;
+}
+.pdf-price-total .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #0b1e3f;
+  font-size: 13pt;
+}
+
+/* ─── signatures ─────────────────────────────────────── */
+.pdf-sig {
+  border: 1pt solid #e4e9f1;
+  border-radius: 3pt;
+  margin-bottom: 12pt;
+  page-break-inside: avoid;
+  overflow: hidden;
+}
+.pdf-sig-head {
+  background: #f1f5f9;
+  padding: 6pt 12pt;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1pt solid #e4e9f1;
+}
+.pdf-sig-role {
+  font-family: 'Manrope', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #0b1e3f;
+}
+.pdf-sig-stamp {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #059669;
+  letter-spacing: 0.8pt;
+  font-weight: 600;
+}
+.pdf-sig-canvas {
+  min-height: 60pt;
+  padding: 12pt;
+  display: flex;
+  align-items: center;
+}
+.pdf-sig-typed {
+  font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+  font-size: 28pt;
+  color: #1e3a8a;
+  line-height: 1;
+}
+.pdf-sig-drawn {
+  max-height: 50pt;
+  width: auto;
+}
+.pdf-sig-meta {
+  background: #f8fafc;
+  padding: 8pt 12pt;
+  border-top: 1pt dashed #e4e9f1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4pt 8pt;
+}
+.pdf-sig-meta .lbl {
+  font-size: 6.5pt;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.8pt;
+  font-weight: 600;
+}
+.pdf-sig-meta .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #0f172a;
+}
+.pdf-sig-meta .full {
+  grid-column: 1 / -1;
+}
+
+/* ─── certificate / audit ────────────────────────────── */
+.pdf-cert-hero {
+  display: flex;
+  align-items: center;
+  gap: 12pt;
+  padding-bottom: 10pt;
+  border-bottom: 2pt solid #06b6d4;
+  margin-bottom: 14pt;
+}
+.pdf-cert-icon {
+  width: 34pt;
+  height: 34pt;
+  border-radius: 50%;
+  background: #d1fae5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18pt;
+  font-weight: 700;
+}
+.pdf-cert-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: #0b1e3f;
+  letter-spacing: -0.3pt;
+}
+.pdf-cert-sub {
+  font-size: 9pt;
+  color: #64748b;
+}
+.pdf-cert-intro {
+  font-size: 9.5pt;
+  color: #334155;
+  line-height: 1.55;
+  margin-bottom: 12pt;
+}
+.pdf-cert-intro .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+
+.pdf-audit-row {
+  display: grid;
+  grid-template-columns: 110pt 60pt 1fr;
+  gap: 8pt;
+  padding: 4pt 0;
+  border-bottom: 1pt solid #e4e9f1;
+  font-size: 8.5pt;
+}
+.pdf-audit-row:last-child {
+  border-bottom: none;
+}
+.pdf-audit-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7pt;
+  color: #64748b;
+}
+.pdf-audit-actor {
+  font-size: 8pt;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4pt;
+}
+
+.pdf-crypto {
+  background: #f1f5f9;
+  padding: 10pt 12pt;
+  border-radius: 3pt;
+  margin-top: 12pt;
+  /* Treat the whole crypto block as a single page-break unit. Page-5 orphans
+     (just the Public Key URL spilling alone onto a new page) happen when
+     Chromium picks a break inside the block. */
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.pdf-crypto .lbl {
+  font-size: 7pt;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1pt;
+  font-weight: 700;
+  margin-bottom: 2pt;
+}
+.pdf-crypto .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #0f172a;
+  margin-bottom: 5pt;
+  line-height: 1.3;
+  /* We've been fighting Chromium's PDF text shaper — it inserts a visible
+     space after ':' in URLs when it *might* need to wrap. The robust answer
+     is to shrink the URL lines enough that they never need to wrap, and
+     disable wrapping on atomic text runs. Anything above that gets normal
+     wrapping behaviour. */
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.pdf-crypto .url {
+  /* URLs are emitted inside <span class="url"> so we can apply one-line
+     treatment without letting any wrap opportunity near ':' appear. The
+     smaller size guarantees they fit a page width (184mm usable = ~520pt,
+     a 90-char URL at 6.5pt/~3.3pt-per-char = ~300pt, comfortable). */
+  font-size: 6.5pt;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* ─── footer ─────────────────────────────────────────── */
+.pdf-footer {
+  position: fixed;
+  bottom: 10mm;
+  left: 18mm;
+  right: 18mm;
+  text-align: center;
+  font-size: 7pt;
+  color: #64748b;
+  border-top: 1pt solid #e4e9f1;
+  padding-top: 5pt;
+}

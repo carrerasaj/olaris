@@ -19,12 +19,22 @@ const PUBLIC_ADMIN_PATHS = [
   '/admin/login/error',
 ]
 
+// Exempt `/admin/orders/[id]/pdf-template` from the session gate — that route
+// is accessed by our own Puppeteer process, which presents an HMAC token
+// instead of a session cookie. The route itself enforces auth internally
+// (token OR session, whichever is present).
+const PDF_TEMPLATE_PATTERN = /^\/admin\/orders\/[^/]+\/pdf-template(\/|$)/
+
 export default auth((req) => {
   const { pathname } = req.nextUrl
 
   if (!pathname.startsWith('/admin')) return NextResponse.next()
 
   if (PUBLIC_ADMIN_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
+    return NextResponse.next()
+  }
+
+  if (PDF_TEMPLATE_PATTERN.test(pathname)) {
     return NextResponse.next()
   }
 

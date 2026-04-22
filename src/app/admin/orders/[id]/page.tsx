@@ -13,6 +13,7 @@ import {
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtDate, fmtDateTime, fmtRelative } from '@/lib/format'
 import { OrderStatusPill, auditEventLabel } from '../../components'
+import { redirect } from 'next/navigation'
 import {
   sendForSignatureAction,
   cancelOrderAction,
@@ -20,9 +21,12 @@ import {
   resendSigningLinkAction,
   deleteDraftAction,
   signAsRepAction,
+  ensureOrderPdfAction,
+  duplicateOrderAction,
   type RepSignInput,
 } from '../../actions/orders'
 import { RepSignButton } from './RepSignButton'
+import { DownloadPdfButton } from './DownloadPdfButton'
 
 export const metadata = { title: 'Order' }
 
@@ -70,6 +74,7 @@ export default async function OrderDetailPage({
   const canDeliver = order.status === 'signed'
   const canResend = order.status === 'sent' || order.status === 'partially_signed'
   const canDelete = order.status === 'draft'
+  const canDownloadPdf = order.status === 'signed' || order.status === 'delivered'
   const repHasSigned = orderSigs.some((s) => s.signerRole === 'rep')
   const canRepSign =
     (order.status === 'sent' || order.status === 'partially_signed') && !repHasSigned
@@ -100,6 +105,17 @@ export default async function OrderDetailPage({
   async function repSign(orderId: string, input: RepSignInput) {
     'use server'
     return signAsRepAction(orderId, input)
+  }
+  async function ensurePdf() {
+    'use server'
+    return ensureOrderPdfAction(id)
+  }
+  async function duplicate() {
+    'use server'
+    const result = await duplicateOrderAction(id)
+    if (result.ok && result.id) {
+      redirect(`/admin/orders/${result.id}/edit`)
+    }
   }
 
   return (
@@ -154,6 +170,22 @@ export default async function OrderDetailPage({
               </button>
             </form>
           )}
+          {canDownloadPdf && (
+            <DownloadPdfButton ensure={ensurePdf} orderRef={order.ref} />
+          )}
+          {/* Duplicate — available on every status. Copies vehicle / options /
+              pricing / finance / delivery / add-ons / customer into a fresh
+              draft, then redirects to that draft's edit page so the user can
+              tweak before sending. */}
+          <form action={duplicate}>
+            <button
+              type="submit"
+              className="adm-btn adm-btn-ghost"
+              title="Create a new draft by copying this order's details"
+            >
+              Duplicate
+            </button>
+          </form>
           {canDeliver && (
             <form action={deliver}>
               <button type="submit" className="adm-btn adm-btn-accent">
