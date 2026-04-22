@@ -8,6 +8,13 @@
       "when": 1776865420656,
       "tag": "0000_amazing_landau",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776866962806,
+      "tag": "0001_abnormal_boomerang",
+      "breakpoints": true
     }
   ]
 }

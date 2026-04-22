@@ -48,10 +48,13 @@ export const signerRole = pgEnum('signer_role', ['customer', 'rep'])
 export const signatureType = pgEnum('signature_type', ['typed', 'drawn'])
 export const otpMethod = pgEnum('otp_method', ['email'])
 export const auditEventType = pgEnum('audit_event_type', [
+  'customer.created',
+  'customer.updated',
   'order.created',
   'order.updated',
   'order.sent',
   'order.cancelled',
+  'order.delivered',
   'link.viewed',
   'otp.requested',
   'otp.verified',

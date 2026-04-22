@@ -1,0 +1,211 @@
+import Link from 'next/link'
+import { desc, eq, gte, sql, and } from 'drizzle-orm'
+import { db, orders, customers, activities, auditEvents } from '@/db/client'
+import { requireAdmin } from '@/lib/admin-auth'
+import { fmtGBPFromPence, fmtRelative } from '@/lib/format'
+import { OrderStatusPill, auditEventLabel } from './components'
+
+export const metadata = { title: 'Dashboard' }
+
+export default async function AdminDashboard() {
+  await requireAdmin()
+
+  const startOfMonth = new Date()
+  startOfMonth.setUTCDate(1)
+  startOfMonth.setUTCHours(0, 0, 0, 0)
+
+  // Parallel reads — each query is short and independent.
+  const [
+    openOrdersRow,
+    awaitingRow,
+    signedThisMonthRow,
+    totalCustomersRow,
+    recentOrders,
+    recentActivity,
+  ] = await Promise.all([
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(orders)
+      .where(sql`${orders.status} in ('draft','sent','partially_signed')`),
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(orders)
+      .where(sql`${orders.status} in ('sent','partially_signed')`),
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(orders)
+      .where(and(eq(orders.status, 'signed'), gte(orders.signedAt, startOfMonth))),
+    db.select({ count: sql<number>`count(*)::int` }).from(customers),
+    db
+      .select({
+        id: orders.id,
+        ref: orders.ref,
+        status: orders.status,
+        totalAmountPence: orders.totalAmountPence,
+        vehicle: orders.vehicle,
+        createdAt: orders.createdAt,
+        customerFirstName: customers.firstName,
+        customerLastName: customers.lastName,
+      })
+      .from(orders)
+      .innerJoin(customers, eq(orders.customerId, customers.id))
+      .orderBy(desc(orders.createdAt))
+      .limit(5),
+    db
+      .select({
+        id: auditEvents.id,
+        eventType: auditEvents.eventType,
+        createdAt: auditEvents.createdAt,
+        orderRef: orders.ref,
+        orderId: orders.id,
+      })
+      .from(auditEvents)
+      .leftJoin(orders, eq(auditEvents.orderId, orders.id))
+      .orderBy(desc(auditEvents.createdAt))
+      .limit(8),
+  ])
+
+  const tiles = [
+    {
+      label: 'Open orders',
+      value: String(openOrdersRow[0]?.count ?? 0),
+      sub: 'draft, sent or partially signed',
+    },
+    {
+      label: 'Awaiting signature',
+      value: String(awaitingRow[0]?.count ?? 0),
+      sub: 'customer action needed',
+    },
+    {
+      label: 'Signed this month',
+      value: String(signedThisMonthRow[0]?.count ?? 0),
+      sub: 'since ' + startOfMonth.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+    },
+    {
+      label: 'Total customers',
+      value: String(totalCustomersRow[0]?.count ?? 0),
+      sub: 'across all time',
+    },
+  ]
+
+  return (
+    <div className="adm-page">
+      <div className="adm-pageheader">
+        <div>
+          <h1>Dashboard</h1>
+          <div className="sub">Order execution & fleet desk activity</div>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <Link href="/admin/customers/new" className="adm-btn adm-btn-ghost">
+            New customer
+          </Link>
+          <Link href="/admin/orders/new" className="adm-btn adm-btn-primary">
+            New order
+          </Link>
+        </div>
+      </div>
+
+      <div className="adm-tiles">
+        {tiles.map((t) => (
+          <div key={t.label} className="adm-tile">
+            <div className="label">{t.label}</div>
+            <div className="value">{t.value}</div>
+            <div className="sub">{t.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="adm-split">
+        <div className="adm-card">
+          <div className="adm-card-head">
+            <h2 className="adm-card-title">Recent orders</h2>
+            <Link href="/admin/orders" className="adm-btn adm-btn-ghost adm-btn-sm">
+              View all →
+            </Link>
+          </div>
+          {recentOrders.length === 0 ? (
+            <div className="adm-empty">
+              <h3>No orders yet</h3>
+              <p>Create your first order to get started.</p>
+              <Link
+                href="/admin/orders/new"
+                className="adm-btn adm-btn-primary"
+                style={{ marginTop: 14 }}
+              >
+                New order
+              </Link>
+            </div>
+          ) : (
+            <table className="adm-table">
+              <thead>
+                <tr>
+                  <th>Ref</th>
+                  <th>Customer</th>
+                  <th>Vehicle</th>
+                  <th className="num">Total</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentOrders.map((o) => (
+                  <tr key={o.id}>
+                    <td className="mono">
+                      <Link href={`/admin/orders/${o.id}`}>{o.ref}</Link>
+                    </td>
+                    <td>
+                      <Link href={`/admin/orders/${o.id}`}>
+                        {o.customerFirstName} {o.customerLastName}
+                      </Link>
+                    </td>
+                    <td>
+                      {o.vehicle?.make} {o.vehicle?.model}
+                    </td>
+                    <td className="num mono">{fmtGBPFromPence(o.totalAmountPence)}</td>
+                    <td>
+                      <OrderStatusPill status={o.status} />
+                    </td>
+                    <td style={{ color: '#64748b', fontSize: 12 }}>
+                      {fmtRelative(o.createdAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        <div className="adm-card">
+          <div className="adm-card-head">
+            <h2 className="adm-card-title">Recent activity</h2>
+          </div>
+          <div className="adm-card-body">
+            {recentActivity.length === 0 ? (
+              <div style={{ fontSize: 13, color: '#64748b', textAlign: 'center', padding: '12px 0' }}>
+                No activity yet.
+              </div>
+            ) : (
+              <div className="adm-timeline">
+                {recentActivity.map((a) => (
+                  <div key={a.id} className="adm-timeline-item">
+                    <div className="adm-timeline-dot" />
+                    <div>
+                      <div className="adm-timeline-title">{auditEventLabel(a.eventType)}</div>
+                      {a.orderRef && (
+                        <div className="adm-timeline-sub">
+                          <Link href={`/admin/orders/${a.orderId}`}>{a.orderRef}</Link>
+                        </div>
+                      )}
+                      <div className="adm-timeline-time">{fmtRelative(a.createdAt)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
