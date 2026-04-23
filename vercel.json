@@ -12,5 +12,11 @@
       "destination": "https://olaris.co.uk/:path*",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/reminders",
+      "schedule": "0 7 * * *"
+    }
   ]
 }

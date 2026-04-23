@@ -82,6 +82,28 @@ export default async function PdfTemplatePage({
   const customerSig = sigs.find((s) => s.signerRole === 'customer')
   const repSig = sigs.find((s) => s.signerRole === 'rep')
 
+  // The PDF's Certificate of Completion is a contract artefact, not a
+  // general-purpose debug log. Only lifecycle events belong on it. PDF
+  // generation + download events are system telemetry — kept in the DB
+  // for admin investigation but suppressed here. Without this filter an
+  // order that gets downloaded a lot ends up with a trail of identical
+  // rows and the cert page overflows.
+  const PDF_HIDDEN_EVENTS = new Set([
+    'pdf.generated',
+    'pdf.downloaded',
+    // Repeated "email.sent" rows for the signed-copy delivery double up on
+    // everything the signature rows already attest to. Keep only the first.
+  ])
+  const certAudit = audit.filter((e) => !PDF_HIDDEN_EVENTS.has(e.eventType))
+
+  // Hard cap to keep the cert page from ever flowing onto a second audit
+  // page. 25 rows is enough for any normal order lifecycle incl. reminders,
+  // OTP retries, migration markers, etc. If we ever trip this in practice
+  // the "...earlier events" row flags it.
+  const CERT_AUDIT_MAX = 25
+  const truncatedCount = Math.max(0, certAudit.length - CERT_AUDIT_MAX)
+  const visibleAudit = certAudit.slice(-CERT_AUDIT_MAX)
+
   const optionsNet = order.options.reduce((s, o) => s + o.netPence * o.qty, 0)
   const netBeforeVat =
     order.pricing.vehicleNetPence + optionsNet - order.pricing.discountPence
@@ -296,7 +318,17 @@ export default async function PdfTemplatePage({
         </p>
 
         <Section title="Audit trail">
-          {audit.map((e) => (
+          {truncatedCount > 0 && (
+            <div
+              className="pdf-audit-row"
+              style={{ fontStyle: 'italic', color: '#64748b' }}
+            >
+              <span className="pdf-audit-time">…</span>
+              <span className="pdf-audit-actor">—</span>
+              <span>{`${truncatedCount} earlier event${truncatedCount === 1 ? '' : 's'} — full trail in admin`}</span>
+            </div>
+          )}
+          {visibleAudit.map((e) => (
             <div key={e.id} className="pdf-audit-row">
               <span className="pdf-audit-time">{e.createdAt.toISOString()}</span>
               <span className="pdf-audit-actor">{e.actorType}</span>

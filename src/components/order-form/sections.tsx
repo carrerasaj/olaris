@@ -14,6 +14,26 @@ interface SectionProps {
   set: OrderSetter
 }
 
+// Non-blocking inline warning style. Shown as a sibling of the input
+// whose value looks suspect. Never gates send; the admin can press
+// through if the data is legitimate. Covers the class of bugs we saw on
+// YJT7 (CO₂=0 on a diesel, "Oxfodshire" typo in postcode-adjacent cells).
+const warningStyle: React.CSSProperties = {
+  marginTop: 4,
+  fontSize: 11.5,
+  color: '#b45309',
+  lineHeight: 1.4,
+}
+
+// UK postcode shape check. Deliberately loose — covers standard and
+// Channel Islands / Gibraltar, rejects obvious garbage. Not a lookup
+// against a real postcode database; we just want "this vaguely looks
+// like a UK postcode".
+function isUkPostcodeShape(input: string): boolean {
+  const trimmed = input.trim().toUpperCase().replace(/\s+/g, ' ')
+  return /^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/.test(trimmed)
+}
+
 interface SectionWithCalcProps extends SectionProps {
   calc: CalcResult
 }
@@ -176,6 +196,11 @@ export function CustomerSection({ order, set }: SectionProps) {
               value={c.billingPostcode}
               onChange={(e) => set('customer.billingPostcode', e.target.value)}
             />
+            {c.billingPostcode && !isUkPostcodeShape(c.billingPostcode) && (
+              <div style={warningStyle}>
+                Doesn&apos;t look like a UK postcode. Check for typos before sending.
+              </div>
+            )}
           </Field>
           <Field label="Country" className="ol-col-2">
             <input
@@ -288,6 +313,11 @@ export function VehicleSection({ order, set }: SectionProps) {
             value={v.co2}
             onChange={(e) => set('vehicle.co2', Number(e.target.value) || 0)}
           />
+          {v.fuel !== 'Electric' && v.co2 === 0 && (
+            <div style={warningStyle}>
+              CO₂ is zero — expected for an electric vehicle, looks wrong for {v.fuel}.
+            </div>
+          )}
         </Field>
         <Field label="Notes for dealer" className="ol-col-3">
           <textarea
@@ -485,6 +515,11 @@ export function DeliverySection({ order, set }: SectionProps) {
             value={d.postcode}
             onChange={(e) => set('delivery.postcode', e.target.value)}
           />
+          {d.postcode && !isUkPostcodeShape(d.postcode) && (
+            <div style={warningStyle}>
+              Doesn&apos;t look like a UK postcode. Check for typos before sending.
+            </div>
+          )}
         </Field>
         <Field label="On-site contact" className="ol-col-3">
           <input
