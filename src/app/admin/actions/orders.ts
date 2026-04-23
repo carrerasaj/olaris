@@ -46,6 +46,18 @@ import {
   orderSentEmail,
   orderSignedEmail,
 } from '@/lib/email-templates'
+import {
+  buildAuditPayload,
+  diffLogistics,
+  FIELD_EVENT_TYPE,
+  isForwardTransitionAllowed,
+  isOverrideTargetAllowed,
+  isPostSignStatus,
+  LOGISTICS_FIELDS,
+  type LogisticsField,
+  type LogisticsPatch,
+  type PostSignStatus,
+} from '@/lib/order-delivery'
 
 export interface OrderActionResult {
   ok: boolean
@@ -508,41 +520,498 @@ export async function cancelOrderAction(
   return { ok: true, id: orderId }
 }
 
-// ─── mark delivered ────────────────────────────────────────────────────────
+// ─── delivery lifecycle (Phase 9) ──────────────────────────────────────────
+//
+// The previous single-click `signed → delivered` flow is replaced with a
+// small state machine:
+//
+//   signed → confirmed → on_order → ready_for_handover → delivered
+//
+// Each transition captures operational fields at the right moment and
+// writes a rich audit row via buildAuditPayload. Logic lives in
+// src/lib/order-delivery.ts so it can move to a dedicated entity later.
+
+interface TransitionInput {
+  note?: string
+}
+
+interface ConfirmedInput extends TransitionInput {
+  supplierPoNumber?: string | null
+  estimatedDeliveryDate?: string | null
+}
+
+interface OnOrderInput extends TransitionInput {
+  estimatedDeliveryDate?: string | null
+}
+
+interface ReadyInput extends TransitionInput {
+  chassisNumber?: string | null
+  registrationPlate?: string | null
+  handoverLocation?: string | null
+  handoverNotes?: string | null
+}
+
+interface DeliveredInput extends TransitionInput {
+  actualDeliveryDate?: string | null
+}
+
+export async function markConfirmedAction(
+  orderId: string,
+  input: ConfirmedInput = {},
+): Promise<OrderActionResult> {
+  return transition(orderId, 'confirmed', {
+    ...input,
+    patch: {
+      supplierPoNumber: input.supplierPoNumber,
+      estimatedDeliveryDate: input.estimatedDeliveryDate,
+    },
+  })
+}
+
+export async function markOnOrderAction(
+  orderId: string,
+  input: OnOrderInput = {},
+): Promise<OrderActionResult> {
+  return transition(orderId, 'on_order', {
+    ...input,
+    patch: { estimatedDeliveryDate: input.estimatedDeliveryDate },
+  })
+}
+
+export async function markReadyForHandoverAction(
+  orderId: string,
+  input: ReadyInput = {},
+): Promise<OrderActionResult> {
+  return transition(orderId, 'ready_for_handover', {
+    ...input,
+    patch: {
+      chassisNumber: input.chassisNumber,
+      registrationPlate: input.registrationPlate,
+      handoverLocation: input.handoverLocation,
+      handoverNotes: input.handoverNotes,
+    },
+  })
+}
 
 export async function markDeliveredAction(
   orderId: string,
+  input: DeliveredInput = {},
+): Promise<OrderActionResult> {
+  return transition(orderId, 'delivered', {
+    ...input,
+    patch: { actualDeliveryDate: input.actualDeliveryDate },
+  })
+}
+
+/**
+ * Shared forward-transition core. Validates the step, computes the logistics
+ * diff, builds the audit payload, stamps the appropriate *_at timestamp,
+ * and writes the main status-change audit row plus per-field events
+ * (chassis/reg/ETA) if those fields moved in this step.
+ */
+async function transition(
+  orderId: string,
+  target: PostSignStatus,
+  opts: {
+    note?: string
+    patch?: LogisticsPatch
+  },
 ): Promise<OrderActionResult> {
   const user = await requireAdmin()
 
   const existing = await db
-    .select({ status: orders.status, customerId: orders.customerId })
+    .select()
     .from(orders)
     .where(eq(orders.id, orderId))
     .limit(1)
   if (existing.length === 0) return { ok: false, error: 'Order not found' }
-  if (existing[0].status !== 'signed') {
-    return { ok: false, error: 'Only signed orders can be marked delivered' }
+  const current = existing[0]
+
+  if (!isForwardTransitionAllowed(current.status, target)) {
+    return {
+      ok: false,
+      error: `Cannot transition from ${current.status} to ${target}. Use admin override if this is a backfill.`,
+    }
   }
 
-  await db
-    .update(orders)
-    .set({ status: 'delivered', deliveredAt: new Date(), updatedAt: new Date() })
-    .where(eq(orders.id, orderId))
+  const now = new Date()
+  const patch = opts.patch ?? {}
+  // Only include fields actually supplied (defined in the patch).
+  const cleanedPatch: LogisticsPatch = {}
+  for (const f of LOGISTICS_FIELDS) {
+    if (f in patch) cleanedPatch[f] = patch[f]
+  }
+  const changedFields = diffLogistics(current, cleanedPatch)
+
+  const stampField = stampFieldForStatus(target)
+  const updatePayload: Partial<typeof orders.$inferInsert> = {
+    status: target,
+    updatedAt: now,
+    ...cleanedPatch,
+  }
+  if (stampField) updatePayload[stampField] = now
+
+  await db.update(orders).set(updatePayload).where(eq(orders.id, orderId))
+
+  const audit = buildAuditPayload({
+    actorId: user.id,
+    previousStatus: current.status,
+    newStatus: target,
+    changedFields,
+    note: opts.note,
+    now,
+  })
 
   await db.insert(auditEvents).values({
     orderId,
-    customerId: existing[0].customerId,
+    customerId: current.customerId,
     actorType: 'rep',
     actorId: user.id,
-    eventType: 'order.delivered',
-    payload: null,
+    eventType: eventTypeForStatus(target),
+    payload: audit as unknown as Record<string, unknown>,
+  })
+
+  // Per-field convenience events for the headline fields so later readers
+  // can find "when was the VIN captured?" without parsing payloads.
+  await emitFieldEvents(orderId, current.customerId, user.id, changedFields, now)
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/orders')
+  revalidatePath('/admin')
+  return { ok: true, id: orderId }
+}
+
+function stampFieldForStatus(
+  s: PostSignStatus,
+):
+  | 'confirmedAt'
+  | 'onOrderAt'
+  | 'readyForHandoverAt'
+  | 'deliveredAt'
+  | 'cancelledPostSignAt'
+  | null {
+  switch (s) {
+    case 'confirmed':
+      return 'confirmedAt'
+    case 'on_order':
+      return 'onOrderAt'
+    case 'ready_for_handover':
+      return 'readyForHandoverAt'
+    case 'delivered':
+      return 'deliveredAt'
+    case 'cancelled_post_sign':
+      return 'cancelledPostSignAt'
+    default:
+      return null
+  }
+}
+
+function eventTypeForStatus(
+  s: PostSignStatus,
+):
+  | 'order.confirmed'
+  | 'order.on_order'
+  | 'order.ready_for_handover'
+  | 'order.delivered'
+  | 'order.cancelled_post_sign' {
+  switch (s) {
+    case 'confirmed':
+      return 'order.confirmed'
+    case 'on_order':
+      return 'order.on_order'
+    case 'ready_for_handover':
+      return 'order.ready_for_handover'
+    case 'delivered':
+      return 'order.delivered'
+    case 'cancelled_post_sign':
+      return 'order.cancelled_post_sign'
+    default:
+      // `signed` is already set by the signing flow; we never transition to it here.
+      throw new Error(`Unexpected post-sign status: ${s}`)
+  }
+}
+
+async function emitFieldEvents(
+  orderId: string,
+  customerId: string,
+  actorId: string,
+  changedFields: Record<LogisticsField, { from: unknown; to: unknown }>,
+  now: Date,
+) {
+  const perField = Object.entries(changedFields)
+    .map(([field, delta]) => ({
+      field: field as LogisticsField,
+      delta,
+      eventType: FIELD_EVENT_TYPE[field as LogisticsField],
+    }))
+    .filter((x) => !!x.eventType)
+
+  if (perField.length === 0) return
+
+  await db.insert(auditEvents).values(
+    perField.map((x) => ({
+      orderId,
+      customerId,
+      actorType: 'rep' as const,
+      actorId,
+      eventType: x.eventType!,
+      payload: { field: x.field, ...x.delta, at: now.toISOString() } as Record<
+        string,
+        unknown
+      >,
+    })),
+  )
+}
+
+// ─── update logistics (any live post-sign stage) ───────────────────────────
+
+export async function updateLogisticsAction(
+  orderId: string,
+  patch: LogisticsPatch,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+
+  const existing = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, orderId))
+    .limit(1)
+  if (existing.length === 0) return { ok: false, error: 'Order not found' }
+  const current = existing[0]
+
+  // Only editable while the order is in a live post-sign stage — not after
+  // delivered/cancelled, not before signed.
+  if (
+    !isPostSignStatus(current.status) ||
+    current.status === 'delivered' ||
+    current.status === 'cancelled_post_sign' ||
+    current.status === 'signed' // pre-confirmation edits discouraged in v1
+  ) {
+    return {
+      ok: false,
+      error: `Logistics cannot be edited in status "${current.status}". Move the order to confirmed first.`,
+    }
+  }
+
+  const cleanedPatch: LogisticsPatch = {}
+  for (const f of LOGISTICS_FIELDS) {
+    if (f in patch) cleanedPatch[f] = patch[f]
+  }
+  const changedFields = diffLogistics(current, cleanedPatch)
+  if (Object.keys(changedFields).length === 0) return { ok: true, id: orderId }
+
+  const now = new Date()
+  await db
+    .update(orders)
+    .set({ ...cleanedPatch, updatedAt: now })
+    .where(eq(orders.id, orderId))
+
+  const audit = buildAuditPayload({
+    actorId: user.id,
+    previousStatus: current.status,
+    newStatus: current.status,
+    changedFields,
+    now,
+  })
+
+  await db.insert(auditEvents).values({
+    orderId,
+    customerId: current.customerId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'order.logistics_updated',
+    payload: audit as unknown as Record<string, unknown>,
+  })
+
+  await emitFieldEvents(
+    orderId,
+    current.customerId,
+    user.id,
+    changedFields,
+    now,
+  )
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/orders')
+  return { ok: true, id: orderId }
+}
+
+// ─── post-sign cancel ──────────────────────────────────────────────────────
+
+export async function cancelPostSignAction(
+  orderId: string,
+  reason: string,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+
+  const trimmed = reason?.trim() ?? ''
+  if (trimmed.length < 5) {
+    return { ok: false, error: 'A reason (min 5 chars) is required to cancel after signing.' }
+  }
+
+  const existing = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, orderId))
+    .limit(1)
+  if (existing.length === 0) return { ok: false, error: 'Order not found' }
+  const current = existing[0]
+
+  if (!isForwardTransitionAllowed(current.status, 'cancelled_post_sign')) {
+    return {
+      ok: false,
+      error: `Cannot post-sign cancel from status "${current.status}".`,
+    }
+  }
+
+  const now = new Date()
+  await db
+    .update(orders)
+    .set({
+      status: 'cancelled_post_sign',
+      cancelledPostSignAt: now,
+      updatedAt: now,
+    })
+    .where(eq(orders.id, orderId))
+
+  const audit = buildAuditPayload({
+    actorId: user.id,
+    previousStatus: current.status,
+    newStatus: 'cancelled_post_sign',
+    reason: trimmed,
+    now,
+  })
+
+  await db.insert(auditEvents).values({
+    orderId,
+    customerId: current.customerId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'order.cancelled_post_sign',
+    payload: audit as unknown as Record<string, unknown>,
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
   revalidatePath('/admin/orders')
   revalidatePath('/admin')
   return { ok: true, id: orderId }
+}
+
+// ─── admin override ────────────────────────────────────────────────────────
+//
+// Escape hatch for backfills and operational recoveries. Jumps any number
+// of stages forward, bypassing the one-step-at-a-time rule. Mandatory
+// reason; fills any skipped *_at stamps to "now" so the timeline isn't
+// hollow.
+
+export async function overrideStatusAction(
+  orderId: string,
+  targetStatus: string,
+  reason: string,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+
+  const trimmed = reason?.trim() ?? ''
+  if (trimmed.length < 5) {
+    return {
+      ok: false,
+      error: 'A reason (min 5 chars) is required to override status.',
+    }
+  }
+
+  if (!isOverrideTargetAllowed(targetStatus)) {
+    return {
+      ok: false,
+      error: `"${targetStatus}" is not a valid override target.`,
+    }
+  }
+
+  const existing = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.id, orderId))
+    .limit(1)
+  if (existing.length === 0) return { ok: false, error: 'Order not found' }
+  const current = existing[0]
+
+  if (!isPostSignStatus(current.status)) {
+    return {
+      ok: false,
+      error: `Override only applies to post-sign orders; current status is "${current.status}".`,
+    }
+  }
+  if (current.status === targetStatus) {
+    return { ok: false, error: 'Order is already at that status.' }
+  }
+
+  const now = new Date()
+  const stamps: Partial<typeof orders.$inferInsert> = {}
+  // Fill any missing forward stamps up to and including the target.
+  if (targetStatus === 'confirmed' || forwardChain('confirmed', targetStatus)) {
+    if (!current.confirmedAt) stamps.confirmedAt = now
+  }
+  if (targetStatus === 'on_order' || forwardChain('on_order', targetStatus)) {
+    if (!current.onOrderAt) stamps.onOrderAt = now
+  }
+  if (
+    targetStatus === 'ready_for_handover' ||
+    forwardChain('ready_for_handover', targetStatus)
+  ) {
+    if (!current.readyForHandoverAt) stamps.readyForHandoverAt = now
+  }
+  if (targetStatus === 'delivered') {
+    if (!current.deliveredAt) stamps.deliveredAt = now
+  }
+  if (targetStatus === 'cancelled_post_sign') {
+    if (!current.cancelledPostSignAt) stamps.cancelledPostSignAt = now
+  }
+
+  await db
+    .update(orders)
+    .set({
+      status: targetStatus as typeof current.status,
+      updatedAt: now,
+      ...stamps,
+    })
+    .where(eq(orders.id, orderId))
+
+  const audit = buildAuditPayload({
+    actorId: user.id,
+    previousStatus: current.status,
+    newStatus: targetStatus,
+    reason: trimmed,
+    now,
+  })
+
+  await db.insert(auditEvents).values({
+    orderId,
+    customerId: current.customerId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'order.status_override',
+    payload: audit as unknown as Record<string, unknown>,
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/orders')
+  revalidatePath('/admin')
+  return { ok: true, id: orderId }
+}
+
+// Does `from` come before (or equal to) `target` in the forward chain?
+// Used by override to decide which intermediate stamps to fill.
+function forwardChain(from: PostSignStatus, target: string): boolean {
+  const order: PostSignStatus[] = [
+    'signed',
+    'confirmed',
+    'on_order',
+    'ready_for_handover',
+    'delivered',
+  ]
+  const fromIdx = order.indexOf(from)
+  const targetIdx = order.indexOf(target as PostSignStatus)
+  if (fromIdx === -1 || targetIdx === -1) return false
+  return fromIdx < targetIdx
 }
 
 // ─── resend signing link ───────────────────────────────────────────────────

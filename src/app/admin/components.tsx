@@ -42,8 +42,12 @@ export function OrderStatusPill({ status }: { status: string }) {
     sent: 'Sent',
     partially_signed: 'Part. signed',
     signed: 'Signed',
+    confirmed: 'Confirmed',
+    on_order: 'On order',
+    ready_for_handover: 'Ready',
     delivered: 'Delivered',
     cancelled: 'Cancelled',
+    cancelled_post_sign: 'Cancelled (post-sign)',
   }
   return (
     <span className={`adm-status adm-status-${status}`}>
@@ -132,6 +136,15 @@ export function auditEventLabel(type: string): string {
       'supplier.reactivated': 'Supplier reactivated',
       'order.vehicle_supplier_set': 'Vehicle supplier assigned',
       'order.finance_provider_set': 'Finance provider assigned',
+      'order.confirmed': 'Order confirmed by supplier',
+      'order.on_order': 'Order placed with supplier',
+      'order.ready_for_handover': 'Vehicle ready for handover',
+      'order.cancelled_post_sign': 'Order cancelled after signing',
+      'order.eta_updated': 'ETA updated',
+      'order.chassis_recorded': 'Chassis/VIN recorded',
+      'order.reg_recorded': 'Registration plate recorded',
+      'order.logistics_updated': 'Logistics details updated',
+      'order.status_override': 'Status override (admin)',
       'quote.created': 'Quote created',
       'quote.updated': 'Quote updated',
       'quote.sent': 'Quote sent to customer',

@@ -20,6 +20,12 @@ import {
   sendForSignatureAction,
   cancelOrderAction,
   markDeliveredAction,
+  markConfirmedAction,
+  markOnOrderAction,
+  markReadyForHandoverAction,
+  updateLogisticsAction,
+  cancelPostSignAction,
+  overrideStatusAction,
   resendSigningLinkAction,
   deleteDraftAction,
   signAsRepAction,
@@ -27,6 +33,8 @@ import {
   duplicateOrderAction,
   type RepSignInput,
 } from '../../actions/orders'
+import type { LogisticsField, LogisticsPatch } from '@/lib/order-delivery'
+import { LOGISTICS_FIELDS } from '@/lib/order-delivery'
 import {
   setOrderVehicleSupplierAction,
   setOrderFinanceProviderAction,
@@ -34,6 +42,7 @@ import {
 import { RepSignButton } from './RepSignButton'
 import { DownloadPdfButton } from './DownloadPdfButton'
 import { SupplierSelectors } from './SupplierSelectors'
+import { DeliveryCard } from './DeliveryCard'
 
 export const metadata = { title: 'Order' }
 
@@ -92,11 +101,18 @@ export default async function OrderDetailPage({
 
   const canEdit = order.status === 'draft'
   const canSend = order.status === 'draft'
-  const canCancel = !['signed', 'delivered', 'cancelled'].includes(order.status)
-  const canDeliver = order.status === 'signed'
+  // Pre-sign cancel only — post-sign cancellation goes through
+  // cancelPostSignAction with a mandatory reason (handled in DeliveryCard).
+  const canCancel = ['draft', 'sent', 'partially_signed'].includes(order.status)
   const canResend = order.status === 'sent' || order.status === 'partially_signed'
   const canDelete = order.status === 'draft'
-  const canDownloadPdf = order.status === 'signed' || order.status === 'delivered'
+  const canDownloadPdf = [
+    'signed',
+    'confirmed',
+    'on_order',
+    'ready_for_handover',
+    'delivered',
+  ].includes(order.status)
   const repHasSigned = orderSigs.some((s) => s.signerRole === 'rep')
   const canRepSign =
     (order.status === 'sent' || order.status === 'partially_signed') && !repHasSigned
@@ -112,9 +128,59 @@ export default async function OrderDetailPage({
     'use server'
     await cancelOrderAction(id)
   }
-  async function deliver() {
+  // ─── delivery lifecycle binders (Phase 9) ──────────────────────────
+  // Each takes FormData from the DeliveryCard inline forms. Field pick
+  // helpers below keep the parsing compact and typed.
+
+  async function confirmOrder(formData: FormData) {
     'use server'
-    await markDeliveredAction(id)
+    await markConfirmedAction(id, {
+      note: formValue(formData, 'note'),
+      supplierPoNumber: formValue(formData, 'supplierPoNumber'),
+      estimatedDeliveryDate: formValue(formData, 'estimatedDeliveryDate'),
+    })
+  }
+  async function onOrder(formData: FormData) {
+    'use server'
+    await markOnOrderAction(id, {
+      note: formValue(formData, 'note'),
+      estimatedDeliveryDate: formValue(formData, 'estimatedDeliveryDate'),
+    })
+  }
+  async function readyForHandover(formData: FormData) {
+    'use server'
+    await markReadyForHandoverAction(id, {
+      note: formValue(formData, 'note'),
+      chassisNumber: formValue(formData, 'chassisNumber'),
+      registrationPlate: formValue(formData, 'registrationPlate'),
+      handoverLocation: formValue(formData, 'handoverLocation'),
+      handoverNotes: formValue(formData, 'handoverNotes'),
+    })
+  }
+  async function deliver(formData: FormData) {
+    'use server'
+    await markDeliveredAction(id, {
+      note: formValue(formData, 'note'),
+      actualDeliveryDate: formValue(formData, 'actualDeliveryDate'),
+    })
+  }
+  async function updateLogistics(formData: FormData) {
+    'use server'
+    const patch: LogisticsPatch = {}
+    for (const f of LOGISTICS_FIELDS as readonly LogisticsField[]) {
+      if (formData.has(f)) patch[f] = formValue(formData, f)
+    }
+    await updateLogisticsAction(id, patch)
+  }
+  async function cancelPostSign(formData: FormData) {
+    'use server'
+    await cancelPostSignAction(id, formValue(formData, 'reason') ?? '')
+  }
+  async function override(formData: FormData) {
+    'use server'
+    const target = formValue(formData, 'targetStatus') ?? ''
+    const reason = formValue(formData, 'reason') ?? ''
+    await overrideStatusAction(id, target, reason)
   }
   async function resend() {
     'use server'
@@ -273,13 +339,7 @@ export default async function OrderDetailPage({
               Duplicate
             </button>
           </form>
-          {canDeliver && (
-            <form action={deliver}>
-              <button type="submit" className="adm-btn adm-btn-accent">
-                Mark delivered
-              </button>
-            </form>
-          )}
+          {/* Delivery-lifecycle controls moved to the DeliveryCard below. */}
           {canDelete && (
             <form action={del}>
               <button type="submit" className="adm-btn adm-btn-danger">
@@ -402,6 +462,19 @@ export default async function OrderDetailPage({
             assignedFinanceDisplay={assignedFinanceDisplay}
             assignVehicle={assignVehicleSupplier}
             assignFinance={assignFinanceProvider}
+          />
+
+          <DeliveryCard
+            order={order}
+            actions={{
+              confirm: confirmOrder,
+              onOrder: onOrder,
+              readyForHandover: readyForHandover,
+              deliver: deliver,
+              updateLogistics: updateLogistics,
+              cancelPostSign: cancelPostSign,
+              override: override,
+            }}
           />
 
           <div className="adm-card">
@@ -603,4 +676,13 @@ export default async function OrderDetailPage({
       </div>
     </div>
   )
+}
+
+// Pull a trimmed string value out of FormData, returning undefined when the
+// field is absent or blank. Used by the delivery-lifecycle form binders.
+function formValue(formData: FormData, key: string): string | undefined {
+  const raw = formData.get(key)
+  if (typeof raw !== 'string') return undefined
+  const trimmed = raw.trim()
+  return trimmed === '' ? undefined : trimmed
 }

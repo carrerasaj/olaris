@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { desc, eq, inArray } from 'drizzle-orm'
 import { db, orders, customers, suppliers } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
-import { fmtGBPFromPence, fmtRelative } from '@/lib/format'
+import { fmtDate, fmtGBPFromPence, fmtRelative } from '@/lib/format'
 import { OrderStatusPill } from '../components'
 
 export const metadata = { title: 'Orders' }
@@ -13,6 +13,7 @@ const STATUS_TABS = [
   { key: 'draft', label: 'Draft' },
   { key: 'sent', label: 'Awaiting signature' },
   { key: 'signed', label: 'Signed' },
+  { key: 'live', label: 'In delivery' },
   { key: 'delivered', label: 'Delivered' },
   { key: 'cancelled', label: 'Cancelled' },
 ] as const
@@ -31,8 +32,12 @@ export default async function OrdersListPage({
     | 'sent'
     | 'partially_signed'
     | 'signed'
+    | 'confirmed'
+    | 'on_order'
+    | 'ready_for_handover'
     | 'delivered'
     | 'cancelled'
+    | 'cancelled_post_sign'
   const statusClause = ((): OrderStatus[] | null => {
     switch (activeTab) {
       case 'open':
@@ -43,10 +48,12 @@ export default async function OrdersListPage({
         return ['sent', 'partially_signed']
       case 'signed':
         return ['signed']
+      case 'live':
+        return ['confirmed', 'on_order', 'ready_for_handover']
       case 'delivered':
         return ['delivered']
       case 'cancelled':
-        return ['cancelled']
+        return ['cancelled', 'cancelled_post_sign']
       default:
         return null
     }
@@ -60,6 +67,7 @@ export default async function OrdersListPage({
       totalAmountPence: orders.totalAmountPence,
       vehicle: orders.vehicle,
       createdAt: orders.createdAt,
+      estimatedDeliveryDate: orders.estimatedDeliveryDate,
       firstName: customers.firstName,
       lastName: customers.lastName,
       customerEmail: customers.email,
@@ -136,6 +144,7 @@ export default async function OrdersListPage({
                 <th>Supplier</th>
                 <th className="num">Total</th>
                 <th>Status</th>
+                <th>ETA</th>
                 <th>Created</th>
               </tr>
             </thead>
@@ -161,6 +170,16 @@ export default async function OrdersListPage({
                   <td>
                     <OrderStatusPill status={o.status} />
                   </td>
+                  <td
+                    style={{
+                      fontSize: 12,
+                      color: etaPast(o.estimatedDeliveryDate, o.status)
+                        ? '#dc2626'
+                        : '#64748b',
+                    }}
+                  >
+                    {o.estimatedDeliveryDate ? fmtDate(o.estimatedDeliveryDate) : '—'}
+                  </td>
                   <td style={{ color: '#64748b', fontSize: 12 }}>{fmtRelative(o.createdAt)}</td>
                 </tr>
               ))}
@@ -170,4 +189,14 @@ export default async function OrdersListPage({
       </div>
     </div>
   )
+}
+
+// Flag ETA red if it's in the past AND the order isn't terminal. The
+// operational view is "what's slipping?" — delivered / cancelled rows
+// don't need the warning.
+function etaPast(eta: string | null, status: string): boolean {
+  if (!eta) return false
+  if (status === 'delivered' || status === 'cancelled' || status === 'cancelled_post_sign')
+    return false
+  return new Date(eta) < new Date()
 }

@@ -42,8 +42,12 @@ export const orderStatus = pgEnum('order_status', [
   'sent',
   'partially_signed',
   'signed',
+  'confirmed',
+  'on_order',
+  'ready_for_handover',
   'delivered',
   'cancelled',
+  'cancelled_post_sign',
 ])
 // Quote lifecycle. `viewed` is a unique-link-opened activity signal only —
 // not identity, not acceptance. Once a quote leaves `draft` its terms are
@@ -96,6 +100,15 @@ export const auditEventType = pgEnum('audit_event_type', [
   'quote.expired',
   'quote.converted',
   'quote.cancelled',
+  'order.confirmed',
+  'order.on_order',
+  'order.ready_for_handover',
+  'order.cancelled_post_sign',
+  'order.eta_updated',
+  'order.chassis_recorded',
+  'order.reg_recorded',
+  'order.logistics_updated',
+  'order.status_override',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -429,8 +442,26 @@ export const orders = pgTable(
     createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
     sentAt: timestamp('sent_at', { withTimezone: true }),
     signedAt: timestamp('signed_at', { withTimezone: true }),
+    // Delivery-lifecycle stamps (Phase 9). All nullable; populated as the
+    // order moves through signed → confirmed → on_order → ready_for_handover
+    // → delivered. `deliveredAt` is the status-flip timestamp; the
+    // operational "keys changed hands" date is `actualDeliveryDate` below.
+    confirmedAt: timestamp('confirmed_at', { withTimezone: true }),
+    onOrderAt: timestamp('on_order_at', { withTimezone: true }),
+    readyForHandoverAt: timestamp('ready_for_handover_at', { withTimezone: true }),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    cancelledPostSignAt: timestamp('cancelled_post_sign_at', { withTimezone: true }),
+    // Operational logistics — captured at various stages; all nullable.
+    supplierPoNumber: text('supplier_po_number'),
+    supplierOrderRef: text('supplier_order_ref'),
+    chassisNumber: text('chassis_number'),
+    registrationPlate: text('registration_plate'),
+    // Dates not timestamps — we care about the day, not the minute.
+    estimatedDeliveryDate: text('estimated_delivery_date'),
+    actualDeliveryDate: text('actual_delivery_date'),
+    handoverLocation: text('handover_location'),
+    handoverNotes: text('handover_notes'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },

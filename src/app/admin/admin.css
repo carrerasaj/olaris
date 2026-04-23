@@ -227,6 +227,14 @@
 .adm-status-delivered .adm-status-dot { background: #7c3aed; }
 .adm-status-cancelled { background: #fee2e2; color: #991b1b; }
 .adm-status-cancelled .adm-status-dot { background: #dc2626; }
+.adm-status-confirmed { background: #e0e7ff; color: #3730a3; }
+.adm-status-confirmed .adm-status-dot { background: #6366f1; }
+.adm-status-on_order { background: #ffedd5; color: #9a3412; }
+.adm-status-on_order .adm-status-dot { background: #f97316; }
+.adm-status-ready_for_handover { background: #ccfbf1; color: #115e59; }
+.adm-status-ready_for_handover .adm-status-dot { background: #14b8a6; }
+.adm-status-cancelled_post_sign { background: #fecaca; color: #7f1d1d; }
+.adm-status-cancelled_post_sign .adm-status-dot { background: #7f1d1d; }
 
 /* ── Dashboard tiles ──────────────────────────────────── */
 .adm-tiles {
