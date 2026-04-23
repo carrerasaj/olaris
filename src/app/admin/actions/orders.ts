@@ -337,6 +337,9 @@ export async function sendForSignatureAction(
 ): Promise<OrderActionResult> {
   const user = await requireAdmin()
 
+  const reachability = signingUrlLooksReachable()
+  if (reachability) return { ok: false, error: reachability }
+
   const rows = await db
     .select({
       order: orders,
@@ -549,6 +552,9 @@ export async function resendSigningLinkAction(
 ): Promise<OrderActionResult> {
   const user = await requireAdmin()
 
+  const reachability = signingUrlLooksReachable()
+  if (reachability) return { ok: false, error: reachability }
+
   const rows = await db
     .select({ order: orders, customer: customers })
     .from(orders)
@@ -631,6 +637,31 @@ function siteUrl(): string {
     process.env.NEXT_PUBLIC_SITE_URL ??
     'http://localhost:3000'
   )
+}
+
+/**
+ * Called before send-to-customer-email actions. Refuses to send if the
+ * signing URL would point at localhost — that would deliver an unclickable
+ * link to a real customer inbox (we learned this from UD3R's localhost
+ * email to Tony, which he couldn't use).
+ *
+ * Returns null when it's safe to send, or an error message when it isn't.
+ *
+ * Escape hatch: set ALLOW_LOCALHOST_CUSTOMER_EMAIL=1 to bypass. Useful
+ * when deliberately testing against a tunnel (ngrok) where the env var
+ * still contains "localhost" via mapping.
+ */
+function signingUrlLooksReachable(): string | null {
+  if (process.env.ALLOW_LOCALHOST_CUSTOMER_EMAIL === '1') return null
+  const url = siteUrl()
+  if (/localhost|127\.0\.0\.1|\[::1\]|::1/.test(url)) {
+    return (
+      `Refusing to email a signing link that points at ${url}. ` +
+      `Customer-facing actions require NEXTAUTH_URL to be a public HTTPS URL. ` +
+      `If you're testing intentionally, set ALLOW_LOCALHOST_CUSTOMER_EMAIL=1.`
+    )
+  }
+  return null
 }
 
 // ─── rep signature ────────────────────────────────────────────────────────

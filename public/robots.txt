@@ -1,7 +1,10 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Disallow: /api
+Disallow: /admin/
+Disallow: /sign/
+Disallow: /verify/
+Disallow: /api/
 
 # Sitemap
 Sitemap: https://olaris.co.uk/sitemap.xml
