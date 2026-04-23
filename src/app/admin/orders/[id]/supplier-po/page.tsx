@@ -34,7 +34,9 @@ import {
   markSupplierPOAcknowledgedAction,
   cancelSupplierPOAction,
   refreshDraftSnapshotAction,
+  recordSupplierInvoiceAction,
 } from '../../../actions/supplier-po'
+import { SupplierInvoiceCard } from './SupplierInvoiceCard'
 import {
   diffSnapshots,
   snapshotFromOrder,
@@ -160,6 +162,20 @@ export default async function SupplierPoPage({
   async function cancel(formData: FormData) {
     'use server'
     await cancelSupplierPOAction(po.id, formStr(formData, 'reason') ?? '')
+  }
+  async function recordInvoice(formData: FormData) {
+    'use server'
+    const rawVat = formData.get('supplierInvoiceVat')
+    const vatProvided = typeof rawVat === 'string' && rawVat.trim() !== ''
+    await recordSupplierInvoiceAction(po.id, {
+      supplierInvoiceRef: formStr(formData, 'supplierInvoiceRef'),
+      supplierInvoiceDate: formStr(formData, 'supplierInvoiceDate'),
+      supplierInvoiceNetPence: poundsToPence(formNum(formData, 'supplierInvoiceNet')),
+      supplierInvoiceVatPence: vatProvided
+        ? poundsToPence(formNum(formData, 'supplierInvoiceVat'))
+        : null,
+      supplierInvoiceNotes: formStr(formData, 'supplierInvoiceNotes'),
+    })
   }
 
   return (
@@ -494,6 +510,8 @@ export default async function SupplierPoPage({
               </div>
             </div>
           )}
+
+          <SupplierInvoiceCard po={po} recordInvoice={recordInvoice} />
 
           {po.status !== 'cancelled' && (
             <div className="adm-card">

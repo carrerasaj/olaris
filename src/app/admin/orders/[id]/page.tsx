@@ -45,6 +45,7 @@ import { DownloadPdfButton } from './DownloadPdfButton'
 import { SupplierSelectors } from './SupplierSelectors'
 import { DeliveryCard } from './DeliveryCard'
 import { SupplierPOCard } from './SupplierPOCard'
+import { DealPLCard } from './DealPLCard'
 import { createDraftSupplierPOAction } from '../../actions/supplier-po'
 
 export const metadata = { title: 'Order' }
@@ -506,6 +507,8 @@ export default async function OrderDetailPage({
             activePO={activePO}
             createDraftAction={createSupplierPoDraft}
           />
+
+          <DealPLCard order={order} activePO={activePO} />
 
           <div className="adm-card">
             <div className="adm-card-head">

@@ -207,3 +207,67 @@ export function isEditable(po: Pick<SupplierOrder, 'status'>): boolean {
 export function isCancellable(po: Pick<SupplierOrder, 'status'>): boolean {
   return po.status !== 'cancelled'
 }
+
+// ─── Supplier invoice derivation (Phase 11) ─────────────────────────────
+
+export interface InvoiceInputs {
+  supplierInvoiceNetPence: number | null
+  supplierInvoiceVatPence: number | null // nullable — some suppliers don't split VAT
+}
+
+export interface DerivedInvoice {
+  supplierInvoiceTotalPence: number | null
+  supplierInvoiceVarianceNetPence: number | null
+  supplierInvoiceVarianceTotalPence: number | null
+}
+
+/**
+ * Derive invoice total + variances from the admin-entered invoice inputs
+ * and the PO's purchase-side totals.
+ *
+ * Rules:
+ *   - If invoice net is null → everything is null (nothing captured yet).
+ *   - If invoice VAT is null → invoiceTotal = invoiceNet (VAT not split on
+ *     supplier's invoice; common for small suppliers / fuel cards).
+ *   - Variances are signed: invoiced - PO. Positive = we got charged more
+ *     than the PO. Negative = supplier invoiced us less.
+ */
+export function deriveInvoice(
+  inputs: InvoiceInputs,
+  purchaseNetPence: number,
+  purchaseTotalPence: number,
+): DerivedInvoice {
+  if (inputs.supplierInvoiceNetPence === null) {
+    return {
+      supplierInvoiceTotalPence: null,
+      supplierInvoiceVarianceNetPence: null,
+      supplierInvoiceVarianceTotalPence: null,
+    }
+  }
+  const invoiceNet = Math.round(inputs.supplierInvoiceNetPence)
+  const invoiceVat =
+    inputs.supplierInvoiceVatPence === null
+      ? null
+      : Math.round(inputs.supplierInvoiceVatPence)
+  const invoiceTotal = invoiceVat === null ? invoiceNet : invoiceNet + invoiceVat
+  return {
+    supplierInvoiceTotalPence: invoiceTotal,
+    supplierInvoiceVarianceNetPence: invoiceNet - purchaseNetPence,
+    supplierInvoiceVarianceTotalPence: invoiceTotal - purchaseTotalPence,
+  }
+}
+
+// Variance thresholds (£, absolute value). Fixed in v1; percentage-based
+// tiers deferred. Used everywhere variance is displayed.
+export const VARIANCE_AMBER_PENCE = 50_00 // £50
+export const VARIANCE_RED_PENCE = 250_00 // £250
+
+export type VarianceTone = 'ok' | 'amber' | 'red'
+
+export function varianceTone(pence: number | null | undefined): VarianceTone {
+  if (pence === null || pence === undefined) return 'ok'
+  const abs = Math.abs(pence)
+  if (abs > VARIANCE_RED_PENCE) return 'red'
+  if (abs > VARIANCE_AMBER_PENCE) return 'amber'
+  return 'ok'
+}

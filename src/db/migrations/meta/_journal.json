@@ -43,6 +43,13 @@
       "when": 1776942360189,
       "tag": "0005_eminent_prism",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1776971885095,
+      "tag": "0006_funny_frog_thor",
+      "breakpoints": true
     }
   ]
 }

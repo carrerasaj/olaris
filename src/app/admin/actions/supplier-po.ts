@@ -38,6 +38,7 @@ import { supplierPoEmail } from '@/lib/email-templates'
 import { renderSupplierPoPdf } from '@/lib/pdf/render-supplier-po'
 import {
   buildDraftPOFromOrder,
+  deriveInvoice,
   deriveTotals,
   diffSnapshots,
   isEditable,
@@ -587,6 +588,105 @@ export async function markSupplierPOAcknowledgedAction(
 }
 
 // ─── cancel ──────────────────────────────────────────────────────────
+
+// ─── record supplier invoice (Phase 11) ──────────────────────────────
+
+export interface RecordSupplierInvoiceInput {
+  supplierInvoiceRef?: string | null
+  supplierInvoiceDate?: string | null
+  supplierInvoiceNetPence: number // required
+  supplierInvoiceVatPence: number | null // null = not split on invoice
+  supplierInvoiceNotes?: string | null
+}
+
+export async function recordSupplierInvoiceAction(
+  supplierPoId: string,
+  input: RecordSupplierInvoiceInput,
+): Promise<SupplierPoActionResult> {
+  const user = await requireAdmin()
+
+  if (
+    typeof input.supplierInvoiceNetPence !== 'number' ||
+    !Number.isFinite(input.supplierInvoiceNetPence) ||
+    input.supplierInvoiceNetPence < 0
+  ) {
+    return {
+      ok: false,
+      error: 'A non-negative invoice net amount is required.',
+    }
+  }
+
+  const rows = await db
+    .select()
+    .from(supplierOrders)
+    .where(eq(supplierOrders.id, supplierPoId))
+    .limit(1)
+  if (rows.length === 0) return { ok: false, error: 'PO not found' }
+  const po = rows[0]
+
+  if (po.status !== 'acknowledged') {
+    return {
+      ok: false,
+      error: `Invoice capture is only available for acknowledged POs. This PO is ${po.status}.`,
+    }
+  }
+
+  const derived = deriveInvoice(
+    {
+      supplierInvoiceNetPence: input.supplierInvoiceNetPence,
+      supplierInvoiceVatPence: input.supplierInvoiceVatPence,
+    },
+    po.purchaseNetPence,
+    po.purchaseTotalPence,
+  )
+
+  const now = new Date()
+  await db
+    .update(supplierOrders)
+    .set({
+      supplierInvoiceRef: input.supplierInvoiceRef ?? po.supplierInvoiceRef,
+      supplierInvoiceDate: input.supplierInvoiceDate ?? null,
+      supplierInvoiceNetPence: Math.round(input.supplierInvoiceNetPence),
+      supplierInvoiceVatPence:
+        input.supplierInvoiceVatPence === null
+          ? null
+          : Math.round(input.supplierInvoiceVatPence),
+      supplierInvoiceTotalPence: derived.supplierInvoiceTotalPence,
+      supplierInvoiceVarianceNetPence: derived.supplierInvoiceVarianceNetPence,
+      supplierInvoiceVarianceTotalPence:
+        derived.supplierInvoiceVarianceTotalPence,
+      supplierInvoiceReceivedAt: now,
+      supplierInvoiceNotes: input.supplierInvoiceNotes ?? null,
+      updatedAt: now,
+    })
+    .where(eq(supplierOrders.id, po.id))
+
+  await db.insert(auditEvents).values({
+    orderId: po.orderId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'supplier_po.invoice_received',
+    payload: {
+      poId: po.id,
+      invoiceRef: input.supplierInvoiceRef ?? po.supplierInvoiceRef ?? null,
+      invoiceDate: input.supplierInvoiceDate ?? null,
+      invoiceNetPence: Math.round(input.supplierInvoiceNetPence),
+      invoiceVatPence:
+        input.supplierInvoiceVatPence === null
+          ? null
+          : Math.round(input.supplierInvoiceVatPence),
+      invoiceTotalPence: derived.supplierInvoiceTotalPence,
+      varianceNetPence: derived.supplierInvoiceVarianceNetPence,
+      varianceTotalPence: derived.supplierInvoiceVarianceTotalPence,
+    },
+  })
+
+  revalidatePath(`/admin/orders/${po.orderId}/supplier-po`)
+  revalidatePath(`/admin/orders/${po.orderId}`)
+  revalidatePath('/admin/reports/margin')
+  revalidatePath('/admin')
+  return { ok: true, id: po.id, ref: po.ref }
+}
 
 export async function cancelSupplierPOAction(
   supplierPoId: string,

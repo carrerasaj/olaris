@@ -4,6 +4,7 @@ import { db, orders, customers, activities, auditEvents } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtRelative } from '@/lib/format'
 import { OrderStatusPill, auditEventLabel } from './components'
+import { getDashboardSummary } from '@/lib/reports/dashboard'
 
 export const metadata = { title: 'Dashboard' }
 
@@ -22,6 +23,7 @@ export default async function AdminDashboard() {
     totalCustomersRow,
     recentOrders,
     recentActivity,
+    dashboardSummary,
   ] = await Promise.all([
     db
       .select({ count: sql<number>`count(*)::int` })
@@ -63,6 +65,7 @@ export default async function AdminDashboard() {
       .leftJoin(orders, eq(auditEvents.orderId, orders.id))
       .orderBy(desc(auditEvents.createdAt))
       .limit(8),
+    getDashboardSummary(),
   ])
 
   const tiles = [
@@ -113,6 +116,79 @@ export default async function AdminDashboard() {
             <div className="sub">{t.sub}</div>
           </div>
         ))}
+      </div>
+
+      {/* Phase 11 — P&L summary tile row. Each tile click-throughs to
+          the relevant report view so "hmm, is invoice aging spiking?" is
+          one click from the dashboard. */}
+      <div className="adm-tiles" style={{ marginTop: 16 }}>
+        <Link
+          href="/admin/reports/margin?basis=signed"
+          className="adm-tile"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <div className="label">Gross profit (90d)</div>
+          <div
+            className="value"
+            style={{
+              color:
+                dashboardSummary.grossProfitPence < 0 ? '#b91c1c' : undefined,
+            }}
+          >
+            {fmtGBPFromPence(dashboardSummary.grossProfitPence)}
+          </div>
+          <div className="sub">
+            {dashboardSummary.dealCount} deal
+            {dashboardSummary.dealCount === 1 ? '' : 's'}
+            {dashboardSummary.grossProfitMarginBps !== null &&
+              ` · ${(dashboardSummary.grossProfitMarginBps / 100).toFixed(1)}% margin`}
+          </div>
+        </Link>
+        <Link
+          href="/admin/reports/margin?po_status=draft"
+          className="adm-tile"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <div className="label">Open POs</div>
+          <div className="value">{dashboardSummary.openPoCount}</div>
+          <div className="sub">draft or sent</div>
+        </Link>
+        <Link
+          href="/admin/reports/margin?po_status=acknowledged&invoiced=no"
+          className="adm-tile"
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            background:
+              dashboardSummary.invoiceAgingCount > 0 ? '#fef3c7' : undefined,
+          }}
+        >
+          <div className="label">Invoice aging</div>
+          <div
+            className="value"
+            style={{
+              color:
+                dashboardSummary.invoiceAgingCount > 0 ? '#b45309' : undefined,
+            }}
+          >
+            {dashboardSummary.invoiceAgingCount}
+          </div>
+          <div className="sub">ack&apos;d &gt;30 days, no invoice</div>
+        </Link>
+        <Link
+          href="/admin/reports/vat"
+          className="adm-tile"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <div className="label">VAT summary</div>
+          <div
+            className="value"
+            style={{ fontSize: 18, fontWeight: 700, color: '#0b1e3f' }}
+          >
+            Management view →
+          </div>
+          <div className="sub">for the accountant</div>
+        </Link>
       </div>
 
       <div className="adm-split">

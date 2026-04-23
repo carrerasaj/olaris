@@ -196,6 +196,7 @@ export function auditEventLabel(type: string): string {
       'supplier_po.cancelled': 'Supplier PO cancelled',
       'supplier_po.snapshot_refreshed': 'Supplier PO snapshot refreshed',
       'supplier_po.superseded_by': 'Superseded by new PO',
+      'supplier_po.invoice_received': 'Supplier invoice recorded',
       'quote.created': 'Quote created',
       'quote.updated': 'Quote updated',
       'quote.sent': 'Quote sent to customer',

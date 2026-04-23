@@ -116,6 +116,7 @@ export const auditEventType = pgEnum('audit_event_type', [
   'supplier_po.cancelled',
   'supplier_po.snapshot_refreshed',
   'supplier_po.superseded_by',
+  'supplier_po.invoice_received',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -655,6 +656,19 @@ export const supplierOrders = pgTable(
     supplierPoRefReceived: text('supplier_po_ref_received'),
     supplierEtaDate: text('supplier_eta_date'),
     supplierInvoiceRef: text('supplier_invoice_ref'),
+    // Supplier invoice capture (Phase 11). All nullable — populated when
+    // the supplier's actual invoice arrives. Variance columns are derived
+    // server-side on save by deriveInvoice().
+    supplierInvoiceDate: text('supplier_invoice_date'),
+    supplierInvoiceNetPence: integer('supplier_invoice_net_pence'),
+    supplierInvoiceVatPence: integer('supplier_invoice_vat_pence'),
+    supplierInvoiceTotalPence: integer('supplier_invoice_total_pence'),
+    supplierInvoiceVarianceNetPence: integer('supplier_invoice_variance_net_pence'),
+    supplierInvoiceVarianceTotalPence: integer('supplier_invoice_variance_total_pence'),
+    supplierInvoiceReceivedAt: timestamp('supplier_invoice_received_at', {
+      withTimezone: true,
+    }),
+    supplierInvoiceNotes: text('supplier_invoice_notes'),
 
     // Operational notes
     notesToSupplier: text('notes_to_supplier'),

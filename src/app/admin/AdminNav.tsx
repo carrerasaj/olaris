@@ -15,6 +15,7 @@ const ITEMS: NavItem[] = [
   { href: '/admin/orders', label: 'Orders' },
   { href: '/admin/customers', label: 'Customers' },
   { href: '/admin/suppliers', label: 'Suppliers' },
+  { href: '/admin/reports/margin', label: 'Reports' },
 ]
 
 export function AdminNav() {
