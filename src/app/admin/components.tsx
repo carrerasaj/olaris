@@ -1,5 +1,41 @@
 // Shared admin UI fragments that multiple server pages import.
 
+export function SupplierKindPill({ kind }: { kind: string }) {
+  const label: Record<string, string> = {
+    dealer: 'Dealer',
+    broker: 'Broker',
+    oem_partner: 'OEM partner',
+    importer: 'Importer',
+    funder: 'Funder',
+  }
+  const tone: Record<string, string> = {
+    dealer: '#0891b2',
+    broker: '#7c3aed',
+    oem_partner: '#059669',
+    importer: '#b45309',
+    funder: '#0b1e3f',
+  }
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '2px 8px',
+        borderRadius: 999,
+        fontSize: 10.5,
+        fontWeight: 700,
+        letterSpacing: 0.4,
+        textTransform: 'uppercase',
+        color: tone[kind] ?? '#334155',
+        background: '#f1f5f9',
+        border: `1px solid ${tone[kind] ?? '#cbd5e1'}33`,
+      }}
+    >
+      {label[kind] ?? kind}
+    </span>
+  )
+}
+
+
 export function OrderStatusPill({ status }: { status: string }) {
   const label: Record<string, string> = {
     draft: 'Draft',

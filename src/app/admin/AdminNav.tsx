@@ -13,6 +13,7 @@ const ITEMS: NavItem[] = [
   { href: '/admin', label: 'Dashboard', exact: true },
   { href: '/admin/orders', label: 'Orders' },
   { href: '/admin/customers', label: 'Customers' },
+  { href: '/admin/suppliers', label: 'Suppliers' },
 ]
 
 export function AdminNav() {

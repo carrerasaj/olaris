@@ -17,6 +17,40 @@ export const addressSchema = z.object({
   country: z.string().max(80).default('United Kingdom'),
 })
 
+export const supplierCreateSchema = z.object({
+  kind: z.enum(['dealer', 'broker', 'oem_partner', 'importer', 'funder']),
+  legalName: z.string().min(1, 'Legal name is required').max(200),
+  tradingName: z.string().max(200).optional().nullable(),
+  primaryContactName: z.string().min(1, 'Contact name is required').max(120),
+  primaryContactEmail: z.string().email('Invalid email').max(200),
+  primaryContactPhone: z.string().max(40).optional().nullable(),
+  website: z
+    .string()
+    .trim()
+    .max(200)
+    .optional()
+    .nullable()
+    .refine(
+      (v) =>
+        !v ||
+        /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/[^\s]*)?$/i.test(v),
+      { message: 'Invalid website URL' },
+    ),
+  addressLine1: z.string().max(200).optional().nullable(),
+  addressLine2: z.string().max(200).optional().nullable(),
+  addressCity: z.string().max(100).optional().nullable(),
+  addressPostcode: z
+    .string()
+    .max(10)
+    .optional()
+    .nullable()
+    .refine((v) => !v || UK_POSTCODE.test(v), { message: 'Invalid UK postcode' }),
+  addressCountry: z.string().max(80).optional().nullable(),
+  notes: z.string().max(5000).optional().nullable(),
+})
+
+export type SupplierCreateInput = z.infer<typeof supplierCreateSchema>
+
 export const customerCreateSchema = z.object({
   type: z.enum(['business', 'personal']),
   salutation: z.string().max(5).optional(),

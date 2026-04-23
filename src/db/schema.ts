@@ -66,6 +66,12 @@ export const auditEventType = pgEnum('audit_event_type', [
   'reminder.sent',
   'email.sent',
   'email.failed',
+  'supplier.created',
+  'supplier.updated',
+  'supplier.deactivated',
+  'supplier.reactivated',
+  'order.vehicle_supplier_set',
+  'order.finance_provider_set',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -81,6 +87,17 @@ export const activityKind = pgEnum('activity_kind', [
   'email',
   'meeting',
   'task',
+])
+// Supplier categories — split "who sources the vehicle" from "who underwrites
+// the finance" at the `orders` layer (two separate FKs). Both types live in
+// the same `suppliers` table, distinguished by `kind`. `funder` is a lender
+// like Leasys UK Ltd; `dealer` is a vehicle source like Van Choices.
+export const supplierKind = pgEnum('supplier_kind', [
+  'dealer',
+  'broker',
+  'oem_partner',
+  'importer',
+  'funder',
 ])
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
@@ -263,6 +280,44 @@ export const companies = pgTable(
   }),
 )
 
+// Suppliers cover both the vehicle-source side (dealer, broker, OEM
+// partner, importer) and the finance-underwriting side (funder). Orders
+// reference them via two separate FKs (`vehicle_supplier_id` and
+// `finance_provider_id`) so the two roles are never conflated. Olaris is
+// always the broker in the commercial sense — it's never a row in this
+// table pointing at itself.
+export const suppliers = pgTable(
+  'suppliers',
+  {
+    id: id(),
+    kind: supplierKind('kind').notNull(),
+    legalName: text('legal_name').notNull(),
+    tradingName: text('trading_name'),
+    primaryContactName: text('primary_contact_name').notNull(),
+    primaryContactEmail: text('primary_contact_email').notNull(),
+    primaryContactPhone: text('primary_contact_phone'),
+    website: text('website'),
+    addressLine1: text('address_line_1'),
+    addressLine2: text('address_line_2'),
+    addressCity: text('address_city'),
+    addressPostcode: text('address_postcode'),
+    addressCountry: text('address_country'),
+    notes: text('notes'),
+    // Soft-disable rather than delete — keeps foreign-key integrity on
+    // historical orders if a supplier relationship ends. Default true;
+    // list views filter on this.
+    active: boolean('active').notNull().default(true),
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    kindIdx: index('suppliers_kind_idx').on(t.kind),
+    legalNameIdx: index('suppliers_legal_name_idx').on(t.legalName),
+    activeIdx: index('suppliers_active_idx').on(t.active),
+  }),
+)
+
 export const customers = pgTable(
   'customers',
   {
@@ -303,6 +358,20 @@ export const orders = pgTable(
     companyId: text('company_id').references(() => companies.id, {
       onDelete: 'set null',
     }),
+    // Vehicle supplier — dealer / broker / OEM / importer. Nullable because
+    // legacy orders (pre-supplier-module) won't have one, and draft orders
+    // may be entered before a supplier is chosen.
+    vehicleSupplierId: text('vehicle_supplier_id').references(
+      () => suppliers.id,
+      { onDelete: 'restrict' }, // never auto-delete a supplier that's on an order
+    ),
+    // Finance provider (lender). Nullable — outright-purchase orders and
+    // pending-finance orders legitimately have none. Distinct from
+    // vehicle supplier even when the same party could in theory do both.
+    financeProviderId: text('finance_provider_id').references(
+      () => suppliers.id,
+      { onDelete: 'restrict' },
+    ),
     status: orderStatus('status').notNull().default('draft'),
     customerType: customerType('customer_type').notNull().default('business'),
     financeType: financeType('finance_type').notNull().default('BCH'),
@@ -339,6 +408,8 @@ export const orders = pgTable(
     customerIdx: index('orders_customer_idx').on(t.customerId),
     createdAtIdx: index('orders_created_at_idx').on(t.createdAt),
     refIdx: uniqueIndex('orders_ref_idx').on(t.ref),
+    vehicleSupplierIdx: index('orders_vehicle_supplier_idx').on(t.vehicleSupplierId),
+    financeProviderIdx: index('orders_finance_provider_idx').on(t.financeProviderId),
   }),
 )
 
@@ -555,6 +626,19 @@ export const ordersRelations = relations(orders, ({ many, one }) => ({
     references: [customers.id],
   }),
   company: one(companies, { fields: [orders.companyId], references: [companies.id] }),
+  // Two separate supplier relations: sourcing the vehicle vs underwriting
+  // finance. Both point at the same `suppliers` table but carry different
+  // operational meaning.
+  vehicleSupplier: one(suppliers, {
+    fields: [orders.vehicleSupplierId],
+    references: [suppliers.id],
+    relationName: 'vehicleSupplier',
+  }),
+  financeProvider: one(suppliers, {
+    fields: [orders.financeProviderId],
+    references: [suppliers.id],
+    relationName: 'financeProvider',
+  }),
   signatures: many(signatures),
   auditEvents: many(auditEvents),
   signingTokens: many(signingTokens),
@@ -562,6 +646,12 @@ export const ordersRelations = relations(orders, ({ many, one }) => ({
   documents: many(documents),
   reminders: many(reminderSchedule),
   createdBy: one(users, { fields: [orders.createdBy], references: [users.id] }),
+}))
+
+export const suppliersRelations = relations(suppliers, ({ many, one }) => ({
+  vehicleSupplierOrders: many(orders, { relationName: 'vehicleSupplier' }),
+  financeProviderOrders: many(orders, { relationName: 'financeProvider' }),
+  createdBy: one(users, { fields: [suppliers.createdBy], references: [users.id] }),
 }))
 
 export const signingTokensRelations = relations(signingTokens, ({ one, many }) => ({
@@ -618,6 +708,9 @@ export type Customer = typeof customers.$inferSelect
 export type NewCustomer = typeof customers.$inferInsert
 export type Company = typeof companies.$inferSelect
 export type NewCompany = typeof companies.$inferInsert
+export type Supplier = typeof suppliers.$inferSelect
+export type NewSupplier = typeof suppliers.$inferInsert
+export type SupplierKind = (typeof supplierKind.enumValues)[number]
 export type Order = typeof orders.$inferSelect
 export type NewOrder = typeof orders.$inferInsert
 export type Signature = typeof signatures.$inferSelect

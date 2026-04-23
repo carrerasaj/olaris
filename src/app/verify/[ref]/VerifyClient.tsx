@@ -31,6 +31,8 @@ interface View {
   vehicle: string
   totalGBP: string
   customerName: string
+  vehicleSupplierName: string | null
+  financeProviderName: string | null
   signers: Signer[]
   pdf: { url: string; sha256: string; sizeBytes: number | null } | null
   pubkeyUrl: string
@@ -105,6 +107,20 @@ export function VerifyClient({ view }: { view: View }) {
             <dd>{view.vehicle}</dd>
             <dt>Customer</dt>
             <dd>{view.customerName}</dd>
+            {view.vehicleSupplierName && (
+              <>
+                <dt>Vehicle supplier</dt>
+                <dd>{view.vehicleSupplierName}</dd>
+              </>
+            )}
+            {view.financeProviderName && (
+              <>
+                <dt>Finance provider</dt>
+                <dd>{view.financeProviderName}</dd>
+              </>
+            )}
+            <dt>Broker</dt>
+            <dd>Olaris Consulting Ltd</dd>
             <dt>Total</dt>
             <dd className="mono" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
               {view.totalGBP}

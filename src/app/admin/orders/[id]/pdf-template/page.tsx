@@ -11,7 +11,7 @@
  */
 
 import { notFound } from 'next/navigation'
-import { asc, eq } from 'drizzle-orm'
+import { asc, eq, inArray } from 'drizzle-orm'
 import {
   db,
   orders,
@@ -19,6 +19,7 @@ import {
   companies,
   signatures,
   auditEvents,
+  suppliers,
 } from '@/db/client'
 import { auth } from '@/lib/auth'
 import { verifyRenderToken } from '@/lib/pdf/render-token'
@@ -81,6 +82,23 @@ export default async function PdfTemplatePage({
 
   const customerSig = sigs.find((s) => s.signerRole === 'customer')
   const repSig = sigs.find((s) => s.signerRole === 'rep')
+
+  // Look up supplier + finance provider rows if assigned. Shown on the PDF
+  // so the contract artefact names the parties involved (customer gets a
+  // permanent record of who supplied the vehicle + who funded it).
+  const supplierIds = [order.vehicleSupplierId, order.financeProviderId].filter(
+    (x): x is string => !!x,
+  )
+  const assignedSuppliers =
+    supplierIds.length > 0
+      ? await db.select().from(suppliers).where(inArray(suppliers.id, supplierIds))
+      : []
+  const vehicleSupplierRow = order.vehicleSupplierId
+    ? assignedSuppliers.find((s) => s.id === order.vehicleSupplierId) ?? null
+    : null
+  const financeProviderRow = order.financeProviderId
+    ? assignedSuppliers.find((s) => s.id === order.financeProviderId) ?? null
+    : null
 
   // The PDF's Certificate of Completion is a contract artefact, not a
   // general-purpose debug log. Only lifecycle events belong on it. PDF
@@ -201,6 +219,33 @@ export default async function PdfTemplatePage({
             <dd>{order.vehicle.co2} g/km</dd>
           </dl>
         </Section>
+
+        {(vehicleSupplierRow || financeProviderRow) && (
+          <Section title="Parties">
+            <dl className="pdf-kv">
+              {vehicleSupplierRow && (
+                <>
+                  <dt>Vehicle supplier</dt>
+                  <dd>
+                    {vehicleSupplierRow.tradingName ?? vehicleSupplierRow.legalName}
+                    {vehicleSupplierRow.tradingName &&
+                      ` (${vehicleSupplierRow.legalName})`}
+                  </dd>
+                </>
+              )}
+              {financeProviderRow && (
+                <>
+                  <dt>Finance provider</dt>
+                  <dd>
+                    {financeProviderRow.tradingName ?? financeProviderRow.legalName}
+                  </dd>
+                </>
+              )}
+              <dt>Broker</dt>
+              <dd>Olaris Consulting Ltd</dd>
+            </dl>
+          </Section>
+        )}
 
         {order.options.length > 0 && (
           <Section title={`Factory options (${order.options.length})`}>

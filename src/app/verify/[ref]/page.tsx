@@ -18,13 +18,14 @@
  */
 
 import Link from 'next/link'
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq, inArray } from 'drizzle-orm'
 import {
   db,
   orders,
   customers,
   signatures,
   documents,
+  suppliers,
 } from '@/db/client'
 import { fmtDateTime, fmtGBPFromPence } from '@/lib/format'
 import { mintDownloadToken } from '@/lib/pdf/download-token'
@@ -77,6 +78,28 @@ export default async function VerifyPage({
       .limit(1),
   ])
 
+  // Resolve supplier + finance provider names for display. /verify is public
+  // so we show the party names but no contact details (those are internal).
+  const supplierIds = [order.vehicleSupplierId, order.financeProviderId].filter(
+    (x): x is string => !!x,
+  )
+  const supplierRows =
+    supplierIds.length > 0
+      ? await db.select().from(suppliers).where(inArray(suppliers.id, supplierIds))
+      : []
+  const vehicleSupplierName = order.vehicleSupplierId
+    ? (() => {
+        const s = supplierRows.find((x) => x.id === order.vehicleSupplierId)
+        return s ? (s.tradingName ?? s.legalName) : null
+      })()
+    : null
+  const financeProviderName = order.financeProviderId
+    ? (() => {
+        const s = supplierRows.find((x) => x.id === order.financeProviderId)
+        return s ? (s.tradingName ?? s.legalName) : null
+      })()
+    : null
+
   const view = {
     ref: order.ref,
     status: order.status,
@@ -85,6 +108,8 @@ export default async function VerifyPage({
     vehicle: `${order.vehicle.make} ${order.vehicle.model}`,
     totalGBP: fmtGBPFromPence(order.totalAmountPence),
     customerName: `${customer.firstName} ${customer.lastName}`,
+    vehicleSupplierName,
+    financeProviderName,
     signers: sigs.map((s) => ({
       role: s.signerRole,
       name: s.signerName,

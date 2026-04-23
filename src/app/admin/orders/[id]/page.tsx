@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { desc, eq } from 'drizzle-orm'
+import { asc, desc, eq, inArray } from 'drizzle-orm'
 import {
   db,
   orders,
@@ -9,6 +9,7 @@ import {
   auditEvents,
   signatures,
   signingTokens,
+  suppliers,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtDate, fmtDateTime, fmtRelative } from '@/lib/format'
@@ -25,8 +26,13 @@ import {
   duplicateOrderAction,
   type RepSignInput,
 } from '../../actions/orders'
+import {
+  setOrderVehicleSupplierAction,
+  setOrderFinanceProviderAction,
+} from '../../actions/suppliers'
 import { RepSignButton } from './RepSignButton'
 import { DownloadPdfButton } from './DownloadPdfButton'
+import { SupplierSelectors } from './SupplierSelectors'
 
 export const metadata = { title: 'Order' }
 
@@ -52,7 +58,7 @@ export default async function OrderDetailPage({
   if (rows.length === 0) notFound()
   const { order, customer, company } = rows[0]
 
-  const [orderEvents, orderSigs, activeToken] = await Promise.all([
+  const [orderEvents, orderSigs, activeToken, activeSuppliers] = await Promise.all([
     db
       .select()
       .from(auditEvents)
@@ -66,6 +72,13 @@ export default async function OrderDetailPage({
       .where(eq(signingTokens.orderId, id))
       .orderBy(desc(signingTokens.createdAt))
       .limit(1),
+    // Load all active suppliers once; the component splits them into
+    // vehicle-suppliers (non-funder) and finance-providers (funder) locally.
+    db
+      .select()
+      .from(suppliers)
+      .where(eq(suppliers.active, true))
+      .orderBy(asc(suppliers.legalName)),
   ])
 
   const canEdit = order.status === 'draft'
@@ -117,6 +130,71 @@ export default async function OrderDetailPage({
       redirect(`/admin/orders/${result.id}/edit`)
     }
   }
+  async function assignVehicleSupplier(supplierId: string | null) {
+    'use server'
+    return setOrderVehicleSupplierAction(id, supplierId)
+  }
+  async function assignFinanceProvider(supplierId: string | null) {
+    'use server'
+    return setOrderFinanceProviderAction(id, supplierId)
+  }
+
+  // Split + map the suppliers into lightweight options for the client. Also
+  // look up the two currently-assigned ones (if any) for the summary
+  // display under each select.
+  const vehicleSupplierOptions = activeSuppliers
+    .filter((s) => s.kind !== 'funder')
+    .map((s) => ({
+      id: s.id,
+      kind: s.kind,
+      displayName: s.tradingName ?? s.legalName,
+      contactName: s.primaryContactName,
+    }))
+  const financeProviderOptions = activeSuppliers
+    .filter((s) => s.kind === 'funder')
+    .map((s) => ({
+      id: s.id,
+      kind: s.kind,
+      displayName: s.tradingName ?? s.legalName,
+      contactName: s.primaryContactName,
+    }))
+
+  // Even if inactive (e.g. supplier deactivated after the assignment), look
+  // up by id so the summary panel still renders the historic link.
+  const assignedIds = [order.vehicleSupplierId, order.financeProviderId].filter(
+    (x): x is string => !!x,
+  )
+  const assignedSuppliers =
+    assignedIds.length > 0
+      ? await db
+          .select()
+          .from(suppliers)
+          .where(inArray(suppliers.id, assignedIds))
+      : []
+  const assignedVehicleDisplay = order.vehicleSupplierId
+    ? (() => {
+        const s = assignedSuppliers.find((x) => x.id === order.vehicleSupplierId)
+        return s
+          ? {
+              id: s.id,
+              name: s.tradingName ?? s.legalName,
+              contact: `${s.primaryContactName} · ${s.primaryContactEmail}${s.primaryContactPhone ? ` · ${s.primaryContactPhone}` : ''}`,
+            }
+          : null
+      })()
+    : null
+  const assignedFinanceDisplay = order.financeProviderId
+    ? (() => {
+        const s = assignedSuppliers.find((x) => x.id === order.financeProviderId)
+        return s
+          ? {
+              id: s.id,
+              name: s.tradingName ?? s.legalName,
+              contact: `${s.primaryContactName} · ${s.primaryContactEmail}${s.primaryContactPhone ? ` · ${s.primaryContactPhone}` : ''}`,
+            }
+          : null
+      })()
+    : null
 
   return (
     <div className="adm-page">
@@ -281,6 +359,18 @@ export default async function OrderDetailPage({
               </table>
             )}
           </div>
+
+          <SupplierSelectors
+            orderId={id}
+            vehicleSuppliers={vehicleSupplierOptions}
+            financeProviders={financeProviderOptions}
+            assignedVehicleId={order.vehicleSupplierId}
+            assignedFinanceId={order.financeProviderId}
+            assignedVehicleDisplay={assignedVehicleDisplay}
+            assignedFinanceDisplay={assignedFinanceDisplay}
+            assignVehicle={assignVehicleSupplier}
+            assignFinance={assignFinanceProvider}
+          />
 
           <div className="adm-card">
             <div className="adm-card-head">
