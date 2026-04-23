@@ -57,6 +57,50 @@ export function OrderStatusPill({ status }: { status: string }) {
   )
 }
 
+export function SupplierPoStatusPill({ status }: { status: string }) {
+  const label: Record<string, string> = {
+    draft: 'Draft',
+    sent: 'Sent',
+    acknowledged: 'Acknowledged',
+    cancelled: 'Cancelled',
+  }
+  const tone: Record<string, { fg: string; bg: string; border: string }> = {
+    draft: { fg: '#475569', bg: '#f1f5f9', border: '#cbd5e1' },
+    sent: { fg: '#0369a1', bg: '#e0f2fe', border: '#7dd3fc' },
+    acknowledged: { fg: '#047857', bg: '#d1fae5', border: '#6ee7b7' },
+    cancelled: { fg: '#991b1b', bg: '#fef2f2', border: '#fecaca' },
+  }
+  const t = tone[status] ?? { fg: '#334155', bg: '#f1f5f9', border: '#cbd5e1' }
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '2px 10px',
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: 0.3,
+        textTransform: 'uppercase',
+        color: t.fg,
+        background: t.bg,
+        border: `1px solid ${t.border}`,
+      }}
+    >
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: 3,
+          background: t.fg,
+        }}
+      />
+      {label[status] ?? status}
+    </span>
+  )
+}
+
 export function QuoteStatusPill({ status }: { status: string }) {
   const label: Record<string, string> = {
     draft: 'Draft',
@@ -145,6 +189,13 @@ export function auditEventLabel(type: string): string {
       'order.reg_recorded': 'Registration plate recorded',
       'order.logistics_updated': 'Logistics details updated',
       'order.status_override': 'Status override (admin)',
+      'supplier_po.created': 'Supplier PO drafted',
+      'supplier_po.updated': 'Supplier PO updated',
+      'supplier_po.sent': 'Supplier PO sent to dealer',
+      'supplier_po.acknowledged': 'Supplier PO acknowledged',
+      'supplier_po.cancelled': 'Supplier PO cancelled',
+      'supplier_po.snapshot_refreshed': 'Supplier PO snapshot refreshed',
+      'supplier_po.superseded_by': 'Superseded by new PO',
       'quote.created': 'Quote created',
       'quote.updated': 'Quote updated',
       'quote.sent': 'Quote sent to customer',

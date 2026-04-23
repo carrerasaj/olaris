@@ -10,6 +10,7 @@ import {
   signatures,
   signingTokens,
   suppliers,
+  supplierOrders,
   quotes,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
@@ -43,6 +44,8 @@ import { RepSignButton } from './RepSignButton'
 import { DownloadPdfButton } from './DownloadPdfButton'
 import { SupplierSelectors } from './SupplierSelectors'
 import { DeliveryCard } from './DeliveryCard'
+import { SupplierPOCard } from './SupplierPOCard'
+import { createDraftSupplierPOAction } from '../../actions/supplier-po'
 
 export const metadata = { title: 'Order' }
 
@@ -68,8 +71,14 @@ export default async function OrderDetailPage({
   if (rows.length === 0) notFound()
   const { order, customer, company } = rows[0]
 
-  const [orderEvents, orderSigs, activeToken, activeSuppliers, sourceQuoteRows] =
-    await Promise.all([
+  const [
+    orderEvents,
+    orderSigs,
+    activeToken,
+    activeSuppliers,
+    sourceQuoteRows,
+    supplierPoRows,
+  ] = await Promise.all([
     db
       .select()
       .from(auditEvents)
@@ -97,7 +106,15 @@ export default async function OrderDetailPage({
           .where(eq(quotes.id, order.sourceQuoteId))
           .limit(1)
       : Promise.resolve([] as Array<{ id: string; ref: string }>),
+    db
+      .select()
+      .from(supplierOrders)
+      .where(eq(supplierOrders.orderId, id))
+      .orderBy(desc(supplierOrders.createdAt))
+      .limit(10),
   ])
+
+  const activePO = supplierPoRows.find((p) => p.status !== 'cancelled') ?? null
 
   const canEdit = order.status === 'draft'
   const canSend = order.status === 'draft'
@@ -203,6 +220,13 @@ export default async function OrderDetailPage({
     const result = await duplicateOrderAction(id)
     if (result.ok && result.id) {
       redirect(`/admin/orders/${result.id}/edit`)
+    }
+  }
+  async function createSupplierPoDraft() {
+    'use server'
+    const result = await createDraftSupplierPOAction(id)
+    if (result.ok) {
+      redirect(`/admin/orders/${id}/supplier-po`)
     }
   }
   async function assignVehicleSupplier(supplierId: string | null) {
@@ -475,6 +499,12 @@ export default async function OrderDetailPage({
               cancelPostSign: cancelPostSign,
               override: override,
             }}
+          />
+
+          <SupplierPOCard
+            order={order}
+            activePO={activePO}
+            createDraftAction={createSupplierPoDraft}
           />
 
           <div className="adm-card">

@@ -109,6 +109,13 @@ export const auditEventType = pgEnum('audit_event_type', [
   'order.reg_recorded',
   'order.logistics_updated',
   'order.status_override',
+  'supplier_po.created',
+  'supplier_po.updated',
+  'supplier_po.sent',
+  'supplier_po.acknowledged',
+  'supplier_po.cancelled',
+  'supplier_po.snapshot_refreshed',
+  'supplier_po.superseded_by',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -135,6 +142,16 @@ export const supplierKind = pgEnum('supplier_kind', [
   'oem_partner',
   'importer',
   'funder',
+])
+
+// Supplier purchase-order lifecycle (Phase 10). No `delivered` — that lives
+// on the customer order via the Phase 9 delivery lifecycle. A PO's job is
+// done at `acknowledged`.
+export const supplierPoStatus = pgEnum('supplier_po_status', [
+  'draft',
+  'sent',
+  'acknowledged',
+  'cancelled',
 ])
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
@@ -580,6 +597,98 @@ export const quoteTokens = pgTable(
   }),
 )
 
+// Phase 10 — Olaris → supplier purchase order.
+//
+// One row per customer order (partial unique index enforces "one active PO
+// per order" while cancelled rows are allowed to coexist for the audit
+// trail). Snapshot jsonb (vehicle/options/delivery) is refreshable while
+// draft and frozen at send time — after `sent`, this row is the canonical
+// record of what Olaris asked the supplier to supply, even if the customer
+// order diverges later.
+//
+// Margin fields are computed and written by the server on every save; the
+// rule is:
+//   marginPence = customerTotalSnapshotPence - purchaseTotalPence + marginAdjustmentPence
+// There is no admin override of marginPence itself — corrections go via
+// marginAdjustmentPence + a required note.
+export const supplierOrders = pgTable(
+  'supplier_orders',
+  {
+    id: id(),
+    // Human-facing ref: OL-PO-YYYY-MM-XXXX. "PO" segment distinguishes from
+    // customer orders (OL-YYYY-…) and quotes (OL-Q-YYYY-…).
+    ref: text('ref').notNull().unique(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    supplierId: text('supplier_id')
+      .notNull()
+      .references(() => suppliers.id, { onDelete: 'restrict' }),
+    status: supplierPoStatus('status').notNull().default('draft'),
+
+    // Snapshot of customer-order jsonb fields at PO creation / last refresh.
+    // Frozen at send. Supplier sees this, not whatever the customer order
+    // currently shows.
+    vehicle: jsonb('vehicle').$type<VehicleJson>().notNull(),
+    options: jsonb('options').$type<OrderOptionJson[]>().notNull().default([]),
+    delivery: jsonb('delivery').$type<DeliveryJson>().notNull(),
+
+    // Purchase-side commercials (what Olaris pays the supplier). Admin-
+    // entered; totals + margin are derived server-side on save.
+    purchaseNetPence: integer('purchase_net_pence').notNull().default(0),
+    purchaseVatRate: integer('purchase_vat_rate').notNull().default(20),
+    purchaseVatPence: integer('purchase_vat_pence').notNull().default(0),
+    purchaseGrossPence: integer('purchase_gross_pence').notNull().default(0),
+    deliveryFeePence: integer('delivery_fee_pence').notNull().default(0),
+    onRoadPence: integer('on_road_pence').notNull().default(0),
+    purchaseTotalPence: integer('purchase_total_pence').notNull().default(0),
+
+    // Margin snapshot — derived, stored for reporting stability.
+    customerTotalSnapshotPence: integer('customer_total_snapshot_pence'),
+    marginAdjustmentPence: integer('margin_adjustment_pence').notNull().default(0),
+    marginAdjustmentNote: text('margin_adjustment_note'),
+    marginPence: integer('margin_pence'),
+    // stored as basis points for precision: (margin / customerTotal) × 10000
+    marginBps: integer('margin_bps'),
+
+    // Supplier-side refs captured at acknowledge / invoice time
+    supplierPoRefReceived: text('supplier_po_ref_received'),
+    supplierEtaDate: text('supplier_eta_date'),
+    supplierInvoiceRef: text('supplier_invoice_ref'),
+
+    // Operational notes
+    notesToSupplier: text('notes_to_supplier'),
+    internalNotes: text('internal_notes'),
+
+    // PDF artefact (set at send)
+    pdfBlobUrl: text('pdf_blob_url'),
+    pdfSha256: text('pdf_sha256'),
+
+    // Lifecycle stamps
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    acknowledgedAt: timestamp('acknowledged_at', { withTimezone: true }),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    cancellationReason: text('cancellation_reason'),
+
+    createdBy: text('created_by').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    refIdx: uniqueIndex('supplier_orders_ref_idx').on(t.ref),
+    orderIdx: index('supplier_orders_order_idx').on(t.orderId),
+    supplierIdx: index('supplier_orders_supplier_idx').on(t.supplierId),
+    statusIdx: index('supplier_orders_status_idx').on(t.status),
+    // Partial unique index: at most one non-cancelled PO per customer order.
+    // Cancelled rows are free to coexist, preserving audit history.
+    oneActivePerOrder: uniqueIndex('supplier_orders_one_active_per_order')
+      .on(t.orderId)
+      .where(sql`status <> 'cancelled'`),
+  }),
+)
+
 export const signingTokens = pgTable(
   'signing_tokens',
   {
@@ -818,6 +927,7 @@ export const ordersRelations = relations(orders, ({ many, one }) => ({
   activities: many(activities),
   documents: many(documents),
   reminders: many(reminderSchedule),
+  supplierOrders: many(supplierOrders),
   // The quote this order was converted from, if any.
   sourceQuote: one(quotes, {
     fields: [orders.sourceQuoteId],
@@ -863,7 +973,23 @@ export const suppliersRelations = relations(suppliers, ({ many, one }) => ({
   financeProviderOrders: many(orders, { relationName: 'financeProvider' }),
   vehicleSupplierQuotes: many(quotes, { relationName: 'quoteVehicleSupplier' }),
   financeProviderQuotes: many(quotes, { relationName: 'quoteFinanceProvider' }),
+  supplierOrders: many(supplierOrders),
   createdBy: one(users, { fields: [suppliers.createdBy], references: [users.id] }),
+}))
+
+export const supplierOrdersRelations = relations(supplierOrders, ({ one }) => ({
+  order: one(orders, {
+    fields: [supplierOrders.orderId],
+    references: [orders.id],
+  }),
+  supplier: one(suppliers, {
+    fields: [supplierOrders.supplierId],
+    references: [suppliers.id],
+  }),
+  createdBy: one(users, {
+    fields: [supplierOrders.createdBy],
+    references: [users.id],
+  }),
 }))
 
 export const signingTokensRelations = relations(signingTokens, ({ one, many }) => ({
@@ -924,6 +1050,9 @@ export type NewCompany = typeof companies.$inferInsert
 export type Supplier = typeof suppliers.$inferSelect
 export type NewSupplier = typeof suppliers.$inferInsert
 export type SupplierKind = (typeof supplierKind.enumValues)[number]
+export type SupplierOrder = typeof supplierOrders.$inferSelect
+export type NewSupplierOrder = typeof supplierOrders.$inferInsert
+export type SupplierPoStatus = (typeof supplierPoStatus.enumValues)[number]
 export type Order = typeof orders.$inferSelect
 export type NewOrder = typeof orders.$inferInsert
 export type Quote = typeof quotes.$inferSelect

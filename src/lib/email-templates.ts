@@ -159,6 +159,69 @@ This quote is valid until ${expiry}. To accept it, just reply to this email or g
   }
 }
 
+interface SupplierPoInput {
+  supplierContactName: string
+  supplierTradingName: string
+  poRef: string
+  customerOrderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  vehicleDerivative: string
+  purchaseTotalGBP: string
+  etaRequested: string | null
+  notesToSupplier: string | null
+  replyToEmail: string
+}
+
+export function supplierPoEmail(input: SupplierPoInput) {
+  const notesBlock = input.notesToSupplier
+    ? `<div style="padding:14px 16px;background:#f8fafc;border-left:3px solid #06b6d4;border-radius:4px;margin:18px 0"><div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;font-weight:700;margin-bottom:6px">Notes from Olaris</div><div style="font-size:13px;color:#0f172a;line-height:1.5;white-space:pre-wrap">${escapeHtml(input.notesToSupplier)}</div></div>`
+    : ''
+  const etaBlock = input.etaRequested
+    ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Requested delivery</td><td style="padding:14px 18px;text-align:right;font-size:13px;color:#0f172a;font-weight:600;border-top:1px solid #e4e9f1">${escapeHtml(input.etaRequested)}</td></tr>`
+    : ''
+  return {
+    subject: `Purchase order ${input.poRef} — ${input.vehicleMake} ${input.vehicleModel}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Purchase order attached</h1>
+      <p style="${P}">Hi ${escapeHtml(input.supplierContactName)},</p>
+      <p style="${P}">
+        Please find attached our purchase order for a
+        <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}${input.vehicleDerivative ? ' ' + escapeHtml(input.vehicleDerivative) : ''}</strong>
+        on behalf of our customer.
+      </p>
+      <p style="${P}">
+        We've also attached the customer's signed order for your records — this is
+        the legally-executed contract between Olaris and the end customer.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">PO reference</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.poRef)}</td></tr>
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Customer order ref</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600;border-top:1px solid #e4e9f1">${escapeHtml(input.customerOrderRef)}</td></tr>
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Purchase total (inc. VAT)</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.purchaseTotalGBP)}</td></tr>
+        ${etaBlock}
+      </table>
+      ${notesBlock}
+      <p style="${SMALL}">
+        Please reply to this email to acknowledge and share your PO reference
+        + confirmed ETA. Any queries to <a href="mailto:${escapeHtml(input.replyToEmail)}" style="color:#0b1e3f">${escapeHtml(input.replyToEmail)}</a>.
+      </p>
+    `),
+    text: `Hi ${input.supplierContactName},
+
+Please find attached our purchase order for a ${input.vehicleMake} ${input.vehicleModel}${input.vehicleDerivative ? ' ' + input.vehicleDerivative : ''} on behalf of our customer.
+
+PO reference: ${input.poRef}
+Customer order ref: ${input.customerOrderRef}
+Purchase total (inc. VAT): ${input.purchaseTotalGBP}${input.etaRequested ? `\nRequested delivery: ${input.etaRequested}` : ''}${input.notesToSupplier ? `\n\nNotes:\n${input.notesToSupplier}` : ''}
+
+We've also attached the customer's signed order for your records.
+
+Please reply to this email with your PO reference and confirmed ETA.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
 interface OrderSignedInput {
   recipientFirstName: string
   orderRef: string

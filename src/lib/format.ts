@@ -62,6 +62,20 @@ export function generateQuoteRef(): string {
   return `OL-Q-${y}-${m}-${suffix}`
 }
 
+// Supplier PO refs — OL-PO-YYYY-MM-XXXX. Distinct prefix so the dealer
+// immediately knows whether a ref we sent them is a PO from Olaris vs a
+// customer order ref they might have also seen.
+export function generateSupplierPoRef(): string {
+  const d = new Date()
+  const y = d.getUTCFullYear()
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0')
+  const ALPH = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+  const bytes = new Uint8Array(4)
+  crypto.getRandomValues(bytes)
+  const suffix = Array.from(bytes, (b) => ALPH[b % ALPH.length]).join('')
+  return `OL-PO-${y}-${m}-${suffix}`
+}
+
 export function fmtDate(d: Date | string | null | undefined): string {
   if (!d) return '—'
   const date = typeof d === 'string' ? new Date(d) : d
