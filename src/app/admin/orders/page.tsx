@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { desc, eq, inArray } from 'drizzle-orm'
-import { db, orders, customers } from '@/db/client'
+import { db, orders, customers, suppliers } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtRelative } from '@/lib/format'
 import { OrderStatusPill } from '../components'
@@ -63,9 +63,12 @@ export default async function OrdersListPage({
       firstName: customers.firstName,
       lastName: customers.lastName,
       customerEmail: customers.email,
+      supplierLegalName: suppliers.legalName,
+      supplierTradingName: suppliers.tradingName,
     })
     .from(orders)
     .innerJoin(customers, eq(orders.customerId, customers.id))
+    .leftJoin(suppliers, eq(orders.vehicleSupplierId, suppliers.id))
     .orderBy(desc(orders.createdAt))
     .limit(200)
 
@@ -130,6 +133,7 @@ export default async function OrdersListPage({
                 <th>Ref</th>
                 <th>Customer</th>
                 <th>Vehicle</th>
+                <th>Supplier</th>
                 <th className="num">Total</th>
                 <th>Status</th>
                 <th>Created</th>
@@ -149,6 +153,9 @@ export default async function OrdersListPage({
                   </td>
                   <td>
                     {o.vehicle?.make} {o.vehicle?.model}
+                  </td>
+                  <td style={{ color: o.supplierLegalName ? undefined : '#cbd5e1' }}>
+                    {o.supplierTradingName ?? o.supplierLegalName ?? '—'}
                   </td>
                   <td className="num mono">{fmtGBPFromPence(o.totalAmountPence)}</td>
                   <td>
