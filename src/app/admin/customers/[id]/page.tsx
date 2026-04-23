@@ -1,10 +1,17 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { desc, eq } from 'drizzle-orm'
-import { db, customers, companies, orders, activities } from '@/db/client'
+import {
+  db,
+  customers,
+  companies,
+  orders,
+  quotes,
+  activities,
+} from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtDate, fmtRelative } from '@/lib/format'
-import { OrderStatusPill } from '../../components'
+import { OrderStatusPill, QuoteStatusPill } from '../../components'
 import { addActivityAction, completeActivityAction } from '../../actions/customers'
 
 export const metadata = { title: 'Customer' }
@@ -30,12 +37,18 @@ export default async function CustomerDetailPage({
   if (row.length === 0) notFound()
   const { customer, company } = row[0]
 
-  const [customerOrders, customerActivities] = await Promise.all([
+  const [customerOrders, customerQuotes, customerActivities] = await Promise.all([
     db
       .select()
       .from(orders)
       .where(eq(orders.customerId, id))
       .orderBy(desc(orders.createdAt))
+      .limit(50),
+    db
+      .select()
+      .from(quotes)
+      .where(eq(quotes.customerId, id))
+      .orderBy(desc(quotes.createdAt))
       .limit(50),
     db
       .select()
@@ -77,6 +90,12 @@ export default async function CustomerDetailPage({
             Edit
           </Link>
           <Link
+            href={`/admin/quotes/new?customerId=${customer.id}`}
+            className="adm-btn adm-btn-ghost"
+          >
+            New quote
+          </Link>
+          <Link
             href={`/admin/orders/new?customerId=${customer.id}`}
             className="adm-btn adm-btn-primary"
           >
@@ -87,6 +106,48 @@ export default async function CustomerDetailPage({
 
       <div className="adm-split">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {customerQuotes.length > 0 && (
+            <div className="adm-card">
+              <div className="adm-card-head">
+                <h2 className="adm-card-title">
+                  Quotes ({customerQuotes.length})
+                </h2>
+              </div>
+              <table className="adm-table">
+                <thead>
+                  <tr>
+                    <th>Ref</th>
+                    <th>Vehicle</th>
+                    <th className="num">Total</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {customerQuotes.map((q) => (
+                    <tr key={q.id}>
+                      <td className="mono">
+                        <Link href={`/admin/quotes/${q.id}`}>{q.ref}</Link>
+                      </td>
+                      <td>
+                        {q.vehicle?.make} {q.vehicle?.model}
+                      </td>
+                      <td className="num mono">
+                        {fmtGBPFromPence(q.totalAmountPence)}
+                      </td>
+                      <td>
+                        <QuoteStatusPill status={q.status} />
+                      </td>
+                      <td style={{ color: '#64748b', fontSize: 12 }}>
+                        {fmtRelative(q.createdAt)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           <div className="adm-card">
             <div className="adm-card-head">
               <h2 className="adm-card-title">Orders ({customerOrders.length})</h2>

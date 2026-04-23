@@ -48,6 +48,20 @@ export function generateOrderRef(): string {
   return `OL-${y}-${m}-${suffix}`
 }
 
+// Quote refs sort visually with orders but never collide thanks to the "Q"
+// segment. A customer can tell at a glance whether a ref we sent them is a
+// pre-commit quote or a live order.
+export function generateQuoteRef(): string {
+  const d = new Date()
+  const y = d.getUTCFullYear()
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0')
+  const ALPH = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+  const bytes = new Uint8Array(4)
+  crypto.getRandomValues(bytes)
+  const suffix = Array.from(bytes, (b) => ALPH[b % ALPH.length]).join('')
+  return `OL-Q-${y}-${m}-${suffix}`
+}
+
 export function fmtDate(d: Date | string | null | undefined): string {
   if (!d) return '—'
   const date = typeof d === 'string' ? new Date(d) : d

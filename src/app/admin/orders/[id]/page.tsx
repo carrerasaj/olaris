@@ -10,6 +10,7 @@ import {
   signatures,
   signingTokens,
   suppliers,
+  quotes,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtDate, fmtDateTime, fmtRelative } from '@/lib/format'
@@ -58,7 +59,8 @@ export default async function OrderDetailPage({
   if (rows.length === 0) notFound()
   const { order, customer, company } = rows[0]
 
-  const [orderEvents, orderSigs, activeToken, activeSuppliers] = await Promise.all([
+  const [orderEvents, orderSigs, activeToken, activeSuppliers, sourceQuoteRows] =
+    await Promise.all([
     db
       .select()
       .from(auditEvents)
@@ -79,6 +81,13 @@ export default async function OrderDetailPage({
       .from(suppliers)
       .where(eq(suppliers.active, true))
       .orderBy(asc(suppliers.legalName)),
+    order.sourceQuoteId
+      ? db
+          .select({ id: quotes.id, ref: quotes.ref })
+          .from(quotes)
+          .where(eq(quotes.id, order.sourceQuoteId))
+          .limit(1)
+      : Promise.resolve([] as Array<{ id: string; ref: string }>),
   ])
 
   const canEdit = order.status === 'draft'
@@ -287,6 +296,29 @@ export default async function OrderDetailPage({
           )}
         </div>
       </div>
+
+      {sourceQuoteRows[0] && (
+        <div
+          style={{
+            padding: '10px 14px',
+            background: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            color: '#0b1e3f',
+            borderRadius: 6,
+            fontSize: 13,
+            marginBottom: 16,
+          }}
+        >
+          Created from quote{' '}
+          <Link
+            href={`/admin/quotes/${sourceQuoteRows[0].id}`}
+            className="mono"
+            style={{ fontWeight: 700 }}
+          >
+            {sourceQuoteRows[0].ref}
+          </Link>
+        </div>
+      )}
 
       <div className="adm-split">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

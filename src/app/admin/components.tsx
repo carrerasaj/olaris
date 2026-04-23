@@ -53,6 +53,58 @@ export function OrderStatusPill({ status }: { status: string }) {
   )
 }
 
+export function QuoteStatusPill({ status }: { status: string }) {
+  const label: Record<string, string> = {
+    draft: 'Draft',
+    sent: 'Sent',
+    viewed: 'Viewed',
+    accepted: 'Accepted',
+    declined: 'Declined',
+    expired: 'Expired',
+    converted: 'Converted',
+    cancelled: 'Cancelled',
+  }
+  const tone: Record<string, { fg: string; bg: string; border: string }> = {
+    draft: { fg: '#475569', bg: '#f1f5f9', border: '#cbd5e1' },
+    sent: { fg: '#0369a1', bg: '#e0f2fe', border: '#7dd3fc' },
+    viewed: { fg: '#0e7490', bg: '#cffafe', border: '#67e8f9' },
+    accepted: { fg: '#047857', bg: '#d1fae5', border: '#6ee7b7' },
+    declined: { fg: '#b91c1c', bg: '#fee2e2', border: '#fca5a5' },
+    expired: { fg: '#78716c', bg: '#f5f5f4', border: '#d6d3d1' },
+    converted: { fg: '#0b1e3f', bg: '#dbeafe', border: '#93c5fd' },
+    cancelled: { fg: '#991b1b', bg: '#fef2f2', border: '#fecaca' },
+  }
+  const t = tone[status] ?? { fg: '#334155', bg: '#f1f5f9', border: '#cbd5e1' }
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '2px 10px',
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: 0.3,
+        textTransform: 'uppercase',
+        color: t.fg,
+        background: t.bg,
+        border: `1px solid ${t.border}`,
+      }}
+    >
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: 3,
+          background: t.fg,
+        }}
+      />
+      {label[status] ?? status}
+    </span>
+  )
+}
+
 export function auditEventLabel(type: string): string {
   return (
     {
@@ -74,6 +126,21 @@ export function auditEventLabel(type: string): string {
       'reminder.sent': 'Reminder sent',
       'email.sent': 'Email sent',
       'email.failed': 'Email failed',
+      'supplier.created': 'Supplier created',
+      'supplier.updated': 'Supplier updated',
+      'supplier.deactivated': 'Supplier deactivated',
+      'supplier.reactivated': 'Supplier reactivated',
+      'order.vehicle_supplier_set': 'Vehicle supplier assigned',
+      'order.finance_provider_set': 'Finance provider assigned',
+      'quote.created': 'Quote created',
+      'quote.updated': 'Quote updated',
+      'quote.sent': 'Quote sent to customer',
+      'quote.viewed': 'Quote viewed by customer',
+      'quote.accepted': 'Quote accepted',
+      'quote.declined': 'Quote declined',
+      'quote.expired': 'Quote expired',
+      'quote.converted': 'Quote converted to order',
+      'quote.cancelled': 'Quote cancelled',
     }[type] ?? type
   )
 }

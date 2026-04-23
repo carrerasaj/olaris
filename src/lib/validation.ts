@@ -180,3 +180,29 @@ export const orderSendSchema = orderDraftSchema.extend({
     postcode: z.string().min(5, 'Delivery postcode required'),
   }),
 })
+
+// Quotes share the order draft shape (same jsonb columns) minus `consent`
+// (not captured at quote time) plus supplier FKs and customer-facing notes.
+// We use .omit/extend rather than redeclaring so any future field added to
+// orderDraftSchema is automatically inherited by quotes.
+export const quoteDraftSchema = orderDraftSchema
+  .omit({ consent: true })
+  .extend({
+    vehicleSupplierId: z.string().optional().nullable(),
+    financeProviderId: z.string().optional().nullable(),
+    customerNotes: z.string().max(5000).optional().nullable(),
+  })
+
+export type QuoteDraftInput = z.infer<typeof quoteDraftSchema>
+
+// Stricter check before a quote can leave `draft` for `sent`.
+export const quoteSendSchema = quoteDraftSchema.extend({
+  vehicle: quoteDraftSchema.shape.vehicle.extend({
+    make: z.string().min(1, 'Vehicle make required'),
+    model: z.string().min(1, 'Vehicle model required'),
+  }),
+  pricing: quoteDraftSchema.shape.pricing.refine(
+    (p) => p.vehicleNetPence > 0,
+    { message: 'Vehicle net price must be greater than zero' },
+  ),
+})

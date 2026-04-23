@@ -101,6 +101,64 @@ This code expires in 10 minutes. If you didn't request it, please contact us.
   }
 }
 
+interface QuoteSentInput {
+  customerFirstName: string
+  quoteRef: string
+  vehicleMake: string
+  vehicleModel: string
+  totalGBP: string
+  monthlyGBP: string | null
+  viewUrl: string
+  expiresAt: Date
+}
+
+export function quoteSentEmail(input: QuoteSentInput) {
+  const expiry = input.expiresAt.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+  const monthlyRow = input.monthlyGBP
+    ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Monthly</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.monthlyGBP)}</td></tr>`
+    : ''
+  return {
+    subject: `Your Olaris quote — ${input.vehicleMake} ${input.vehicleModel} (${input.quoteRef})`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Your quote is ready</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Thanks for your interest. Here's your quote for the
+        <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>.
+        Full breakdown at the link below.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Quote reference</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.quoteRef)}</td></tr>
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Drive-away total</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.totalGBP)}</td></tr>
+        ${monthlyRow}
+      </table>
+      <div style="text-align:center;margin:28px 0">
+        <a href="${input.viewUrl}" style="${BTN}">View your quote</a>
+      </div>
+      <p style="${SMALL}">
+        This quote is valid until <strong>${expiry}</strong>. To accept it, just reply to
+        this email or give us a call — we'll prepare the order for signing.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Thanks for your interest. Here's your quote for the ${input.vehicleMake} ${input.vehicleModel}.
+
+Quote reference: ${input.quoteRef}
+Drive-away total: ${input.totalGBP}${input.monthlyGBP ? `\nMonthly: ${input.monthlyGBP}` : ''}
+
+View your quote: ${input.viewUrl}
+
+This quote is valid until ${expiry}. To accept it, just reply to this email or give us a call — we'll prepare the order for signing.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
 interface OrderSignedInput {
   recipientFirstName: string
   orderRef: string

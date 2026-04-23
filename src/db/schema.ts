@@ -21,6 +21,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  type AnyPgColumn,
 } from 'drizzle-orm/pg-core'
 import { nanoid } from 'nanoid'
 
@@ -42,6 +43,20 @@ export const orderStatus = pgEnum('order_status', [
   'partially_signed',
   'signed',
   'delivered',
+  'cancelled',
+])
+// Quote lifecycle. `viewed` is a unique-link-opened activity signal only —
+// not identity, not acceptance. Once a quote leaves `draft` its terms are
+// frozen; edits require cancel + new draft. Terminal states: `converted`,
+// `cancelled`, `declined`, `expired`.
+export const quoteStatus = pgEnum('quote_status', [
+  'draft',
+  'sent',
+  'viewed',
+  'accepted',
+  'declined',
+  'expired',
+  'converted',
   'cancelled',
 ])
 export const signerRole = pgEnum('signer_role', ['customer', 'rep'])
@@ -72,6 +87,15 @@ export const auditEventType = pgEnum('audit_event_type', [
   'supplier.reactivated',
   'order.vehicle_supplier_set',
   'order.finance_provider_set',
+  'quote.created',
+  'quote.updated',
+  'quote.sent',
+  'quote.viewed',
+  'quote.accepted',
+  'quote.declined',
+  'quote.expired',
+  'quote.converted',
+  'quote.cancelled',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -372,6 +396,13 @@ export const orders = pgTable(
       () => suppliers.id,
       { onDelete: 'restrict' },
     ),
+    // Back-link to the quote this order was converted from. Null for orders
+    // created directly. Set null on quote delete — we never lose the order.
+    // `AnyPgColumn` breaks the TS inference cycle with quotes.convertedOrderId.
+    sourceQuoteId: text('source_quote_id').references(
+      (): AnyPgColumn => quotes.id,
+      { onDelete: 'set null' },
+    ),
     status: orderStatus('status').notNull().default('draft'),
     customerType: customerType('customer_type').notNull().default('business'),
     financeType: financeType('finance_type').notNull().default('BCH'),
@@ -410,6 +441,111 @@ export const orders = pgTable(
     refIdx: uniqueIndex('orders_ref_idx').on(t.ref),
     vehicleSupplierIdx: index('orders_vehicle_supplier_idx').on(t.vehicleSupplierId),
     financeProviderIdx: index('orders_finance_provider_idx').on(t.financeProviderId),
+    sourceQuoteIdx: index('orders_source_quote_idx').on(t.sourceQuoteId),
+  }),
+)
+
+// Quotes sit before orders in the funnel. Shape deliberately mirrors
+// `orders` so `convertQuoteToOrderAction` is a field-for-field copy.
+// Terms are immutable after send: once status leaves `draft`, edits
+// require cancel + new draft (no revision layer in v1).
+export const quotes = pgTable(
+  'quotes',
+  {
+    id: id(),
+    // Human-facing ref like OL-Q-2026-04-8F3K. The "Q" segment makes it
+    // instantly clear whether a ref a customer reads back to us is a
+    // committed order or a pre-sale quote.
+    ref: text('ref').notNull().unique(),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'restrict' }),
+    companyId: text('company_id').references(() => companies.id, {
+      onDelete: 'set null',
+    }),
+    // Optional — same role split as orders. Carried through on conversion.
+    vehicleSupplierId: text('vehicle_supplier_id').references(
+      () => suppliers.id,
+      { onDelete: 'restrict' },
+    ),
+    financeProviderId: text('finance_provider_id').references(
+      () => suppliers.id,
+      { onDelete: 'restrict' },
+    ),
+    status: quoteStatus('status').notNull().default('draft'),
+    customerType: customerType('customer_type').notNull().default('business'),
+    financeType: financeType('finance_type').notNull().default('BCH'),
+
+    // Same jsonb blobs as orders — the editor is shared between the two
+    // flows, so the storage shape must be identical.
+    vehicle: jsonb('vehicle').$type<VehicleJson>().notNull(),
+    options: jsonb('options').$type<OrderOptionJson[]>().notNull().default([]),
+    delivery: jsonb('delivery').$type<DeliveryJson>().notNull(),
+    pricing: jsonb('pricing').$type<PricingJson>().notNull(),
+    finance: jsonb('finance').$type<FinanceJson>().notNull(),
+    addons: jsonb('addons').$type<AddonsJson>().notNull(),
+    partExchange: jsonb('part_exchange').$type<PartExchangeJson>(),
+
+    // Internal notes (not shown to customer on public quote view).
+    notes: text('notes'),
+    // Notes shown on the customer-facing /quote/[token] page.
+    customerNotes: text('customer_notes'),
+
+    totalAmountPence: integer('total_amount_pence').notNull().default(0),
+    monthlyAmountPence: integer('monthly_amount_pence').notNull().default(0),
+
+    // Defaults to now() + 14 days at creation; explicit rather than derived
+    // so we can shorten/extend per quote without schema changes.
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+
+    createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    viewedAt: timestamp('viewed_at', { withTimezone: true }),
+    acceptedAt: timestamp('accepted_at', { withTimezone: true }),
+    declinedAt: timestamp('declined_at', { withTimezone: true }),
+    convertedAt: timestamp('converted_at', { withTimezone: true }),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+
+    // Set by `convertQuoteToOrderAction`. Null until conversion. We keep the
+    // quote row around indefinitely — the customer timeline reads from both.
+    // `AnyPgColumn` breaks the TS inference cycle with orders.sourceQuoteId.
+    convertedOrderId: text('converted_order_id').references(
+      (): AnyPgColumn => orders.id,
+      { onDelete: 'set null' },
+    ),
+
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    statusIdx: index('quotes_status_idx').on(t.status),
+    customerIdx: index('quotes_customer_idx').on(t.customerId),
+    createdAtIdx: index('quotes_created_at_idx').on(t.createdAt),
+    refIdx: uniqueIndex('quotes_ref_idx').on(t.ref),
+    expiresAtIdx: index('quotes_expires_at_idx').on(t.expiresAt),
+    convertedOrderIdx: index('quotes_converted_order_idx').on(t.convertedOrderId),
+  }),
+)
+
+// Public view token for /quote/[token]. One active token per quote: the
+// "resend" flow looks up the existing unexpired token and reuses it rather
+// than minting a new URL every time. `consumed_at` is reserved for symmetry
+// with `signing_tokens`; v1 quote tokens are never consumed (view-only).
+export const quoteTokens = pgTable(
+  'quote_tokens',
+  {
+    id: id(),
+    quoteId: text('quote_id')
+      .notNull()
+      .references(() => quotes.id, { onDelete: 'cascade' }),
+    token: text('token').notNull().unique(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    tokenIdx: uniqueIndex('quote_tokens_token_idx').on(t.token),
+    quoteIdx: index('quote_tokens_quote_idx').on(t.quoteId),
   }),
 )
 
@@ -499,6 +635,9 @@ export const auditEvents = pgTable(
   {
     id: id(),
     orderId: text('order_id').references(() => orders.id, { onDelete: 'cascade' }),
+    // Quote-targeted audit rows populate this; order-targeted rows populate
+    // `order_id`. A few events on conversion legitimately populate both.
+    quoteId: text('quote_id').references(() => quotes.id, { onDelete: 'cascade' }),
     customerId: text('customer_id').references(() => customers.id, {
       onDelete: 'set null',
     }),
@@ -516,6 +655,7 @@ export const auditEvents = pgTable(
   },
   (t) => ({
     orderIdx: index('audit_events_order_idx').on(t.orderId),
+    quoteIdx: index('audit_events_quote_idx').on(t.quoteId),
     customerIdx: index('audit_events_customer_idx').on(t.customerId),
     eventTypeIdx: index('audit_events_event_type_idx').on(t.eventType),
     createdAtIdx: index('audit_events_created_at_idx').on(t.createdAt),
@@ -599,6 +739,7 @@ export const reminderSchedule = pgTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   ordersCreated: many(orders),
+  quotesCreated: many(quotes),
   customersCreated: many(customers),
   activities: many(activities),
 }))
@@ -615,6 +756,7 @@ export const customersRelations = relations(customers, ({ many, one }) => ({
     references: [companies.id],
   }),
   orders: many(orders),
+  quotes: many(quotes),
   activities: many(activities),
   documents: many(documents),
   createdBy: one(users, { fields: [customers.createdBy], references: [users.id] }),
@@ -645,12 +787,51 @@ export const ordersRelations = relations(orders, ({ many, one }) => ({
   activities: many(activities),
   documents: many(documents),
   reminders: many(reminderSchedule),
+  // The quote this order was converted from, if any.
+  sourceQuote: one(quotes, {
+    fields: [orders.sourceQuoteId],
+    references: [quotes.id],
+    relationName: 'sourceQuote',
+  }),
   createdBy: one(users, { fields: [orders.createdBy], references: [users.id] }),
+}))
+
+export const quotesRelations = relations(quotes, ({ one, many }) => ({
+  customer: one(customers, {
+    fields: [quotes.customerId],
+    references: [customers.id],
+  }),
+  company: one(companies, { fields: [quotes.companyId], references: [companies.id] }),
+  vehicleSupplier: one(suppliers, {
+    fields: [quotes.vehicleSupplierId],
+    references: [suppliers.id],
+    relationName: 'quoteVehicleSupplier',
+  }),
+  financeProvider: one(suppliers, {
+    fields: [quotes.financeProviderId],
+    references: [suppliers.id],
+    relationName: 'quoteFinanceProvider',
+  }),
+  // The order this quote was converted into, if any.
+  convertedOrder: one(orders, {
+    fields: [quotes.convertedOrderId],
+    references: [orders.id],
+    relationName: 'sourceQuote',
+  }),
+  tokens: many(quoteTokens),
+  auditEvents: many(auditEvents),
+  createdBy: one(users, { fields: [quotes.createdBy], references: [users.id] }),
+}))
+
+export const quoteTokensRelations = relations(quoteTokens, ({ one }) => ({
+  quote: one(quotes, { fields: [quoteTokens.quoteId], references: [quotes.id] }),
 }))
 
 export const suppliersRelations = relations(suppliers, ({ many, one }) => ({
   vehicleSupplierOrders: many(orders, { relationName: 'vehicleSupplier' }),
   financeProviderOrders: many(orders, { relationName: 'financeProvider' }),
+  vehicleSupplierQuotes: many(quotes, { relationName: 'quoteVehicleSupplier' }),
+  financeProviderQuotes: many(quotes, { relationName: 'quoteFinanceProvider' }),
   createdBy: one(users, { fields: [suppliers.createdBy], references: [users.id] }),
 }))
 
@@ -672,6 +853,7 @@ export const signaturesRelations = relations(signatures, ({ one }) => ({
 
 export const auditEventsRelations = relations(auditEvents, ({ one }) => ({
   order: one(orders, { fields: [auditEvents.orderId], references: [orders.id] }),
+  quote: one(quotes, { fields: [auditEvents.quoteId], references: [quotes.id] }),
   customer: one(customers, {
     fields: [auditEvents.customerId],
     references: [customers.id],
@@ -713,6 +895,11 @@ export type NewSupplier = typeof suppliers.$inferInsert
 export type SupplierKind = (typeof supplierKind.enumValues)[number]
 export type Order = typeof orders.$inferSelect
 export type NewOrder = typeof orders.$inferInsert
+export type Quote = typeof quotes.$inferSelect
+export type NewQuote = typeof quotes.$inferInsert
+export type QuoteStatus = (typeof quoteStatus.enumValues)[number]
+export type QuoteToken = typeof quoteTokens.$inferSelect
+export type NewQuoteToken = typeof quoteTokens.$inferInsert
 export type Signature = typeof signatures.$inferSelect
 export type NewSignature = typeof signatures.$inferInsert
 export type AuditEvent = typeof auditEvents.$inferSelect
