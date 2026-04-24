@@ -6,14 +6,14 @@ import { AnimatedSection } from '@/components/ui/AnimatedSection'
 import { FleetMileageCalculator } from '@/components/tools/FleetMileageCalculator'
 
 export const metadata: Metadata = {
-  title: 'Free Excess Mileage Calculator UK — Check Your Fleet Exposure | Olaris',
+  title: 'Excess Mileage Calculator UK · Free, HMRC-aligned · Olaris',
   description:
-    "Calculate your fleet's excess mileage charges before end of contract. Free tool — plug in your numbers and see your exposure instantly. No signup.",
+    'Calculate lease excess mileage charges instantly. UK rates, HMRC-aligned, free. See what you owe — and how to avoid it on your next contract.',
   alternates: { canonical: 'https://olaris.co.uk/tools/excess-mileage-calculator' },
   openGraph: {
-    title: 'Free Excess Mileage Calculator UK | Olaris',
+    title: 'Excess Mileage Calculator UK · Free, HMRC-aligned · Olaris',
     description:
-      "Calculate what your fleet's excess mileage charges will cost at end of contract. Free tool — no signup required.",
+      'Calculate lease excess mileage charges instantly. UK rates, HMRC-aligned, free. See what you owe — and how to avoid it on your next contract.',
     type: 'website',
     url: 'https://olaris.co.uk/tools/excess-mileage-calculator',
     images: [{ url: 'https://olaris.co.uk/images/fleet-hero.webp' }],
@@ -111,7 +111,7 @@ export default function ExcessMileageCalculatorPage() {
       <GradientHero
         badge="Free Fleet Tool"
         size="compact"
-        title="Free Excess Mileage Charge Calculator"
+        title="Calculate your lease excess mileage charge"
         subtitle="Find out what your fleet's excess mileage charges could cost — before the invoice lands"
       />
 

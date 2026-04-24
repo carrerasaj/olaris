@@ -20,9 +20,9 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Fleet Intelligence Platform | Olaris',
+  title: 'Orbis · Fleet Intelligence Platform · DVLA, Mileage, EV, Cost',
   description:
-    'Live tracking of 15+ manufacturers. Automated mileage vs contract monitoring, driver behaviour scoring, DVLA checks, cost tracking & EV transition planning.',
+    'Connected vehicle data, DVLA compliance, EV charging reconciliation and cost analysis in one view. Included with every Olaris lease.',
   url: 'https://olaris.co.uk/platform',
 })
 
@@ -107,7 +107,7 @@ export default function PlatformPage() {
       <GradientHero
         size="compact"
         editorial
-        title="A platform built from the operator's chair"
+        title="Orbis · Fleet Intelligence Platform"
         subtitle="Everything here exists because someone who has actually run a fleet said 'I need this.' Not because a product manager thought it sounded good."
       />
 

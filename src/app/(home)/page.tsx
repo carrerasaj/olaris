@@ -15,9 +15,9 @@ import { constructMetadata } from '@/lib/seo'
 import { Car, Users, BrainCircuit } from 'lucide-react'
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Fleet Leasing with Intelligence Built In | Olaris',
+  title: 'Fleet Leasing & Fleet Intelligence · Orbis Platform · Olaris',
   description:
-    'Business contract hire and salary sacrifice for UK businesses with Orbis fleet intelligence included in every agreement. All makes, all sectors.',
+    'Business contract hire and salary sacrifice for UK businesses. Every lease includes Orbis fleet intelligence — real-time visibility from day one.',
 })
 
 const leasingCards = [

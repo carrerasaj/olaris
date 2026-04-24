@@ -7,14 +7,14 @@ import { CompanyCarTaxCalculator } from '@/components/tools/CompanyCarTaxCalcula
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: 'Free Company Car Tax Calculator UK 2025-2030 — BIK Rates | Olaris',
+  title: 'Company Car Tax Calculator 2026/27 · BIK Rates · Olaris',
   description:
-    "Calculate your company car BIK tax for 2025 to 2030 with HMRC-confirmed rates. Free tool — covers electric, hybrid, and petrol/diesel. No signup.",
+    'Free UK company car tax calculator. 2026/27 HMRC BIK rates for ICE, hybrid and EV. Includes P11D lookup. Instant result.',
   alternates: { canonical: 'https://olaris.co.uk/tools/company-car-tax-calculator' },
   openGraph: {
-    title: 'Free Company Car Tax Calculator UK 2025-2030 | Olaris',
+    title: 'Company Car Tax Calculator 2026/27 · BIK Rates · Olaris',
     description:
-      "Calculate BIK tax on any company car from 2025 to 2030. HMRC-confirmed escalating rates. Free — no signup.",
+      'Free UK company car tax calculator. 2026/27 HMRC BIK rates for ICE, hybrid and EV. Includes P11D lookup. Instant result.',
     type: 'website',
     url: 'https://olaris.co.uk/tools/company-car-tax-calculator',
     images: [{ url: 'https://olaris.co.uk/images/fleet-hero.webp' }],
