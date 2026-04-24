@@ -137,6 +137,46 @@ export const documentKind = pgEnum('document_kind', [
 // NPS band derived on insert from the 0–10 score. Promoters 9–10,
 // passives 7–8, detractors 0–6. Stored so queries can aggregate without
 // re-deriving.
+// ─── Phase 13 / F-03: lead capture + drip infrastructure ─────────────
+//
+// `leads` is the pre-conversion counterpart to `customers`. Anyone who
+// gives us their email via a calculator, a lead magnet, or an exit-intent
+// popover lands here. When a lead signs a contract, the sales flow
+// promotes the row into `customers` (outside F-03 scope); until then the
+// lead is nurtured via drip sequences defined in `src/lib/drip-sequences.ts`.
+//
+// Kept separate from `customers` because:
+//   - Lifecycle differs (nurture vs. signed contract)
+//   - Most leads never convert; polluting `customers` hurts query speed
+//   - Leads carry source / attribution the customers table doesn't need
+
+export const leadSource = pgEnum('lead_source', [
+  'excess-mileage',
+  'company-car-tax',
+  'ev-transition',
+  'fleet-compliance',
+  'contact',
+  'newsletter',
+  'pillar-download',
+  'exit-intent',
+  'sticky-bar',
+  'case-study',
+  'fleet-scorecard',
+  'other',
+])
+
+export const leadEventType = pgEnum('lead_event_type', [
+  'lead.created',
+  'gated_resource.sent',
+  'gated_resource.failed',
+  'drip.enrolled',
+  'drip.sent',
+  'drip.suppressed',
+  'drip.failed',
+  'lead.unsubscribed',
+  'lead.converted_to_customer',
+])
+
 export const feedbackCategory = pgEnum('feedback_category', [
   'promoter',
   'passive',
@@ -975,6 +1015,116 @@ export const feedback = pgTable(
   }),
 )
 
+// ─── F-03: leads + drip enrolments + lead events ──────────────────────
+//
+// One row per captured email. Attribution fields let us trace which
+// surface produced the lead (calculator, exit-intent, newsletter, etc.)
+// for GA4 reconciliation. marketingOptOut mirrors the customers column
+// of the same name — respected by every drip send.
+//
+// `sourceContext` is a free-form jsonb for per-source context that
+// doesn't deserve its own column yet — e.g. the calculator inputs that
+// produced a result, or the UTM params the visitor arrived with.
+export const leads = pgTable(
+  'leads',
+  {
+    id: id(),
+    email: text('email').notNull(),
+    firstName: text('first_name'),
+    lastName: text('last_name'),
+    company: text('company'),
+    source: leadSource('source').notNull(),
+    /** Free-form attribution context captured at creation time. */
+    sourceContext: jsonb('source_context').$type<Record<string, unknown>>(),
+    /** Suppresses all drip / marketing email. Transactional email (e.g. "your PDF is attached") still sends. */
+    marketingOptOut: boolean('marketing_opt_out').notNull().default(false),
+    unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true }),
+    /** URL-safe token for one-click unsubscribe links in every drip email. */
+    unsubscribeToken: text('unsubscribe_token')
+      .notNull()
+      .$defaultFn(() => nanoid(32)),
+    /** When this lead converts to a paid customer, stamp the id here. */
+    convertedCustomerId: text('converted_customer_id').references(
+      (): AnyPgColumn => customers.id,
+      { onDelete: 'set null' },
+    ),
+    convertedAt: timestamp('converted_at', { withTimezone: true }),
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    geoCity: text('geo_city'),
+    geoCountry: text('geo_country'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => ({
+    // One email can be captured via multiple sources over time. Unique on
+    // (email, source) avoids duplicate capture from the same surface
+    // while still letting the same person be captured again via a
+    // different surface (which tells us something).
+    emailSourceIdx: uniqueIndex('leads_email_source_idx').on(t.email, t.source),
+    emailIdx: index('leads_email_idx').on(t.email),
+    sourceIdx: index('leads_source_idx').on(t.source),
+    createdAtIdx: index('leads_created_at_idx').on(t.createdAt),
+    unsubTokenIdx: uniqueIndex('leads_unsubscribe_token_idx').on(t.unsubscribeToken),
+  }),
+)
+
+// Drip-sequence enrolment. One row per scheduled step; mirrors the
+// existing reminder_schedule pattern so the cron sweep is the same
+// shape. When a step sends, the service inserts the next step's row.
+// cancelledAt is stamped when the lead unsubscribes or opts out.
+export const dripEnrolments = pgTable(
+  'drip_enrolments',
+  {
+    id: id(),
+    leadId: text('lead_id')
+      .notNull()
+      .references(() => leads.id, { onDelete: 'cascade' }),
+    /** Sequence identifier from src/lib/drip-sequences.ts (e.g. 'post-excess-mileage-calc'). */
+    sequenceId: text('sequence_id').notNull(),
+    /** Zero-indexed step within the sequence. */
+    step: integer('step').notNull(),
+    scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    cancelledAt: timestamp('cancelled_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    // One row per (lead, sequence, step). Prevents accidental duplicates
+    // if the enqueue helper is called twice for the same step.
+    uniqueStepIdx: uniqueIndex('drip_enrolments_lead_sequence_step_idx').on(
+      t.leadId,
+      t.sequenceId,
+      t.step,
+    ),
+    scheduledIdx: index('drip_enrolments_scheduled_idx').on(t.scheduledFor),
+    leadIdx: index('drip_enrolments_lead_idx').on(t.leadId),
+  }),
+)
+
+// Lead audit trail. Same shape as auditEvents but FK to leads — the
+// audit_events table is order-centric and doesn't cleanly fit pre-sale
+// records. Typed payload via jsonb.
+export const leadEvents = pgTable(
+  'lead_events',
+  {
+    id: id(),
+    leadId: text('lead_id')
+      .notNull()
+      .references(() => leads.id, { onDelete: 'cascade' }),
+    eventType: leadEventType('event_type').notNull(),
+    payload: jsonb('payload').$type<Record<string, unknown>>(),
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    leadIdx: index('lead_events_lead_idx').on(t.leadId),
+    typeIdx: index('lead_events_type_idx').on(t.eventType),
+    createdAtIdx: index('lead_events_created_at_idx').on(t.createdAt),
+  }),
+)
+
 // ─── Relations ─────────────────────────────────────────────────────────────
 // Drizzle relations — used for typed joins via db.query.* API.
 
@@ -1160,6 +1310,23 @@ export const feedbackTokensRelations = relations(feedbackTokens, ({ one }) => ({
   }),
 }))
 
+export const leadsRelations = relations(leads, ({ many, one }) => ({
+  events: many(leadEvents),
+  dripEnrolments: many(dripEnrolments),
+  convertedCustomer: one(customers, {
+    fields: [leads.convertedCustomerId],
+    references: [customers.id],
+  }),
+}))
+
+export const dripEnrolmentsRelations = relations(dripEnrolments, ({ one }) => ({
+  lead: one(leads, { fields: [dripEnrolments.leadId], references: [leads.id] }),
+}))
+
+export const leadEventsRelations = relations(leadEvents, ({ one }) => ({
+  lead: one(leads, { fields: [leadEvents.leadId], references: [leads.id] }),
+}))
+
 // ─── Inferred types (for use across the app) ──────────────────────────────
 
 export type User = typeof users.$inferSelect
@@ -1197,3 +1364,11 @@ export type NewFeedback = typeof feedback.$inferInsert
 export type FeedbackCategory = (typeof feedbackCategory.enumValues)[number]
 export type FeedbackToken = typeof feedbackTokens.$inferSelect
 export type NewFeedbackToken = typeof feedbackTokens.$inferInsert
+export type Lead = typeof leads.$inferSelect
+export type NewLead = typeof leads.$inferInsert
+export type LeadSource = (typeof leadSource.enumValues)[number]
+export type DripEnrolment = typeof dripEnrolments.$inferSelect
+export type NewDripEnrolment = typeof dripEnrolments.$inferInsert
+export type LeadEvent = typeof leadEvents.$inferSelect
+export type NewLeadEvent = typeof leadEvents.$inferInsert
+export type LeadEventType = (typeof leadEventType.enumValues)[number]

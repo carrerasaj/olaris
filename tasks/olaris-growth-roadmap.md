@@ -35,7 +35,8 @@ Baseline metrics targets live in `.claude/Olaris Audit Tasks.md` §1 and `.claud
 - [x] **F-01** · GA4 + conversion events (typed wrapper, EventMap, calculators + contact form + primary CTAs instrumented, README-analytics.md with admin steps) — *shipped 24 Apr 2026, commit `growth-F-01-ga4-events`*
 - [x] **F-02** · Ahrefs technical cleanup (sitemap gaps fixed, /platform JSON-LD duplicate removed, external links verified, thin-linking deferred to T2-02) — *shipped 24 Apr 2026, commit `growth-F-02-ahrefs-technical-cleanup`*
 - [x] **T2-02** · Internal linking audit (cluster manifest + `<RelatedPostsBlock>` component, 2 missing BCH/platform links added in blog bodies, thin-linking re-audit showed F-02's tsx-only grep over-reported — markdown link count is healthy everywhere) — *shipped 24 Apr 2026, commit `growth-T-02-02-internal-linking-audit`*
-- [x] **CO-04** · Style + voice guide (`docs/style-guide.md` — observed patterns from the existing 16-post corpus, not invented rules; frontmatter template, voice rules, length targets, required elements per post, cluster linkage) — *shipped 24 Apr 2026, commit TBD*
+- [x] **CO-04** · Style + voice guide (`docs/style-guide.md` — observed patterns from the existing 16-post corpus, not invented rules; frontmatter template, voice rules, length targets, required elements per post, cluster linkage) — *shipped 24 Apr 2026, commit `growth-CO-04-style-voice-guide`*
+- [x] **F-03** · Email infra + lead-storage primitive (migration 0008 with `leads` / `drip_enrolments` / `lead_events` tables; `src/lib/leads.ts` with `captureLead` / `enrolLead` / `unsubscribeByToken` / `recordLeadEvent`; `src/lib/drip-sequences.ts` typed registry with the 7-step post-excess-mileage sequence from A-06; `src/lib/gated-resources.ts` with empty asset registry ready for T2-04; `/api/cron/drips` endpoint with bearer auth; `/unsubscribe/[token]` public page with confirm-click flow to defeat link-scanner prefetch) — *shipped 24 Apr 2026, commit TBD*
 
 ---
 
@@ -51,16 +52,9 @@ See Done section above.
 
 See Done section above.
 
-### [ ] F-03 · Email infra + lead-storage primitive
+### [x] F-03 · Email infra + lead-storage primitive — *done*
 
-- Source: derived from `Olaris Audit Tasks.md` S1-03 + `Olaris Conversion Addendum.md` A-06
-- Why: every capture surface needs a `leads` row, a gated-download flow, and an `enqueueDrip(sequence, leadId)` helper. Without this, A-01, A-03, A-06, B-01 each reinvent storage.
-- Scope:
-  - `leads` table in `src/db/schema.ts` (email, company?, source, payload jsonb, created_at, marketing_opt_out, double_opt_in_at nullable)
-  - `sendGatedResource(leadId, assetId)` — email the PDF/Word/xlsx, record delivery
-  - `enqueueDrip(leadId, sequenceId)` — uses existing `reminderSchedule`-style pattern, one cron sweep triggers next step
-  - One sequence registry file `src/lib/drip-sequences.ts` so A-06 et al. can declare sequences declaratively
-- Unblocks: T1-01, T1-02, T1-03, T2-04, T4-02, C-05
+See Done section above.
 
 ---
 
@@ -322,11 +316,11 @@ Tasks that belong on the radar but don't fit the tier cadence. Most are waiting 
 
 Alan paused the video-dependent branch (VC-02 + T2-03 finish) until recording can happen, so the working plan is "ship everything that doesn't need Alan's camera time." Order:
 
-1. **F-03 · Email infra + lead-storage primitive** — pure backend. Unblocks entire Tier 1 + every new CT-* tool.
-2. **T2-03 (partial) · /about + author bylines + `<FounderVideoSlot />` stub** — build the scaffolding now with a headshot + bio copy from Alan. Video slot stays stubbed until VC-02 recording happens; drops in without a second PR.
-3. **VC-01 · Orbis screenshots (component scaffolding + placement pattern)** — Claude Code builds the annotation component + `/platform` placement slots against placeholder images; real images slot in when Alan/Orbis ship them. Unblocks T3-04 platform rebuild pre-emptively.
-4. *(T2-02 Internal linking audit — shipped 24 Apr 2026)*
-5. *(CO-04 Style + voice guide — shipped 24 Apr 2026)*
+1. **T2-03 (partial) · /about + author bylines + `<FounderVideoSlot />` stub** — build the scaffolding now with a headshot + bio copy from Alan. Video slot stays stubbed until VC-02 recording happens; drops in without a second PR.
+2. **VC-01 · Orbis screenshots (component scaffolding + placement pattern)** — Claude Code builds the annotation component + `/platform` placement slots against placeholder images; real images slot in when Alan/Orbis ship them. Unblocks T3-04 platform rebuild pre-emptively.
+3. **T2-04 · First inline lead magnet (Grey Fleet Policy Template)** — now viable; F-03 ships the `gatedResources` registry with zero assets, so the first addition is a clean diff. Needs the Word template from Alan.
+4. **T1-01 · Post-result PDF report + email capture on `/tools/excess-mileage-calculator`** — top of Tier 1. F-03 removes the previous blocker. Wires `captureLead` + `sendGatedResource` + `enrolLead('post-excess-mileage-calc')` to the excess-mileage calculator flow.
+5. *(T2-02 Internal linking audit, CO-04 Style guide, F-03 Email infra — all shipped 24 Apr 2026)*
 
 Deferred until Alan is ready to record:
 
@@ -355,6 +349,7 @@ Why this order:
 ## Change log
 
 - **24 Apr 2026** — Initial merge of SEO + Conversion briefs into a single tiered plan. T2-01 marked done (S1-01 meta rewrites shipped).
+- **24 Apr 2026** — F-03 shipped. Migration 0008 adds `leads` (with unique index on `(email, source)`), `drip_enrolments` (mirrors the `reminder_schedule` pattern), and `lead_events` (audit trail FK to `leads`). `src/lib/leads.ts` is the entry point: `captureLead` upserts idempotently, `enrolLead` schedules the first drip-step row, `unsubscribeByToken` marks + cancels pending drips. `src/lib/drip-sequences.ts` declares the 7-step post-excess-mileage sequence from A-06 as typed code — body copy is a working first draft T1-03 iterates on. `/api/cron/drips` sweeps due rows on the same `CRON_SECRET` bearer pattern as `/api/cron/reminders`, with 07:30 UTC slot in vercel.json. `/unsubscribe/[token]` uses a confirm-click pattern instead of one-click on page load, defeating corporate link-scanner prefetch. **Next-5 reshuffled:** Tier 1 capture surfaces now unblocked — T1-01 promoted into the list.
 - **24 Apr 2026** — CO-04 shipped. `docs/style-guide.md` captures the voice / length / structure already working in the existing 16-post corpus (~2,400 word median, first-person, concrete numbers, .gov.uk citations). Not invented rules — documented what ships well.
 - **24 Apr 2026** — T2-02 shipped (internal linking audit). Built `<RelatedPostsBlock>` + `src/content/blog/clusters.ts` manifest covering all 16 posts across 7 clusters; migrated the hardcoded per-post map from the blog slug page. Added BCH links in grey-fleet + lease-company-mileage posts, company-car-tax link from `/leasing/salary-sacrifice`, and ev-transition feature link from the planner tool. F-02's "thin linking" flag was partly over-reported — the agent only grepped .tsx, missing markdown link density; re-audit shows only `/tools/company-car-tax-calculator` was genuinely thin (1 inbound).
 - **24 Apr 2026** — F-02 shipped (Ahrefs technical cleanup). Discovery pass found fewer real issues than the stale Ahrefs report suggested — only sitemap gaps + /platform JSON-LD dup were actionable. Internal thin-linking deferred to T2-02. "Next 5 to ship" reshuffled around the video-dependency pause: T2-02 → CO-04 → F-03 → T2-03 partial → VC-01 scaffolding, with VC-02 + logo/case-study outreach explicitly parked.
