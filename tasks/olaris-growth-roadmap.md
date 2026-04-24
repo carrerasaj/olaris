@@ -33,6 +33,7 @@ Baseline metrics targets live in `.claude/Olaris Audit Tasks.md` §1 and `.claud
 
 - [x] **T2-01 ↔ S1-01** · Meta + H1 rewrites on the four highest-impression pages — *shipped 24 Apr 2026, commit `seo-s1-01-meta-rewrites`*
 - [x] **F-01** · GA4 + conversion events (typed wrapper, EventMap, calculators + contact form + primary CTAs instrumented, README-analytics.md with admin steps) — *shipped 24 Apr 2026, commit `growth-F-01-ga4-events`*
+- [x] **F-02** · Ahrefs technical cleanup (sitemap gaps fixed, /platform JSON-LD duplicate removed, external links verified, thin-linking deferred to T2-02) — *shipped 24 Apr 2026, commit `growth-F-02-ahrefs-technical-cleanup`*
 
 ---
 
@@ -44,12 +45,9 @@ Ship these first. Each unblocks multiple downstream tasks. Do not parallelise Ti
 
 See Done section above.
 
-### [ ] F-02 · Ahrefs technical cleanup (15 issues)
+### [x] F-02 · Ahrefs technical cleanup — *done*
 
-- Source: `.claude/Olaris Audit Tasks.md` S1-02
-- Why early: several other tasks touch JSON-LD, sitemap, redirects. Cleaning first means new work doesn't layer onto a broken baseline. Also unblocks SEO authority before content tasks land.
-- Unblocks: T3-01 (pillar schema), T3-04 (platform rebuild), T4-06 (new service page)
-- Known: `/platform` has **two** `SoftwareApplication` JSON-LD blocks (one in `layout.tsx`, one in `page.tsx`) — fold into this task.
+See Done section above.
 
 ### [ ] F-03 · Email infra + lead-storage primitive
 
@@ -322,18 +320,26 @@ Tasks that belong on the radar but don't fit the tier cadence. Most are waiting 
 
 ## Next 5 to ship (rolling — update as tasks close)
 
-Reconciling priorities across all three briefs against what's actually unblocked right now:
+Alan paused the video-dependent branch (VC-02 + T2-03 finish) until recording can happen, so the working plan is "ship everything that doesn't need Alan's camera time." Order:
 
-1. **F-02 · Ahrefs technical cleanup** — unblocks T3-04 / T4-06 / CO-03. Already the next Foundation task. Low-risk, high-unblock value.
-2. **VC-01 · Eight Orbis screenshots (or high-fid mockups)** — content addendum's #2 priority, highest single-lever on `/platform` conversion. Needs Alan/Orbis assets; Claude Code prepares annotation component + placement pattern meanwhile.
-3. **T2-03 + VC-02 · Alan as face of brand (incl. 60-sec founder video)** — E-E-A-T for SEO, trust for conversion, content addendum's #1 priority. Needs Alan's recording session. Requires VC-01 screenshots for screen-cut inserts.
-4. **F-03 · Email infra + lead-storage primitive** — unblocks the entire Tier 1 + every new tool in CT-*. Ship after VC assets are in flight so Tier 1/3 can start as soon as assets land.
-5. **T2-02 · Internal linking audit** — cheap win, fixes existing blog post orphan problem, surfaces the cluster manifest needed for every future post.
+1. **T2-02 · Internal linking audit** — now urgent: F-02 discovery found 7 routes with ≤1 inbound link (including /about and /features/ev-transition with zero). Fixes thin linking + ships the `<RelatedPosts>` component and `clusters.ts` manifest every Tier 3 post will need.
+2. **CO-04 · Style + voice guide** — one-pager, ~30 min. Pins tone + required elements for all downstream content work. Cheap.
+3. **F-03 · Email infra + lead-storage primitive** — pure backend. Unblocks entire Tier 1 + every new CT-* tool.
+4. **T2-03 (partial) · /about + author bylines + `<FounderVideoSlot />` stub** — build the scaffolding now with a headshot + bio copy from Alan. Video slot stays stubbed until VC-02 recording happens; drops in without a second PR.
+5. **VC-01 · Orbis screenshots (component scaffolding + placement pattern)** — Claude Code builds the annotation component + `/platform` placement slots against placeholder images; real images slot in when Alan/Orbis ship them. Unblocks T3-04 platform rebuild pre-emptively.
 
-Why this order over alternatives:
+Deferred until Alan is ready to record:
 
-- Tier 1 capture surfaces (T1-01 through T1-05) need **both** F-03 *and* evidence the `/platform` page can actually close — so put VC-01/VC-02 in flight first. Exit-intent on a calculator is wasted if the landing page after still looks like vapour.
-- Content addendum's priority #3 (CT-01 Fleet Cost Scorecard) is further out here because it needs F-03 which is itself above it. Bumping it up would block on F-03 anyway.
+- **VC-02** · Founder video recording (paused pending Alan's time)
+- **T2-03 finish** · completes when VC-02 lands
+- **T4-04/VC-05** · client logo outreach (Alan-initiated)
+- **T3-03** · case study outreach (Alan-initiated)
+
+Why this order:
+
+- Tier 1 capture surfaces (T1-01 through T1-05) need F-03. Getting F-03 done first means Tier 1 unblocks *and* CT-* tools in Tier 3/4 have lead storage already wired.
+- T2-02 is cheap, high-value, and surfaces the cluster manifest T3-01/02 pillar work depends on — doing it before any long-form content means no orphan posts land.
+- Stubbing T2-03 now with assets Alan can send async (headshot, 300-word bio) means when VC-02 video lands, it's a single small drop-in commit, not a page rebuild.
 
 ## Cross-cutting rules
 
@@ -349,6 +355,7 @@ Why this order over alternatives:
 ## Change log
 
 - **24 Apr 2026** — Initial merge of SEO + Conversion briefs into a single tiered plan. T2-01 marked done (S1-01 meta rewrites shipped).
+- **24 Apr 2026** — F-02 shipped (Ahrefs technical cleanup). Discovery pass found fewer real issues than the stale Ahrefs report suggested — only sitemap gaps + /platform JSON-LD dup were actionable. Internal thin-linking deferred to T2-02. "Next 5 to ship" reshuffled around the video-dependency pause: T2-02 → CO-04 → F-03 → T2-03 partial → VC-01 scaffolding, with VC-02 + logo/case-study outreach explicitly parked.
 - **24 Apr 2026** — F-01 shipped (GA4 events). Content addendum merged:
   - Renamed content-brief `F-*` tool tasks to `CT-*` to avoid collision with Foundation.
   - Added VC-01, VC-04 (visual credibility) to Tier 2; VC-02 folded into T2-03; VC-03 deferred alongside B-06; VC-05 folded into T4-04.
