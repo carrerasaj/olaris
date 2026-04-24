@@ -32,20 +32,31 @@ import {
   reminderSchedule,
   documents,
 } from '@/db/client'
+import type { Customer, Order } from '@/db/schema'
 import { requireAdmin } from '@/lib/admin-auth'
 import {
   orderDraftSchema,
   orderSendSchema,
   type OrderDraftInput,
 } from '@/lib/validation'
-import { generateOrderRef, fmtGBPFromPence } from '@/lib/format'
+import { generateOrderRef, fmtGBPFromPence, fmtDate } from '@/lib/format'
 import { captureForensics, canonicalJson } from '@/lib/forensics'
 import { signBytes, signingKeyFingerprint } from '@/lib/signing-key'
 import { sendEmail } from '@/lib/email'
 import {
   orderSentEmail,
   orderSignedEmail,
+  orderConfirmedEmail,
+  orderEtaChangedEmail,
+  orderReadyForHandoverEmail,
+  orderDeliveredEmail,
 } from '@/lib/email-templates'
+import {
+  sendLifecycleEmail,
+  recordEmailEvent,
+  findPriorEmailSent,
+  type LifecycleTemplate,
+} from '@/lib/email-customer'
 import {
   buildAuditPayload,
   diffLogistics,
@@ -54,6 +65,7 @@ import {
   isOverrideTargetAllowed,
   isPostSignStatus,
   LOGISTICS_FIELDS,
+  shouldSendEtaChangeEmail,
   type LogisticsField,
   type LogisticsPatch,
   type PostSignStatus,
@@ -451,17 +463,16 @@ export async function sendForSignatureAction(
     html: email.html,
     text: email.text,
   })
-  await db.insert(auditEvents).values({
+  await recordEmailEvent({
+    template: 'order.sent',
     orderId: order.id,
     customerId: order.customerId,
-    actorType: 'system',
-    eventType: sendResult.ok ? 'email.sent' : 'email.failed',
-    payload: {
-      template: 'order.sent',
-      to: customer.email,
-      messageId: sendResult.id,
-      error: sendResult.error,
-    },
+    to: customer.email,
+    subject: email.subject,
+    outcome: sendResult.ok ? 'sent' : 'failed',
+    providerMessageId: sendResult.id ?? null,
+    error: sendResult.error ?? null,
+    extra: { tokenExpiresAt: expiresAt.toISOString() },
   })
 
   revalidatePath(`/admin/orders/${order.id}`)
@@ -620,12 +631,14 @@ async function transition(
   const user = await requireAdmin()
 
   const existing = await db
-    .select()
+    .select({ order: orders, customer: customers })
     .from(orders)
+    .innerJoin(customers, eq(orders.customerId, customers.id))
     .where(eq(orders.id, orderId))
     .limit(1)
   if (existing.length === 0) return { ok: false, error: 'Order not found' }
-  const current = existing[0]
+  const current = existing[0].order
+  const customer = existing[0].customer
 
   if (!isForwardTransitionAllowed(current.status, target)) {
     return {
@@ -675,10 +688,122 @@ async function transition(
   // can find "when was the VIN captured?" without parsing payloads.
   await emitFieldEvents(orderId, current.customerId, user.id, changedFields, now)
 
+  // Merge patch + current so the email composer reads the post-update row.
+  const after = { ...current, ...cleanedPatch, status: target }
+  await fireTransitionEmail(target, after, customer)
+
+  // Schedule the NPS ask two days after delivery (Phase 12). Respects
+  // marketing opt-out at send time via the cron branch, not here.
+  if (target === 'delivered') {
+    const scheduled = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000)
+    await db.insert(reminderSchedule).values({
+      orderId,
+      scheduledFor: scheduled,
+      kind: 'nps_day_2',
+    })
+  }
+
   revalidatePath(`/admin/orders/${orderId}`)
   revalidatePath('/admin/orders')
   revalidatePath('/admin')
   return { ok: true, id: orderId }
+}
+
+/**
+ * Fire the appropriate lifecycle email for a forward transition. Best-
+ * effort: failure logs into audit via sendLifecycleEmail but never
+ * blocks the state change.
+ */
+async function fireTransitionEmail(
+  target: PostSignStatus,
+  order: Order,
+  customer: Customer,
+): Promise<void> {
+  if (target === 'cancelled_post_sign') return
+
+  const vehicle = order.vehicle
+  const commonBase = {
+    customerFirstName: customer.firstName,
+    orderRef: order.ref,
+    vehicleMake: vehicle.make,
+    vehicleModel: vehicle.model,
+  }
+
+  if (target === 'confirmed') {
+    const etaLabel = order.estimatedDeliveryDate
+      ? fmtDate(order.estimatedDeliveryDate)
+      : null
+    const email = orderConfirmedEmail({ ...commonBase, etaLabel })
+    await sendLifecycleEmail({
+      template: 'order.confirmed_email',
+      orderId: order.id,
+      customerId: order.customerId,
+      to: customer.email,
+      subject: email.subject,
+      html: email.html,
+      text: email.text,
+    })
+    // Remember this ETA as the one the customer now knows about.
+    if (order.estimatedDeliveryDate) {
+      await db
+        .update(orders)
+        .set({ lastCommunicatedEtaDate: order.estimatedDeliveryDate })
+        .where(eq(orders.id, order.id))
+    }
+    return
+  }
+
+  if (target === 'ready_for_handover') {
+    const etaLabel = order.estimatedDeliveryDate
+      ? fmtDate(order.estimatedDeliveryDate)
+      : null
+    const email = orderReadyForHandoverEmail({
+      ...commonBase,
+      handoverLocation: order.handoverLocation ?? null,
+      etaLabel,
+    })
+    await sendLifecycleEmail({
+      template: 'order.ready_for_handover_email',
+      orderId: order.id,
+      customerId: order.customerId,
+      to: customer.email,
+      subject: email.subject,
+      html: email.html,
+      text: email.text,
+    })
+    if (order.estimatedDeliveryDate) {
+      await db
+        .update(orders)
+        .set({ lastCommunicatedEtaDate: order.estimatedDeliveryDate })
+        .where(eq(orders.id, order.id))
+    }
+    return
+  }
+
+  if (target === 'delivered') {
+    const email = orderDeliveredEmail({
+      ...commonBase,
+      registrationPlate: order.registrationPlate ?? null,
+      // Handover pack URL is added by the handover-pack generation path;
+      // it's a separate admin action and may not have run yet. Email
+      // survives without it — the signed-order verify link still shows.
+      handoverPackUrl: null,
+      verifyUrl: `${siteUrl()}/verify/${order.ref}`,
+    })
+    await sendLifecycleEmail({
+      template: 'order.delivered_email',
+      orderId: order.id,
+      customerId: order.customerId,
+      to: customer.email,
+      subject: email.subject,
+      html: email.html,
+      text: email.text,
+    })
+    return
+  }
+
+  // on_order isn't a customer-facing email in v1 — they get the ETA-
+  // changed email instead when the ETA actually moves meaningfully.
 }
 
 function stampFieldForStatus(
@@ -768,16 +893,19 @@ async function emitFieldEvents(
 export async function updateLogisticsAction(
   orderId: string,
   patch: LogisticsPatch,
+  opts?: { forceCustomerEmail?: boolean; forceReason?: string },
 ): Promise<OrderActionResult> {
   const user = await requireAdmin()
 
   const existing = await db
-    .select()
+    .select({ order: orders, customer: customers })
     .from(orders)
+    .innerJoin(customers, eq(orders.customerId, customers.id))
     .where(eq(orders.id, orderId))
     .limit(1)
   if (existing.length === 0) return { ok: false, error: 'Order not found' }
-  const current = existing[0]
+  const current = existing[0].order
+  const customer = existing[0].customer
 
   // Only editable while the order is in a live post-sign stage — not after
   // delivered/cancelled, not before signed.
@@ -830,6 +958,57 @@ export async function updateLogisticsAction(
     changedFields,
     now,
   )
+
+  // ETA-change customer email (Phase 12). Fires when the ETA moved vs the
+  // last value we actually told the customer — not vs whatever it was
+  // before this edit. Internal churn stays silent; meaningful drift or
+  // admin-forced resend reaches the inbox.
+  const etaChanged = 'estimatedDeliveryDate' in cleanedPatch
+  if (etaChanged) {
+    const newEta = cleanedPatch.estimatedDeliveryDate ?? null
+    const lastComm = current.lastCommunicatedEtaDate
+    const shouldAutoSend = shouldSendEtaChangeEmail({
+      newEta,
+      lastCommunicated: lastComm,
+      orderStatusPastSigned: ['confirmed', 'on_order', 'ready_for_handover'].includes(
+        current.status,
+      ),
+    })
+    const shouldSend = shouldAutoSend || !!opts?.forceCustomerEmail
+
+    if (shouldSend && newEta) {
+      const email = orderEtaChangedEmail({
+        customerFirstName: customer.firstName,
+        orderRef: current.ref,
+        vehicleMake: current.vehicle.make,
+        vehicleModel: current.vehicle.model,
+        previousEtaLabel: lastComm ? fmtDate(lastComm) : null,
+        newEtaLabel: fmtDate(newEta),
+      })
+      const result = await sendLifecycleEmail({
+        template: 'order.eta_changed_email',
+        orderId: current.id,
+        customerId: current.customerId,
+        to: customer.email,
+        subject: email.subject,
+        html: email.html,
+        text: email.text,
+        force: opts?.forceCustomerEmail
+          ? {
+              reason:
+                opts.forceReason?.trim() ||
+                'Admin forced ETA email via logistics edit',
+            }
+          : undefined,
+      })
+      if (result.outcome === 'sent') {
+        await db
+          .update(orders)
+          .set({ lastCommunicatedEtaDate: newEta })
+          .where(eq(orders.id, orderId))
+      }
+    }
+  }
 
   revalidatePath(`/admin/orders/${orderId}`)
   revalidatePath('/admin/orders')
@@ -1082,18 +1261,22 @@ export async function resendSigningLinkAction(
     html: email.html,
     text: email.text,
   })
-  await db.insert(auditEvents).values({
+  // Manual resend always counts as a resend in the audit log; capture the
+  // prior send so admins can see the gap between the two.
+  const prior = await findPriorEmailSent('order.sent', order.id)
+  await recordEmailEvent({
+    template: 'order.sent',
     orderId: order.id,
     customerId: order.customerId,
-    actorType: 'system',
-    eventType: sendResult.ok ? 'email.sent' : 'email.failed',
-    payload: {
-      template: 'order.sent',
-      to: customer.email,
-      manual: true,
-      messageId: sendResult.id,
-      error: sendResult.error,
-    },
+    to: customer.email,
+    subject: email.subject,
+    outcome: sendResult.ok ? 'sent' : 'failed',
+    providerMessageId: sendResult.id ?? null,
+    error: sendResult.error ?? null,
+    isResend: !!prior,
+    resendReason: 'Admin manual resend from order page',
+    previousSentAt: prior?.sentAt,
+    extra: { manual: true, tokenExpiresAt: expiresAt.toISOString() },
   })
 
   revalidatePath(`/admin/orders/${order.id}`)
@@ -1343,12 +1526,16 @@ async function finalisePdfAndNotify(input: FinaliseInput): Promise<void> {
       }
     }
   } else {
-    await db.insert(auditEvents).values({
+    await recordEmailEvent({
+      template: 'order.signed',
       orderId: input.orderId,
       customerId: input.customerId,
-      actorType: 'system',
-      eventType: 'email.failed',
-      payload: { template: 'order.signed', stage: 'pdf_generate', error: pdfResult.error },
+      to: input.customerEmail,
+      subject: `Order ${input.orderRef} fully executed`,
+      outcome: 'failed',
+      providerMessageId: null,
+      error: pdfResult.error ?? 'pdf_generate_failed',
+      extra: { stage: 'pdf_generate' },
     })
   }
 
@@ -1378,23 +1565,38 @@ async function finalisePdfAndNotify(input: FinaliseInput): Promise<void> {
     sendEmail({ to: input.repEmail, ...repMail, attachments }),
   ])
 
-  await db.insert(auditEvents).values({
-    orderId: input.orderId,
-    customerId: input.customerId,
-    actorType: 'system',
-    eventType: custSend.ok && repSend.ok ? 'email.sent' : 'email.failed',
-    payload: {
+  // One audit row per recipient — keeps the {to, providerMessageId, error}
+  // contract one-to-one, so a query like "all emails to customers" doesn't
+  // have to know about a `customerMessageId` shape variant.
+  const sharedExtra = {
+    pdfAttached: !!pdfBuffer,
+    pdfSha256: pdfSha,
+    downloadUrl,
+  }
+  await Promise.all([
+    recordEmailEvent({
       template: 'order.signed',
-      recipients: 2,
-      pdfAttached: !!pdfBuffer,
-      pdfSha256: pdfSha,
-      downloadUrl,
-      customerMessageId: custSend.id,
-      repMessageId: repSend.id,
-      customerError: custSend.error,
-      repError: repSend.error,
-    },
-  })
+      orderId: input.orderId,
+      customerId: input.customerId,
+      to: input.customerEmail,
+      subject: customerMail.subject,
+      outcome: custSend.ok ? 'sent' : 'failed',
+      providerMessageId: custSend.id ?? null,
+      error: custSend.error ?? null,
+      extra: { ...sharedExtra, recipient: 'customer' },
+    }),
+    recordEmailEvent({
+      template: 'order.signed',
+      orderId: input.orderId,
+      customerId: input.customerId,
+      to: input.repEmail,
+      subject: repMail.subject,
+      outcome: repSend.ok ? 'sent' : 'failed',
+      providerMessageId: repSend.id ?? null,
+      error: repSend.error ?? null,
+      extra: { ...sharedExtra, recipient: 'rep' },
+    }),
+  ])
 }
 
 // Exported for the /api/sign/submit route to call when the customer signs

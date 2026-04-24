@@ -158,3 +158,43 @@ export const FIELD_EVENT_TYPE: Partial<
   registrationPlate: 'order.reg_recorded',
   estimatedDeliveryDate: 'order.eta_updated',
 }
+
+// ─── ETA drift (Phase 12) ───────────────────────────────────────────────
+//
+// Drift threshold for customer-facing ETA-change emails. Measured against
+// the last ETA we *successfully emailed the customer about*, not against
+// internal ETA edits. Internal churn (dealer nudges dates by a day,
+// admin corrects a typo) shouldn't spam the customer.
+
+export const ETA_DRIFT_THRESHOLD_DAYS = 7
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+
+/**
+ * Should we send an ETA-change email to the customer given the new ETA
+ * and the last one we communicated? Rules:
+ *
+ *   - `newEta` null → never email (we've cleared the ETA; silent).
+ *   - `lastCommunicated` null and order past `signed` → yes (first comms).
+ *   - `abs(days between newEta and lastCommunicated) > threshold` → yes.
+ *   - Otherwise no.
+ *
+ * Compares by calendar date only — timezones on yyyy-mm-dd strings don't
+ * matter because we parse at UTC midnight on both sides.
+ */
+export function shouldSendEtaChangeEmail(args: {
+  newEta: string | null
+  lastCommunicated: string | null
+  orderStatusPastSigned: boolean
+}): boolean {
+  if (!args.newEta) return false
+  if (!args.orderStatusPastSigned) return false
+  if (!args.lastCommunicated) return true
+  return etaDriftDays(args.newEta, args.lastCommunicated) > ETA_DRIFT_THRESHOLD_DAYS
+}
+
+export function etaDriftDays(a: string, b: string): number {
+  const da = Date.parse(`${a}T00:00:00Z`)
+  const db = Date.parse(`${b}T00:00:00Z`)
+  if (Number.isNaN(da) || Number.isNaN(db)) return 0
+  return Math.abs(Math.round((da - db) / MS_PER_DAY))
+}

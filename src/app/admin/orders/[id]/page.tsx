@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { asc, desc, eq, inArray } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm'
 import {
   db,
   orders,
@@ -12,6 +12,7 @@ import {
   suppliers,
   supplierOrders,
   quotes,
+  feedback,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtDate, fmtDateTime, fmtRelative } from '@/lib/format'
@@ -46,7 +47,12 @@ import { SupplierSelectors } from './SupplierSelectors'
 import { DeliveryCard } from './DeliveryCard'
 import { SupplierPOCard } from './SupplierPOCard'
 import { DealPLCard } from './DealPLCard'
+import { HandoverPackCard } from './HandoverPackCard'
+import { FeedbackCard } from './FeedbackCard'
 import { createDraftSupplierPOAction } from '../../actions/supplier-po'
+import { generateHandoverPackAction } from '../../actions/handover-pack'
+import { resendNpsRequestAction } from '../../actions/feedback'
+import { getCurrentHandoverPack } from '@/lib/handover-pack'
 
 export const metadata = { title: 'Order' }
 
@@ -79,6 +85,9 @@ export default async function OrderDetailPage({
     activeSuppliers,
     sourceQuoteRows,
     supplierPoRows,
+    handoverPack,
+    orderFeedback,
+    npsSentRows,
   ] = await Promise.all([
     db
       .select()
@@ -113,6 +122,30 @@ export default async function OrderDetailPage({
       .where(eq(supplierOrders.orderId, id))
       .orderBy(desc(supplierOrders.createdAt))
       .limit(10),
+    getCurrentHandoverPack(id),
+    db
+      .select()
+      .from(feedback)
+      .where(eq(feedback.orderId, id))
+      .orderBy(desc(feedback.submittedAt))
+      .limit(1),
+    // Has the NPS template been sent (or suppressed by opt-out)? Used to
+    // toggle the FeedbackCard label between "will be sent automatically"
+    // and "awaiting response / resend".
+    db
+      .select({ id: auditEvents.id })
+      .from(auditEvents)
+      .where(
+        and(
+          eq(auditEvents.orderId, id),
+          inArray(auditEvents.eventType, [
+            'email.sent',
+            'email.suppressed',
+          ]),
+          sql`${auditEvents.payload} ->> 'template' = 'nps_request_email'`,
+        ),
+      )
+      .limit(1),
   ])
 
   const activePO = supplierPoRows.find((p) => p.status !== 'cancelled') ?? null
@@ -188,7 +221,12 @@ export default async function OrderDetailPage({
     for (const f of LOGISTICS_FIELDS as readonly LogisticsField[]) {
       if (formData.has(f)) patch[f] = formValue(formData, f)
     }
-    await updateLogisticsAction(id, patch)
+    const forceCustomerEmail = formData.get('forceCustomerEmail') === 'on'
+    const forceReason = formValue(formData, 'forceCustomerEmailReason')
+    await updateLogisticsAction(id, patch, {
+      forceCustomerEmail,
+      forceReason,
+    })
   }
   async function cancelPostSign(formData: FormData) {
     'use server'
@@ -229,6 +267,14 @@ export default async function OrderDetailPage({
     if (result.ok) {
       redirect(`/admin/orders/${id}/supplier-po`)
     }
+  }
+  async function generateHandover() {
+    'use server'
+    await generateHandoverPackAction(id)
+  }
+  async function resendNps() {
+    'use server'
+    await resendNpsRequestAction(id)
   }
   async function assignVehicleSupplier(supplierId: string | null) {
     'use server'
@@ -509,6 +555,19 @@ export default async function OrderDetailPage({
           />
 
           <DealPLCard order={order} activePO={activePO} />
+
+          <HandoverPackCard
+            order={order}
+            existing={handoverPack}
+            generate={generateHandover}
+          />
+
+          <FeedbackCard
+            orderStatus={order.status}
+            feedback={orderFeedback[0] ?? null}
+            resendNps={resendNps}
+            npsAlreadySent={npsSentRows.length > 0}
+          />
 
           <div className="adm-card">
             <div className="adm-card-head">

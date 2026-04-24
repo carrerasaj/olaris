@@ -49,6 +49,7 @@ export default async function EditCustomerPage({
     addressPostcode: customer.billingAddress?.postcode,
     addressCountry: customer.billingAddress?.country,
     notes: customer.notes ?? undefined,
+    marketingOptOut: customer.marketingOptOut,
   }
 
   return (

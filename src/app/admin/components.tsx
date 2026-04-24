@@ -206,6 +206,56 @@ export function auditEventLabel(type: string): string {
       'quote.expired': 'Quote expired',
       'quote.converted': 'Quote converted to order',
       'quote.cancelled': 'Quote cancelled',
+      'email.suppressed': 'Email suppressed',
+      'feedback.requested': 'Feedback requested',
+      'feedback.submitted': 'Feedback submitted',
+      'feedback.detractor_flagged': 'Detractor flagged for follow-up',
+      'handover_pack.generated': 'Handover pack generated',
+      'handover_pack.superseded': 'Handover pack superseded',
+      'customer.marketing_opt_out_changed': 'Marketing opt-out changed',
     }[type] ?? type
+  )
+}
+
+/**
+ * Coloured pill for an NPS score. Promoter (9–10) green, passive (7–8)
+ * amber, detractor (0–6) red. Tiny so it fits inline next to a name.
+ */
+export function NpsScorePill({ score }: { score: number }) {
+  const category =
+    score >= 9 ? 'promoter' : score >= 7 ? 'passive' : 'detractor'
+  const styles: Record<string, { bg: string; fg: string; label: string }> = {
+    promoter: { bg: '#dcfce7', fg: '#047857', label: 'Promoter' },
+    passive: { bg: '#fef3c7', fg: '#78350f', label: 'Passive' },
+    detractor: { bg: '#fee2e2', fg: '#b91c1c', label: 'Detractor' },
+  }
+  const s = styles[category]
+  return (
+    <span
+      title={`NPS ${score} · ${s.label}`}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '2px 9px',
+        background: s.bg,
+        color: s.fg,
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 700,
+        lineHeight: 1.5,
+      }}
+    >
+      <span
+        style={{
+          fontFamily: 'JetBrains Mono, monospace',
+          fontSize: 11,
+          fontWeight: 800,
+        }}
+      >
+        {score}
+      </span>
+      {s.label}
+    </span>
   )
 }

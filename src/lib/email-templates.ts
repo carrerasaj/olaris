@@ -159,6 +159,219 @@ This quote is valid until ${expiry}. To accept it, just reply to this email or g
   }
 }
 
+// ─── Phase 12 — customer delivery lifecycle ─────────────────────────────
+
+interface OrderConfirmedInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  etaLabel: string | null // pre-formatted date string or null
+}
+
+export function orderConfirmedEmail(input: OrderConfirmedInput) {
+  const etaRow = input.etaLabel
+    ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Estimated delivery</td><td style="padding:14px 18px;text-align:right;font-size:13px;color:#0f172a;font-weight:600;border-top:1px solid #e4e9f1">${escapeHtml(input.etaLabel)}</td></tr>`
+    : ''
+  return {
+    subject: `Your order has been placed with the dealer — ${input.orderRef}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Your order is confirmed with the dealer</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Good news — your <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>
+        has been placed with the supplier and the order is now in progress.
+        We'll keep you updated as it moves through build and delivery.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Order reference</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.orderRef)}</td></tr>
+        ${etaRow}
+      </table>
+      <p style="${SMALL}">
+        Any questions, just reply to this email.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Your ${input.vehicleMake} ${input.vehicleModel} has been placed with the supplier and the order is now in progress.
+
+Order reference: ${input.orderRef}${input.etaLabel ? `\nEstimated delivery: ${input.etaLabel}` : ''}
+
+We'll keep you updated as it moves through build and delivery.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface OrderEtaChangedInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  previousEtaLabel: string | null
+  newEtaLabel: string
+}
+
+export function orderEtaChangedEmail(input: OrderEtaChangedInput) {
+  return {
+    subject: `Updated ETA for your order — ${input.orderRef}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Updated delivery estimate</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        The supplier has updated the expected delivery for your
+        <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Order</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.orderRef)}</td></tr>
+        ${input.previousEtaLabel ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Previous ETA</td><td style="padding:14px 18px;text-align:right;font-size:13px;color:#475569;border-top:1px solid #e4e9f1"><s>${escapeHtml(input.previousEtaLabel)}</s></td></tr>` : ''}
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">New ETA</td><td style="padding:14px 18px;text-align:right;font-size:15px;color:#0b1e3f;font-weight:700;border-top:1px solid #e4e9f1">${escapeHtml(input.newEtaLabel)}</td></tr>
+      </table>
+      <p style="${SMALL}">
+        Any questions, just reply to this email.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+The supplier has updated the expected delivery for your ${input.vehicleMake} ${input.vehicleModel}.
+
+Order: ${input.orderRef}${input.previousEtaLabel ? `\nPrevious ETA: ${input.previousEtaLabel}` : ''}
+New ETA: ${input.newEtaLabel}
+
+Any questions, just reply to this email.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface OrderReadyForHandoverInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  handoverLocation: string | null
+  etaLabel: string | null
+}
+
+export function orderReadyForHandoverEmail(input: OrderReadyForHandoverInput) {
+  const handoverRow = input.handoverLocation
+    ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Handover at</td><td style="padding:14px 18px;text-align:right;font-size:13px;color:#0f172a;font-weight:600;border-top:1px solid #e4e9f1">${escapeHtml(input.handoverLocation)}</td></tr>`
+    : ''
+  const etaRow = input.etaLabel
+    ? `<tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;border-top:1px solid #e4e9f1">Expected</td><td style="padding:14px 18px;text-align:right;font-size:13px;color:#0f172a;font-weight:600;border-top:1px solid #e4e9f1">${escapeHtml(input.etaLabel)}</td></tr>`
+    : ''
+  return {
+    subject: `Your ${input.vehicleMake} ${input.vehicleModel} is ready for handover — ${input.orderRef}`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Ready for handover</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Your <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>
+        has arrived and is being prepared for handover. We'll be in touch
+        shortly to confirm the exact time.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="width:100%;margin:20px 0;background:#f8fafc;border-radius:6px">
+        <tr><td style="padding:14px 18px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Order</td><td style="padding:14px 18px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;color:#0f172a;font-weight:600">${escapeHtml(input.orderRef)}</td></tr>
+        ${handoverRow}
+        ${etaRow}
+      </table>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Your ${input.vehicleMake} ${input.vehicleModel} has arrived and is being prepared for handover. We'll be in touch shortly to confirm the exact time.
+
+Order: ${input.orderRef}${input.handoverLocation ? `\nHandover at: ${input.handoverLocation}` : ''}${input.etaLabel ? `\nExpected: ${input.etaLabel}` : ''}
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface OrderDeliveredInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  registrationPlate: string | null
+  handoverPackUrl: string | null
+  verifyUrl: string
+}
+
+export function orderDeliveredEmail(input: OrderDeliveredInput) {
+  const packRow = input.handoverPackUrl
+    ? `<div style="text-align:center;margin:24px 0"><a href="${input.handoverPackUrl}" style="${BTN}">Download handover pack</a></div>`
+    : ''
+  return {
+    subject: `Welcome to your ${input.vehicleMake} ${input.vehicleModel}`,
+    html: cardTemplate(`
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:24px;background:#d1fae5;color:#059669">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+      </div>
+      <h1 style="${H1};text-align:center">Delivered</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Welcome to your new <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>${input.registrationPlate ? ` <span style="font-family:'JetBrains Mono',monospace">(${escapeHtml(input.registrationPlate)})</span>` : ''}.
+        Thanks for trusting us with the order.
+      </p>
+      ${packRow}
+      <p style="${SMALL}">
+        Your signed order remains available at
+        <a href="${input.verifyUrl}" style="color:#0b1e3f">${escapeHtml(input.verifyUrl)}</a>.
+        If anything needs attention, reply to this email.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Welcome to your new ${input.vehicleMake} ${input.vehicleModel}${input.registrationPlate ? ` (${input.registrationPlate})` : ''}. Thanks for trusting us with the order.
+
+${input.handoverPackUrl ? `Download your handover pack: ${input.handoverPackUrl}\n\n` : ''}Your signed order remains available at: ${input.verifyUrl}
+
+If anything needs attention, reply to this email.
+
+— Olaris Consulting Ltd`,
+  }
+}
+
+interface NpsRequestInput {
+  customerFirstName: string
+  orderRef: string
+  vehicleMake: string
+  vehicleModel: string
+  feedbackUrl: string
+}
+
+export function npsRequestEmail(input: NpsRequestInput) {
+  return {
+    subject: `How was your experience with Olaris?`,
+    html: cardTemplate(`
+      <h1 style="${H1}">Quick feedback — 30 seconds</h1>
+      <p style="${P}">Hi ${escapeHtml(input.customerFirstName)},</p>
+      <p style="${P}">
+        Now that you've had your <strong>${escapeHtml(input.vehicleMake)} ${escapeHtml(input.vehicleModel)}</strong>
+        for a couple of days, we'd really value your feedback on the order
+        experience with Olaris — it takes about 30 seconds.
+      </p>
+      <div style="text-align:center;margin:28px 0">
+        <a href="${input.feedbackUrl}" style="${BTN}">Give feedback</a>
+      </div>
+      <p style="${SMALL}">
+        It's a single 0–10 rating plus an optional comment. Order
+        <strong style="font-family:'JetBrains Mono',monospace">${escapeHtml(input.orderRef)}</strong>.
+      </p>
+    `),
+    text: `Hi ${input.customerFirstName},
+
+Now that you've had your ${input.vehicleMake} ${input.vehicleModel} for a couple of days, we'd really value your feedback on the order experience with Olaris. It takes about 30 seconds — a single 0–10 rating plus an optional comment.
+
+Feedback: ${input.feedbackUrl}
+
+Order: ${input.orderRef}
+
+— Olaris Consulting Ltd`,
+  }
+}
+
 interface SupplierPoInput {
   supplierContactName: string
   supplierTradingName: string

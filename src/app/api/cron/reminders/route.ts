@@ -33,8 +33,14 @@ import {
   auditEvents,
 } from '@/db/client'
 import { sendEmail } from '@/lib/email'
-import { orderSentEmail } from '@/lib/email-templates'
+import { orderSentEmail, npsRequestEmail } from '@/lib/email-templates'
 import { fmtGBPFromPence } from '@/lib/format'
+import {
+  sendLifecycleEmail,
+  recordEmailEvent,
+  findPriorEmailSent,
+} from '@/lib/email-customer'
+import { mintFeedbackTokenForOrder } from '@/app/admin/actions/feedback'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -111,6 +117,75 @@ export async function GET(req: Request) {
     }
 
     const { order, customer } = rows[0]
+
+    // ── Phase 12 — NPS branch ────────────────────────────────
+    if (r.kind === 'nps_day_2') {
+      if (order.status !== 'delivered') {
+        await db
+          .update(reminderSchedule)
+          .set({ cancelledAt: now })
+          .where(eq(reminderSchedule.id, r.rid))
+        skipped++
+        details.push({
+          reminderId: r.rid,
+          outcome: `nps_skipped:status:${order.status}`,
+        })
+        continue
+      }
+
+      const mint = await mintFeedbackTokenForOrder(order.id)
+      if (!mint.ok || !mint.token) {
+        failed++
+        details.push({
+          reminderId: r.rid,
+          outcome: 'nps_mint_failed',
+          error: mint.error,
+        })
+        continue
+      }
+
+      const feedbackUrl = `${siteUrl()}/feedback/${mint.token}`
+      const email = npsRequestEmail({
+        customerFirstName: customer.firstName,
+        orderRef: order.ref,
+        vehicleMake: order.vehicle.make,
+        vehicleModel: order.vehicle.model,
+        feedbackUrl,
+      })
+      const result = await sendLifecycleEmail({
+        template: 'nps_request_email',
+        orderId: order.id,
+        customerId: order.customerId,
+        to: customer.email,
+        subject: email.subject,
+        html: email.html,
+        text: email.text,
+      })
+
+      // Mark the reminder done so tomorrow's sweep doesn't reconsider it.
+      // Suppressed (opt-out / already_sent) → cancelledAt; the audit row
+      // carries the reason. Sent / failed → sentAt. Failure isn't retried
+      // in v1 — admin can manually resend via the order page.
+      const updateSet =
+        result.outcome === 'suppressed'
+          ? { cancelledAt: now }
+          : { sentAt: now }
+      await db
+        .update(reminderSchedule)
+        .set(updateSet)
+        .where(eq(reminderSchedule.id, r.rid))
+
+      if (result.outcome === 'sent') sent++
+      else if (result.outcome === 'suppressed') skipped++
+      else failed++
+      details.push({
+        reminderId: r.rid,
+        outcome: `nps_${result.outcome}${result.reason ? `:${result.reason}` : ''}`,
+        error: result.error,
+      })
+      continue
+    }
+
     if (order.status !== 'sent' && order.status !== 'partially_signed') {
       // Already signed / delivered / cancelled — suppress the reminder.
       // Stamp cancelled_at so tomorrow's sweep doesn't reconsider it.
@@ -173,32 +248,40 @@ export async function GET(req: Request) {
       text: email.text,
     })
 
+    // Reminders that successfully send the order.sent template are always
+    // a resend (the original went out at sendForSignatureAction). Capture
+    // the prior sentAt so the audit row stands on its own.
+    const prior = await findPriorEmailSent('order.sent', order.id)
+
     if (sendResult.ok) {
       await db
         .update(reminderSchedule)
         .set({ sentAt: now })
         .where(eq(reminderSchedule.id, r.rid))
-      await db.insert(auditEvents).values([
-        {
-          orderId: order.id,
-          customerId: order.customerId,
-          actorType: 'system',
-          eventType: 'reminder.sent',
-          payload: { kind: r.kind, to: customer.email, scheduledFor: r.scheduledFor.toISOString() },
+      await db.insert(auditEvents).values({
+        orderId: order.id,
+        customerId: order.customerId,
+        actorType: 'system',
+        eventType: 'reminder.sent',
+        payload: {
+          kind: r.kind,
+          to: customer.email,
+          scheduledFor: r.scheduledFor.toISOString(),
         },
-        {
-          orderId: order.id,
-          customerId: order.customerId,
-          actorType: 'system',
-          eventType: 'email.sent',
-          payload: {
-            template: 'order.sent',
-            reminder: true,
-            to: customer.email,
-            messageId: sendResult.id,
-          },
-        },
-      ])
+      })
+      await recordEmailEvent({
+        template: 'order.sent',
+        orderId: order.id,
+        customerId: order.customerId,
+        to: customer.email,
+        subject: email.subject,
+        outcome: 'sent',
+        providerMessageId: sendResult.id ?? null,
+        isResend: !!prior,
+        resendReason: prior ? `Cron reminder: ${r.kind}` : undefined,
+        previousSentAt: prior?.sentAt,
+        extra: { reminder: true, reminderKind: r.kind },
+      })
       sent++
       details.push({ reminderId: r.rid, outcome: 'sent' })
     } else {
@@ -206,17 +289,19 @@ export async function GET(req: Request) {
       // retries. If Resend is down today, we'll catch up tomorrow. If
       // the address is permanently bad, the email will keep failing —
       // we accept that in v1 (no dead-letter queue yet).
-      await db.insert(auditEvents).values({
+      await recordEmailEvent({
+        template: 'order.sent',
         orderId: order.id,
         customerId: order.customerId,
-        actorType: 'system',
-        eventType: 'email.failed',
-        payload: {
-          template: 'order.sent',
-          reminder: true,
-          to: customer.email,
-          error: sendResult.error,
-        },
+        to: customer.email,
+        subject: email.subject,
+        outcome: 'failed',
+        providerMessageId: null,
+        error: sendResult.error ?? 'unknown',
+        isResend: !!prior,
+        resendReason: prior ? `Cron reminder: ${r.kind}` : undefined,
+        previousSentAt: prior?.sentAt,
+        extra: { reminder: true, reminderKind: r.kind },
       })
       failed++
       details.push({

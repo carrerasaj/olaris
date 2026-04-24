@@ -54,6 +54,7 @@ function coerceCustomerPayload(form: FormData) {
       country: (raw['addressCountry'] as string) || 'United Kingdom',
     },
     notes: (raw['notes'] as string) || undefined,
+    marketingOptOut: raw['marketingOptOut'] === 'on' || raw['marketingOptOut'] === 'true',
   }
 }
 
@@ -104,6 +105,7 @@ export async function createCustomerAction(form: FormData): Promise<ActionResult
       companyId,
       billingAddress: input.billingAddress,
       notes: input.notes,
+      marketingOptOut: input.marketingOptOut ?? false,
       createdBy: user.id,
     })
     .returning({ id: customers.id })
@@ -140,9 +142,13 @@ export async function updateCustomerAction(
   }
   const input = parsed.data
 
-  // Fetch existing for companyId continuity
+  // Fetch existing for companyId continuity + opt-out diff for audit
   const existing = await db
-    .select({ id: customers.id, companyId: customers.companyId })
+    .select({
+      id: customers.id,
+      companyId: customers.companyId,
+      marketingOptOut: customers.marketingOptOut,
+    })
     .from(customers)
     .where(eq(customers.id, customerId))
     .limit(1)
@@ -178,6 +184,7 @@ export async function updateCustomerAction(
     companyId = null
   }
 
+  const nextOptOut = input.marketingOptOut ?? false
   await db
     .update(customers)
     .set({
@@ -192,9 +199,20 @@ export async function updateCustomerAction(
       companyId,
       billingAddress: input.billingAddress,
       notes: input.notes,
+      marketingOptOut: nextOptOut,
       updatedAt: new Date(),
     })
     .where(eq(customers.id, customerId))
+
+  if (nextOptOut !== existing[0].marketingOptOut) {
+    await db.insert(auditEvents).values({
+      customerId,
+      actorType: 'rep',
+      actorId: user.id,
+      eventType: 'customer.marketing_opt_out_changed',
+      payload: { from: existing[0].marketingOptOut, to: nextOptOut },
+    })
+  }
 
   revalidatePath(`/admin/customers/${customerId}`)
   revalidatePath('/admin/customers')

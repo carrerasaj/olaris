@@ -121,6 +121,51 @@ export function DeliveryCard({ order, actions }: DeliveryCardProps) {
             </summary>
             <form action={actions.updateLogistics} style={styles.form}>
               <FullLogisticsFields order={order} />
+              <div
+                style={{
+                  marginTop: 10,
+                  padding: '10px 12px',
+                  background: '#f8fafc',
+                  border: '1px solid #e4e9f1',
+                  borderRadius: 6,
+                  fontSize: 12.5,
+                }}
+              >
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 8,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    name="forceCustomerEmail"
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>
+                    <strong>Email customer about this update</strong>
+                    <br />
+                    <span style={{ color: '#64748b' }}>
+                      Force-sends an ETA-changed email even if the drift is
+                      within the 7-day threshold. Requires a reason below.
+                    </span>
+                  </span>
+                </label>
+                <div
+                  className="adm-field"
+                  style={{ marginTop: 8, marginBottom: 0 }}
+                >
+                  <label style={{ fontSize: 11, textTransform: 'uppercase' }}>
+                    Reason (used if forcing)
+                  </label>
+                  <input
+                    name="forceCustomerEmailReason"
+                    placeholder="e.g. customer called to ask"
+                  />
+                </div>
+              </div>
               <div style={styles.actions}>
                 <button type="submit" className="adm-btn adm-btn-ghost adm-btn-sm">
                   Save logistics

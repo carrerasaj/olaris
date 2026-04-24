@@ -27,6 +27,7 @@ export interface CustomerFormInitial {
   addressPostcode?: string
   addressCountry?: string
   notes?: string
+  marketingOptOut?: boolean
 }
 
 type Action = (state: ActionResult | null, formData: FormData) => Promise<ActionResult>
@@ -230,6 +231,39 @@ export function CustomerForm({
             <label>Internal notes (not shown to customer)</label>
             <textarea name="notes" rows={4} defaultValue={initial?.notes} />
           </div>
+        </div>
+      </div>
+
+      <div className="adm-card" style={{ marginBottom: 16 }}>
+        <div className="adm-card-head">
+          <h2 className="adm-card-title">Communication preferences</h2>
+        </div>
+        <div className="adm-card-body">
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 10,
+              cursor: 'pointer',
+            }}
+          >
+            <input
+              type="checkbox"
+              name="marketingOptOut"
+              defaultChecked={initial?.marketingOptOut ?? false}
+              style={{ marginTop: 3 }}
+            />
+            <span>
+              <strong style={{ fontSize: 13 }}>
+                Opt out of optional comms (NPS, referrals)
+              </strong>
+              <br />
+              <span style={{ fontSize: 12, color: '#64748b' }}>
+                Service emails — order confirmed, ETA changes, ready for
+                handover, delivered — always send regardless of this setting.
+              </span>
+            </span>
+          </label>
         </div>
       </div>
 

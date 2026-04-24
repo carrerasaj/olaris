@@ -8,10 +8,11 @@ import {
   orders,
   quotes,
   activities,
+  feedback,
 } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
-import { fmtGBPFromPence, fmtDate, fmtRelative } from '@/lib/format'
-import { OrderStatusPill, QuoteStatusPill } from '../../components'
+import { fmtGBPFromPence, fmtDate, fmtDateTime, fmtRelative } from '@/lib/format'
+import { OrderStatusPill, QuoteStatusPill, NpsScorePill } from '../../components'
 import { addActivityAction, completeActivityAction } from '../../actions/customers'
 
 export const metadata = { title: 'Customer' }
@@ -37,26 +38,44 @@ export default async function CustomerDetailPage({
   if (row.length === 0) notFound()
   const { customer, company } = row[0]
 
-  const [customerOrders, customerQuotes, customerActivities] = await Promise.all([
-    db
-      .select()
-      .from(orders)
-      .where(eq(orders.customerId, id))
-      .orderBy(desc(orders.createdAt))
-      .limit(50),
-    db
-      .select()
-      .from(quotes)
-      .where(eq(quotes.customerId, id))
-      .orderBy(desc(quotes.createdAt))
-      .limit(50),
-    db
-      .select()
-      .from(activities)
-      .where(eq(activities.customerId, id))
-      .orderBy(desc(activities.createdAt))
-      .limit(50),
-  ])
+  const [customerOrders, customerQuotes, customerActivities, customerFeedback] =
+    await Promise.all([
+      db
+        .select()
+        .from(orders)
+        .where(eq(orders.customerId, id))
+        .orderBy(desc(orders.createdAt))
+        .limit(50),
+      db
+        .select()
+        .from(quotes)
+        .where(eq(quotes.customerId, id))
+        .orderBy(desc(quotes.createdAt))
+        .limit(50),
+      db
+        .select()
+        .from(activities)
+        .where(eq(activities.customerId, id))
+        .orderBy(desc(activities.createdAt))
+        .limit(50),
+      db
+        .select({
+          id: feedback.id,
+          orderId: feedback.orderId,
+          score: feedback.score,
+          category: feedback.category,
+          comment: feedback.comment,
+          submittedAt: feedback.submittedAt,
+          orderRef: orders.ref,
+        })
+        .from(feedback)
+        .innerJoin(orders, eq(orders.id, feedback.orderId))
+        .where(eq(feedback.customerId, id))
+        .orderBy(desc(feedback.submittedAt))
+        .limit(10),
+    ])
+
+  const latestFeedback = customerFeedback[0] ?? null
 
   async function addActivity(formData: FormData) {
     'use server'
@@ -73,13 +92,37 @@ export default async function CustomerDetailPage({
           >
             ← Customers
           </Link>
-          <h1 style={{ marginTop: 4 }}>
+          <h1
+            style={{
+              marginTop: 4,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
             {customer.firstName} {customer.lastName}
+            {latestFeedback && <NpsScorePill score={latestFeedback.score} />}
           </h1>
           <div className="sub">
             {customer.type === 'business' && company
               ? `${company.name} · ${customer.email}`
               : customer.email}
+            {customer.marketingOptOut && (
+              <span
+                style={{
+                  marginLeft: 10,
+                  fontSize: 11,
+                  color: '#b45309',
+                  background: '#fef3c7',
+                  padding: '1px 8px',
+                  borderRadius: 999,
+                  fontWeight: 600,
+                }}
+                title="Customer has opted out of NPS / marketing emails. Service emails still send."
+              >
+                marketing opt-out
+              </span>
+            )}
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
@@ -252,6 +295,60 @@ export default async function CustomerDetailPage({
               )}
             </div>
           </div>
+
+          {customerFeedback.length > 0 && (
+            <div className="adm-card">
+              <div className="adm-card-head">
+                <h2 className="adm-card-title">
+                  Feedback ({customerFeedback.length})
+                </h2>
+              </div>
+              <div className="adm-card-body">
+                {customerFeedback.map((f) => (
+                  <div
+                    key={f.id}
+                    style={{
+                      padding: '10px 0',
+                      borderBottom: '1px dashed #e4e9f1',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 10,
+                        alignItems: 'center',
+                        marginBottom: 4,
+                      }}
+                    >
+                      <NpsScorePill score={f.score} />
+                      <Link
+                        href={`/admin/orders/${f.orderId}`}
+                        className="mono"
+                        style={{ fontSize: 12, color: '#1e3a8a' }}
+                      >
+                        {f.orderRef}
+                      </Link>
+                      <span style={{ fontSize: 12, color: '#64748b' }}>
+                        · {fmtDateTime(f.submittedAt)}
+                      </span>
+                    </div>
+                    {f.comment && (
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: '#0f172a',
+                          whiteSpace: 'pre-wrap',
+                          paddingLeft: 4,
+                        }}
+                      >
+                        {f.comment}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -379,12 +476,52 @@ function ActivityRow({
     await completeActivityAction(activity.id, customerId)
   }
 
+  // Detractor follow-ups created by the NPS pipeline have a very specific
+  // title shape — flag them visually so admins notice the row in a long
+  // timeline. Open ones get a red strip + label; completed ones drop the
+  // strip but keep the label so the historic context survives.
+  const isDetractor = activity.title.startsWith('Follow up: NPS ')
+  const open = !activity.completedAt
+  const detractorOpen = isDetractor && open
+
   return (
-    <div className="adm-timeline-item">
+    <div
+      className="adm-timeline-item"
+      style={
+        detractorOpen
+          ? {
+              background: '#fef2f2',
+              borderLeft: '3px solid #b91c1c',
+              padding: '8px 10px',
+              borderRadius: 4,
+              marginLeft: -10,
+            }
+          : undefined
+      }
+    >
       <div className="adm-timeline-dot" />
       <div>
         <div className="adm-timeline-title">
-          [{activity.kind}] {activity.title}
+          {isDetractor ? (
+            <span
+              style={{
+                display: 'inline-block',
+                fontSize: 10,
+                background: detractorOpen ? '#b91c1c' : '#cbd5e1',
+                color: '#fff',
+                padding: '1px 6px',
+                borderRadius: 3,
+                marginRight: 6,
+                fontWeight: 700,
+                letterSpacing: 0.4,
+              }}
+            >
+              NPS DETRACTOR
+            </span>
+          ) : (
+            `[${activity.kind}] `
+          )}
+          {activity.title}
         </div>
         {activity.body && (
           <div className="adm-timeline-sub" style={{ whiteSpace: 'pre-wrap' }}>
@@ -392,9 +529,19 @@ function ActivityRow({
           </div>
         )}
         {activity.dueDate && (
-          <div className="adm-timeline-sub">
+          <div
+            className="adm-timeline-sub"
+            style={
+              detractorOpen && activity.dueDate.getTime() < Date.now()
+                ? { color: '#b91c1c', fontWeight: 700 }
+                : undefined
+            }
+          >
             Due {fmtDate(activity.dueDate)}
             {activity.completedAt && ' · ✓ done'}
+            {detractorOpen &&
+              activity.dueDate.getTime() < Date.now() &&
+              ' · OVERDUE'}
           </div>
         )}
         <div

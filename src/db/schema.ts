@@ -117,6 +117,13 @@ export const auditEventType = pgEnum('audit_event_type', [
   'supplier_po.snapshot_refreshed',
   'supplier_po.superseded_by',
   'supplier_po.invoice_received',
+  'email.suppressed',
+  'feedback.requested',
+  'feedback.submitted',
+  'feedback.detractor_flagged',
+  'handover_pack.generated',
+  'handover_pack.superseded',
+  'customer.marketing_opt_out_changed',
 ])
 export const actorType = pgEnum('actor_type', ['rep', 'customer', 'system'])
 export const documentKind = pgEnum('document_kind', [
@@ -124,7 +131,16 @@ export const documentKind = pgEnum('document_kind', [
   'proof_of_address',
   'proof_of_income',
   'signed_order_pdf',
+  'handover_pack',
   'other',
+])
+// NPS band derived on insert from the 0–10 score. Promoters 9–10,
+// passives 7–8, detractors 0–6. Stored so queries can aggregate without
+// re-deriving.
+export const feedbackCategory = pgEnum('feedback_category', [
+  'promoter',
+  'passive',
+  'detractor',
 ])
 export const activityKind = pgEnum('activity_kind', [
   'note',
@@ -390,6 +406,10 @@ export const customers = pgTable(
     }),
     billingAddress: jsonb('billing_address').$type<AddressJson>(),
     notes: text('notes'),
+    // Phase 12 — suppresses NPS + future referral/anniversary comms only.
+    // Transactional emails (confirmed / ETA / ready / delivered) are the
+    // service we're contracted to provide and ignore this flag.
+    marketingOptOut: boolean('marketing_opt_out').notNull().default(false),
     createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -477,6 +497,11 @@ export const orders = pgTable(
     registrationPlate: text('registration_plate'),
     // Dates not timestamps — we care about the day, not the minute.
     estimatedDeliveryDate: text('estimated_delivery_date'),
+    // Last ETA we *successfully emailed the customer about*. The drift
+    // threshold for the next customer-facing ETA email compares against
+    // this, not against estimated_delivery_date, so internal churn doesn't
+    // spam the customer. Populated only when an ETA-bearing email sends.
+    lastCommunicatedEtaDate: text('last_communicated_eta_date'),
     actualDeliveryDate: text('actual_delivery_date'),
     handoverLocation: text('handover_location'),
     handoverNotes: text('handover_notes'),
@@ -888,6 +913,68 @@ export const reminderSchedule = pgTable(
   }),
 )
 
+// Phase 12 — post-delivery NPS capture.
+//
+// One feedback row per (order, submission). A short-lived token is minted
+// at delivery and emailed to the customer +2 days later; clicking it
+// lands them on /feedback/[token], scoring submits a row and consumes the
+// token (one submission per token). The token is independent of
+// signing_tokens — different purpose, different lifecycle.
+export const feedbackTokens = pgTable(
+  'feedback_tokens',
+  {
+    id: id(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'cascade' }),
+    token: text('token').notNull().unique(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    tokenIdx: uniqueIndex('feedback_tokens_token_idx').on(t.token),
+    orderIdx: index('feedback_tokens_order_idx').on(t.orderId),
+  }),
+)
+
+export const feedback = pgTable(
+  'feedback',
+  {
+    id: id(),
+    orderId: text('order_id')
+      .notNull()
+      .references(() => orders.id, { onDelete: 'restrict' }),
+    customerId: text('customer_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'restrict' }),
+    score: integer('score').notNull(), // 0–10, app-level bounds-checked
+    category: feedbackCategory('category').notNull(),
+    comment: text('comment'),
+    submittedAt: timestamp('submitted_at', { withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+    tokenId: text('token_id').references(() => feedbackTokens.id, {
+      onDelete: 'set null',
+    }),
+    // Forensic envelope — same shape as signatures, so customer-submitted
+    // NPS has a comparable "who clicked this from where" record.
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    geoCity: text('geo_city'),
+    geoCountry: text('geo_country'),
+  },
+  (t) => ({
+    orderIdx: index('feedback_order_idx').on(t.orderId),
+    customerIdx: index('feedback_customer_idx').on(t.customerId),
+    submittedAtIdx: index('feedback_submitted_at_idx').on(t.submittedAt),
+    categoryIdx: index('feedback_category_idx').on(t.category),
+  }),
+)
+
 // ─── Relations ─────────────────────────────────────────────────────────────
 // Drizzle relations — used for typed joins via db.query.* API.
 
@@ -1053,6 +1140,26 @@ export const reminderScheduleRelations = relations(reminderSchedule, ({ one }) =
   order: one(orders, { fields: [reminderSchedule.orderId], references: [orders.id] }),
 }))
 
+export const feedbackRelations = relations(feedback, ({ one }) => ({
+  order: one(orders, { fields: [feedback.orderId], references: [orders.id] }),
+  customer: one(customers, {
+    fields: [feedback.customerId],
+    references: [customers.id],
+  }),
+  token: one(feedbackTokens, {
+    fields: [feedback.tokenId],
+    references: [feedbackTokens.id],
+  }),
+}))
+
+export const feedbackTokensRelations = relations(feedbackTokens, ({ one }) => ({
+  order: one(orders, { fields: [feedbackTokens.orderId], references: [orders.id] }),
+  customer: one(customers, {
+    fields: [feedbackTokens.customerId],
+    references: [customers.id],
+  }),
+}))
+
 // ─── Inferred types (for use across the app) ──────────────────────────────
 
 export type User = typeof users.$inferSelect
@@ -1085,3 +1192,8 @@ export type NewDocument = typeof documents.$inferInsert
 export type Activity = typeof activities.$inferSelect
 export type NewActivity = typeof activities.$inferInsert
 export type ReminderSchedule = typeof reminderSchedule.$inferSelect
+export type Feedback = typeof feedback.$inferSelect
+export type NewFeedback = typeof feedback.$inferInsert
+export type FeedbackCategory = (typeof feedbackCategory.enumValues)[number]
+export type FeedbackToken = typeof feedbackTokens.$inferSelect
+export type NewFeedbackToken = typeof feedbackTokens.$inferInsert

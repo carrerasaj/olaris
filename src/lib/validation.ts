@@ -65,6 +65,7 @@ export const customerCreateSchema = z.object({
   vatNumber: z.string().max(20).optional(),
   billingAddress: addressSchema,
   notes: z.string().max(5000).optional(),
+  marketingOptOut: z.boolean().optional(),
 })
 
 export type CustomerCreateInput = z.infer<typeof customerCreateSchema>

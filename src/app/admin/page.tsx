@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { desc, eq, gte, sql, and } from 'drizzle-orm'
+import { desc, eq, gte, isNull, sql, and, like } from 'drizzle-orm'
 import { db, orders, customers, activities, auditEvents } from '@/db/client'
 import { requireAdmin } from '@/lib/admin-auth'
 import { fmtGBPFromPence, fmtRelative } from '@/lib/format'
@@ -24,6 +24,7 @@ export default async function AdminDashboard() {
     recentOrders,
     recentActivity,
     dashboardSummary,
+    detractorFollowUpsRow,
   ] = await Promise.all([
     db
       .select({ count: sql<number>`count(*)::int` })
@@ -66,6 +67,20 @@ export default async function AdminDashboard() {
       .orderBy(desc(auditEvents.createdAt))
       .limit(8),
     getDashboardSummary(),
+    // Detractor follow-ups (Phase 12): open tasks auto-created when a
+    // customer submits an NPS score ≤ 6. Counted by the convention that
+    // the task title starts with "Follow up: NPS ". Simple + robust;
+    // no need for a new column on activities in v1.
+    db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(activities)
+      .where(
+        and(
+          eq(activities.kind, 'task'),
+          isNull(activities.completedAt),
+          like(activities.title, 'Follow up: NPS %'),
+        ),
+      ),
   ])
 
   const tiles = [
@@ -189,6 +204,29 @@ export default async function AdminDashboard() {
           </div>
           <div className="sub">for the accountant</div>
         </Link>
+        {(() => {
+          const n = detractorFollowUpsRow[0]?.count ?? 0
+          return (
+            <Link
+              href="/admin/activities/nps-follow-ups"
+              className="adm-tile"
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                background: n > 0 ? '#fee2e2' : undefined,
+              }}
+            >
+              <div className="label">Open NPS follow-ups</div>
+              <div
+                className="value"
+                style={{ color: n > 0 ? '#b91c1c' : undefined }}
+              >
+                {n}
+              </div>
+              <div className="sub">detractor tasks awaiting response</div>
+            </Link>
+          )
+        })()}
       </div>
 
       <div className="adm-split">
