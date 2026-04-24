@@ -2,12 +2,22 @@
 
 import Link from 'next/link'
 import { ReactNode } from 'react'
+import { track } from '@/lib/analytics'
 
 interface GradientBorderButtonProps {
   children: ReactNode
   href?: string
   onClick?: () => void
   'aria-label'?: string
+}
+
+function ctaLabel(children: ReactNode): string {
+  return typeof children === 'string' ? children : 'cta'
+}
+
+function fromPage(): string {
+  if (typeof window === 'undefined') return ''
+  return window.location.pathname
 }
 
 /**
@@ -71,13 +81,36 @@ export function GradientBorderButton({
 
   if (href) {
     return (
-      <Link href={href} aria-label={ariaLabel} className="inline-block">
+      <Link
+        href={href}
+        aria-label={ariaLabel}
+        className="inline-block"
+        onClick={() =>
+          track('cta_click', {
+            label: ctaLabel(children),
+            destination: href,
+            from_page: fromPage(),
+          })
+        }
+      >
         {content}
       </Link>
     )
   }
   return (
-    <button type="button" onClick={onClick} aria-label={ariaLabel} className="inline-block">
+    <button
+      type="button"
+      onClick={() => {
+        track('cta_click', {
+          label: ctaLabel(children),
+          destination: 'button',
+          from_page: fromPage(),
+        })
+        onClick?.()
+      }}
+      aria-label={ariaLabel}
+      className="inline-block"
+    >
       {content}
     </button>
   )

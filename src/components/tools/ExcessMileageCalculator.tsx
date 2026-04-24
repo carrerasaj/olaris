@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { track } from '@/lib/analytics'
 
 const EMPTY_VEHICLE = { reg: '', startDate: '', annualMileage: '', currentOdo: '', ppm: '' }
 
@@ -110,6 +111,12 @@ export default function ExcessMileageCalculator() {
     const avgUtil = Math.round(calculated.reduce((s, r) => s + r.utilisation, 0) / calculated.length * 10) / 10
 
     setResults({ vehicles: calculated, totalExcess, totalSavings, overCount, underCount, avgUtil, total: calculated.length })
+
+    track(
+      'tool_calculation_completed',
+      { tool: 'excess-mileage', result_numeric: totalExcess },
+      { dedupe: true },
+    )
   }
 
   const handleEmailSubmit = (e: React.FormEvent) => {
@@ -120,6 +127,7 @@ export default function ExcessMileageCalculator() {
     }
     setEmailError('')
     setEmailSubmitted(true)
+    track('lead_captured', { source: 'excess-mileage' })
     window.open(`https://olaris-fleet.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank')
   }
 

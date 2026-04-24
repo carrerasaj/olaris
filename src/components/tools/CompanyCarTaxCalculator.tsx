@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
+import { track } from '@/lib/analytics'
 
 /* ── BIK / VED / eVED rate tables ────────────────────────────── */
 
@@ -180,6 +181,21 @@ export function CompanyCarTaxCalculator() {
   const totalBik = rows.reduce((s, r) => s + r.annualTax, 0)
   const iceTotalBik = iceRows.reduce((s, r) => s + r.annualTax, 0)
   const saving = iceTotalBik - totalBik
+
+  // Fire tool_calculation_completed once the headline (first-year annual
+  // BIK) has settled. Deduped + debounced to avoid per-keystroke noise.
+  useEffect(() => {
+    const firstYearAnnual = rows[0]?.annualTax ?? 0
+    if (firstYearAnnual <= 0) return
+    const t = window.setTimeout(() => {
+      track(
+        'tool_calculation_completed',
+        { tool: 'company-car-tax', result_numeric: firstYearAnnual },
+        { dedupe: true },
+      )
+    }, 1000)
+    return () => window.clearTimeout(t)
+  }, [rows])
 
   const colours = FUEL_COLOURS[fuelType]
 

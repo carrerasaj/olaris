@@ -11,6 +11,7 @@ import { CTABanner } from '@/components/ui/CTABanner'
 import { Button } from '@/components/ui/button'
 import { Reveal } from '@/components/marketing/Reveal'
 import { GradientBorderButton } from '@/components/marketing/GradientBorderButton'
+import { TrackedLink } from '@/components/ui/TrackedLink'
 import { constructMetadata } from '@/lib/seo'
 import { Car, Users, BrainCircuit } from 'lucide-react'
 
@@ -60,7 +61,9 @@ export default function HomePage() {
       >
         <GradientBorderButton href="/contact">Get a Quote</GradientBorderButton>
         <Button variant="secondary-outline" size="lg" asChild>
-          <Link href="/leasing">Explore Our Platform</Link>
+          <TrackedLink href="/leasing" ctaLabel="Explore Our Platform">
+            Explore Our Platform
+          </TrackedLink>
         </Button>
       </GradientHero>
 

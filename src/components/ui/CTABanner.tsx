@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { TrackedLink } from '@/components/ui/TrackedLink'
 
 interface CTABannerProps {
   headline: string
@@ -26,7 +26,9 @@ export function CTABanner({
           </p>
         )}
         <Button variant="gradient" size="lg" asChild>
-          <Link href={buttonHref}>{buttonText}</Link>
+          <TrackedLink href={buttonHref} ctaLabel={buttonText}>
+            {buttonText}
+          </TrackedLink>
         </Button>
       </div>
     </section>

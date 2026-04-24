@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { track } from '@/lib/analytics'
 
 interface Question {
   id: number
@@ -215,6 +216,18 @@ export function FleetComplianceChecker() {
 
   const answeredCount = QUESTIONS.filter((q) => answers[q.id] !== null).length
   const progressPercent = Math.round((answeredCount / QUESTIONS.length) * 100)
+
+  // Fire tool_calculation_completed once all questions are answered and
+  // a score exists. Deduped so toggling answers after the first full
+  // result doesn't re-fire per change.
+  useEffect(() => {
+    if (!result) return
+    track(
+      'tool_calculation_completed',
+      { tool: 'fleet-compliance', result_numeric: result.score },
+      { dedupe: true },
+    )
+  }, [result])
 
   return (
     <div className="max-w-3xl mx-auto">

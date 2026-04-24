@@ -6,6 +6,7 @@ import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { Button } from '@/components/ui/button'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { siteConfig } from '@/lib/seo'
+import { track } from '@/lib/analytics'
 
 export default function ContactPage() {
   const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
@@ -26,6 +27,19 @@ export default function ContactPage() {
 
       if (response.ok) {
         setFormState('success')
+
+        // Fire events before form.reset() clears the enquiry field.
+        const enquiry = String(data.get('enquiry') ?? '')
+        track('lead_captured', { source: 'contact' })
+        if (enquiry === 'Platform Demo') {
+          track('demo_requested', { from_page: '/contact' })
+        } else if (
+          enquiry === 'Business Contract Hire' ||
+          enquiry === 'Salary Sacrifice'
+        ) {
+          track('quote_requested', {})
+        }
+
         form.reset()
       } else {
         setFormState('error')

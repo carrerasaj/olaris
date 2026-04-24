@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
+import { track } from '@/lib/analytics'
 
 function fmt(n: number) {
   return n.toLocaleString('en-GB')
@@ -91,6 +92,21 @@ export function FleetMileageCalculator() {
 
   const animatedCharge = useAnimatedValue(results.estimatedCharge)
   const animatedReduced = useAnimatedValue(results.reducedCharge)
+
+  // Fire tool_calculation_completed once the headline result has
+  // settled (1s after last input change) and is non-trivial. useMemo
+  // recomputes on every keystroke; debounce + dedupe keeps GA clean.
+  useEffect(() => {
+    if (results.estimatedCharge <= 0) return
+    const t = window.setTimeout(() => {
+      track(
+        'tool_calculation_completed',
+        { tool: 'excess-mileage', result_numeric: results.estimatedCharge },
+        { dedupe: true },
+      )
+    }, 1000)
+    return () => window.clearTimeout(t)
+  }, [results.estimatedCharge])
 
   return (
     <div className="max-w-3xl mx-auto">
