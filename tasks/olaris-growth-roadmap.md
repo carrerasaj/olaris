@@ -1,11 +1,20 @@
-# Olaris — Growth Roadmap (SEO × Conversion merged)
+# Olaris — Growth Roadmap (SEO × Conversion × Content merged)
 
-**Companion to:** `.claude/Olaris Audit Tasks.md` (SEO brief) and `.claude/Olaris Conversion Addendum.md` (conversion brief).
-**Prepared:** 24 Apr 2026
+**Companion to:** `.claude/Olaris Audit Tasks.md` (SEO brief), `.claude/Olaris Conversion Addendum.md` (conversion brief), `.claude/Olaris Content Addendum.md` (content brief).
+**Prepared:** 24 Apr 2026 · **Content addendum merged:** 24 Apr 2026
 **Owner:** Alan + Claude Code
 **Revision cadence:** after each tier closes, before the next starts.
 
-This file is the canonical sequencing of work across both briefs. The original briefs stay authoritative for scope and acceptance criteria per task. This file only controls *order* and *dependencies* — including the cross-brief interdependencies neither source file captures on its own.
+This file is the canonical sequencing of work across all three briefs. The original briefs stay authoritative for scope and acceptance criteria per task. This file only controls *order* and *dependencies* — including the cross-brief interdependencies none of the source files captures on its own.
+
+**Task ID prefixes:**
+
+- `F-*` Foundation
+- `T1..T4-*` Tier 1–4 delivery
+- `VC-*` Visual credibility (Content Addendum sprint E)
+- `CT-*` Content tools (Content Addendum sprint F — renamed from F-* to avoid collision with Foundation)
+- `CF-*` Content formats (Content Addendum sprint G)
+- `CO-*` Content ops (Content Addendum sprint H)
 
 ---
 
@@ -23,6 +32,7 @@ Baseline metrics targets live in `.claude/Olaris Audit Tasks.md` §1 and `.claud
 ## Done
 
 - [x] **T2-01 ↔ S1-01** · Meta + H1 rewrites on the four highest-impression pages — *shipped 24 Apr 2026, commit `seo-s1-01-meta-rewrites`*
+- [x] **F-01** · GA4 + conversion events (typed wrapper, EventMap, calculators + contact form + primary CTAs instrumented, README-analytics.md with admin steps) — *shipped 24 Apr 2026, commit `growth-F-01-ga4-events`*
 
 ---
 
@@ -30,12 +40,9 @@ Baseline metrics targets live in `.claude/Olaris Audit Tasks.md` §1 and `.claud
 
 Ship these first. Each unblocks multiple downstream tasks. Do not parallelise Tier 1 until F-01 and F-03 are live.
 
-### [ ] F-01 · GA4 + conversion events
+### [x] F-01 · GA4 + conversion events — *done*
 
-- Source: `.claude/Olaris Audit Tasks.md` S1-05
-- Why first: every capture / tool / CTA task downstream needs `lead_captured`, `tool_calculation_completed`, `demo_requested`, `cta_click` to measure impact. Ship without events and we're flying blind.
-- Unblocks: T1-01, T1-02, T1-04, T4-10, D-02, D-03
-- Files: `src/lib/analytics.ts` (create if missing); hook into App Router via client component; `README-analytics.md` at repo root documenting events + manual GA4 admin steps.
+See Done section above.
 
 ### [ ] F-02 · Ahrefs technical cleanup (15 issues)
 
@@ -92,18 +99,32 @@ The `/tools/excess-mileage-calculator` page is the #1 traffic leak (313 imp @ po
 
 ## Tier 2 — authority + middle-funnel (week 3–7, parallel with Tier 1 after T1-01)
 
-### [ ] T2-01 ↔ S1-01 · Meta rewrites *(done — see "Done" section above)*
+### [x] T2-01 ↔ S1-01 · Meta rewrites — *done (see "Done" section)*
 
 ### [ ] T2-02 ↔ S1-04 · Internal linking audit
 
 - Why early: surfaces the 9 existing blog posts' linking gaps before we add more posts in Tier 3
 - Includes: `<RelatedPosts cluster="..." />` component + `src/content/blog/clusters.ts` manifest stub
 
-### [ ] T2-03 ↔ B-04 · Alan as face of the brand
+### [ ] T2-03 ↔ B-04 + VC-02 · Alan as face of the brand (includes founder video)
 
-- Why: E-E-A-T signal for SEO *and* trust signal for conversion — the rare task that moves both axes
-- Scope: `/about` rebuild, blog post author bylines with photo/bio, optional 90-second founder video on homepage
-- Asset dependency: Alan provides headshot + bio copy + optional video (unpolished > polished here)
+- Why: E-E-A-T signal for SEO *and* trust signal for conversion — the rare task that moves both axes. Content addendum elevates the founder video to its own priority (VC-02, #1 of their top-5). Folded in here so `/about` rebuild + author bylines + video ship as a single trust-layer.
+- Scope: `/about` rebuild, blog post author bylines with photo/bio, 60-second founder video on homepage (VC-02 spec: iPhone, no polish, Alan-to-camera with 3 × 8s Orbis screen cuts, ending with book-a-call CTA).
+- Asset dependency: Alan provides headshot + bio copy + video recording (unpolished > polished here). Video requires VC-01 screenshots/mockups to exist for the screen-cut inserts.
+
+### [ ] VC-01 ↔ Content E-01 · Eight Orbis product screenshots (1600×1000)
+
+- Why early: content addendum's diagnosis names this as the single highest-ROI content fix — "/platform is the worst-performing conversion page *because* there's nothing to see". Unblocks T3-04 (platform rebuild) and T2-03 (founder video screen cuts).
+- Scope: 8 annotated screenshots per content addendum table — fleet dashboard, single-vehicle detail, driver scorecard, DVLA panel, cost-per-mile view, EV charging reconciliation, excess mileage forecast, carbon/scope report.
+- Where real product isn't shipped: high-fidelity Figma mockups, labelled *"Preview · shipping Q3 2026"*.
+- Asset dependency: Alan (or Orbis team) produces the images. Claude Code handles the annotation component + placement once assets exist.
+
+### [ ] VC-04 ↔ Content E-04 · One visual mid-article per existing blog post
+
+- Why: cluster-wide skim-scan fix. Every existing post that currently ends in a text CTA gets one visual insertion.
+- Scope: chart/table/diagram per content addendum matrix (grey-fleet → cost-per-mile chart, BIK → rates table, mileage → contract-vs-actual visual, fleet-intelligence → simplified dashboard).
+- Tactical: build as reusable React components so T3-02 supporting posts + T4-08 expansion inherit them.
+- Depends on: CO-05 visual asset system (if we ship it first) — otherwise build components ad-hoc and generalise later.
 
 ### [ ] T2-04 ↔ A-03 · Inline lead magnets — start with Grey Fleet Policy Template
 
@@ -119,6 +140,11 @@ The `/tools/excess-mileage-calculator` page is the #1 traffic leak (313 imp @ po
 
 - Depends on: T1-01 has been live long enough for real counters (~2 weeks)
 - Scope: recent-activity widget above every form — newsletter count, quotes-this-week, "Alan personally replies within 4 business hours"
+
+### [ ] CO-04 ↔ Content H-04 · Style + voice guide
+
+- Why now: small one-pager that every Tier 3 content task wants to follow. Ship before long-form pillar writing starts.
+- Scope: `docs/style-guide.md` — tone (direct, first-hand, no consulting-speak), reading level (Y9), length rules (≥1,200 words or don't publish), required per-post elements (ToC, 1 visual, 2 internal links, related-reading block, schema, CTA), author byline pattern. One page. Pin in repo for Alan + contractors + Claude Code.
 
 ---
 
@@ -136,16 +162,24 @@ Content-heavy tier. Alan writes long-form copy; Claude Code handles scaffolding,
 - Depends on: T3-01 (so internal links resolve)
 - Scope: scaffold four MDX posts with H1/H2 structure + `<RelatedPosts cluster="grey-fleet" />` + required internal links; Alan writes body
 
-### [ ] T3-03 ↔ B-03 · Three case studies with real numbers
+### [ ] CT-03 ↔ Content F-03 · Grey Fleet Risk Calculator
 
-- Unblock async: chase client permissions in parallel with Tier 1/2 work
-- Scope: `/case-studies` route, Situation/Intervention/Outcome/Quote pattern, 3 stories
-- Dependency: customer sign-off — start outreach early
+- Why here: content addendum names this as priority #4 of top-5 — *"pairs perfectly with the /grey-fleet pillar and the Policy Template lead magnet"*. Traffic pool overlap means pillar + tool + magnet reinforce each other.
+- Depends on: T3-01 (pillar), T2-04 (policy template magnet), F-03 (lead capture infra)
+- Scope: new tool at `/tools/grey-fleet-risk-calculator`. Inputs: grey fleet driver count, miles/year per driver, company size. Outputs: estimated annual legal liability exposure + insurance premium differential + suggested conversion plan. Email-gated detailed PDF on completion.
+- Targets: "grey fleet" cluster (18 tracked queries, 220+ imp).
+- Wire `tool_calculation_completed` with `tool: 'grey-fleet-risk'` — requires adding that enum value to `EventMap` in `src/lib/analytics.ts`.
+
+### [ ] T3-03 ↔ B-03 + CF-06 · Three case studies (written + video versions)
+
+- Unblock async: chase client permissions in parallel with Tier 1/2 work. Ask for logo rights (T4-04/VC-05) in the same outreach.
+- Scope: `/case-studies` route, Situation/Intervention/Outcome/Quote pattern, 3 stories written. For each client who agrees, record a 2-minute on-camera testimonial (CF-06 from content addendum). Even 1 of 3 video testimonials is worth 100× a written quote — aim for at least one.
+- Dependency: customer sign-off — start outreach early. Video versions are stretch scope; written case studies are required.
 
 ### [ ] T3-04 ↔ S2-03 · Rebuild `/platform` as Orbis Platform page
 
 - Note: T2-01 already updated title/description/H1. This task is the full page rebuild (capability blocks, screenshots, integrations strip, FAQ).
-- Depends on: F-02 (JSON-LD dedup), ideally T3-03 (case study block can link to real stories)
+- Depends on: F-02 (JSON-LD dedup), **VC-01 screenshots** (the capability blocks are placeholders without them — content addendum's diagnosis names this page's missing visuals as the single worst-performing conversion surface), ideally T3-03 (case study block can link to real stories)
 
 ### [ ] T3-05 ↔ A-02 · Sticky bottom bar on blog posts
 
@@ -161,18 +195,21 @@ Content-heavy tier. Alan writes long-form copy; Claude Code handles scaffolding,
 - Separates "ready to talk" / "get a quote" / "ask a question" so the ready-to-talk user doesn't wade through qualification
 - Depends on: T1-04 (calendar embed is the "ready to talk" column)
 
-### [ ] T4-02 ↔ B-01 · Fleet Cost Scorecard (interactive)
+### [ ] T4-02 ↔ B-01 + CT-01 · Fleet Cost Scorecard (interactive) — *promotion candidate*
 
 - New tool at `/tools/fleet-cost-scorecard`, 8 questions → score → email-gated PDF
 - Depends on: F-03. Standalone otherwise — highest-leverage new-tool build in the backlog.
+- **Promotion note:** content addendum lists this as priority #3 of top-5 for the quarter. If Tier 3 content ships faster than expected, consider pulling T4-02 up to Tier 3 adjacent to T3-01 (the grey-fleet pillar traffic overlaps with "how to audit my fleet" scorecard target queries).
 
 ### [ ] T4-03 ↔ C-03 · Pricing transparency
 
 - Start with a `/leasing/how-we-price` page (minimum viable). Add vehicle-of-the-month rotating card later.
 
-### [ ] T4-04 ↔ B-02 · Live testimonials / logo strip
+### [ ] T4-04 ↔ B-02 + VC-05 · Live testimonials / logo strip
 
 - Client-permission dependent. Placeholders accepted for phase 1.
+- Kick off client permissions ASAP (content addendum VC-05: contact 5 existing clients this week, ask to use logo or anonymised descriptor). Component supports real logos and anonymised cards interchangeably.
+- Pairs with T3-03 case study outreach — bundle the ask.
 
 ### [ ] T4-05 ↔ B-05 · Live-chat / async message widget
 
@@ -202,29 +239,109 @@ Content-heavy tier. Alan writes long-form copy; Claude Code handles scaffolding,
 - Only after events have been firing 2–3 weeks post-F-01
 - Sheet or Metabase view with the 6 funnel stages from addendum table
 
+### [ ] CT-02 ↔ Content F-02 · BCH vs PCH vs Sal-Sac comparison tool
+
+- New tool. Input: fleet size, driver profile, annual mileage, appetite for admin. Output: ranked recommendation per option with monthly cost range + next-step CTA.
+- Targets: the entire leasing cluster — "business contract hire", "salary sacrifice", "personal contract hire" — queries we don't rank on today.
+- Depends on: F-03, `src/data/bch-benchmarks.ts` (Alan populates with real numbers; stub OK initially).
+
+### [ ] CT-04 ↔ Content F-04 · Fleet Carbon Calculator
+
+- Input: fleet composition (ICE/hybrid/EV counts + avg mileage). Output: tonnes CO₂e/year + scope 1/2/3 breakdown + "what EV swap would save" slider.
+- Targets: ESG / sustainability audience — "fleet carbon footprint", "scope 123 fleet".
+- Depends on: F-03.
+
+### [ ] CT-05 ↔ Content F-05 · Vehicle TCO comparator
+
+- Pick 2 vehicles from a dropdown of 50 popular models → side-by-side 4-year TCO (lease, fuel/energy, tax, insurance, excess mileage likelihood, residual).
+- Highest-shareability tool of the set — fleet managers send TCO comparisons to their FD. Build a share URL that encodes the comparison.
+- Depends on: F-03, vehicle data file.
+
+### [ ] CT-06 ↔ Content F-06 · Driver Licence Check Simulator
+
+- 30-second lightweight interactive: "Enter DOB + licence details — we'll show what DVLA compliance actually checks." No real API call, educational + lead capture at the end.
+- Pairs with `/features/driver-behaviour`.
+- Depends on: F-03.
+
+### [ ] CT-07 ↔ Content F-07 · EV Transition Planner v2
+
+- Upgrade `/tools/ev-transition-planner` (currently content-only, 40 imp @ pos 40). Inputs: current fleet → phased 3-year transition plan, depot + charging modelling, BIK/VAT savings projection, PDF roadmap output.
+- Not new — 10× what's there.
+- Depends on: F-03. When this ships, `tool: 'ev-transition'` event starts firing (currently inert — `EventMap` already includes it).
+
+### [ ] CT-08 ↔ Content F-08 · Fleet Compliance Quick-Check v2
+
+- Upgrade `/tools/fleet-compliance-checker` (113 imp @ pos 76). Enter fleet size → 10-item checklist with green/amber/red + timeline implications.
+- Currently already fires `tool_calculation_completed` — this is a scope expansion, not a rebuild.
+
+### [ ] CF-02 ↔ Content G-02 · LinkedIn carousel series (3/week)
+
+- Existing `S3-05` was a one-off. Content addendum expands to a structured cadence: Mon educational / Wed contrarian take / Fri tool spotlight or case study.
+- Scope: document the cadence + a template carousel structure in `marketing/linkedin/`. Alan drafts copy; Claude Code handles carousel markdown templates. First three carousels ship from the `/grey-fleet` pillar (T3-01) once it exists.
+
+### [ ] CF-04 ↔ Content G-04 · Interactive comparison pages
+
+- Hybrid between a long-form post and a tool: long, data-dense, embeddable charts. Candidates: BCH vs Sal-Sac vs Personal Lease, UK company car tax 2026/27, fleet electrification readiness.
+- Value: these earn backlinks because they become the canonical reference. Pairs with CT-02 (BCH vs Sal-Sac tool) — the page embeds the tool.
+- Depends on: CT-02 (for the BCH page), general data work.
+
+### [ ] CO-02 ↔ Content H-02 · Repurposing pipeline (documented)
+
+- Document the 1-pillar → 4-posts → 1-asset → 1-video → 3-carousels → 1-webinar fan-out in `docs/content-repurposing.md`. Makes every new pillar produce 10 pieces of content rather than 1.
+- Not a code task — process doc + a checklist template. Enforces CO-01 editorial calendar discipline.
+
 ---
 
 ## Deferred / async / manual
 
 Tasks that belong on the radar but don't fit the tier cadence. Most are waiting on a non-code input.
 
+**SEO / Conversion briefs:**
+
 - **S3-03 · Backlink outreach list** — manual work for Alan; Claude drafts the CSV template when asked
 - **S3-04 · Monthly audit script** — builds after first month of post-launch data (week 10+)
-- **S3-05 · LinkedIn carousels** — after T3-01 exists
-- **B-06 · Interactive platform demo** — paid tool evaluation needed (Storylane / Arcade / Navattic); revisit after T3-04
+- **S3-05 · LinkedIn (one-off)** — superseded by CF-02 in Tier 4 (structured cadence); retain ID for cross-reference only.
+- **B-06 ↔ VC-03 · Interactive platform demo (Storylane/Arcade/Navattic)** — paid tool evaluation needed; revisit after T3-04. Content addendum (E-03) offers a cheaper fallback: a 90-second narrated screen recording, embedded on `/platform` + homepage + BCH pages. Ship the recording first; the interactive version is a Tier 4+ upgrade.
 - **C-02 · Smart form progressive profiling** — cookie infra + lead-merge logic; revisit after T1-03 has a few hundred leads
 - **C-05 · Nurture existing contacts** — Alan exports contact list; one-shot Loom-video re-engagement
 - **D-02 · A/B testing the top 3 CTAs** — addendum notes day 60+ minimum; needs traffic to justify
 - **D-03 · Session replay on `/tools/*`** — adds privacy policy changes; evaluate after F-01 data
 - **D-04 · Quarterly voice-of-customer interviews** — Alan books the calls; recurring task, not a ticket
 
+**Content addendum:**
+
+- **CF-01 ↔ Content G-01 · YouTube channel "The Fleet Fix"** — biweekly 3–5 min videos. High potential, high discipline requirement. Revisit when T2-03 founder video has shipped + been watched — confidence signal that the video format works.
+- **CF-03 ↔ Content G-03 · Monthly webinar + on-demand library** — 45-min live, Alan + guest, replay gated behind email. Content addendum's priority #5 of top-5. Force-multiplies into 1 recording + 4 clips + 1 blog post + 1 LinkedIn carousel. Needs Alan's calendar commitment — deferred until Tier 3 pillar shipped and we know what's working.
+- **CF-05 ↔ Content G-05 · Email course "7-day fleet cost teardown"** — opt-in via homepage banner, 7 daily emails. Depends on F-03 drip infra being battle-tested via T1-03 first.
+- **CF-07 ↔ Content G-07 · Quarterly industry report "State of UK Fleet"** — 20-page PDF, original data. 3–5 days once per quarter. Defer until there's client base / list size to justify the survey.
+- **CO-01 ↔ Content H-01 · Editorial calendar driven by GSC data** — monthly process, not a one-off ticket. Start after first full month of GA4 + GSC data post-F-01 / F-02.
+- **CO-03 ↔ Content H-03 · Content audit of existing 15+ blog posts** — keep/merge/delete triage with 301s. Depends on F-02 (redirect infrastructure). Revisit after F-02 ships.
+- **CO-05 ↔ Content H-05 · Visual asset system** — three recurring visual formats as Figma + React components (Fleet Snapshot / Before-After / Timeline strip). Build ad-hoc in VC-04 first, generalise once we see which formats recur.
+
 ---
+
+## Next 5 to ship (rolling — update as tasks close)
+
+Reconciling priorities across all three briefs against what's actually unblocked right now:
+
+1. **F-02 · Ahrefs technical cleanup** — unblocks T3-04 / T4-06 / CO-03. Already the next Foundation task. Low-risk, high-unblock value.
+2. **VC-01 · Eight Orbis screenshots (or high-fid mockups)** — content addendum's #2 priority, highest single-lever on `/platform` conversion. Needs Alan/Orbis assets; Claude Code prepares annotation component + placement pattern meanwhile.
+3. **T2-03 + VC-02 · Alan as face of brand (incl. 60-sec founder video)** — E-E-A-T for SEO, trust for conversion, content addendum's #1 priority. Needs Alan's recording session. Requires VC-01 screenshots for screen-cut inserts.
+4. **F-03 · Email infra + lead-storage primitive** — unblocks the entire Tier 1 + every new tool in CT-*. Ship after VC assets are in flight so Tier 1/3 can start as soon as assets land.
+5. **T2-02 · Internal linking audit** — cheap win, fixes existing blog post orphan problem, surfaces the cluster manifest needed for every future post.
+
+Why this order over alternatives:
+
+- Tier 1 capture surfaces (T1-01 through T1-05) need **both** F-03 *and* evidence the `/platform` page can actually close — so put VC-01/VC-02 in flight first. Exit-intent on a calculator is wasted if the landing page after still looks like vapour.
+- Content addendum's priority #3 (CT-01 Fleet Cost Scorecard) is further out here because it needs F-03 which is itself above it. Bumping it up would block on F-03 anyway.
 
 ## Cross-cutting rules
 
-- **One capture surface at a time per page.** Per addendum §282 — exit-intent + inline magnet + sticky bar fighting on the same page degrades UX. Ship one, measure two weeks, ship the next.
-- **Don't launch without events.** Every capture surface ships with its GA4 event wired, or it doesn't ship.
+- **One capture surface at a time per page.** Per conversion addendum §282 — exit-intent + inline magnet + sticky bar fighting on the same page degrades UX. Ship one, measure two weeks, ship the next.
+- **Don't launch without events.** Every capture surface ships with its GA4 event wired, or it doesn't ship. Every new tool adds its enum value to `EventMap` in `src/lib/analytics.ts`.
 - **Cluster-first content.** Per SEO brief "what NOT to do": no orphan blog posts. Every new post ships with its internal-link plan.
+- **Proof media before polish.** Per content addendum: iPhone + natural light + Alan talking straight beats slick AI avatar + polished script. Don't ship anything that looks AI-generated.
+- **Don't build 5 tools before any convert.** Per content addendum caveats: ship one tool (T1-01 calc capture, then CT-01 scorecard), measure 3 weeks, then the next. One great tool beats 5 forgotten ones.
 - **Phase 12 is frozen pending smoke tests.** The customer-comms work is committed but unverified in prod. Do not start any task that touches `src/app/admin/` or the email/audit layer until Phase 12 is signed off.
 
 ---
@@ -232,3 +349,11 @@ Tasks that belong on the radar but don't fit the tier cadence. Most are waiting 
 ## Change log
 
 - **24 Apr 2026** — Initial merge of SEO + Conversion briefs into a single tiered plan. T2-01 marked done (S1-01 meta rewrites shipped).
+- **24 Apr 2026** — F-01 shipped (GA4 events). Content addendum merged:
+  - Renamed content-brief `F-*` tool tasks to `CT-*` to avoid collision with Foundation.
+  - Added VC-01, VC-04 (visual credibility) to Tier 2; VC-02 folded into T2-03; VC-03 deferred alongside B-06; VC-05 folded into T4-04.
+  - Added CT-03 to Tier 3 next to grey-fleet pillar; CT-02/04/05/06/07/08 to Tier 4.
+  - Added CO-04 (style guide) to Tier 2; CO-01/03/05 deferred.
+  - Added CF-02 (LinkedIn cadence), CF-04 (interactive comparison pages) to Tier 4; CF-01/03/05/06/07 deferred.
+  - T3-04 now depends on VC-01; T2-03 now owns VC-02 video scope; T3-03 case studies now optionally include video versions (CF-06); T4-04 bundled with VC-05 logo outreach.
+  - Added "Next 5 to ship" rolling priorities section reflecting cross-brief reconciliation. Expanded cross-cutting rules with proof-media and one-tool-at-a-time principles from the content addendum.
