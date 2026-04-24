@@ -182,3 +182,5 @@ The good news: more lease companies are building this capability. If yours isn't
 **Want to see your lease fleet mileage in real-time and avoid excess charges?** [Get in touch with Olaris](/contact) — we built this for lease companies, because we were one — or [explore our platform for lease fleet management](/platform).
 
 **Calculate your exposure →** Try our [free excess mileage calculator](/tools/excess-mileage-calculator) to see what excess charges could cost your fleet before end of contract.
+
+**Looking for a new lease arrangement with visibility from day one?** Olaris offers [business contract hire](/leasing/business-contract-hire) with Orbis fleet intelligence included — real-time mileage tracking, excess exposure alerts, and pooling visibility built in rather than bolted on afterwards.

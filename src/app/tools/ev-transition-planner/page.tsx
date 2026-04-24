@@ -304,6 +304,14 @@ export default function EVTransitionPlannerPage() {
             <p className="text-olaris-text-secondary mb-8 max-w-2xl mx-auto">
               The EV Transition Planner is included in every Olaris lease with Orbis intelligence.
               If you&apos;re not an Olaris customer yet, request a demo and we&apos;ll run the analysis on your fleet data.
+              Or read more about how{' '}
+              <Link
+                href="/features/ev-transition"
+                className="text-cyan-600 hover:text-cyan-700 underline underline-offset-2"
+              >
+                EV transition planning works in Orbis
+              </Link>
+              .
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button variant="gradient" size="lg" asChild>

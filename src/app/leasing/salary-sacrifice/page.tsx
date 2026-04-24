@@ -157,7 +157,14 @@ export default function SalarySacrificePage() {
                 For electric vehicles, the benefit-in-kind (BIK) rate makes salary sacrifice
                 particularly attractive. At the current 2% BIK rate for zero-emission vehicles,
                 an employee can drive a brand new EV for significantly less than they&apos;d pay on
-                a personal contract.
+                a personal contract. Use the{' '}
+                <Link
+                  href="/tools/company-car-tax-calculator"
+                  className="text-cyan-600 hover:text-cyan-700 underline underline-offset-2"
+                >
+                  company car tax calculator
+                </Link>{' '}
+                to see the numbers for a specific vehicle and employee tax band.
               </p>
             </div>
           </AnimatedSection>

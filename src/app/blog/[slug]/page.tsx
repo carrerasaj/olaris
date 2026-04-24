@@ -11,7 +11,7 @@ import { GradientHero } from '@/components/ui/GradientHero'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { AuthorBio } from '@/components/ui/AuthorBio'
 import { constructMetadata, siteConfig } from '@/lib/seo'
-import { blogPosts } from '@/data/blogPosts'
+import { RelatedPostsBlock } from '@/components/blog/RelatedPostsBlock'
 
 const slugToFile: Record<string, string> = {
   'fleet-cost-report': 'blog-01-fleet-cost-report.md',
@@ -40,25 +40,6 @@ const categoryColours: Record<string, string> = {
   ESG: 'bg-teal-100 text-teal-800',
   'Thought Leadership': 'bg-violet-100 text-violet-800',
   'Fleet Management': 'bg-indigo-100 text-indigo-800',
-}
-
-const relatedPosts: Record<string, string[]> = {
-  'fleet-cost-report': ['excess-mileage', 'driver-behaviour-insurance'],
-  'excess-mileage': ['fleet-cost-report', 'lease-company-mileage'],
-  'driver-behaviour-insurance': ['dvla-compliance', 'fleet-cost-report'],
-  'dvla-compliance': ['driver-behaviour-insurance', 'scope-123-fleet'],
-  'scope-123-fleet': ['ev-transition-fleet', 'fleet-management-2026'],
-  'ev-transition-fleet': ['scope-123-fleet', 'connected-vehicle-data'],
-  'connected-vehicle-data': ['fleet-data-single-view', 'fleet-management-2026'],
-  'lease-company-mileage': ['excess-mileage', 'fleet-cost-report'],
-  'fleet-data-single-view': ['connected-vehicle-data', 'fleet-management-2026'],
-  'fleet-management-2026': ['what-is-fleet-intelligence', 'fleet-data-single-view'],
-  'what-is-fleet-intelligence': ['fleet-cost-report', 'excess-mileage'],
-  'what-is-grey-fleet': ['dvla-compliance', 'fleet-cost-report'],
-  'what-is-driver-behaviour-scoring': ['what-is-grey-fleet', 'what-is-fleet-intelligence'],
-  'what-is-fleet-compliance': ['dvla-compliance', 'what-is-grey-fleet', 'what-is-driver-behaviour-scoring'],
-  'what-is-an-at-risk-driver': ['what-is-driver-behaviour-scoring', 'dvla-compliance', 'what-is-fleet-compliance'],
-  'fleet-data-audit': ['fleet-data-single-view', 'connected-vehicle-data', 'what-is-fleet-intelligence'],
 }
 
 function getBlogPost(slug: string) {
@@ -139,10 +120,6 @@ export default async function BlogPostPage({
   const htmlContent = await markdownToHtml(content)
   const readTime = getReadTime(content)
 
-  const related = (relatedPosts[slug] || [])
-    .map((id) => blogPosts.find((p) => p.id === id))
-    .filter(Boolean)
-
   return (
     <>
       <GradientHero
@@ -187,37 +164,8 @@ export default async function BlogPostPage({
 
           <AuthorBio />
 
-          {related.length > 0 && (
-            <div className="mt-16 pt-8 border-t border-olaris-border-light">
-              <h3 className="text-lg font-bold font-heading mb-6">
-                Related Reading
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {related.map((post) => (
-                  <Link
-                    key={post!.id}
-                    href={`/blog/${post!.id}`}
-                    className="group block p-4 rounded-lg border border-olaris-border-light hover:border-cyan-300 transition-colors"
-                  >
-                    <span
-                      className={`inline-block text-xs font-medium px-2 py-0.5 rounded mb-2 ${
-                        categoryColours[post!.category] ||
-                        'bg-gray-100 text-gray-800'
-                      }`}
-                    >
-                      {post!.category}
-                    </span>
-                    <h4 className="text-sm font-semibold leading-snug group-hover:text-cyan-600 transition-colors">
-                      {post!.title}
-                    </h4>
-                    <p className="text-xs text-olaris-text-dark/50 mt-1">
-                      {post!.readTime}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
+          <RelatedPostsBlock current={slug} />
+
 
           <div className="mt-8 pt-8 border-t border-olaris-border-light">
             <Link

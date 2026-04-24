@@ -110,6 +110,8 @@ The organisations that struggle are not the ones that face a difficult complianc
 
 It is not about adding bureaucracy. It is about knowing what you are responsible for and handling it properly. That is duty of care in practice, and it protects everyone: your employees, your organisation, and the other road users around them.
 
+For organisations where the numbers are large enough, the cleanest answer is often to [move drivers off grey fleet with a BCH agreement](/leasing/business-contract-hire) — business contract hire transfers the duty of care burden to a managed fleet arrangement, with the compliance checks and cost visibility built in rather than bolted on.
+
 For more on the broader picture of [what fleet intelligence means for UK operators](/blog/what-is-fleet-intelligence), and how platforms like Olaris connect compliance, cost, and driver data into a single view, see the [Olaris platform overview](/platform).
 
 ## Further Reading
