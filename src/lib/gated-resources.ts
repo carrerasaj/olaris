@@ -31,6 +31,8 @@ import { and, eq } from 'drizzle-orm'
 import { db, leads, type Lead } from '@/db/client'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
 import { recordLeadEvent, buildUnsubscribeUrl } from '@/lib/leads'
+import { renderExcessMileageReport } from '@/lib/pdf/render-excess-mileage-report'
+import type { ExcessMileageReportPayload } from '@/lib/excess-mileage-report'
 
 // ─── Registry shape ─────────────────────────────────────────────────────
 
@@ -62,9 +64,53 @@ export interface GatedResource {
 // ─── Registry ───────────────────────────────────────────────────────────
 
 export const gatedResources: Record<string, GatedResource> = {
-  // First real asset ships with T2-04 (Grey Fleet Policy Template).
-  // Keeping the registry empty for now so the first addition has a
-  // clean, reviewed diff to stand on.
+  'excess-mileage-report': {
+    id: 'excess-mileage-report',
+    label: 'Excess Mileage Report',
+    filename: 'olaris-excess-mileage-report.pdf',
+    contentType: 'application/pdf',
+    subject: () => 'Your Excess Mileage Report · Olaris',
+    html: (ctx) => `
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;max-width:560px">
+  <p>Hi${ctx.lead.firstName ? ` ${ctx.lead.firstName}` : ''},</p>
+  <p>Your excess mileage report is attached. It shows what your fleet is on
+  track to incur over the remaining contract term, how a right-sized BCH
+  agreement would compare, and — honestly — how we&rsquo;d have flagged the
+  overshoot 4–6 months earlier with Orbis.</p>
+  <p>If the numbers surprised you, the fastest way to act on them is a
+  20-minute call. No pitch; we&rsquo;ll walk through your fleet and flag
+  the three fastest places to cut exposure.</p>
+  <p><a href="${ctx.siteUrl}/contact"
+        style="display:inline-block;background:#0f172a;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600">
+        Book a 20-minute call →</a></p>
+  <p>&mdash; Alan Carreras, Olaris</p>
+  <hr style="border:0;border-top:1px solid #e4e9f1;margin:24px 0" />
+  <p style="font-size:12px;color:#64748b;line-height:1.5">
+    You&rsquo;re getting this because you requested a report from our excess
+    mileage calculator at ${ctx.siteUrl}.
+    <a href="${ctx.unsubscribeUrl}" style="color:#64748b;text-decoration:underline">Unsubscribe</a>.
+  </p>
+</div>`,
+    text: (ctx) =>
+      `Hi${ctx.lead.firstName ? ` ${ctx.lead.firstName}` : ''},\n\n` +
+      `Your excess mileage report is attached. It shows what your fleet is on track to incur over the remaining contract term, how a right-sized BCH agreement would compare, and how we'd have flagged the overshoot 4–6 months earlier with Orbis.\n\n` +
+      `If the numbers surprised you, the fastest way to act on them is a 20-minute call. No pitch — we'll walk through your fleet and flag the three fastest places to cut exposure.\n\n` +
+      `Book a call: ${ctx.siteUrl}/contact\n\n` +
+      `— Alan Carreras, Olaris\n\n` +
+      `You're getting this because you requested a report from our excess mileage calculator at ${ctx.siteUrl}. Unsubscribe: ${ctx.unsubscribeUrl}`,
+    buildAttachment: async (ctx) => {
+      // The report payload was stashed on the lead's sourceContext by
+      // the API route at capture time. We pull it back here so the PDF
+      // shows the exact figures the user saw, and so we don't need a
+      // second argument on the generic sendGatedResource signature.
+      const ctxBag = ctx.lead.sourceContext as
+        | { excessMileageReport?: ExcessMileageReportPayload }
+        | null
+      const payload = ctxBag?.excessMileageReport
+      if (!payload) return null
+      return await renderExcessMileageReport(payload)
+    },
+  },
 }
 
 export function getResource(id: string): GatedResource | null {

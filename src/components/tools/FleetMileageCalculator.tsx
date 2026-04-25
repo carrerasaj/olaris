@@ -220,6 +220,24 @@ export function FleetMileageCalculator() {
               </p>
             </div>
 
+            {/* Email-gated PDF report capture.
+                Only appears once the user has produced a meaningful result
+                (per S1-03: not above the fold, after calculation).
+                Separate condition from the "what-if" slider: on-track fleets
+                still benefit from the right-sized BCH comparison. */}
+            {results.estimatedCharge > 0 && (
+              <ReportCaptureForm
+                calcInputs={{
+                  vehicles,
+                  contractedMileage,
+                  actualMileage,
+                  termRemainingMonths: termRemaining,
+                  pencePerMile: ppmRate,
+                }}
+                headlineCharge={results.estimatedCharge}
+              />
+            )}
+
             {/* What if slider */}
             {results.isOver && (
               <div className="rounded-xl p-5 bg-[#0D1117] border border-olaris-border-dark">
@@ -305,6 +323,142 @@ function InputField({
           </span>
         )}
       </div>
+    </div>
+  )
+}
+
+interface ReportCaptureFormProps {
+  calcInputs: {
+    vehicles: number
+    contractedMileage: number
+    actualMileage: number
+    termRemainingMonths: number
+    pencePerMile: number
+  }
+  headlineCharge: number
+}
+
+function ReportCaptureForm({ calcInputs, headlineCharge }: ReportCaptureFormProps) {
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>(
+    'idle',
+  )
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (status === 'submitting' || status === 'done') return
+    setStatus('submitting')
+    setErrorMsg(null)
+    try {
+      const res = await fetch('/api/tools/excess-mileage/report', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          company: company.trim() || null,
+          calcInputs,
+        }),
+      })
+      const body = (await res.json().catch(() => ({}))) as {
+        ok?: boolean
+        error?: string
+      }
+      if (!res.ok || !body.ok) {
+        setStatus('error')
+        setErrorMsg(
+          body.error === 'invalid_body'
+            ? 'Please check your email address and try again.'
+            : "Something went wrong — please try again, or email alan@olaris.co.uk.",
+        )
+        return
+      }
+      track('lead_captured', { source: 'excess-mileage' })
+      setStatus('done')
+    } catch {
+      setStatus('error')
+      setErrorMsg(
+        "Something went wrong — please try again, or email alan@olaris.co.uk.",
+      )
+    }
+  }
+
+  if (status === 'done') {
+    return (
+      <div className="rounded-xl p-5 bg-emerald-500/10 border border-emerald-500/20 text-center">
+        <p className="text-emerald-400 font-bold text-lg mb-1">Report on the way</p>
+        <p className="text-sm text-olaris-text-secondary">
+          Check your inbox in a minute or two — if it&apos;s not there, check
+          spam and flag us safe.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-xl p-5 bg-[#0D1117] border border-cyan-500/30">
+      <div className="mb-4">
+        <p className="text-sm font-medium text-white mb-1">
+          Get your personalised report
+        </p>
+        <p className="text-sm text-olaris-text-secondary">
+          Your projected charge:{' '}
+          <span className="text-white font-mono">{fmtGBP(headlineCharge)}</span>.
+          We&apos;ll email a PDF with the detail, a right-sized BCH comparison,
+          and how Orbis would have caught the overshoot earlier.
+        </p>
+      </div>
+      <form onSubmit={submit} className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label htmlFor="emr-email" className="sr-only">
+              Work email
+            </label>
+            <input
+              id="emr-email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="Work email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-lg bg-[#1C2128] border border-olaris-border-dark text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label htmlFor="emr-company" className="sr-only">
+              Company (optional)
+            </label>
+            <input
+              id="emr-company"
+              type="text"
+              autoComplete="organization"
+              placeholder="Company (optional)"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="w-full px-3 py-2.5 rounded-lg bg-[#1C2128] border border-olaris-border-dark text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <p className="text-xs text-olaris-text-secondary">
+            One email. Unsubscribe anytime.
+          </p>
+          <button
+            type="submit"
+            disabled={status === 'submitting' || !email}
+            className="rounded-lg bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed text-[#0D1117] font-bold px-5 py-2.5 text-sm transition-colors"
+          >
+            {status === 'submitting' ? 'Sending…' : 'Send report'}
+          </button>
+        </div>
+        {errorMsg && (
+          <p className="text-sm text-red-400" role="alert">
+            {errorMsg}
+          </p>
+        )}
+      </form>
     </div>
   )
 }

@@ -35,25 +35,33 @@ function b64urlDecode(s: string): Buffer {
   return Buffer.from(padded, 'base64')
 }
 
-export function mintRenderToken(orderId: string): string {
-  const payload = { orderId, exp: Date.now() + TTL_MS }
+// Subject is whatever identifier the template route expects in its URL — an
+// order id for signed-order / supplier-po / handover-pack templates, or a
+// short-lived payload id for ad-hoc reports (e.g. excess-mileage). Verifier
+// re-checks equality, so a token minted for one subject can't be replayed
+// against another.
+export function mintRenderToken(subject: string): string {
+  const payload = { subject, exp: Date.now() + TTL_MS }
   const body = b64url(JSON.stringify(payload))
   const mac = b64url(createHmac('sha256', secret()).update(body).digest())
   return `${body}.${mac}`
 }
 
-export function verifyRenderToken(token: string, orderId: string): boolean {
+export function verifyRenderToken(token: string, subject: string): boolean {
   const [body, mac] = token.split('.')
   if (!body || !mac) return false
 
-  let payload: { orderId?: string; exp?: number }
+  // Accept legacy `orderId` payloads minted before the field rename, so an
+  // in-flight render at deploy time doesn't fail verification.
+  let payload: { subject?: string; orderId?: string; exp?: number }
   try {
     payload = JSON.parse(b64urlDecode(body).toString('utf8'))
   } catch {
     return false
   }
-  if (!payload.orderId || !payload.exp) return false
-  if (payload.orderId !== orderId) return false
+  const payloadSubject = payload.subject ?? payload.orderId
+  if (!payloadSubject || !payload.exp) return false
+  if (payloadSubject !== subject) return false
   if (Date.now() > payload.exp) return false
 
   const expected = createHmac('sha256', secret()).update(body).digest()
