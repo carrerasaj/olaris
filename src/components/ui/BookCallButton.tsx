@@ -6,10 +6,10 @@
  * conversion than navigating away to /contact (per conversion addendum
  * A-04: "moves commitment up a stage").
  *
- * Loads Cal.com's official embed script once (via next/script with
- * strategy="afterInteractive") then triggers the popup imperatively on
- * click. Avoids the verbose IIFE bootstrap from Cal's docs — the
- * runtime API works the same once the script is on the page.
+ * Uses Cal.com's official bootstrap pattern via `loadCal()`
+ * (src/lib/cal-embed.ts). Loading the embed script directly with
+ * <script src="..."> doesn't work — the script expects a queueing
+ * `window.Cal` stub set up by the bootstrap and throws otherwise.
  *
  * Falls back gracefully when NEXT_PUBLIC_CAL_LINK is unset:
  *   - Renders the `fallback` prop (callers supply a normal link).
@@ -20,33 +20,11 @@
  * can separate "pressed Book a call" from later actual bookings.
  */
 
-import Script from 'next/script'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { track } from '@/lib/analytics'
+import { loadCal, getCalNamespace, getCal } from '@/lib/cal-embed'
 
 const CAL_NAMESPACE = 'olaris-booking'
-
-type CalApi = (command: string, ...args: unknown[]) => void
-interface CalGlobal extends CalApi {
-  ns?: Record<string, CalApi>
-}
-
-function getCal(): CalGlobal | null {
-  if (typeof window === 'undefined') return null
-  return (window as unknown as { Cal?: CalGlobal }).Cal ?? null
-}
-
-function initCalNamespace(): void {
-  const Cal = getCal()
-  if (!Cal) return
-  Cal('init', CAL_NAMESPACE, { origin: 'https://cal.com' })
-  Cal.ns?.[CAL_NAMESPACE]?.('ui', {
-    theme: 'dark',
-    cssVarsPerTheme: { dark: { 'cal-brand': '#06b6d4' } },
-    hideEventTypeDetails: false,
-    layout: 'month_view',
-  })
-}
 
 interface BookCallButtonProps {
   children?: ReactNode
@@ -64,64 +42,69 @@ export function BookCallButton({
   fallback = null,
 }: BookCallButtonProps) {
   const calLink = process.env.NEXT_PUBLIC_CAL_LINK
-  const [scriptReady, setScriptReady] = useState(false)
+  const initStartedRef = useRef(false)
 
-  // Re-init the namespace if the script was already loaded (e.g. another
-  // BookCallButton mounted earlier on the same page). Cheap, idempotent.
+  // Kick off the bootstrap + namespace init as soon as the button mounts.
+  // Repeated calls across multiple buttons on the same page are no-ops
+  // thanks to loadCal's memoised promise.
   useEffect(() => {
-    if (!calLink) return
-    if (getCal()) initCalNamespace()
+    if (!calLink || initStartedRef.current) return
+    initStartedRef.current = true
+
+    // Init the namespace via the queueing stub *before* the script
+    // loads — Cal flushes the queue on hydration. Configures branding
+    // (dark theme + Olaris cyan brand colour).
+    const cal = getCal()
+    cal?.('init', CAL_NAMESPACE, { origin: 'https://cal.com' })
+
+    loadCal()
+      .then(() => {
+        const ns = getCalNamespace(CAL_NAMESPACE)
+        ns?.('ui', {
+          theme: 'dark',
+          cssVarsPerTheme: { dark: { 'cal-brand': '#06b6d4' } },
+          hideEventTypeDetails: false,
+          layout: 'month_view',
+        })
+      })
+      .catch((e) => {
+        console.warn('[cal] embed init failed', e)
+      })
   }, [calLink])
 
   if (!calLink) {
     return <>{fallback}</>
   }
 
-  return (
-    <>
-      <Script
-        id="cal-embed-loader"
-        strategy="afterInteractive"
-        src="https://app.cal.com/embed/embed.js"
-        onLoad={() => {
-          initCalNamespace()
-          setScriptReady(true)
-        }}
-      />
-      <button
-        type="button"
-        data-cal-namespace={CAL_NAMESPACE}
-        data-cal-link={calLink}
-        data-cal-config={JSON.stringify({ layout: 'month_view', theme: 'dark' })}
-        onClick={() => {
-          const page =
-            fromPage ??
-            (typeof window === 'undefined' ? '' : window.location.pathname)
-          track('demo_requested', { from_page: page })
+  function handleClick() {
+    const page =
+      fromPage ?? (typeof window === 'undefined' ? '' : window.location.pathname)
+    track('demo_requested', { from_page: page })
 
-          // If the script hasn't loaded yet (rare — user clicks before
-          // afterInteractive fires), trigger a manual open via the API
-          // once it's available. Cal's data attributes auto-bind on
-          // script load, so this only matters for very fast clicks.
-          if (!scriptReady) {
-            const tryOpen = (attempts: number) => {
-              const Cal = getCal()
-              if (Cal) {
-                Cal.ns?.[CAL_NAMESPACE]?.('modal', {
-                  calLink,
-                  config: { layout: 'month_view', theme: 'dark' },
-                })
-                return
-              }
-              if (attempts > 0) setTimeout(() => tryOpen(attempts - 1), 100)
-            }
-            tryOpen(20)
-          }
-        }}
-        className={className}
-      >
-        {children}
-      </button>
-    </>
+    // Trigger the modal imperatively rather than relying on Cal's
+    // auto-binding to data attributes — that auto-bind has timing
+    // issues if the click lands before the script finishes loading.
+    // Calling through the queueing stub means it'll fire as soon as
+    // the script is ready, even if the user clicks immediately.
+    const ns = getCalNamespace(CAL_NAMESPACE)
+    if (ns) {
+      ns('modal', {
+        calLink,
+        config: { layout: 'month_view', theme: 'dark' },
+      })
+    } else {
+      // Stub also accepts queued calls; flushed when script lands.
+      const cal = getCal()
+      cal?.('modal', {
+        calLink,
+        config: { layout: 'month_view', theme: 'dark' },
+      })
+    }
+  }
+
+  return (
+    <button type="button" onClick={handleClick} className={className}>
+      {children}
+    </button>
   )
 }
