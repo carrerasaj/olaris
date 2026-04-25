@@ -234,8 +234,9 @@ export default function PlatformPage() {
       <CTABanner
         headline="Ready to see your fleet differently?"
         subtext="No slides. No sales pitch. Just your data, in the platform."
-        buttonText="Book a Demo"
+        buttonText="Book a 20-min call"
         buttonHref="/contact"
+        mode="book-call"
       />
     </>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { track } from '@/lib/analytics'
+import { BookCallButton } from '@/components/ui/BookCallButton'
 
 function fmt(n: number) {
   return n.toLocaleString('en-GB')
@@ -388,10 +389,20 @@ function ReportCaptureForm({ calcInputs, headlineCharge }: ReportCaptureFormProp
     return (
       <div className="rounded-xl p-5 bg-emerald-500/10 border border-emerald-500/20 text-center">
         <p className="text-emerald-400 font-bold text-lg mb-1">Report on the way</p>
-        <p className="text-sm text-olaris-text-secondary">
+        <p className="text-sm text-olaris-text-secondary mb-4">
           Check your inbox in a minute or two — if it&apos;s not there, check
           spam and flag us safe.
         </p>
+        <p className="text-sm text-white mb-3">
+          Want to talk through the numbers?
+        </p>
+        <BookCallButton
+          fromPage="/tools/excess-mileage-calculator"
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-500 hover:bg-cyan-400 text-[#0D1117] font-bold px-5 py-2.5 text-sm transition-colors"
+          fallback={null}
+        >
+          Book a 20-min call →
+        </BookCallButton>
       </div>
     )
   }

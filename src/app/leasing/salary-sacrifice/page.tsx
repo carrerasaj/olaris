@@ -314,8 +314,9 @@ export default function SalarySacrificePage() {
       <CTABanner
         headline="Offer Your Employees a Better Deal"
         subtext="A salary sacrifice car scheme is one of the most popular employee benefits available — and with Orbis intelligence built in, it's one of the most visible too. Talk to us about setting up a scheme for your organisation."
-        buttonText="Discuss a Salary Sacrifice Scheme"
+        buttonText="Book a 20-min call"
         buttonHref="/contact"
+        mode="book-call"
       />
     </>
   )

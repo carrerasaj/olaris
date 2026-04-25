@@ -214,8 +214,9 @@ export default function LeasingPage() {
       <CTABanner
         headline="Ready to See the Difference?"
         subtext="Whether you're looking for business contract hire, salary sacrifice, or both — we'd welcome the conversation. Tell us about your fleet and we'll show you what intelligence built in actually looks like."
-        buttonText="Get in Touch"
+        buttonText="Book a 20-min call"
         buttonHref="/contact"
+        mode="book-call"
       />
     </>
   )

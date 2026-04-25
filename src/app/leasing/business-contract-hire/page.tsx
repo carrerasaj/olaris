@@ -303,8 +303,9 @@ export default function BusinessContractHirePage() {
       <CTABanner
         headline="Get a Business Contract Hire Quote"
         subtext="Tell us about your fleet — size, vehicle types, sector — and we'll come back with competitive rates and a demonstration of what Orbis intelligence looks like for your operation. No obligation. No hard sell. Just a conversation with people who've been doing this for 40 years."
-        buttonText="Request a Quote"
+        buttonText="Book a 20-min call"
         buttonHref="/contact"
+        mode="book-call"
       />
     </>
   )

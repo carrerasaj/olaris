@@ -1,11 +1,20 @@
 import { Button } from '@/components/ui/button'
 import { TrackedLink } from '@/components/ui/TrackedLink'
+import { BookCallButton } from '@/components/ui/BookCallButton'
 
 interface CTABannerProps {
   headline: string
   subtext?: string
   buttonText?: string
   buttonHref?: string
+  /**
+   * 'link' (default) — renders as a tracked Next.js link, navigates away.
+   * 'book-call' — renders the Cal.com popup booking button, keeping the
+   *   user on the page. Used on high-intent surfaces (platform, leasing,
+   *   post-calculator) per T1-04. Falls back to the link mode if
+   *   NEXT_PUBLIC_CAL_LINK is unset.
+   */
+  mode?: 'link' | 'book-call'
 }
 
 export function CTABanner({
@@ -13,7 +22,16 @@ export function CTABanner({
   subtext,
   buttonText = 'Talk to Us',
   buttonHref = '/contact',
+  mode = 'link',
 }: CTABannerProps) {
+  const fallbackLink = (
+    <Button variant="gradient" size="lg" asChild>
+      <TrackedLink href={buttonHref} ctaLabel={buttonText}>
+        {buttonText}
+      </TrackedLink>
+    </Button>
+  )
+
   return (
     <section className="bg-olaris-dark py-20 md:py-28 border-t border-olaris-border-dark">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -25,11 +43,16 @@ export function CTABanner({
             {subtext}
           </p>
         )}
-        <Button variant="gradient" size="lg" asChild>
-          <TrackedLink href={buttonHref} ctaLabel={buttonText}>
+        {mode === 'book-call' ? (
+          <BookCallButton
+            fallback={fallbackLink}
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold px-8 py-4 text-lg transition-all shadow-lg hover:shadow-cyan-500/30"
+          >
             {buttonText}
-          </TrackedLink>
-        </Button>
+          </BookCallButton>
+        ) : (
+          fallbackLink
+        )}
       </div>
     </section>
   )

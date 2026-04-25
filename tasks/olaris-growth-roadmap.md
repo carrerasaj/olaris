@@ -37,6 +37,8 @@ Baseline metrics targets live in `.claude/Olaris Audit Tasks.md` §1 and `.claud
 - [x] **T2-02** · Internal linking audit (cluster manifest + `<RelatedPostsBlock>` component, 2 missing BCH/platform links added in blog bodies, thin-linking re-audit showed F-02's tsx-only grep over-reported — markdown link count is healthy everywhere) — *shipped 24 Apr 2026, commit `growth-T-02-02-internal-linking-audit`*
 - [x] **CO-04** · Style + voice guide (`docs/style-guide.md` — observed patterns from the existing 16-post corpus, not invented rules; frontmatter template, voice rules, length targets, required elements per post, cluster linkage) — *shipped 24 Apr 2026, commit `growth-CO-04-style-voice-guide`*
 - [x] **F-03** · Email infra + lead-storage primitive (migration 0008 with `leads` / `drip_enrolments` / `lead_events` tables; `src/lib/leads.ts` with `captureLead` / `enrolLead` / `unsubscribeByToken` / `recordLeadEvent`; `src/lib/drip-sequences.ts` typed registry with the 7-step post-excess-mileage sequence from A-06; `src/lib/gated-resources.ts` with empty asset registry ready for T2-04; `/api/cron/drips` endpoint with bearer auth; `/unsubscribe/[token]` public page with confirm-click flow to defeat link-scanner prefetch) — *shipped 24 Apr 2026, commit TBD*
+- [x] **T1-01 ↔ S1-03** · Post-result PDF report + email capture on `/tools/excess-mileage-calculator` (email-gated `<ReportCaptureForm />` below the calculator result card; POST `/api/tools/excess-mileage/report` re-runs the maths server-side, stashes the full payload on `leads.sourceContext`, fires `sendGatedResource('excess-mileage-report')` + `enrolLead('post-excess-mileage-calc')` fire-and-forget; Puppeteer template at `/admin/tools/excess-mileage-report/pdf-template` reuses the signed-order render pattern with a generalised `mintRenderToken(subject)` and sha256-bound payload in the URL; `src/data/bch-benchmarks.ts` stub table Alan populates with real figures) — *shipped 24 Apr 2026, commit TBD*
+- [x] **T1-04 ↔ A-04** · Cal.com booking embed on `/platform`, `/leasing`, `/leasing/business-contract-hire`, `/leasing/salary-sacrifice`, plus the post-calculator success state on `/tools/excess-mileage-calculator`. New `<BookCallButton />` (`src/components/ui/BookCallButton.tsx`) lazy-loads Cal.com's official embed script via `next/script` and opens the popup overlay so users never leave the page. `<CTABanner mode="book-call">` adds the new mode while preserving the link-mode default for the rest of the site. Reads `NEXT_PUBLIC_CAL_LINK` (path form, e.g. `aj-carreras-2ixsja/30min`); falls back to the static contact link when unset so deploys can ship before Vercel env-var rollout. Fires `demo_requested` on click. Note: Cal handle is the free-tier auto-generated `aj-carreras-2ixsja` and the event is 30min not 20min — tidy on Cal.com side later, env var swap only — *shipped 25 Apr 2026, commit TBD*
 
 ---
 
@@ -62,11 +64,9 @@ See Done section above.
 
 The `/tools/excess-mileage-calculator` page is the #1 traffic leak (313 imp @ pos 4.27, 0 clicks in the last 28 days). Stack conversion surfaces on it first. **Ship sequentially on this page** — do not launch multiple capture surfaces simultaneously per addendum §282 ("they'll fight each other and degrade UX").
 
-### [ ] T1-01 ↔ S1-03 · Post-result PDF report + email capture on `/tools/excess-mileage-calculator`
+### [x] T1-01 ↔ S1-03 · Post-result PDF report + email capture — *done*
 
-- Depends on: F-01, F-03
-- Scope: below the result card, post-calculation, email-only capture → PDF with BCH comparison + Orbis narrative → CTA to book
-- Key plumbing: `src/data/bch-benchmarks.ts` stub table (Alan populates with real figures later), PDF via `@react-pdf/renderer`, drip enrolment call
+See Done section above.
 
 ### [ ] T1-02 ↔ A-01 · Exit-intent modal on `/tools/*`
 
@@ -79,10 +79,9 @@ The `/tools/excess-mileage-calculator` page is the #1 traffic leak (313 imp @ po
 - Depends on: F-03, at least one of T1-01/T1-02
 - Scope: 7-step sequence per addendum table; pause on any reply; GA4 event per step
 
-### [ ] T1-04 ↔ A-04 · Cal.com embed on `/platform`, `/leasing/*`, post-calculator success
+### [x] T1-04 ↔ A-04 · Cal.com booking embed — *done*
 
-- Depends on: F-01
-- Scope: replace static "Contact Us" on high-intent pages with a calendar embed; keep the existing `/contact` form for info-seekers until T4-01
+See Done section above.
 
 ### [ ] T1-05 ↔ C-06 · Thank-you pages that do work
 
@@ -316,11 +315,13 @@ Tasks that belong on the radar but don't fit the tier cadence. Most are waiting 
 
 Alan paused the video-dependent branch (VC-02 + T2-03 finish) until recording can happen, so the working plan is "ship everything that doesn't need Alan's camera time." Order:
 
-1. **T2-03 (partial) · /about + author bylines + `<FounderVideoSlot />` stub** — build the scaffolding now with a headshot + bio copy from Alan. Video slot stays stubbed until VC-02 recording happens; drops in without a second PR.
-2. **VC-01 · Orbis screenshots (component scaffolding + placement pattern)** — Claude Code builds the annotation component + `/platform` placement slots against placeholder images; real images slot in when Alan/Orbis ship them. Unblocks T3-04 platform rebuild pre-emptively.
-3. **T2-04 · First inline lead magnet (Grey Fleet Policy Template)** — now viable; F-03 ships the `gatedResources` registry with zero assets, so the first addition is a clean diff. Needs the Word template from Alan.
-4. **T1-01 · Post-result PDF report + email capture on `/tools/excess-mileage-calculator`** — top of Tier 1. F-03 removes the previous blocker. Wires `captureLead` + `sendGatedResource` + `enrolLead('post-excess-mileage-calc')` to the excess-mileage calculator flow.
-5. *(T2-02 Internal linking audit, CO-04 Style guide, F-03 Email infra — all shipped 24 Apr 2026)*
+1. **T1-05 ↔ C-06 · Thank-you pages that do work** — both anchor routes now exist (T1-01 captured = report sent; T1-04 booked = call booked). Replace the inlined success state in `<ReportCaptureForm />` with a redirect to `/thanks/excess-mileage`, and add a `/thanks/call-booked` route Cal.com's `success-redirect-url` config can point at. ~half day.
+2. **T2-03 (partial) · /about + author bylines + `<FounderVideoSlot />` stub** — video-pause-compatible scaffolding. Needs headshot + 300-word bio from Alan.
+3. **VC-01 · Orbis screenshots (component scaffolding + placement pattern)** — Claude Code builds the annotation component + `/platform` placement slots against placeholder images; real images slot in when Alan/Orbis ship them. Unblocks T3-04 pre-emptively.
+4. **T2-04 · First inline lead magnet (Grey Fleet Policy Template)** — clean diff on the `gatedResources` registry. Needs the Word template from Alan.
+5. **T2-05 ↔ A-05 · Newsletter reframe** — repositions the footer CTA as "The Fleet Intelligence Brief" with value prop + recent-issue preview. ESP wiring depends on whether existing Mailchimp / Beehiiv envs are in use; quick read of the current footer first.
+
+T1-02 (exit-intent on `/tools/*`) stays parked for **2 weeks post-T1-01 ship** per addendum §282 (one capture surface at a time per page). T1-03 drip is active the moment the first lead enrols via T1-01; verify in cron logs after first capture.
 
 Deferred until Alan is ready to record:
 
@@ -348,6 +349,8 @@ Why this order:
 
 ## Change log
 
+- **25 Apr 2026** — T1-04 shipped. New `<BookCallButton />` (`src/components/ui/BookCallButton.tsx`) lazy-loads the Cal.com embed via `next/script` and opens the popup overlay on click — keeps the user on the page (per addendum A-04: "moves commitment up a stage"). `<CTABanner mode="book-call">` adds the new mode without changing existing link-mode call sites. Wired to `/platform`, `/leasing`, `/leasing/business-contract-hire`, `/leasing/salary-sacrifice`, plus the post-calculator success state on `/tools/excess-mileage-calculator`. Fires `demo_requested` on click. Reads `NEXT_PUBLIC_CAL_LINK` (path form, no host) — when unset, falls back to the static `/contact` link via the `fallback` prop, so deploys can ship before Vercel env-var rollout. **Cal.com handle housekeeping deferred:** free-tier locks the URL, so we're stuck with `aj-carreras-2ixsja/30min` (random suffix + 30min event vs. addendum's 20min target). Tidy when Cal.com paid plan is acquired or a custom domain is connected — env-var swap only, no code redeploy. **Next-5 reshuffled:** T1-05 thanks pages promoted to #1 (both anchor routes now exist).
+- **24 Apr 2026** — T1-01 shipped. Excess-mileage calculator now has an email-gated PDF report capture below the result card. Stack: `<ReportCaptureForm />` in `src/components/tools/FleetMileageCalculator.tsx`, `POST /api/tools/excess-mileage/report` re-runs the maths server-side from validated inputs and stashes the full payload on `leads.sourceContext`, Puppeteer template at `/admin/tools/excess-mileage-report/pdf-template` reads it back with a sha256-bound render token (generalised `mintRenderToken(subject)` for reuse). `sendGatedResource` + `enrolLead('post-excess-mileage-calc')` fire-and-forget so a flaky Resend doesn't block capture. `src/data/bch-benchmarks.ts` is stubbed — Alan replaces with real rate-card figures; PDF renderer doesn't need to change. **Next-5 reshuffled:** T1-04 Cal.com embed promoted to #1 (still-open Tier 1, no deps). T1-02 exit-intent remains parked 2wks per addendum §282.
 - **24 Apr 2026** — Initial merge of SEO + Conversion briefs into a single tiered plan. T2-01 marked done (S1-01 meta rewrites shipped).
 - **24 Apr 2026** — F-03 shipped. Migration 0008 adds `leads` (with unique index on `(email, source)`), `drip_enrolments` (mirrors the `reminder_schedule` pattern), and `lead_events` (audit trail FK to `leads`). `src/lib/leads.ts` is the entry point: `captureLead` upserts idempotently, `enrolLead` schedules the first drip-step row, `unsubscribeByToken` marks + cancels pending drips. `src/lib/drip-sequences.ts` declares the 7-step post-excess-mileage sequence from A-06 as typed code — body copy is a working first draft T1-03 iterates on. `/api/cron/drips` sweeps due rows on the same `CRON_SECRET` bearer pattern as `/api/cron/reminders`, with 07:30 UTC slot in vercel.json. `/unsubscribe/[token]` uses a confirm-click pattern instead of one-click on page load, defeating corporate link-scanner prefetch. **Next-5 reshuffled:** Tier 1 capture surfaces now unblocked — T1-01 promoted into the list.
 - **24 Apr 2026** — CO-04 shipped. `docs/style-guide.md` captures the voice / length / structure already working in the existing 16-post corpus (~2,400 word median, first-person, concrete numbers, .gov.uk citations). Not invented rules — documented what ships well.
