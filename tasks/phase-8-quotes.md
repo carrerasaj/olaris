@@ -1,5 +1,7 @@
 # Phase 8 — Quote → Order pipeline
 
+> **Status: shipped.** Closed via commit `14658e7 phase-8-quotes`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 ## Problem
 
 Today the funnel starts at "order exists." There is no way to capture a prospect enquiry, send a priced quote, watch who accepted, or see conversion rate. Every deal is typed directly into `/admin/orders/new`, which only scales to ~1/week and loses all pre-order history (what did we quote? who went cold? why did we lose?).

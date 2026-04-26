@@ -1,5 +1,7 @@
 # Phase 12 — Customer delivery comms + handover pack + NPS
 
+> **Status: shipped.** Closed via commit `05fd80a phase-12-customer-comms`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 ## Problem
 
 Phase 9 runs the delivery lifecycle internally but the customer learns about progress by email/phone. Today they sign the order, then disappear into a black box — they don't know when the dealer confirmed, when the ETA slipped, or when to expect the handover. On delivery day they get the vehicle but no digital record of what we handed over; no NPS capture either, so we have no structured view of how happy customers are with us.

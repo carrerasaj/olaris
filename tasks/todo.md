@@ -1,5 +1,7 @@
 # Olaris Order Execution + Self-Hosted E-Signature + Mini-CRM
 
+> **Status: shipped (Phases 0–7).** This was the original greenfield build plan; the admin/CRM/signing/PDF stack it describes has been live since commit `52e9678 phase-5-pdf-generation-and-verify` (with later phases 6–12 building on top — see their respective `tasks/phase-N-*.md` files). Phase 8 verification was de-facto satisfied piecemeal via real-world signings; Phase 9 docs (`README-OPERATIONS.md`) is the only outstanding deliverable. Active work has moved to `tasks/olaris-growth-roadmap.md`. Unticked checkboxes below are historical.
+
 **Brief:** Build a real vehicle-order execution system for olaris.co.uk with a self-hosted SES-tier e-signature solution (UK eIDAS-compliant audit trail), a minimal Salesforce-shaped CRM to hold customers and orders, and the two order-form variants from `src/components/mockups/` ported into production Next/TSX/Tailwind.
 
 **Confirmed decisions (locked):**
@@ -204,4 +206,16 @@ Per CLAUDE.md, every task needs demonstrated correctness:
 
 ## Review
 
-*To be filled in once phases 0–9 complete, per CLAUDE.md §4.*
+Phases 0–7 shipped end-to-end; the order-execution + signing + CRM stack has been in real production use since 22 Apr 2026. Phase 8 verification happened by exercising the system with real customer orders rather than as a discrete sweep — every box in §Phase 8 has been demonstrated at least once in prod. Phase 9 docs were partially deferred: `README-analytics.md` exists, `docs/style-guide.md` exists, but `README-OPERATIONS.md` (admin add / signing-key rotation / GDPR export procedures) is still outstanding.
+
+Phases 6–12 (delivery lifecycle, supplier PO, accounting, customer comms, NPS) layered on top — each tracked in its own `tasks/phase-N-*.md` file, all shipped.
+
+The 24–26 Apr 2026 window also surfaced two operational lessons captured in `tasks/lessons.md`:
+
+- Schema drift between deployed code and prod DB caused the Tony signing incident on 24 Apr.
+- Provider-first credential rotation caused a ~30-min admin outage on 26 Apr.
+
+**Outstanding:**
+
+- [ ] `README-OPERATIONS.md` (Phase 9 docs deliverable — low priority; useful when a second admin or operator joins)
+- [ ] Replace the v1 `@react-pdf/renderer` plan in §Phase 5 with a Phase-5-as-built note: signed-order PDFs use Puppeteer + Chromium via `src/lib/pdf/render.ts`; the same path was extended in T1-01 (excess-mileage report PDF). The mockups-deletion question from §Verification was answered by retaining them under their original path; consider tidying as a future cleanup.

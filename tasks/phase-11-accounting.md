@@ -1,5 +1,7 @@
 # Phase 11 — Accounting / P&L reporting (v1)
 
+> **Status: shipped.** Closed via commit `141eb12 phase-11-accounting`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 ## Problem
 
 Phase 10 structured every commercial field we'd need to answer "how much did we make on this deal?" — customer total snapshot, purchase total, margin, VAT splits. Nothing reads it back out. Today "what was gross profit last quarter?" means opening every supplier PO individually. This phase turns the data into views admin can actually use when talking to the accountant or deciding which deals are worth chasing.

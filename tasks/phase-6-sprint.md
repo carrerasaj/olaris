@@ -1,5 +1,7 @@
 # Phase 6 sprint — 2026-04-23
 
+> **Status: shipped.** Closed via commits `dfa8360 phase-6-health-endpoint`, `cc750ea phase-6-part1`, `1b48ff0 phase-6-part2`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 Picking up from 52e9678 (phase-5-pdf-generation-and-verify). This is a
 single-day sprint, four tightly-scoped items. Nothing architectural —
 each piece closes a known gap from Phases 1–5.

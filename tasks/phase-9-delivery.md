@@ -1,5 +1,7 @@
 # Phase 9 — Delivery lifecycle
 
+> **Status: shipped.** Closed via commit `c4a40db phase-9-delivery-lifecycle`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 ## Problem
 
 Today's order state machine collapses the entire post-signing phase into one button: `signed → delivered`. In reality a signed deal goes through several distinct operational stages — supplier confirmation, build, handover paperwork, physical delivery, post-delivery follow-up — each with different information, different stakeholders, different dates, and different risks if something goes wrong. Losing that visibility means we can't answer "where is Tony's van?" without pinging the supplier every time.

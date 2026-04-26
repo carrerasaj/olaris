@@ -1,5 +1,7 @@
 # Phase 10 — Supplier purchase order (Olaris → supplier)
 
+> **Status: shipped.** Closed via commit `816cc24 phase-10-supplier-po`. Unticked checkboxes below are historical — kept for context, not active work. See `tasks/olaris-growth-roadmap.md` for current work.
+
 ## Problem
 
 Today a signed customer order is just a tag pointing at a supplier row — nothing actually travels from us to the dealer. In practice we read the signed order, retype the key bits into an email, attach the signed PDF, and hope the dealer replies with a PO acknowledgement we then hand-enter against the order. Three things are wrong with that:
