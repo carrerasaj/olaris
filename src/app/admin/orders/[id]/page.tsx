@@ -33,8 +33,10 @@ import {
   signAsRepAction,
   ensureOrderPdfAction,
   duplicateOrderAction,
+  setOrderRequiresOtpAction,
   type RepSignInput,
 } from '../../actions/orders'
+import { RequiresOtpToggle } from './RequiresOtpToggle'
 import type { LogisticsField, LogisticsPatch } from '@/lib/order-delivery'
 import { LOGISTICS_FIELDS } from '@/lib/order-delivery'
 import {
@@ -174,6 +176,10 @@ export default async function OrderDetailPage({
   async function send() {
     'use server'
     await sendForSignatureAction(id)
+  }
+  async function setRequiresOtp(orderId: string, requiresOtp: boolean) {
+    'use server'
+    return await setOrderRequiresOtpAction(orderId, requiresOtp)
   }
   async function cancel() {
     'use server'
@@ -427,6 +433,19 @@ export default async function OrderDetailPage({
           )}
         </div>
       </div>
+
+      {/* Per-order signing-flow config. Visible only on draft orders —
+          once sent, the customer may already be mid-flow and we don't
+          change auth requirements under their feet. */}
+      {canSend && (
+        <div style={{ marginTop: 12, maxWidth: 560 }}>
+          <RequiresOtpToggle
+            orderId={id}
+            initial={order.requiresOtp}
+            setRequiresOtp={setRequiresOtp}
+          />
+        </div>
+      )}
 
       {sourceQuoteRows[0] && (
         <div

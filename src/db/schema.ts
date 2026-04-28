@@ -511,6 +511,14 @@ export const orders = pgTable(
 
     notes: text('notes'),
 
+    // Per-order opt-in to email-OTP at signing time. Default is false —
+    // single-step SES (link click + IP/UA/geo + drawn signature + Ed25519
+    // doc hash) is sufficient for UK eIDAS SES tier and is the standard
+    // for B2B contract hire. Alan flips this true on the order detail
+    // page when extra verification is warranted (high-value, unfamiliar
+    // counterparty, etc.). Server enforces — client doesn't decide.
+    requiresOtp: boolean('requires_otp').notNull().default(false),
+
     // Derived totals at the moment of last save — in pence. Source of truth is
     // still the pricing/finance jsonb above; these are denormalised for list
     // views that don't want to re-run the calc per row.

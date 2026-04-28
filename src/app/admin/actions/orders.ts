@@ -352,6 +352,51 @@ export async function duplicateOrderAction(
   return { ok: true, id: newOrder.id, ref: newOrder.ref }
 }
 
+// ─── per-order OTP requirement toggle ────────────────────────────────────
+
+/**
+ * Set whether the customer's signing flow for this order requires an
+ * email OTP step. Default for new orders is false (single-step SES).
+ * Only meaningful while `status = 'draft'` — once sent, the customer
+ * may have already opened the link and seen the corresponding UI; we
+ * don't change the flow under their feet. This is enforced here, and
+ * the order detail page only renders the toggle for draft orders.
+ */
+export async function setOrderRequiresOtpAction(
+  orderId: string,
+  requiresOtp: boolean,
+): Promise<OrderActionResult> {
+  const user = await requireAdmin()
+
+  const rows = await db
+    .select({ id: orders.id, status: orders.status, customerId: orders.customerId })
+    .from(orders)
+    .where(eq(orders.id, orderId))
+    .limit(1)
+  if (rows.length === 0) return { ok: false, error: 'Order not found' }
+  const order = rows[0]
+  if (order.status !== 'draft') {
+    return { ok: false, error: 'OTP requirement can only be changed on draft orders' }
+  }
+
+  await db
+    .update(orders)
+    .set({ requiresOtp, updatedAt: new Date() })
+    .where(eq(orders.id, orderId))
+
+  await db.insert(auditEvents).values({
+    orderId,
+    customerId: order.customerId,
+    actorType: 'rep',
+    actorId: user.id,
+    eventType: 'order.updated',
+    payload: { field: 'requires_otp', value: requiresOtp },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  return { ok: true, id: orderId }
+}
+
 // ─── send for signature ───────────────────────────────────────────────────
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000

@@ -84,10 +84,17 @@ interface ViewOrder {
   financeType: string
   totalAmountPence: number
   monthlyAmountPence: number
+  /**
+   * When true, the customer's signing flow includes an email-OTP step
+   * before submission. Set per-order from the admin UI; default false
+   * (single-step SES). Server enforces — sending an `otp`-less submit
+   * for an `requires_otp = true` order will be rejected.
+   */
+  requiresOtp: boolean
   expiresAt: string
 }
 
-type Stage = 'review' | 'success' | 'declined'
+type Stage = 'review' | 'awaiting' | 'success' | 'declined'
 
 export function SignClient({ view }: { view: ViewOrder }) {
   const [stage, setStage] = useState<Stage>('review')
@@ -98,7 +105,10 @@ export function SignClient({ view }: { view: ViewOrder }) {
   })
   const [intent, setIntent] = useState(false)
   const [signature, setSignature] = useState<SignaturePayload | null>(null)
+  const [otp, setOtp] = useState('')
+  const [otpError, setOtpError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [requestingOtp, setRequestingOtp] = useState(false)
   const [alert, setAlert] = useState<{ kind: 'success' | 'error' | 'info'; text: string } | null>(
     null,
   )
@@ -107,6 +117,7 @@ export function SignClient({ view }: { view: ViewOrder }) {
 
   const allConsented = consents.terms && consents.fcaDisclosure && consents.gdpr
   const readyToSign = allConsented && intent && !!signature
+  const canSubmitOtp = otp.length === 6 && /^\d{6}$/.test(otp)
 
   // The submit button shows what's blocking the customer. Order matters:
   // signature → consents → intent. Same order the form is laid out in.
@@ -128,18 +139,60 @@ export function SignClient({ view }: { view: ViewOrder }) {
     [view.expiresAt],
   )
 
+  // ─── OTP request (only when view.requiresOtp) ────────────────
+  async function requestOtp() {
+    setRequestingOtp(true)
+    setAlert(null)
+    setOtpError(null)
+    try {
+      const r = await fetch('/api/sign/otp', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: view.token }),
+      })
+      const data = await r.json()
+      if (!r.ok || !data.ok) {
+        if (data.reason === 'rate_limited') {
+          setAlert({
+            kind: 'error',
+            text: 'Too many codes requested. Please wait a few minutes and try again.',
+          })
+          return
+        }
+        setAlert({
+          kind: 'error',
+          text: 'Could not send a verification code. Please try again in a moment.',
+        })
+        return
+      }
+      setStage('awaiting')
+      setAlert({
+        kind: 'info',
+        text: `A 6-digit code has been emailed to ${view.customer.email}. It expires in 10 minutes.`,
+      })
+    } finally {
+      setRequestingOtp(false)
+    }
+  }
+
   // ─── Submit ─────────────────────────────────────────────────
   async function submit(e: FormEvent) {
     e.preventDefault()
     if (!readyToSign) return
+    if (view.requiresOtp && !canSubmitOtp) return
     setSubmitting(true)
     setAlert(null)
+    setOtpError(null)
     try {
       const r = await fetch('/api/sign/submit', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           token: view.token,
+          // Only include `otp` when this order required it. Server
+          // enforces — sending one without `requires_otp = true` is
+          // ignored, omitting one for `requires_otp = true` is rejected.
+          ...(view.requiresOtp ? { otp } : {}),
           intent: true,
           consents,
           signature,
@@ -147,7 +200,17 @@ export function SignClient({ view }: { view: ViewOrder }) {
       })
       const data = await r.json()
       if (!r.ok || !data.ok) {
-        if (data.error === 'already_signed') {
+        if (data.error === 'bad_otp') {
+          setOtpError(
+            data.remaining > 0
+              ? `Incorrect code. ${data.remaining} attempts remaining.`
+              : 'Too many incorrect attempts. Please request a new code.',
+          )
+        } else if (data.error === 'otp_locked') {
+          setOtpError('Too many attempts. Please request a new code.')
+        } else if (data.error === 'no_active_otp' || data.error === 'otp_required') {
+          setOtpError('Your code has expired or wasn’t sent. Please request a new one.')
+        } else if (data.error === 'already_signed') {
           setAlert({ kind: 'info', text: 'This order has already been signed.' })
         } else if (data.error === 'expired' || data.error === 'consumed' || data.error === 'cancelled') {
           setAlert({
@@ -397,15 +460,91 @@ export function SignClient({ view }: { view: ViewOrder }) {
             </label>
           </div>
 
-          <form onSubmit={submit} style={{ marginTop: 22 }}>
-            <button
-              type="submit"
-              className="sgn-btn sgn-btn-accent sgn-btn-lg"
-              disabled={!readyToSign || submitting}
-            >
-              {submitting ? 'Signing…' : blockerText ?? 'Sign & accept order'}
-            </button>
-          </form>
+          {/* Default flow: single-step SES. One button. */}
+          {!view.requiresOtp && (
+            <form onSubmit={submit} style={{ marginTop: 22 }}>
+              <button
+                type="submit"
+                className="sgn-btn sgn-btn-accent sgn-btn-lg"
+                disabled={!readyToSign || submitting}
+              >
+                {submitting ? 'Signing…' : blockerText ?? 'Sign & accept order'}
+              </button>
+            </form>
+          )}
+
+          {/* OTP-required flow (per-order opt-in). Two-step:
+              1) request a code (gates on the same readyToSign predicate),
+              2) enter code + submit. */}
+          {view.requiresOtp && stage === 'review' && (
+            <div style={{ marginTop: 22 }}>
+              <button
+                type="button"
+                className="sgn-btn sgn-btn-primary sgn-btn-lg"
+                disabled={!readyToSign || requestingOtp}
+                onClick={requestOtp}
+              >
+                {requestingOtp
+                  ? 'Sending code…'
+                  : blockerText ?? 'Email me a verification code to finish'}
+              </button>
+            </div>
+          )}
+
+          {view.requiresOtp && stage === 'awaiting' && (
+            <form onSubmit={submit} style={{ marginTop: 22 }}>
+              <div style={{ fontSize: 13, color: '#334155', marginBottom: 10, textAlign: 'center' }}>
+                Enter the 6-digit code we emailed to <strong>{view.customer.email}</strong>:
+              </div>
+              <div className="sgn-otp-row">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => {
+                    setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))
+                    setOtpError(null)
+                  }}
+                  placeholder="000000"
+                  autoFocus
+                />
+              </div>
+              {otpError && (
+                <div className="sgn-alert sgn-alert-error" style={{ marginTop: 6 }}>
+                  {otpError}
+                </div>
+              )}
+              <button
+                type="submit"
+                className="sgn-btn sgn-btn-accent sgn-btn-lg"
+                disabled={!canSubmitOtp || submitting}
+                style={{ marginTop: 12 }}
+              >
+                {submitting ? 'Signing…' : 'Confirm signature'}
+              </button>
+              <div style={{ textAlign: 'center', marginTop: 10 }}>
+                <button
+                  type="button"
+                  onClick={requestOtp}
+                  disabled={requestingOtp}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#64748b',
+                    fontSize: 12,
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    textDecoration: 'underline',
+                  }}
+                >
+                  {requestingOtp ? 'Sending…' : "Didn't get a code? Send again"}
+                </button>
+              </div>
+            </form>
+          )}
 
           <div style={{ textAlign: 'center', marginTop: 22, paddingTop: 18, borderTop: '1px dashed #e4e9f1' }}>
             {!showDecline ? (

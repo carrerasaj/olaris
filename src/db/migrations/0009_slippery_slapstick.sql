@@ -1,0 +1,1 @@
+ALTER TABLE "orders" ADD COLUMN "requires_otp" boolean DEFAULT false NOT NULL;

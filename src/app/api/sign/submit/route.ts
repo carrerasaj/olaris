@@ -93,11 +93,14 @@ export async function POST(req: Request) {
     return Response.json({ ok: false, error: lookup.reason }, { status: 400 })
   }
 
-  // ── Verify OTP (only when the customer's flow included it) ────
-  // PR2 will gate this branch on `orders.requires_otp`. For now any
-  // submit that includes `otp` follows the legacy two-factor path; any
-  // submit without `otp` is single-step SES (the new default).
+  // ── Verify OTP (when the order opted in via requires_otp) ─────
+  // Server is the source of truth: if `orders.requires_otp = true` and
+  // the body has no `otp`, reject. Don't trust the client to decide
+  // its own auth strength.
   let otpVerifiedAt: Date | null = null
+  if (lookup.order.requiresOtp && !body.otp) {
+    return Response.json({ ok: false, error: 'otp_required' }, { status: 400 })
+  }
   if (body.otp) {
     const latestOtp = await db
       .select()

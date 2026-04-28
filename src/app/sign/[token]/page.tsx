@@ -65,6 +65,7 @@ export default async function SignPage({
     financeType: lookup.order.financeType,
     totalAmountPence: lookup.order.totalAmountPence,
     monthlyAmountPence: lookup.order.monthlyAmountPence,
+    requiresOtp: lookup.order.requiresOtp,
     expiresAt: lookup.token.expiresAt.toISOString(),
   }
 
