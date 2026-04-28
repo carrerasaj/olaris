@@ -2,13 +2,19 @@
 
 /**
  * Customer-facing signing client. Renders the order summary + signing
- * widgets. Talks to /api/sign/otp, /api/sign/submit, /api/sign/decline.
+ * widgets. Talks to /api/sign/submit, /api/sign/decline.
  *
  * UX states:
- *   - 'review'   : customer reading the order, consent unchecked
- *   - 'awaiting' : OTP requested, waiting for the code
+ *   - 'review'   : customer reading the order, signing in one step
  *   - 'success'  : signed, thank-you screen
  *   - 'declined' : customer declined, confirmation screen
+ *
+ * Default flow is single-step SES per UK eIDAS: link click is the auth
+ * factor (proves the customer received the email at their verified
+ * address); the page captures consent, intent, signature, IP/UA/geo,
+ * and a doc hash + Ed25519 signature. The OTP path is preserved at
+ * /api/sign/otp for orders that opt in via `orders.requires_otp`
+ * (PR2 introduces that flag and the conditional UI branch).
  */
 
 import { useMemo, useState, type FormEvent } from 'react'
@@ -81,7 +87,7 @@ interface ViewOrder {
   expiresAt: string
 }
 
-type Stage = 'review' | 'awaiting' | 'success' | 'declined'
+type Stage = 'review' | 'success' | 'declined'
 
 export function SignClient({ view }: { view: ViewOrder }) {
   const [stage, setStage] = useState<Stage>('review')
@@ -92,10 +98,7 @@ export function SignClient({ view }: { view: ViewOrder }) {
   })
   const [intent, setIntent] = useState(false)
   const [signature, setSignature] = useState<SignaturePayload | null>(null)
-  const [otp, setOtp] = useState('')
-  const [otpError, setOtpError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [requestingOtp, setRequestingOtp] = useState(false)
   const [alert, setAlert] = useState<{ kind: 'success' | 'error' | 'info'; text: string } | null>(
     null,
   )
@@ -103,8 +106,17 @@ export function SignClient({ view }: { view: ViewOrder }) {
   const [declineReason, setDeclineReason] = useState('')
 
   const allConsented = consents.terms && consents.fcaDisclosure && consents.gdpr
-  const readyToRequestOtp = allConsented && intent && !!signature
-  const canSubmitOtp = otp.length === 6 && /^\d{6}$/.test(otp)
+  const readyToSign = allConsented && intent && !!signature
+
+  // The submit button shows what's blocking the customer. Order matters:
+  // signature → consents → intent. Same order the form is laid out in.
+  const blockerText = !signature
+    ? 'Add a signature to continue'
+    : !allConsented
+      ? 'Tick all consent boxes to continue'
+      : !intent
+        ? 'Confirm intent to sign to continue'
+        : null
 
   const expiryText = useMemo(
     () =>
@@ -116,55 +128,18 @@ export function SignClient({ view }: { view: ViewOrder }) {
     [view.expiresAt],
   )
 
-  // ─── OTP request ─────────────────────────────────────────────
-  async function requestOtp() {
-    setRequestingOtp(true)
-    setAlert(null)
-    setOtpError(null)
-    try {
-      const r = await fetch('/api/sign/otp', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ token: view.token }),
-      })
-      const data = await r.json()
-      if (!r.ok || !data.ok) {
-        if (data.reason === 'rate_limited') {
-          setAlert({
-            kind: 'error',
-            text: 'Too many codes requested. Please wait a few minutes and try again.',
-          })
-          return
-        }
-        setAlert({
-          kind: 'error',
-          text: 'Could not send a verification code. Please try again in a moment.',
-        })
-        return
-      }
-      setStage('awaiting')
-      setAlert({
-        kind: 'info',
-        text: `A 6-digit code has been emailed to ${view.customer.email}. It expires in 10 minutes.`,
-      })
-    } finally {
-      setRequestingOtp(false)
-    }
-  }
-
   // ─── Submit ─────────────────────────────────────────────────
   async function submit(e: FormEvent) {
     e.preventDefault()
-    if (!signature || !allConsented || !intent || !canSubmitOtp) return
+    if (!readyToSign) return
     setSubmitting(true)
-    setOtpError(null)
+    setAlert(null)
     try {
       const r = await fetch('/api/sign/submit', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           token: view.token,
-          otp,
           intent: true,
           consents,
           signature,
@@ -172,20 +147,18 @@ export function SignClient({ view }: { view: ViewOrder }) {
       })
       const data = await r.json()
       if (!r.ok || !data.ok) {
-        if (data.error === 'bad_otp') {
-          setOtpError(
-            data.remaining > 0
-              ? `Incorrect code. ${data.remaining} attempts remaining.`
-              : 'Too many incorrect attempts. Please request a new code.',
-          )
-        } else if (data.error === 'otp_locked') {
-          setOtpError('Too many attempts. Please request a new code.')
-        } else if (data.error === 'no_active_otp') {
-          setOtpError('Your code has expired. Please request a new one.')
-        } else if (data.error === 'already_signed') {
+        if (data.error === 'already_signed') {
           setAlert({ kind: 'info', text: 'This order has already been signed.' })
+        } else if (data.error === 'expired' || data.error === 'consumed' || data.error === 'cancelled') {
+          setAlert({
+            kind: 'error',
+            text: 'This signing link is no longer valid. Please contact your Olaris representative.',
+          })
         } else {
-          setAlert({ kind: 'error', text: 'Could not submit your signature. Please try again.' })
+          setAlert({
+            kind: 'error',
+            text: 'Could not submit your signature. Please try again, or contact your Olaris representative.',
+          })
         }
         return
       }
@@ -246,6 +219,26 @@ export function SignClient({ view }: { view: ViewOrder }) {
           </div>
           <div className="amt">{pence(view.totalAmountPence)}</div>
         </div>
+      </div>
+
+      {/* Single-glance guidance so the customer doesn't need any
+          off-page instructions (a phone call, a separate email, etc.).
+          Three steps, in the order the page is laid out. */}
+      <div
+        style={{
+          background: '#eff6ff',
+          border: '1px solid #bfdbfe',
+          borderRadius: 8,
+          padding: '14px 16px',
+          fontSize: 13,
+          color: '#1e3a8a',
+          lineHeight: 1.55,
+          margin: '4px 0 18px',
+        }}
+      >
+        <strong style={{ fontWeight: 700 }}>How to sign:</strong>{' '}
+        review the order below, sign in the signature box, tick the four boxes,
+        then click <strong>Sign &amp; accept order</strong>. Takes about a minute.
       </div>
 
       <div className="sgn-card">
@@ -404,78 +397,15 @@ export function SignClient({ view }: { view: ViewOrder }) {
             </label>
           </div>
 
-          {stage === 'review' && (
-            <div style={{ marginTop: 22 }}>
-              <button
-                type="button"
-                className="sgn-btn sgn-btn-primary sgn-btn-lg"
-                disabled={!readyToRequestOtp || requestingOtp}
-                onClick={requestOtp}
-              >
-                {requestingOtp ? 'Sending code…' : 'Email me a verification code to finish'}
-              </button>
-              {!readyToRequestOtp && (
-                <p style={{ fontSize: 12, color: '#64748b', textAlign: 'center', marginTop: 10 }}>
-                  Complete your signature and tick all consents above to continue.
-                </p>
-              )}
-            </div>
-          )}
-
-          {stage === 'awaiting' && (
-            <form onSubmit={submit} style={{ marginTop: 22 }}>
-              <div style={{ fontSize: 13, color: '#334155', marginBottom: 10, textAlign: 'center' }}>
-                Enter the 6-digit code we emailed to <strong>{view.customer.email}</strong>:
-              </div>
-              <div className="sgn-otp-row">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                  value={otp}
-                  onChange={(e) => {
-                    setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))
-                    setOtpError(null)
-                  }}
-                  placeholder="000000"
-                  autoFocus
-                />
-              </div>
-              {otpError && (
-                <div className="sgn-alert sgn-alert-error" style={{ marginTop: 6 }}>
-                  {otpError}
-                </div>
-              )}
-              <button
-                type="submit"
-                className="sgn-btn sgn-btn-accent sgn-btn-lg"
-                disabled={!canSubmitOtp || submitting}
-                style={{ marginTop: 12 }}
-              >
-                {submitting ? 'Signing…' : 'Confirm signature'}
-              </button>
-              <div style={{ textAlign: 'center', marginTop: 10 }}>
-                <button
-                  type="button"
-                  onClick={requestOtp}
-                  disabled={requestingOtp}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#64748b',
-                    fontSize: 12,
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    textDecoration: 'underline',
-                  }}
-                >
-                  {requestingOtp ? 'Sending…' : "Didn't get a code? Send again"}
-                </button>
-              </div>
-            </form>
-          )}
+          <form onSubmit={submit} style={{ marginTop: 22 }}>
+            <button
+              type="submit"
+              className="sgn-btn sgn-btn-accent sgn-btn-lg"
+              disabled={!readyToSign || submitting}
+            >
+              {submitting ? 'Signing…' : blockerText ?? 'Sign & accept order'}
+            </button>
+          </form>
 
           <div style={{ textAlign: 'center', marginTop: 22, paddingTop: 18, borderTop: '1px dashed #e4e9f1' }}>
             {!showDecline ? (

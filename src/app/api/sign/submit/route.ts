@@ -36,7 +36,10 @@ const MAX_OTP_ATTEMPTS = 5
 
 const submitSchema = z.object({
   token: z.string().min(16).max(64),
-  otp: z.string().regex(/^\d{6}$/, 'OTP must be 6 digits'),
+  // OTP is optional. Default flow is single-step SES — link click is the
+  // auth factor. When the customer's path included an OTP step (PR2 flag
+  // `orders.requires_otp`), the page sends `otp` and we verify it below.
+  otp: z.string().regex(/^\d{6}$/, 'OTP must be 6 digits').optional(),
   intent: z.literal(true),
   consents: z.object({
     terms: z.literal(true),
@@ -90,52 +93,59 @@ export async function POST(req: Request) {
     return Response.json({ ok: false, error: lookup.reason }, { status: 400 })
   }
 
-  // ── Verify OTP ─────────────────────────────────────────────────
-  const latestOtp = await db
-    .select()
-    .from(otpCodes)
-    .where(
-      and(eq(otpCodes.signingTokenId, lookup.token.id), isNull(otpCodes.consumedAt)),
-    )
-    .orderBy(otpCodes.createdAt)
-    .limit(10) // get all unconsumed, pick the newest
-  const current = latestOtp
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .find((o) => o.expiresAt.getTime() > Date.now())
+  // ── Verify OTP (only when the customer's flow included it) ────
+  // PR2 will gate this branch on `orders.requires_otp`. For now any
+  // submit that includes `otp` follows the legacy two-factor path; any
+  // submit without `otp` is single-step SES (the new default).
+  let otpVerifiedAt: Date | null = null
+  if (body.otp) {
+    const latestOtp = await db
+      .select()
+      .from(otpCodes)
+      .where(
+        and(eq(otpCodes.signingTokenId, lookup.token.id), isNull(otpCodes.consumedAt)),
+      )
+      .orderBy(otpCodes.createdAt)
+      .limit(10) // get all unconsumed, pick the newest
+    const current = latestOtp
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .find((o) => o.expiresAt.getTime() > Date.now())
 
-  if (!current) {
-    await audit(lookup, forensics, 'otp.failed', { reason: 'no_active_otp' })
-    return Response.json({ ok: false, error: 'no_active_otp' }, { status: 400 })
-  }
-  if (current.attempts >= MAX_OTP_ATTEMPTS) {
-    await audit(lookup, forensics, 'otp.failed', { reason: 'locked' })
-    return Response.json({ ok: false, error: 'otp_locked' }, { status: 400 })
-  }
+    if (!current) {
+      await audit(lookup, forensics, 'otp.failed', { reason: 'no_active_otp' })
+      return Response.json({ ok: false, error: 'no_active_otp' }, { status: 400 })
+    }
+    if (current.attempts >= MAX_OTP_ATTEMPTS) {
+      await audit(lookup, forensics, 'otp.failed', { reason: 'locked' })
+      return Response.json({ ok: false, error: 'otp_locked' }, { status: 400 })
+    }
 
-  const otpHash = createHash('sha256').update(body.otp).digest('hex')
-  if (otpHash !== current.codeHash) {
+    const otpHash = createHash('sha256').update(body.otp).digest('hex')
+    if (otpHash !== current.codeHash) {
+      await db
+        .update(otpCodes)
+        .set({ attempts: current.attempts + 1 })
+        .where(eq(otpCodes.id, current.id))
+      await audit(lookup, forensics, 'otp.failed', { reason: 'bad_code' })
+      return Response.json(
+        {
+          ok: false,
+          error: 'bad_otp',
+          remaining: MAX_OTP_ATTEMPTS - (current.attempts + 1),
+        },
+        { status: 400 },
+      )
+    }
+
+    // OTP correct — consume it
     await db
       .update(otpCodes)
-      .set({ attempts: current.attempts + 1 })
+      .set({ consumedAt: new Date() })
       .where(eq(otpCodes.id, current.id))
-    await audit(lookup, forensics, 'otp.failed', { reason: 'bad_code' })
-    return Response.json(
-      {
-        ok: false,
-        error: 'bad_otp',
-        remaining: MAX_OTP_ATTEMPTS - (current.attempts + 1),
-      },
-      { status: 400 },
-    )
+
+    await audit(lookup, forensics, 'otp.verified', null)
+    otpVerifiedAt = new Date()
   }
-
-  // OTP correct — consume it
-  await db
-    .update(otpCodes)
-    .set({ consumedAt: new Date() })
-    .where(eq(otpCodes.id, current.id))
-
-  await audit(lookup, forensics, 'otp.verified', null)
 
   // ── Compute document hash + server signature ──────────────────
   // Phase 4 hashes a canonical JSON snapshot of the order. Phase 5 will
@@ -181,8 +191,12 @@ export async function POST(req: Request) {
       userAgent: forensics.userAgent,
       geoCity: forensics.geoCity,
       geoCountry: forensics.geoCountry,
-      otpMethod: 'email',
-      otpVerifiedAt: new Date(),
+      // OTP-related columns only populated when the OTP path was actually
+      // used. Schema already allows both to be null; the Certificate of
+      // Completion can show "OTP-verified" or "link-token + IP/UA" based
+      // on whether otp_verified_at is set.
+      otpMethod: otpVerifiedAt ? 'email' : null,
+      otpVerifiedAt,
       documentSha256: docHash,
       serverSignature: serverSig,
       signingKeyFingerprint: keyFp,
@@ -226,6 +240,11 @@ export async function POST(req: Request) {
   await audit(lookup, forensics, 'signed', {
     role: lookup.token.signerRole,
     method: body.signature.type,
+    // Distinguishes OTP-verified SES from link-token SES in the audit
+    // payload. The signature row already captures the same fact via
+    // otp_verified_at; this duplicates it into the event stream so an
+    // audit query doesn't have to join signatures.
+    authFactor: otpVerifiedAt ? 'ses-otp-verified' : 'ses-link-token',
     docSha256: docHash,
   })
 
